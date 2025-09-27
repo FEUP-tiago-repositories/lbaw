@@ -1,6 +1,8 @@
-# lbaw25122
+# SportsHub
 
+The main goal of the SportsHub project is to create a web-based platform that connects people who want flexible sports options to sports facilities and similar service providers. Unlike traditional models of long-term memberships, SportsHub allows users to search, book, and experience different sports activities anytime, anywhere, without commitments. It bridges the gap between users who want flexibility (such as digital nomads, casual players, or people with irregular schedules) and businesses that want to optimize their underused spaces or promote their services in a wider market.
 
+---
 
 ## Getting started
 

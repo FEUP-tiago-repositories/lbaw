@@ -1,49 +1,22 @@
 # ER: Requirements Specification Component
 
-The main goal of the _SportsHub_ project is to create a web-based platform that connects people who want flexible sports options to sports facilities and similar service providers. Unlike traditional models of long-term memberships, _SportsHub_ allows users to search, book, and experience different sports activities anytime, anywhere, without commitments. It bridges the gap between users who want flexibility (such as digital nomads, casual players, or people with irregular schedules) and businesses that want to optimize their underused spaces or promote their services in a wider market.
+The _SportsHub_ system is being developed as a web-based platform that connects people who want flexible sports options with sports facilities and service providers. Unlike traditional long-term membership models, _SportsHub_ allows users to search, book and experience different sports activities anytime, anywhere, without commitments. It bridges the gap between users who want flexibility (such as digital nomads, casual players or people with irregular schedules) and businesses that want to optimize their underused spaces or promote their services in a wider market.
 
 ## A1: _SportsHub_
 
-### <u> A1.1. Goals, business context and environment </u>
+### <u> Goals, business context, environment and motivation </u>
 
-The SportsHub project has the main goal of developing a web-based platform which centres and simplifies the access to sports activities, allowing people to easily discover, compare, and book sports experiences of different types, whenever and wherever they want to practice.
+The main goal of _SportsHub_ is to develop a web-based platform that simplifies access to sports activities, allowing people to easily discover, compare, and book sports experiences whenever and wherever they want to practice. The platform is positioned within the sports and fitness industry, competing with traditional booking systems and membership models by offering a unified marketplace for diverse sports activities with a strong focus on on-demand usage and user freedom.
 
-From a business context perspective, SportsHub is positioned within the sports and fitness industry, which is traditionally dominated by long-term contracts and inflexible memberships. However, the demand for flexibility and variety is increasing, driven by modern lifestyles: professionals with irregular schedules, digital nomads who move between cities, tourists who want to stay active during their stay and people looking for alternatives to routine sports practices.
+_SportsHub_ addresses the challenges faced by both sides of the sports activity market. For users, current models create barriers such as monthly fees, lack of facility knowledge and difficulty with last-minute bookings. For businesses, the main challenge is underutilization of spaces during off-peak hours and struggles with visibility. _SportsHub_ creates a symbiotic relationship where users gain maximum flexibility and variety while businesses achieve better profitability and exposure.
 
-The platform serves two main stakeholder groups:
-- Users who want instant access to facilities and activities without constraints, with the added benefit of discovering and experimenting different types of sports.
-- Businesses and providers (gyms, courts, studios, clubs, etc.) that want to maximize their occupancy, fill underused time slots, or promote their facilities to a wider audience.
+### <u> Main Features </u>
 
-In the expected environment, SportsHub competes with traditional booking systems and membership models but differentiates itself by offering:
-- a single, unified marketplace for diverse sports activities, not tied to a single facility or sport;
-- a strong focus on on-demand usage and user freedom;
-- a more efficient visibility channel for businesses, providing both revenue growth and brand exposure.
+The platform includes user registration and profile management, advanced search and filtering capabilities, detailed facility pages with reviews, an instant booking system with multiple payment options, comprehensive notification system, reservation management and a business dashboard for facility owners. The platform features adaptive and responsive design ensuring optimal usability across desktop, tablet, and mobile devices.
 
-This ecosystem ensures that SportsHub becomes not only a booking system but also a dynamic hub that motivates users to practice sports more frequently, integrating perfectly into their lifestyle.
+### <u> User Profiles </u>
 
-### <u> A1.2. Motivation </u>
-
-The motivation for SportsHub come from the challenges faced by both sides of the sports activity market:
-- For users, the current model often creates barriers to sport practice. Commitments such as monthly fees, lack of knowledge of available facilities, or the difficulty of last-minute booking discourage people from being active. SportsHub eliminates these obstacles by opening access to sports anywhere, anytime, and across multiple types of sports.
-- For businesses, the main challenge is underutilization. Many spaces remain empty during off-peak hours, while others struggle with visibility. By joining the platform, providers can promote their spaces directly to people actively searching, monetize their unused capacity, and attract new audiences who would not typically commit to long-term memberships.
-
-In this way, SportsHub creates a symbiotic relationship: users gain maximum flexibility and variety in their sports practice, while businesses gain profitability and a fair chance to showcase their facilities. It is not just an alternative to memberships, but a stimulus for a healthier and more dynamic lifestyle.
-
-### <u> A1.3. Main Features </u>
-- User registration, login, and profile customization;
-- Search and filter by location, type of sports, prices, availability, among other relevant criteria;
-- Detailed pages for each facility or activity, including location, opening hours, available sports, reviews, and owner information;
-- Booking system with instant confirmation, cancellation options, and multiple payment methods.
-- Notifications for booking confirmations, upcoming reservations, cancellations or promotional offers;
-- Ability for users to see reservations (past or future), edit or delete and add rating/review facilities or activities;
-- Business dashboard for facility owners to list and manage spaces, availability, and pricing;
-- Adaptive and responsive design for optimal usability across desktop, tablet, and mobile devices.
-
-### <u> A1.4. User Profiles </u>
-- **Administrators:** manage the overall system, ensure smooth operation, resolve disputes, verify businesses, and remove inappropriate reviews or content.
-- **Individual Users:** search for activities and, when an authenticated user, can edit profile, book spaces or classes, write reviews and manage personal reservations. They may be casual sports players, tourists, or digital nomads for example.
-- **Businesses (Facility Owners/Providers):** register their spaces, set calendars and pricing, manage reservations, analyze usage, and interact with user feedback.
-
+_SportsHub_ serves three main user types: **Administrators** who manage the overall system and ensure smooth operation; **Individual Users** including casual sports players, tourists, and digital nomads who search for activities, book spaces, and write reviews; and **Businesses** (facility owners and providers) who register their spaces, manage availability and pricing, and interact with user feedback.
 
 ## A2: Actors and User stories
 

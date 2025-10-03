@@ -25,9 +25,9 @@ This artifact contains the specification of the actors and their user stories, s
 ### A2.1. Actors
 
 For _SportsHub_ website, the actors are represented in Figure 1 and described in Table 1.
-<figure style="text-align:center;">
-    <img src="./a2_diagram.png" alt="Actors Diagram">
-    <figcaption>Figure 1: SportsHub actors</figcaption>
+<figure style="text-align: center;">
+  <img src="./a2_diagram.png" alt="Actors Diagram" style="width:50%;">
+  <p style="text-align:center;">Figure 1: SportsHub actors</p>
 </figure>
 
 |    Actor    | Description |
@@ -40,7 +40,7 @@ For _SportsHub_ website, the actors are represented in Figure 1 and described in
 | Administrator | Manages the overall systems and ensures a smooth experience |
 | Payment Provider | Allows to make payments through external providers |
 | OpenStreetMap API | External API responsible for the system's map service (OpenStreetMap) |
-<p style="align-text:center;">Table 1: SportsHub actors description.</p>
+<p align="center" style="align-text:center;">Table 1: SportsHub actors description.</p>
 
 ### 2. User Stories
 

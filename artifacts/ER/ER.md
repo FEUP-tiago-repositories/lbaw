@@ -42,65 +42,66 @@ For _SportsHub_ website, the actors are represented in Figure 1 and described in
 | Payment Provider | Allows to make payments through external providers |
 | OpenStreetMap API | External API responsible for the system's map service (OpenStreetMap) |
 
-<p align="center">Table 1: SportsHub actors description.</p>
+<div align="center">
+  <p>Table 1: SportsHub actors description.</p>
+</div>
 
-### 2. User Stories
+### A2.2. User Stories
 
-> User stories organized by actor.\
-> For each actor, a table containing a line for each user story, and for each user story: an identifier, a name, a priority, and a description (following the recommended pattern). Below is a template for presenting the user stories.
+For the _SportsHub_ website, consider the user stories that are presented in the following sections.
 
-| Identifier | Name | Priority | Responsible | Description |
-|------------|------|----------|-------------|-------------|
-| US01 | US Name 1 | High | Ana Alice | As an \<actor\>, I want to \<what\>, so that \<why\>. |
-| US02 | US Name 2 | Medium | John Silva | As an \<actor\>, I want to \<what\>, so that \<why\>. |
-| US03 | US Name 3 | Low | Francisco Alves | As an \<actor\>, I want to \<what\>, so that \<why\>. |
-
-#### 2.1. Visitor
+#### A2.2.1. Visitor
 
 | Identifier | Name     | Priority | Responsible | Description                                                                                     |
 |------------|----------|----------|-------------|-------------------------------------------------------------------------------------------------|
-| US01       | Sign-in  | High     | k           | As a Visitor, I want to be able to authenticate into the system, so that I can access my profile and my bookings |
-| US02       | Sign-up  | High     | k           | As a Visitor, I want to be able to create an account in the system, so that I can access its main features |
+| US10       | Sign-in  | High     | Gustavo     | As a Visitor, I want to be able to authenticate into the system, so that I can access my profile and my bookings |
+| US11       | Sign-up  | High     | Gustavo     | As a Visitor, I want to be able to create an account in the system, so that I can access its main features |
 
-**Table 2: Visitor user stories**
+<div align="center">
+  <p>Table 2: Visitors user stories.</p>
+</div>
 
-#### 2.2. User
+#### A2.2.2. User
 
 | Identifier | Name                      | Priority | Responsible     | Description                                                                 |
 |------------|---------------------------|----------|-----------------|-----------------------------------------------------------------------------|
-| US11       | See Home page             | High     | Tiago Oliveira  | As a User, I want to access the home page, so that I can see |
-| US12       | See About page            | High     | Tiago Oliveira  | As a User, I want to access the about page, so that I can see a description about the main information of the website |
-| US13       | See Services informations | High     | Tiago Oliveira  | As a User, I want to access the service's information, so I can understand how the website works. |
-| US14       | Consult FAQ page          | High     | Tiago Oliveira  | As a User, I want to acess the FAQ, so I can get answers to common questions |
-| US15       | Consult Contacts page     | High     | Tiago Oliveira  | As a User, I want to acess admin’s contacts, so I can come in touch with the website creators |
-| US16       | Search Activities         | High     | Francisco Gomes | As a User, I want to search for activities, so that I can find those that spark my interest |
-| US17       | Filter Activities         | High     | Francisco Gomes | As a User, I want to filter the results I get, so that I can more freely choose those that better suite me |
-| US18       | See sports’ activity details | High   | Gustavo         | As a User, I want to see the details of the activity I select, so that I can plan what to choose |
-| US19       | Viewing profiles          | High     | Gustavo         | As a User, I want to be able to view other’s profiles, so that I can access relevant information |
+| US20       | See Home page             | High     | Tiago Oliveira  | As a User, I want to access the home page, so that I can see |
+| US21       | See About page            | High     | Tiago Oliveira  | As a User, I want to access the about page, so that I can see a description about the main information of the website |
+| US22       | See Services informations | High     | Tiago Oliveira  | As a User, I want to access the service's information, so I can understand how the website works. |
+| US23       | Consult FAQ page          | High     | Tiago Oliveira  | As a User, I want to access the FAQ, so I can get answers to common questions |
+| US24       | Consult Contacts page     | High     | Tiago Oliveira  | As a User, I want to access admin’s contacts, so I can come in touch with the website creators |
+| US25       | Search Activities         | High     | Francisco Gomes | As a User, I want to search for activities, so that I can find those that spark my interest |
+| US26       | Filter Activities         | High     | Francisco Gomes | As a User, I want to filter the results I get, so that I can more freely choose those that better suite me |
+| US27       | See sports’ activity details | High  | Gustavo         | As a User, I want to see the details of the activity I select, so that I can plan what to choose |
+| US28       | Viewing profiles          | High     | Gustavo         | As a User, I want to be able to view other’s profiles, so that I can access relevant information |
 
-**Table 3: User user stories**
+<div align="center">
+  <p>Table 3: User user stories.</p>
+</div>
 
 #### 2.3. Authenticated User
 
 | Identifier | Name               | Priority | Responsible | Description                                                                 |
 |------------|--------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US21       | Editing my profile | High     | k           | As an Authenticated User, I want to be able to edit my own profile, so that I can update my information |
+| US30       | Editing my profile | High     | unknown     | As an Authenticated User, I want to be able to edit my own profile, so that I can update my information |
 
-**Table 4: Authenticated user user stories**
+<div align="center">
+  <p>Table 4: Authenticated user user stories.</p>
+</div>
 
 #### 2.4. Business Owner
 
 | Identifier | Name                                  | Priority | Responsible | Description                                                                 |
 |------------|---------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US31       | Creating new activities               | High     | Joana       | As a Business Owner, I want to be able to create new activities, so that my clients can have access to new activities |
-| US32       | Editing activities details            | High     | l           | As a Business Owner, I want to be able to edit the details of my activities, so that customers always have accurate and detailed information to help them decide and book |
-| US33       | Setting activities schedules          | Medium   | l           | As a Business Owner, I want to set schedules for my activities, so that my customers know when activities are available |
-| US34       | Marking activities as permanently closed | Medium | ç           | As a Business Owner, I want to mark activities as permanently closed, so that customers cannot see or try to book activities that are no longer available |
-| US35       | Accepting or declining reservations   | Medium   | jn          | As a Business Owner, I want to be able to accept or decline customer reservations, so that |
-| US36       | Seeing an activities’ reservations in a calendar | Medium | jj | As a Business Owner, I want to see all reservations for my activities in a calendar, so that I can easily track bookings and manage better schedules |
-| US37       | Getting notified when a reservation is made | Low  | j           | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
-| US38       | Discounts                             | Low      | j           | As a Business Owner, I want to create and manage discounts for my activities, so that I can attract more customers |
-| US39       | Getting reservation reminders         | Low      | i           | As a Business Owner, I want my customers to receive automatic reminders of their reservations, so that the attendance rate improves and no-shows are reduced |
+| US40       | Creating new activities               | High     | Joana       | As a Business Owner, I want to be able to create new activities, so that my clients can have access to new activities |
+| US41       | Editing activities details            | High     | l           | As a Business Owner, I want to be able to edit the details of my activities, so that customers always have accurate and detailed information to help them decide and book |
+| US42       | Setting activities schedules          | Medium   | l           | As a Business Owner, I want to set schedules for my activities, so that my customers know when activities are available |
+| US43       | Marking activities as permanently closed | Medium | ç           | As a Business Owner, I want to mark activities as permanently closed, so that customers cannot see or try to book activities that are no longer available |
+| US44       | Accepting or declining reservations   | Medium   | jn          | As a Business Owner, I want to be able to accept or decline customer reservations, so that |
+| US45       | Seeing an activities’ reservations in a calendar | Medium | jj | As a Business Owner, I want to see all reservations for my activities in a calendar, so that I can easily track bookings and manage better schedules |
+| US46       | Getting notified when a reservation is made | Low  | j           | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
+| US47       | Discounts                             | Low      | j           | As a Business Owner, I want to create and manage discounts for my activities, so that I can attract more customers |
+| US48       | Getting reservation reminders         | Low      | i           | As a Business Owner, I want my customers to receive automatic reminders of their reservations, so that the attendance rate improves and no-shows are reduced |
 
 **Table 5: Business Owner user stories**
 
@@ -108,11 +109,11 @@ For _SportsHub_ website, the actors are represented in Figure 1 and described in
 
 | Identifier | Name                                      | Priority | Responsible | Description                                                                 |
 |------------|-------------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US41       | Book an activity                          | High     | j           | As a Customer, I want to be able to book an activity, so that I can secure a spot |
-| US42       | Cancel my reservation                     | High     | ss          | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend |
-| US43       | Review an activity                        | Medium   | ss          | As a Customer, I want to review an activity I have attended, so that other users can make informed decisions about the quality of each activity |
-| US44       | Getting notifications of a reservation’s status | Low   | ss          | As a Customer, I want to receive a notification when a reservation is confirmed or cancelled so that I can always stay informed |
-| US45       | Recommendations Algorithm                 | Low      | s           | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience |
+| US50       | Book an activity                          | High     | j           | As a Customer, I want to be able to book an activity, so that I can secure a spot |
+| US51       | Cancel my reservation                     | High     | ss          | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend |
+| US52       | Review an activity                        | Medium   | ss          | As a Customer, I want to review an activity I have attended, so that other users can make informed decisions about the quality of each activity |
+| US53       | Getting notifications of a reservation’s status | Low   | ss          | As a Customer, I want to receive a notification when a reservation is confirmed or cancelled so that I can always stay informed |
+| US54       | Recommendations Algorithm                 | Low      | s           | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience |
 
 **Table 6: Customer user stories**
 
@@ -120,9 +121,9 @@ For _SportsHub_ website, the actors are represented in Figure 1 and described in
 
 | Identifier | Name                          | Priority | Responsible | Description                                                                 |
 |------------|-------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US51       | Manage user accounts          | Medium   | ds          | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized |
-| US52       | Deleting inappropriate comments | Medium  | a           | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users |
-| US53       | Deleting inappropriate activities | Medium | s           | As an Admin, I want to delete inappropriate activities, so that the platform remains safe and trustworthy for all users |
+| US60       | Manage user accounts          | Medium   | ds          | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized |
+| US61       | Deleting inappropriate comments | Medium  | a           | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users |
+| US62       | Deleting inappropriate activities | Medium | s           | As an Admin, I want to delete inappropriate activities, so that the platform remains safe and trustworthy for all users |
 
 **Table 7: Admin user stories**
 
@@ -135,13 +136,13 @@ For _SportsHub_ website, the actors are represented in Figure 1 and described in
 
 | Identifier | Name                      | Description                                                                 |
 |------------|---------------------------|-----------------------------------------------------------------------------|
-| BR01       | Unique Profile            | Only 1 profile per user                                                     |
-| BR02       | Profile ownership         | A profile may only be edited by its owner or an administrator               |
-| BR03       | Reservation details       | A reservation must include user, activity and schedule                      |
-| BR04       | Reservation schedule restraint | Reservations can only be made on a valid schedule set by the owner    |
-| BR05       | Unique reservation slot   | Customers cannot double-book the same time slot                             |
-| BR06       | Reservation management    | Reservations can be accepted, declined, or cancelled by the Business Owner or the system |
-| BR07       | Reservation ownership     | Only Business Owners can create, edit, schedule, or close activities        |
+| BR10       | Unique Profile            | Only 1 profile per user                                                     |
+| BR11       | Profile ownership         | A profile may only be edited by its owner or an administrator               |
+| BR12       | Reservation details       | A reservation must include user, activity and schedule                      |
+| BR13       | Reservation schedule restraint | Reservations can only be made on a valid schedule set by the owner    |
+| BR14       | Unique reservation slot   | Customers cannot double-book the same time slot                             |
+| BR15       | Reservation management    | Reservations can be accepted, declined, or cancelled by the Business Owner or the system |
+| BR16       | Reservation ownership     | Only Business Owners can create, edit, schedule, or close activities        |
 
 **Table 8: SportsHub Business Rules**
 
@@ -149,13 +150,13 @@ For _SportsHub_ website, the actors are represented in Figure 1 and described in
 
 | Identifier | Name             | Description                                                                 |
 |------------|------------------|-----------------------------------------------------------------------------|
-| TR01       | Availability     | The system must be available 99% of the time in each 24h cycle              |
-| TR02       | Compatibility    | The application must be compatible in different types of systems, such as computers, tablets and smartphones |
-| TR03       | Development Tools | The system must be developed using HTML5, CSS, PHP and JavaScript, as well as compatible frameworks |
-| TR04       | Usability        | The system must be easy and intuitive to use, as it is designed to be used by every age group without technical experience |
-| TR05       | Security         | The system shall protect information from unauthorized access through the use of an authentication system. It should keep all sensitive information such as location and payment details encrypted |
-| TR06       | Database         | The PostgreSQL database management system must be used, with a version of 11 or higher. |
-| TR07       | Performance      | The system must support at least 60 concurrent reservations per minute     |
+| TR10       | Availability     | The system must be available 99% of the time in each 24h cycle              |
+| TR11       | Compatibility    | The application must be compatible in different types of systems, such as computers, tablets and smartphones |
+| TR12       | Development Tools | The system must be developed using HTML5, CSS, PHP and JavaScript, as well as compatible frameworks |
+| TR13       | Usability        | The system must be easy and intuitive to use, as it is designed to be used by every age group without technical experience |
+| TR14       | Security         | The system shall protect information from unauthorized access through the use of an authentication system. It should keep all sensitive information such as location and payment details encrypted |
+| TR15       | Database         | The PostgreSQL database management system must be used, with a version of 11 or higher. |
+| TR16       | Performance      | The system must support at least 60 concurrent reservations per minute     |
 
 **Table 9: SportsHub Technical Requirements**
 
@@ -163,11 +164,11 @@ For _SportsHub_ website, the actors are represented in Figure 1 and described in
 
 | Identifier | Name                   | Description                                                                 |
 |------------|------------------------|-----------------------------------------------------------------------------|
-| C01        | Discount limit         | Discounts cannot exceed 100%                                                |
-| C02        | Parental consent       | Minors must have parental approval to register                              |
-| C03        | Realistic bookings     | Reservations can’t be made more than 1 year in advance                      |
-| C04        | Geographical Limitations | Spaces used for activities must be within Portuguese territories           |
-| C05        | Unique account         | There can be only 1 account per email and phone number                      |
+| R10        | Discount limit         | Discounts cannot exceed 100%                                                |
+| R11        | Parental consent       | Minors must have parental approval to register                              |
+| R12        | Realistic bookings     | Reservations can’t be made more than 1 year in advance                      |
+| R04        | Geographical Limitations | Spaces used for activities must be within Portuguese territories           |
+| R05        | Unique account         | There can be only 1 account per email and phone number                      |
 
 **Table 10: SportsHub Project Restrictions**
 

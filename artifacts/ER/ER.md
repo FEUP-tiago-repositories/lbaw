@@ -25,9 +25,9 @@ This artifact contains the specification of the actors and their user stories, s
 ### A2.1. Actors
 
 For _SportsHub_ website, the actors are represented in Figure 1 and described in Table 1.
-<figure style="text-align: center;">
-  <img src="./a2_diagram.png" alt="Actors Diagram" style="width:50%;">
-  <p style="text-align:center;">Figure 1: SportsHub actors</p>
+<figure style="display: flex; flex-direction: column; align-items: center;">
+  <img src="./a2_diagram.png" alt="Actors Diagram" style="width:50%; height:auto;">
+  <figcaption>Figure 1: SportsHub actors</figcaption>
 </figure>
 
 |    Actor    | Description |

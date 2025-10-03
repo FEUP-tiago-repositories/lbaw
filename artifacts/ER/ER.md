@@ -93,29 +93,35 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 | Identifier | Name                                      | Priority | Responsible | Description                                                                 |
 |------------|-------------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US40       | Book a sport space                       | High     | unknown           | As a Customer, I want to be able to book a sport space, so that I can secure a spot |
-| US41       | Cancel my reservation                     | High     | unknown     | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend |
-| US42       | Review a sport space                        | Medium   | unknown     | As a Customer, I want to review a sport space I have attended, so that other users can make informed decisions about the quality of each space |
-| US43       | Getting notifications of a reservation’s status | Low   | unknown      | As a Customer, I want to receive a notification when a reservation is confirmed or cancelled so that I can always stay informed |
-| US44       | Recommendations Algorithm                 | Low      | unknown  | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience |
+| US40       | Book a sport space                        | High     | unknown     | As a Customer, I want to be able to book a sport space, so that I can ensure a slot in that space. |
+| US41       | Edit my future reservation                | High     | unknown     | As a Customer, I want to be able to edit my future reservations, so that I can keep my reservations up-to-date. |
+| US42       | Cancel my future reservation              | High     | unknown     | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend. |
+| US43       | See my reservations                       |          | unknown     | As a Customer, I want to be able to see my future or past reservations, so that I can remember and review past reservations and keep me updated or edit my future reservations. |
+| US44       | Review a sport space                      | Medium   | unknown     | As a Customer, I want to review a sport space I have attended, so that other users can make informed decisions about the quality of each space. |
+| US45       | Getting notifications of a reservation    | Low      | unknown     | As a Customer, I want to receive a notification when a reservation is confirmed, cancelled or is very soon so that I can always stay informed. |
+| US46       | Recommendations Algorithm                 | Low      | unknown     | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience. |
 
-**Table 5: Customer user stories**
+<div align="center">
+  <p>Table 5: Customer user stories.</p>
+</div>
 
 #### A2.2.5. Business Owner
 
 | Identifier | Name                                  | Priority | Responsible | Description                                                                 |
 |------------|---------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
 | US50       | Creating new sports spaces            | High     | unknown     | As a Business Owner, I want to be able to create new sports spaces, so that my clients can interact with my sports space. |
-| US51       | Editing sports spaces details            | High     | unknown     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book. |
-| US52       | Delete or hide sports spaces          | High    | unknown     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available. |
-| US53       | Setting sports spaces schedules and capacity  | Medium   | unknown     | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available. |
-| US54       | Accepting, declining, modifing or canceling reservations   | Medium   | unknown     | As a Business Owner, I want to be able to accept, decline, modify or cancel customer reservations, so that |
-| US55       | Seeing space's reservations in a calendar | Medium | unknown | As a Business Owner, I want to see all reservations for my spaces in a calendar, so that I can easily track bookings and manage better schedules. |
-| US56       | Getting notified when a reservation is made | Low  | unknown     | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
-| US57       | Discounts                             | Low      | unknown   | As a Business Owner, I want to create and manage discounts for my sports spaces, so that I can attract more customers |
-| US58       | Getting reservation reminders         | Low      | unknown     | As a Business Owner, I want my customers to receive automatic reminders of their reservations, so that the attendance rate improves and no-shows are reduced |
+| US51       | Editing sports spaces details         | High     | unknown     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book. |
+| US52       | Delete or hide sports spaces          | High     | unknown     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available. |
+| US53       | Setting sports spaces schedules and capacity | Medium | unknown | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available. |
+| US54       | Accepting, declining, modifing or canceling reservations | Medium | unknown | As a Business Owner, I want to be able to accept, decline, modify or cancel customer reservations, so that I can manage my availability efficiently and avoid scheduling conflicts. | 
+| US55       | Seeing space's reservations in a calendar | Medium | unknown   | As a Business Owner, I want to see all reservations for my spaces in a calendar, so that I can easily track bookings and manage better schedules. |
+| US56       | Respond to reviews                    | Low      | unknown     | As a Business Owner, I want respond to reviews in my sports spaces, so that I can appreciate for positive comments and provide a response to negative reviews. |
+| US57       | Getting notified when a reservation is made | Low | unknown    | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
+| US58       | Discounts                             | Low      | unknown     | As a Business Owner, I want to create and manage discounts for my sports spaces, so that I can attract more customers |
 
-**Table 5: Business Owner user stories**
+<div align="center">
+  <p>Table 6: Business Owner user stories.</p>
+</div>
 
 #### 2.6. Admin
 
@@ -125,7 +131,9 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | US61       | Manage sports spaces                       | Medium | unknown | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users. |
 | US62       | Deleting inappropriate reviews             | Medium  | unknown | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users. |
 
-**Table 6: Admin user stories**
+<div align="center">
+  <p>Table 7: Admin user stories.</p>
+</div>
 
 ### 3. Supplementary Requirements
 

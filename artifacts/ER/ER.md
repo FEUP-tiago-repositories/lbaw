@@ -38,7 +38,13 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 | US02 | US Name 2 | Medium | John Silva | As an \<actor\>, I want to \<what\>, so that \<why\>. |
 | US03 | US Name 3 | Low | Francisco Alves | As an \<actor\>, I want to \<what\>, so that \<why\>. |
 
-#### 2.1. Actor 1
+#### 2.1. Visitor
+
+| Identifier | Name     | Priority | Description                                                                                     |
+|------------|----------|----------|-------------------------------------------------------------------------------------------------|
+| US01       | Sign-in  | High     | As a Visitor, I want to be able to authenticate into the system, so that I can access my profile and my bookings |
+| US02       | Sign-up  | High     | As a Visitor, I want to be able to create an account in the system, so that I can access its main features |
+Table 2: Visitor user stories.
 
 #### 2.2. Actor 2
 

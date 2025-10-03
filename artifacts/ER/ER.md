@@ -106,13 +106,13 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | Identifier | Name                                  | Priority | Responsible | Description                                                                 |
 |------------|---------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
 | US50       | Creating new sports spaces            | High     | unknown     | As a Business Owner, I want to be able to create new sports spaces, so that my clients can interact with my sports space. |
-| US51       | Editing sports spaces details            | High     | unknown     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book |
+| US51       | Editing sports spaces details            | High     | unknown     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book. |
 | US52       | Delete or hide sports spaces          | High    | unknown     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available. |
 | US53       | Setting sports spaces schedules and capacity  | Medium   | unknown     | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available. |
 | US54       | Accepting, declining, modifing or canceling reservations   | Medium   | unknown     | As a Business Owner, I want to be able to accept, decline, modify or cancel customer reservations, so that |
-| US55       | Seeing an activities’ reservations in a calendar | Medium | unknown | As a Business Owner, I want to see all reservations for my activities in a calendar, so that I can easily track bookings and manage better schedules |
+| US55       | Seeing space's reservations in a calendar | Medium | unknown | As a Business Owner, I want to see all reservations for my spaces in a calendar, so that I can easily track bookings and manage better schedules. |
 | US56       | Getting notified when a reservation is made | Low  | unknown     | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
-| US57       | Discounts                             | Low      | unknown   | As a Business Owner, I want to create and manage discounts for my activities, so that I can attract more customers |
+| US57       | Discounts                             | Low      | unknown   | As a Business Owner, I want to create and manage discounts for my sports spaces, so that I can attract more customers |
 | US58       | Getting reservation reminders         | Low      | unknown     | As a Business Owner, I want my customers to receive automatic reminders of their reservations, so that the attendance rate improves and no-shows are reduced |
 
 **Table 5: Business Owner user stories**
@@ -121,9 +121,9 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 | Identifier | Name                                       | Priority | Responsible | Description                                                                 |
 |------------|--------------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US60       | Manage user and business owners accounts   | Medium   | unknown  | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized |
-| US61       | Manage sports spaces                       | Medium | unknown | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users
-| US62       | Deleting inappropriate reviews             | Medium  | unknown | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users |
+| US60       | Manage users accounts   | Medium   | unknown  | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized. |
+| US61       | Manage sports spaces                       | Medium | unknown | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users. |
+| US62       | Deleting inappropriate reviews             | Medium  | unknown | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users. |
 
 **Table 6: Admin user stories**
 

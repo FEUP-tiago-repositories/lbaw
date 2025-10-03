@@ -44,6 +44,7 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 |------------|----------|----------|-------------|-------------------------------------------------------------------------------------------------|
 | US01       | Sign-in  | High     | k           | As a Visitor, I want to be able to authenticate into the system, so that I can access my profile and my bookings |
 | US02       | Sign-up  | High     | k           | As a Visitor, I want to be able to create an account in the system, so that I can access its main features |
+
 **Table 2: Visitor user stories**
 
 #### 2.2. User
@@ -67,6 +68,7 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 | Identifier | Name               | Priority | Responsible | Description                                                                 |
 |------------|--------------------|----------|-------------|-----------------------------------------------------------------------------|
 | US21       | Editing my profile | High     | k           | As an Authenticated User, I want to be able to edit my own profile, so that I can update my information |
+
 **Table 4: Authenticated user user stories**
 
 #### 2.4. Business Owner
@@ -82,6 +84,7 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 | US37       | Getting notified when a reservation is made | Low  | j           | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
 | US38       | Discounts                             | Low      | j           | As a Business Owner, I want to create and manage discounts for my activities, so that I can attract more customers |
 | US39       | Getting reservation reminders         | Low      | i           | As a Business Owner, I want my customers to receive automatic reminders of their reservations, so that the attendance rate improves and no-shows are reduced |
+
 **Table 5: Business Owner user stories**
 
 #### 2.5. Customer
@@ -93,6 +96,7 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 | US43       | Review an activity                        | Medium   | ss          | As a Customer, I want to review an activity I have attended, so that other users can make informed decisions about the quality of each activity |
 | US44       | Getting notifications of a reservation’s status | Low   | ss          | As a Customer, I want to receive a notification when a reservation is confirmed or cancelled so that I can always stay informed |
 | US45       | Recommendations Algorithm                 | Low      | s           | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience |
+
 **Table 6: Customer user stories**
 
 #### 2.6. Admin
@@ -102,6 +106,7 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 | US51       | Manage user accounts          | Medium   | ds          | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized |
 | US52       | Deleting inappropriate comments | Medium  | a           | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users |
 | US53       | Deleting inappropriate activities | Medium | s           | As an Admin, I want to delete inappropriate activities, so that the platform remains safe and trustworthy for all users |
+
 **Table 7: Admin user stories**
 
 ### 3. Supplementary Requirements
@@ -111,9 +116,43 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 
 #### 3.1. Business rules
 
+| Identifier | Name                      | Description                                                                 |
+|------------|---------------------------|-----------------------------------------------------------------------------|
+| BR01       | Unique Profile            | Only 1 profile per user                                                     |
+| BR02       | Profile ownership         | A profile may only be edited by its owner or an administrator               |
+| BR03       | Reservation details       | A reservation must include user, activity and schedule                      |
+| BR04       | Reservation schedule restraint | Reservations can only be made on a valid schedule set by the owner    |
+| BR05       | Unique reservation slot   | Customers cannot double-book the same time slot                             |
+| BR06       | Reservation management    | Reservations can be accepted, declined, or cancelled by the Business Owner or the system |
+| BR07       | Reservation ownership     | Only Business Owners can create, edit, schedule, or close activities        |
+
+**Table 8: SportsHub Business Rules**
+
 #### 3.2. Technical requirements
 
+| Identifier | Name             | Description                                                                 |
+|------------|------------------|-----------------------------------------------------------------------------|
+| TR01       | Availability     | The system must be available 99% of the time in each 24h cycle              |
+| TR02       | Compatibility    | The application must be compatible in different types of systems, such as computers, tablets and smartphones |
+| TR03       | Development Tools | The system must be developed using HTML5, CSS, PHP and JavaScript, as well as compatible frameworks |
+| TR04       | Usability        | The system must be easy and intuitive to use, as it is designed to be used by every age group without technical experience |
+| TR05       | Security         | The system shall protect information from unauthorized access through the use of an authentication system. It should keep all sensitive information such as location and payment details encrypted |
+| TR06       | Database         | The PostgreSQL database management system must be used, with a version of 11 or higher. |
+| TR07       | Performance      | The system must support at least 60 concurrent reservations per minute     |
+
+**Table 9: SportsHub Technical Requirements**
+
 #### 3.3. Restrictions
+
+| Identifier | Name                   | Description                                                                 |
+|------------|------------------------|-----------------------------------------------------------------------------|
+| C01        | Discount limit         | Discounts cannot exceed 100%                                                |
+| C02        | Parental consent       | Minors must have parental approval to register                              |
+| C03        | Realistic bookings     | Reservations can’t be made more than 1 year in advance                      |
+| C04        | Geographical Limitations | Spaces used for activities must be within Portuguese territories           |
+| C05        | Unique account         | There can be only 1 account per email and phone number                      |
+
+**Table 10: SportsHub Project Restrictions**
 
 ---
 

@@ -65,15 +65,15 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 | Identifier | Name                      | Priority | Responsible     | Description                                                                 |
 |------------|---------------------------|----------|-----------------|-----------------------------------------------------------------------------|
-| US20       | See Home page             | High     | Tiago Oliveira  | As a User, I want to access the home page, so that I can see |
-| US21       | See About page            | High     | Tiago Oliveira  | As a User, I want to access the about page, so that I can see a description about the main information of the website |
-| US22       | See Services informations | High     | Tiago Oliveira  | As a User, I want to access the service's information, so I can understand how the website works. |
-| US23       | Consult FAQ page          | High     | Tiago Oliveira  | As a User, I want to access the FAQ, so I can get answers to common questions |
-| US24       | Consult Contacts page     | High     | Tiago Oliveira  | As a User, I want to access admin’s contacts, so I can come in touch with the website creators |
-| US25       | Search Activities         | High     | Francisco Gomes | As a User, I want to search for activities, so that I can find those that spark my interest |
-| US26       | Filter Activities         | High     | Francisco Gomes | As a User, I want to filter the results I get, so that I can more freely choose those that better suite me |
-| US27       | See sports’ activity details | High  | Gustavo         | As a User, I want to see the details of the activity I select, so that I can plan what to choose |
-| US28       | Viewing profiles          | High     | Gustavo         | As a User, I want to be able to view other’s profiles, so that I can access relevant information |
+| US20       | See Home page             | High     | Tiago Oliveira  | As a User, I want to access the home page, so that I can have access to main features and a brief presentation of the website. |
+| US21       | See About page            | High     | Tiago Oliveira  | As a User, I want to see the about page, so that I can see a description about the main information of the website. |
+| US22       | See Services informations | High     | Tiago Oliveira  | As a User, I want to see the service's information, so I can understand how the website works. |
+| US23       | Consult FAQ page          | High     | Tiago Oliveira  | As a User, I want to see the FAQ, so I can get answers to common questions. |
+| US24       | Consult Contacts page     | High     | Tiago Oliveira  | As a User, I want to see admin’s contacts, so I can come in touch with the website creators. |
+| US25       | Search Activities         | High     | Francisco Gomes | As a User, I want to search for activities, so that I can find those that spark my interest. |
+| US26       | Filter Activities         | High     | Francisco Gomes | As a User, I want to filter the results I get, so that I can more freely choose those that better suite me. |
+| US27       | See sports’ spaces details | High  | Gustavo         | As a User, I want to see the details of the sports space I select, so that I can plan what to choose. |
+| US28       | Viewing profiles          | High     | Gustavo         | As a User, I want to be able to view other’s profiles, so that I can access relevant information. |
 
 <div align="center">
   <p>Table 3: User user stories.</p>
@@ -93,13 +93,13 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 | Identifier | Name                                      | Priority | Responsible | Description                                                                 |
 |------------|-------------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US40       | Book an activity                          | High     | j           | As a Customer, I want to be able to book an activity, so that I can secure a spot |
-| US41       | Cancel my reservation                     | High     | ss          | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend |
-| US42       | Review an activity                        | Medium   | ss          | As a Customer, I want to review an activity I have attended, so that other users can make informed decisions about the quality of each activity |
-| US43       | Getting notifications of a reservation’s status | Low   | ss          | As a Customer, I want to receive a notification when a reservation is confirmed or cancelled so that I can always stay informed |
-| US44       | Recommendations Algorithm                 | Low      | s           | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience |
+| US40       | Book a sport space                       | High     | unknown           | As a Customer, I want to be able to book a sport space, so that I can secure a spot |
+| US41       | Cancel my reservation                     | High     | unknown     | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend |
+| US42       | Review a sport space                        | Medium   | unknown     | As a Customer, I want to review a sport space I have attended, so that other users can make informed decisions about the quality of each space |
+| US43       | Getting notifications of a reservation’s status | Low   | unknown      | As a Customer, I want to receive a notification when a reservation is confirmed or cancelled so that I can always stay informed |
+| US44       | Recommendations Algorithm                 | Low      | unknown  | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience |
 
-**Table 6: Customer user stories**
+**Table 5: Customer user stories**
 
 #### A2.2.5. Business Owner
 
@@ -107,7 +107,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 |------------|---------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
 | US50       | Creating new sports spaces            | High     | unknown     | As a Business Owner, I want to be able to create new sports spaces, so that my clients can interact with my sports space. |
 | US51       | Editing sports spaces details            | High     | unknown     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book |
-| US52       | Delete or hide sports spaces          |  **    | unknown     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available. |
+| US52       | Delete or hide sports spaces          | High    | unknown     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available. |
 | US53       | Setting sports spaces schedules and capacity  | Medium   | unknown     | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available. |
 | US54       | Accepting, declining, modifing or canceling reservations   | Medium   | unknown     | As a Business Owner, I want to be able to accept, decline, modify or cancel customer reservations, so that |
 | US55       | Seeing an activities’ reservations in a calendar | Medium | unknown | As a Business Owner, I want to see all reservations for my activities in a calendar, so that I can easily track bookings and manage better schedules |
@@ -125,7 +125,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | US61       | Manage sports spaces                       | Medium | unknown | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users
 | US62       | Deleting inappropriate reviews             | Medium  | unknown | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users |
 
-**Table 7: Admin user stories**
+**Table 6: Admin user stories**
 
 ### 3. Supplementary Requirements
 

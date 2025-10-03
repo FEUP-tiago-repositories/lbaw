@@ -20,12 +20,26 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 
 ## A2: Actors and User stories
 
-> Brief presentation of the artifact goals.
+This artifact contains the specification of the actors and their user stories, serving as a basis for the system requirements
 
-### 1. Actors
+### A2.1. Actors
 
-> Diagram identifying actors and their relationships.\
-> Table identifying actors, including a brief description.
+For _SportsHub_ website, the actors are represented in Figure 1 and described in Table 1.
+<div align=center>
+![Figure 1: SportsHub actors](./a2_diagram.png)
+</div>
+
+|    Actor    | Description |
+|-------------|-------------|
+| User | Generic user that can see public information such as sports facilities, prices, availability, reviews… |
+| Visitor | Unauthenticated user that can register itself (sign-up) or sign-in in the system |
+| Authenticated | Registered users can create, edit and delete their profiles |
+| Customer | Authenticated users that can make, edit or cancel reservations and write reviews |
+| Business Owner | Authenticated users that can register their spaces, manage availability and pricing and interact with user feedback |
+| Administrator | Manages the overall systems and ensures a smooth experience |
+| Payment Provider | Allows to make payments through external providers |
+| OpenStreetMap API | External API responsible for the system's map service (OpenStreetMap) |
+<p style="align-text:center;">Table 1: SportsHub actors description.</p>
 
 ### 2. User Stories
 

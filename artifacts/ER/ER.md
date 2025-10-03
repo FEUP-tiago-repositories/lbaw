@@ -44,11 +44,45 @@ _SportsHub_ serves three main user types: **Administrators** who manage the over
 |------------|----------|----------|-------------------------------------------------------------------------------------------------|
 | US01       | Sign-in  | High     | As a Visitor, I want to be able to authenticate into the system, so that I can access my profile and my bookings |
 | US02       | Sign-up  | High     | As a Visitor, I want to be able to create an account in the system, so that I can access its main features |
-Table 2: Visitor user stories.
+#### 2.2. User
 
-#### 2.2. Actor 2
+#### 2.3. Authenticated User
 
-#### 2.N. Actor n
+| Identifier | Name               | Priority | Responsible | Description                                                                 |
+|------------|--------------------|----------|-------------|-----------------------------------------------------------------------------|
+| US21       | Editing my profile | High     | k           | As an Authenticated User, I want to be able to edit my own profile, so that I can update my information |
+
+#### 2.4. Business Owner
+
+| Identifier | Name                                  | Priority | Responsible | Description                                                                 |
+|------------|---------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
+| US32       | Creating new activities               | High     | Joana       | As a Business Owner, I want to be able to create new activities, so that my clients can have access to new activities |
+| US33       | Editing activities details            | High     | l           | As a Business Owner, I want to be able to edit the details of my activities, so that customers always have accurate and detailed information to help them decide and book |
+| US34       | Setting activities schedules          | Medium   | l           | As a Business Owner, I want to set schedules for my activities, so that my customers know when activities are available |
+| US35       | Marking activities as permanently closed | Medium | ç           | As a Business Owner, I want to mark activities as permanently closed, so that customers cannot see or try to book activities that are no longer available |
+| US36       | Accepting or declining reservations   | Medium   | jn          | As a Business Owner, I want to be able to accept or decline customer reservations, so that |
+| US37       | Seeing an activities’ reservations in a calendar | Medium | jj | As a Business Owner, I want to see all reservations for my activities in a calendar, so that I can easily track bookings and manage better schedules |
+| US38       | Getting notified when a reservation is made | Low  | j           | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
+| US39       | Discounts                             | Low      | j           | As a Business Owner, I want to create and manage discounts for my activities, so that I can attract more customers |
+| US40       | Getting reservation reminders         | Low      | i           | As a Business Owner, I want my customers to receive automatic reminders of their reservations, so that the attendance rate improves and no-shows are reduced |
+
+#### 2.5. Customer
+
+| Identifier | Name                                      | Priority | Responsible | Description                                                                 |
+|------------|-------------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
+| US41       | Book an activity                          | High     | j           | As a Customer, I want to be able to book an activity, so that I can secure a spot |
+| US42       | Cancel my reservation                     | High     | ss          | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend |
+| US43       | Review an activity                        | Medium   | ss          | As a Customer, I want to review an activity I have attended, so that other users can make informed decisions about the quality of each activity |
+| US44       | Getting notifications of a reservation’s status | Low   | ss          | As a Customer, I want to receive a notification when a reservation is confirmed or cancelled so that I can always stay informed |
+| US45       | Recommendations Algorithm                 | Low      | s           | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience |
+
+#### 2.6. Admin
+
+| Identifier | Name                          | Priority | Responsible | Description                                                                 |
+|------------|-------------------------------|----------|-------------|-----------------------------------------------------------------------------|
+| US51       | Manage user accounts          | Medium   | ds          | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized |
+| US52       | Deleting inappropriate comments | Medium  | a           | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users |
+| US53       | Deleting inappropriate activities | Medium | s           | As an Admin, I want to delete inappropriate activities, so that the platform remains safe and trustworthy for all users |
 
 ### 3. Supplementary Requirements
 

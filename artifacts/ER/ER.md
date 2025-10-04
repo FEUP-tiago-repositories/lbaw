@@ -123,7 +123,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
   <p>Table 6: Business Owner user stories.</p>
 </div>
 
-#### 2.6. Admin
+#### A2.2.6. Admin
 
 | Identifier | Name                                       | Priority | Responsible | Description                                                                 |
 |------------|--------------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
@@ -135,24 +135,25 @@ For the _SportsHub_ website, consider the user stories that are presented in the
   <p>Table 7: Admin user stories.</p>
 </div>
 
-### 3. Supplementary Requirements
+### A2.3. Supplementary Requirements
 
-> Section including business rules, technical requirements, and restrictions.\
-> For each subsection, a table containing identifiers, names, and descriptions for each requirement.
+This section contains business rules, technical requirements and other restrictions on the SportsHub's project.
 
-#### 3.1. Business rules
+#### A2.3.1. Business rules
 
 | Identifier | Name                      | Description                                                                 |
 |------------|---------------------------|-----------------------------------------------------------------------------|
-| BR10       | Unique Profile            | Only 1 profile per user                                                     |
-| BR11       | Profile ownership         | A profile may only be edited by its owner or an administrator               |
-| BR12       | Reservation details       | A reservation must include user, activity and schedule                      |
-| BR13       | Reservation schedule restraint | Reservations can only be made on a valid schedule set by the owner    |
-| BR14       | Unique reservation slot   | Customers cannot double-book the same time slot                             |
-| BR15       | Reservation management    | Reservations can be accepted, declined, or cancelled by the Business Owner or the system |
-| BR16       | Reservation ownership     | Only Business Owners can create, edit, schedule, or close activities        |
+| BR10       | Deleted Account           | Upon account deletion, reviews are kept but are made anonymous.
+| BR11       | Administrator Account     | Administrator accounts are independent of the user accounts, i.e. they cannot make reservations or have a sports space.
+| BR12       | Reservation details       | A reservation must be associated with a user, sports space and schedule.
+| BR13       | Reservation schedule restraint | Customers cannot double-book in the same (or different) sport spaces at the same time slot.
+| BR14       | Valid Reviews             | Customers can only leave a review at sports spaces where they have already been to (booked in the past)
+| BR15       | Reservation Dates and hours | Customers cannot book on a past date or past time of the same day. 
+| BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation or review but can see all the sports spaces and other funcionalities.
 
-**Table 8: SportsHub Business Rules**
+<div align="center">
+  <p>Table 8: SportsHub Business Rules</p>
+</div>
 
 #### 3.2. Technical requirements
 

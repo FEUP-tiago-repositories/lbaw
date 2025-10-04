@@ -150,6 +150,7 @@ This section contains business rules, technical requirements and other restricti
 | BR14       | Valid Reviews             | Customers can only leave a review at sports spaces where they have already been to (booked in the past)
 | BR15       | Reservation Dates and hours | Customers cannot book on a past date or past time of the same day. 
 | BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation or review but can see all the sports spaces and other funcionalities.
+| BR17       | Modify Reservations       | Customers can cancel or modify reservations only before the reservation start time. |
 
 <div align="center">
   <p>Table 8: SportsHub Business Rules</p>

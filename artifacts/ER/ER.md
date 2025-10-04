@@ -160,28 +160,30 @@ This section contains business rules, technical requirements and other restricti
 
 | Identifier | Name             | Description                                                                 |
 |------------|------------------|-----------------------------------------------------------------------------|
-| TR10       | Availability     | The system must be available 99% of the time in each 24h cycle              |
+| TR10       | Availability     | The system must be available 99% of the time in each 7 days cycle.              |
 | TR11       | Compatibility    | The application must be compatible in different types of systems, such as computers, tablets and smartphones |
 | TR12       | Development Tools | The system must be developed using HTML5, CSS, PHP and JavaScript, as well as compatible frameworks |
 | TR13       | Usability        | The system must be easy and intuitive to use, as it is designed to be used by every age group without technical experience |
 | TR14       | Security         | The system shall protect information from unauthorized access through the use of an authentication system. It should keep all sensitive information such as location and payment details encrypted |
 | TR15       | Database         | The PostgreSQL database management system must be used, with a version of 11 or higher. |
-| TR16       | Performance      | The system must support at least 60 concurrent reservations per minute     |
+| TR16       | Performance      | The system must support at least 60 concurrent reservations per minute.     |
 
-**Table 9: SportsHub Technical Requirements**
+<div align="center">
+  <p>Table 9: SportsHub Technical Requirements</p>
+</div>
 
 #### 3.3. Restrictions
 
 | Identifier | Name                   | Description                                                                 |
 |------------|------------------------|-----------------------------------------------------------------------------|
-| R10        | Discount limit         | Discounts cannot exceed 100%                                                |
-| R11        | Parental consent       | Minors must have parental approval to register                              |
+| R10        | Discount limit         | Discounts cannot exceed 100%.                                                |
+| R11        | Age restrictions       | Minors cannot create an account on the website.                             |
 | R12        | Realistic bookings     | Reservations can’t be made more than 1 year in advance                      |
-| R04        | Geographical Limitations | Spaces used for activities must be within Portuguese territories           |
-| R05        | Unique account         | There can be only 1 account per email and phone number                      |
+| R13        | Unique account         | There can be only 1 account per email and phone number                      |
 
-**Table 10: SportsHub Project Restrictions**
-
+<div align="center">
+  <p>Table 10: SportsHub Project Restrictions</p>
+</div>
 ---
 
 ## A3: Information Architecture

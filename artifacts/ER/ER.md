@@ -144,9 +144,9 @@ This section contains business rules, technical requirements and other restricti
 | Identifier | Name                      | Description                                                                 |
 |------------|---------------------------|-----------------------------------------------------------------------------|
 | BR10       | Deleted Account           | Upon account deletion, reviews are kept but are made anonymous.
-| BR11       | Administrator Account     | Administrator accounts are independent of the user accounts, i.e. they cannot make reservations or have a sports space.
+| BR11       | Administrator Account     | Administrator accounts are independent of the user accounts, i.e. they cannot make reservations or create a sports space.
 | BR12       | Reservation details       | A reservation must be associated with a user, sports space and schedule.
-| BR13       | Reservation schedule restraint | Customers cannot double-book in the same (or different) sport spaces at the same time slot.
+| BR13       | Reservation schedule Constraint | Customers cannot double-book in the same (or different) sport spaces at the same time slot.
 | BR14       | Valid Reviews             | Customers can only leave a review at sports spaces where they have already been to (booked in the past)
 | BR15       | Reservation Dates and hours | Customers cannot book on a past date or past time of the same day. 
 | BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation or review but can see all the sports spaces and other funcionalities.

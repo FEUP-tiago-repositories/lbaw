@@ -217,6 +217,13 @@ The wireframes below show the template and localization of the important interac
   <p align="center">Figure 4: Search page wireframe</p>
 </div>
 
+#### UIxx: Sports Space Details Page
+
+<div align="center">
+  <img src="./wireframes/space_wireframe.png" alt="Sports space details page wireframe" width="100%">
+  <p align="center">Figure 7: Sports space details page wireframe</p>
+</div>
+
 #### UIxx: Profiles Pages
 
 <div align="center">
@@ -224,13 +231,6 @@ The wireframes below show the template and localization of the important interac
   <p align="center">Figure 5: Customer profile page wireframe</p>
   <img src="./wireframes/business_owner_profile_wireframe.png" alt="Business owner profile page wireframe" width="100%">
   <p align="center">Figure 6: Business owner profile page wireframe</p>
-</div>
-
-#### UIxx: Sports Space Details Page
-
-<div align="center">
-  <img src="./wireframes/space_wireframe.png" alt="Sports space details page wireframe" width="100%">
-  <p align="center">Figure 7: Sports space details page wireframe</p>
 </div>
 
 ## Revision history

@@ -192,19 +192,46 @@ This section contains business rules, technical requirements and other restricti
 
 ### 1. Sitemap
 
-> Sitemap presenting the overall structure of the web application.\
-> Each page must be identified in the sitemap.\
-> Multiple instances of the same page (e.g. student profile in SIGARRA) are presented as page stacks.
+The image below represents the pages that are going to exist in SportsHub and how they can be accessed or used. It is a simple design of the process of using the website.
+
+<div align="center">
+  <img src="./sitemap.png" alt="Sitemap" width="100%">
+  <p align="center">Figure 2: SportsHub sitemap</p>
+</div>
 
 ### 2. Wireframes
 
-> Wireframes for, at least, two main pages of the web application. Do not include trivial use cases (e.g. about page, contacts).
+The wireframes below show the template and localization of the important interactive elements. The home page is the most significant page in our system and because of it it is represented below, the next pages that required some clarification and thinking about its usability are the search page, profiles pages (customer profile / business owner profile) and the sports space page. As such they also have wireframes.
 
-#### UIxx: Page Name
+#### UIxx: Home Page
 
-#### UIxx: Page Name
+<div align="center">
+  <img src="./wireframes/homepage_wireframe.png" alt="Home page wireframe" width="100%">
+  <p align="center">Figure 3: Home page wireframe</p>
+</div>
 
----
+#### UIxx: Search Page
+
+<div align="center">
+  <img src="./wireframes/activities_catalog_wireframe.png" alt="Search page wireframe" width="100%">
+  <p align="center">Figure 4: Search page wireframe</p>
+</div>
+
+#### UIxx: Profiles Pages
+
+<div align="center">
+  <img src="./wireframes/customer_profile_wireframe.png" alt="Customer profile page wireframe" width="100%">
+  <p align="center">Figure 5: Customer profile page wireframe</p>
+  <img src="./wireframes/business_owner_profile_wireframe.png" alt="Business owner profile page wireframe" width="100%">
+  <p align="center">Figure 6: Business owner profile page wireframe</p>
+</div>
+
+#### UIxx: Sports Space Details Page
+
+<div align="center">
+  <img src="./wireframes/space_wireframe.png" alt="Sports space details page wireframe" width="100%">
+  <p align="center">Figure 7: Sports space details page wireframe</p>
+</div>
 
 ## Revision history
 

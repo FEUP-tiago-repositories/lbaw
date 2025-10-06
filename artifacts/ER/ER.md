@@ -12,7 +12,7 @@ _SportsHub_ addresses the challenges faced by both sides of the sports activity 
 
 ### <u> Main Features </u>
 
-The platform includes user registration and profile management, personalized search and filtering capabilities, detailed facility pages with reviews, an instant booking system with multiple payment options, comprehensive notification system, reservation management and a business dashboard for facility owners. The platform features adaptive and responsive design ensuring optimal usability across desktop, tablet, and mobile devices.
+The platform includes sign-in/sign-up, user registration and profile management, personalized search and filtering capabilities, detailed facility pages with reviews, an instant booking system with multiple payment options, comprehensive notification system, reservation management and a business dashboard for facility owners. The platform features adaptive and responsive design ensuring optimal usability across desktop, tablet, and mobile devices.
 
 ### <u> User Profiles </u>
 

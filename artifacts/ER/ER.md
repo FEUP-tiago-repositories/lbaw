@@ -156,7 +156,7 @@ This section contains business rules, technical requirements and other restricti
   <p>Table 8: SportsHub Business Rules</p>
 </div>
 
-#### 3.2. Technical requirements
+#### A2.3.2. Technical requirements
 
 | Identifier | Name             | Description                                                                 |
 |------------|------------------|-----------------------------------------------------------------------------|
@@ -172,7 +172,7 @@ This section contains business rules, technical requirements and other restricti
   <p>Table 9: SportsHub Technical Requirements</p>
 </div>
 
-#### 3.3. Restrictions
+#### A2.3.3. Restrictions
 
 | Identifier | Name                   | Description                                                                 |
 |------------|------------------------|-----------------------------------------------------------------------------|
@@ -184,13 +184,12 @@ This section contains business rules, technical requirements and other restricti
 <div align="center">
   <p>Table 10: SportsHub Project Restrictions</p>
 </div>
----
 
 ## A3: Information Architecture
 
 > Brief presentation of the artifact goals.
 
-### 1. Sitemap
+### A3.1. Sitemap
 
 The image below represents the pages that are going to exist in SportsHub and how they can be accessed or used. It is a simple design of the process of using the website.
 
@@ -199,32 +198,32 @@ The image below represents the pages that are going to exist in SportsHub and ho
   <p align="center">Figure 2: SportsHub sitemap</p>
 </div>
 
-### 2. Wireframes
+### A3.2. Wireframes
 
 The wireframes below show the template and localization of the important interactive elements. The home page is the most significant page in our system and because of it it is represented below, the next pages that required some clarification and thinking about its usability are the search page, profiles pages (customer profile / business owner profile) and the sports space page. As such they also have wireframes.
 
-#### UIxx: Home Page
+#### UI01: Home Page
 
 <div align="center">
   <img src="./wireframes/homepage_wireframe.png" alt="Home page wireframe" width="100%">
   <p align="center">Figure 3: Home page wireframe</p>
 </div>
 
-#### UIxx: Search Page
+#### UI51: Search Page
 
 <div align="center">
   <img src="./wireframes/activities_catalog_wireframe.png" alt="Search page wireframe" width="100%">
   <p align="center">Figure 4: Search page wireframe</p>
 </div>
 
-#### UIxx: Sports Space Details Page
+#### UI52: Sports Space Details Page
 
 <div align="center">
   <img src="./wireframes/space_wireframe.png" alt="Sports space details page wireframe" width="100%">
   <p align="center">Figure 7: Sports space details page wireframe</p>
 </div>
 
-#### UIxx: Profiles Pages
+#### UI10: Profiles Pages
 
 <div align="center">
   <img src="./wireframes/customer_profile_wireframe.png" alt="Customer profile page wireframe" width="100%">

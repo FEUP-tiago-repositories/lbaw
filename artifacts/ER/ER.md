@@ -194,7 +194,7 @@ This section contains business rules, technical requirements and other restricti
 The image below represents the pages that are going to exist in SportsHub and how they can be accessed or used. It is a simple design of the process of using the website.
 
 <div align="center">
-  <img src="./sitemap.png" alt="Sitemap" width="100%">
+  <img src="./sitemap.png" alt="Sitemap" width="80%">
   <p align="center">Figure 2: SportsHub sitemap</p>
 </div>
 
@@ -205,31 +205,31 @@ The wireframes below show the template and localization of the important interac
 #### UI01: Home Page
 
 <div align="center">
-  <img src="./wireframes/homepage_wireframe.png" alt="Home page wireframe" width="100%">
+  <img src="./wireframes/homepage_wireframe.png" alt="Home page wireframe" width="80%">
   <p align="center">Figure 3: Home page wireframe</p>
 </div>
 
 #### UI51: Search Page
 
 <div align="center">
-  <img src="./wireframes/activities_catalog_wireframe.png" alt="Search page wireframe" width="100%">
+  <img src="./wireframes/activities_catalog_wireframe.png" alt="Search page wireframe" width="80%">
   <p align="center">Figure 4: Search page wireframe</p>
 </div>
 
 #### UI52: Sports Space Details Page
 
 <div align="center">
-  <img src="./wireframes/space_wireframe1.png" alt="Sports space details page wireframe" width="100%">
-  <img src="./wireframes/space_wireframe2.png" alt="Sports space details page wireframe" width="100%">
+  <img src="./wireframes/space_wireframe1.png" alt="Sports space details page wireframe" width="80%">
+  <img src="./wireframes/space_wireframe2.png" alt="Sports space details page wireframe" width="80%">
   <p align="center">Figure 7: Sports space details page wireframe</p>
 </div>
 
 #### UI10: Profiles Pages
 
 <div align="center">
-  <img src="./wireframes/customer_profile_wireframe.png" alt="Customer profile page wireframe" width="100%">
+  <img src="./wireframes/customer_profile_wireframe.png" alt="Customer profile page wireframe" width="80%">
   <p align="center">Figure 5: Customer profile page wireframe</p>
-  <img src="./wireframes/business_owner_profile_wireframe.png" alt="Business owner profile page wireframe" width="100%">
+  <img src="./wireframes/business_owner_profile_wireframe.png" alt="Business owner profile page wireframe" width="80%">
   <p align="center">Figure 6: Business owner profile page wireframe</p>
 </div>
 

@@ -16,7 +16,7 @@ The platform includes sign-in/sign-up, user registration and profile management,
 
 ### <u> User Profiles </u>
 
-_SportsHub_ serves four main user types: **Visitors** who are unauthenticated users that can browse the platform and may choose to sign in or sign up, **Administrators** who manage the overall system and ensure smooth operation; **Individual Users** including casual sports players, tourists, and digital nomads who search for activities, book spaces, and write reviews; and **Businesses** (facility owners and providers) who register their spaces, manage availability and pricing, and interact with user feedback.
+_SportsHub_ serves four main user types: **Visitors** who are unauthenticated users that can search activities, browse the platform and may choose to sign in or sign up; **Customers** (including casual sports players, tourists, and digital nomads) who can search, book spaces and write reviews; **Businesses** (facility owners and providers) who register their spaces, manage availability and pricing, and interact with user feedback and **Administrators** who manage the overall system and ensure smooth operation;
 
 ## A2: Actors and User stories
 
@@ -219,7 +219,8 @@ The wireframes below show the template and localization of the important interac
 #### UI52: Sports Space Details Page
 
 <div align="center">
-  <img src="./wireframes/space_wireframe.png" alt="Sports space details page wireframe" width="100%">
+  <img src="./wireframes/space_wireframe1.png" alt="Sports space details page wireframe" width="100%">
+  <img src="./wireframes/space_wireframe2.png" alt="Sports space details page wireframe" width="100%">
   <p align="center">Figure 7: Sports space details page wireframe</p>
 </div>
 

@@ -93,10 +93,10 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 | Identifier | Name                                      | Priority | Responsible | Description                                                                 |
 |------------|-------------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US40       | Book a sport space                        | High     | unknown     | As a Customer, I want to be able to book a sport space, so that I can ensure a slot in that space. |
+| US40       | Book a sport space                        | High     | Gustavo     | As a Customer, I want to be able to book a sport space, so that I can ensure a slot in that space. |
 | US41       | Edit my future reservation                | High     | unknown     | As a Customer, I want to be able to edit my future reservations, so that I can keep my reservations up-to-date. |
-| US42       | Cancel my future reservation              | High     | unknown     | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend. |
-| US43       | See my reservations                       |          | unknown     | As a Customer, I want to be able to see my future or past reservations, so that I can remember and review past reservations and keep me updated or edit my future reservations. |
+| US42       | Cancel my future reservation              | High     | Gustavo     | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend. |
+| US43       | See my reservations                       |    High      | Gustavo     | As a Customer, I want to be able to see my future or past reservations, so that I can remember and review past reservations and keep me updated or edit my future reservations. |
 | US44       | Review a sport space                      | Medium   | unknown     | As a Customer, I want to review a sport space I have attended, so that other users can make informed decisions about the quality of each space. |
 | US45       | Getting notifications of a reservation    | Low      | unknown     | As a Customer, I want to receive a notification when a reservation is confirmed, cancelled or is very soon so that I can always stay informed. |
 | US46       | Recommendations Algorithm                 | Low      | Tiago Yin     | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience. |
@@ -109,9 +109,9 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 | Identifier | Name                                  | Priority | Responsible | Description                                                                 |
 |------------|---------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US50       | Creating new sports spaces            | High     | unknown     | As a Business Owner, I want to be able to create new sports spaces, so that my clients can interact with my sports space. |
+| US50       | Creating new sports spaces            | High     | Gustavo     | As a Business Owner, I want to be able to create new sports spaces, so that my clients can interact with my sports space. |
 | US51       | Editing sports spaces details         | High     | Tiago Yin     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book. |
-| US52       | Delete or hide sports spaces          | High     | unknown     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available. |
+| US52       | Delete or hide sports spaces          | High     | Gustavo     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available. |
 | US53       | Setting sports spaces schedules and capacity | Medium | Tiago Yin | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available. |
 | US54       | Accepting, declining, modifing or canceling reservations | Medium | unknown | As a Business Owner, I want to be able to accept, decline, modify or cancel customer reservations, so that I can manage my availability efficiently and avoid scheduling conflicts. | 
 | US55       | Seeing space's reservations in a calendar | Medium | Tiago Yin   | As a Business Owner, I want to see all reservations for my spaces in a calendar, so that I can easily track bookings and manage better schedules. |
@@ -161,10 +161,10 @@ This section contains business rules, technical requirements and other restricti
 | Identifier | Name             | Description                                                                 |
 |------------|------------------|-----------------------------------------------------------------------------|
 | TR10       | Availability     | The system must be available 99% of the time in each 7 days cycle.              |
-| TR11       | Compatibility    | The application must be compatible in different types of systems, such as computers, tablets and smartphones |
+| <b>TR11</b>     | <b> Compatibility </b>    | <b> The application must be compatible in different types of systems, such as computers, tablets and smartphones </b> |
 | TR12       | Development Tools | The system must be developed using HTML5, CSS, PHP and JavaScript, as well as compatible frameworks |
-| TR13       | Usability        | The system must be easy and intuitive to use, as it is designed to be used by every age group without technical experience |
-| TR14       | Security         | The system shall protect information from unauthorized access through the use of an authentication system. It should keep all sensitive information such as location and payment details encrypted |
+| <b>TR13</b>       | <b>Usability</b>        | <b>The system must be easy and intuitive to use, as it is designed to be used by every age group without technical experience</b> |
+| <b>TR14</b>       | <b>Security</b>         | <b>The system shall protect information from unauthorized access through the use of an authentication system. It should keep all sensitive information such as location and payment details encrypted</b> |
 | TR15       | Database         | The PostgreSQL database management system must be used, with a version of 11 or higher. |
 | TR16       | Performance      | The system must support at least 60 concurrent reservations per minute.     |
 

@@ -201,6 +201,8 @@ The image below represents the pages that are going to exist in SportsHub and ho
   <p align="center">Figure 2: SportsHub sitemap</p>
 </div>
 
+> Note: there is no specific page for tags. They will be presented as part of the search pages, sport spaces and other related pages.
+
 ### A3.2. Wireframes
 
 The wireframes below show the template and localization of the important interactive elements. The home page is the most significant page in our system and because of it it is represented below, the next pages that required some clarification and thinking about its usability are the search page, profiles pages (customer profile / business owner profile) and the sports space page. As such they also have wireframes.

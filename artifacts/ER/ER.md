@@ -81,9 +81,9 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 #### A2.2.3. Authenticated User
 
-| Identifier | Name               | Priority | Responsible | Description                                                                                             |
-| ---------- | ------------------ | -------- | ----------- | ------------------------------------------------------------------------------------------------------- |
-| US30       | Editing my profile | High     | unknown     | As an Authenticated User, I want to be able to edit my own profile, so that I can update my information |
+| Identifier | Name               | Priority | Responsible    | Description                                                                                             |
+| ---------- | ------------------ | -------- | -------------- | ------------------------------------------------------------------------------------------------------- |
+| US30       | Editing my profile | High     | Tiago Oliveira | As an Authenticated User, I want to be able to edit my own profile, so that I can update my information |
 
 <div align="center">
   <p>Table 4: Authenticated user user stories.</p>
@@ -110,9 +110,9 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | Identifier | Name                                                     | Priority | Responsible | Description                                                                                                                                                                         |
 | ---------- | -------------------------------------------------------- | -------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | US50       | Creating new sports spaces                               | High     | Gustavo     | As a Business Owner, I want to be able to create new sports spaces, so that my clients can interact with my sports space.                                                           |
-| US51       | Editing sports spaces details                            | High     | Tiago Yin   | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book.              |
+| US51       | Editing sports spaces details                            | High     | Gustavo     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book.              |
 | US52       | Delete or hide sports spaces                             | High     | Gustavo     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available.                                       |
-| US53       | Setting sports spaces schedules and capacity             | Medium   | Tiago Yin   | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available.                                         |
+| US53       | Setting sports spaces schedules and capacity             | Medium   | Gustavo     | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available.                                         |
 | US54       | Accepting, declining, modifing or canceling reservations | Medium   | unknown     | As a Business Owner, I want to be able to accept, decline, modify or cancel customer reservations, so that I can manage my availability efficiently and avoid scheduling conflicts. |
 | US55       | Seeing space's reservations in a calendar                | Medium   | Tiago Yin   | As a Business Owner, I want to see all reservations for my spaces in a calendar, so that I can easily track bookings and manage better schedules.                                   |
 | US56       | Respond to reviews                                       | Low      | Gustavo     | As a Business Owner, I want respond to reviews in my sports spaces, so that I can appreciate for positive comments and provide a response to negative reviews.                      |

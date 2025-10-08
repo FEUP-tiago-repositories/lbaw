@@ -16,7 +16,7 @@ The platform includes sign-in/sign-up, user registration and profile management,
 
 ### <u> User Profiles </u>
 
-_SportsHub_ serves three main user types: **Administrators** who manage the overall system and ensure smooth operation; **Individual Users** including casual sports players, tourists, and digital nomads who search for activities, book spaces, and write reviews; and **Businesses** (facility owners and providers) who register their spaces, manage availability and pricing, and interact with user feedback.
+_SportsHub_ serves four main user types: **Visitors** who are unauthenticated users that can browse the platform and may choose to sign in or sign up, **Administrators** who manage the overall system and ensure smooth operation; **Individual Users** including casual sports players, tourists, and digital nomads who search for activities, book spaces, and write reviews; and **Businesses** (facility owners and providers) who register their spaces, manage availability and pricing, and interact with user feedback.
 
 ## A2: Actors and User stories
 
@@ -58,7 +58,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | US11       | Sign-up  | High     | Gustavo     | As a Visitor, I want to be able to create an account in the system, so that I can access its main features |
 
 <div align="center">
-  <p>Table 2: Visitors user stories.</p>
+  <p>Table 2: Visitor user stories.</p>
 </div>
 
 #### A2.2.2. User

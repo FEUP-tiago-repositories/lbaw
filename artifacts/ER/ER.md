@@ -127,9 +127,9 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 | Identifier | Name                           | Priority | Responsible | Description                                                                                                                              |
 | ---------- | ------------------------------ | -------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| US60       | Manage users accounts          | Medium   | Frsncisco    | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized. |
-| US61       | Manage sports spaces           | Medium   | Francisco   | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users.              |
-| US62       | Deleting inappropriate reviews | Medium   | Tiago Yin    | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users.               |
+| US60       | Manage users accounts          | High   | Frsncisco    | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized. |
+| US61       | Manage sports spaces           | High   | Francisco   | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users.              |
+| US62       | Deleting inappropriate reviews | High   | Tiago Yin    | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users.               |
 
 <div align="center">
   <p>Table 7: Admin user stories.</p>

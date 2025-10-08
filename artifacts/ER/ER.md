@@ -70,8 +70,8 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | US22       | See Services informations  | High     | Tiago Oliveira  | As a User, I want to see the service's information, so I can understand how the website works.                                 |
 | US23       | Consult FAQ page           | High     | Tiago Oliveira  | As a User, I want to see the FAQ, so I can get answers to common questions.                                                    |
 | US24       | Consult Contacts page      | High     | Tiago Oliveira  | As a User, I want to see admin’s contacts, so I can come in touch with the website creators.                                   |
-| US25       | Search Spaces              | High     | Francisco Gomes | As a User, I want to search for spaces, so that I can find those that spark my interest.                                       |
-| US26       | Filter Activities          | High     | Francisco Gomes | As a User, I want to filter the results I get, so that I can more freely choose those that better suite me.                    |
+| US25       | Search Spaces              | High     | Francisco | As a User, I want to search for spaces, so that I can find those that spark my interest.                                       |
+| US26       | Filter Activities          | High     | Francisco | As a User, I want to filter the results I get, so that I can more freely choose those that better suite me.                    |
 | US27       | See sports’ spaces details | High     | Gustavo         | As a User, I want to see the details of the sports space I select, so that I can plan what to choose.                          |
 | US28       | Viewing profiles           | High     | Gustavo         | As a User, I want to be able to view other’s profiles, so that I can access relevant information.                              |
 
@@ -100,6 +100,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | US44       | Review a sport space                   | High   | Tiago Yin     | As a Customer, I want to review a sport space I have attended, so that other users can make informed decisions about the quality of each space.                                 |
 | US45       | Getting notifications of a reservation | Low      | Tiago Yin     | As a Customer, I want to receive a notification when a reservation is confirmed, cancelled or is very soon so that I can always stay informed.                                  |
 | US46       | Recommendations Algorithm              | Low      | Francisco   | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience.                                                   |
+| US47       | Favorites                              | Low      | Francisco   | As a Customer, I want to choose my favorite spaces and see them on my profile, so that I can remember which spaces I enjoyed the most and want to return to.                    | 
 
 <div align="center">
   <p>Table 5: Customer user stories.</p>
@@ -117,7 +118,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | US55       | Seeing space's reservations in a calendar                | Medium   | Tiago Yin   | As a Business Owner, I want to see all reservations for my spaces in a calendar, so that I can easily track bookings and manage better schedules.                                   |
 | US56       | Respond to reviews                                       | Low      | Gustavo     | As a Business Owner, I want respond to reviews in my sports spaces, so that I can appreciate for positive comments and provide a response to negative reviews.                      |
 | US57       | Getting notified when a reservation is made              | Low      | Tiago Yin    | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively                                                    |
-| US58       | Discounts                                                | Low      | Frsncisco    | As a Business Owner, I want to create and manage discounts for my sports spaces, so that I can attract more customers                                                               |
+| US58       | Discounts                                                | Low      | Francisco    | As a Business Owner, I want to create and manage discounts for my sports spaces, so that I can attract more customers                                                               |
 
 <div align="center">
   <p>Table 6: Business Owner user stories.</p>

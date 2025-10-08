@@ -188,7 +188,9 @@ This section contains business rules, technical requirements and other restricti
 
 ## A3: Information Architecture
 
-> Brief presentation of the artifact goals.
+The goal of this artifact is to give a brief overview of the information architecture. This is important for us to identify user requirements, as well as to preview and plan the application organization and user interface of the final product. 
+
+This artifact contains a sitemap with the main detailing the overall structure of the pages and six wireframes with the functionality and content of the more important pages.
 
 ### A3.1. Sitemap
 

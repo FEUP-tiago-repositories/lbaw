@@ -99,7 +99,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | US43       | See my reservations                       |          | unknown     | As a Customer, I want to be able to see my future or past reservations, so that I can remember and review past reservations and keep me updated or edit my future reservations. |
 | US44       | Review a sport space                      | Medium   | unknown     | As a Customer, I want to review a sport space I have attended, so that other users can make informed decisions about the quality of each space. |
 | US45       | Getting notifications of a reservation    | Low      | unknown     | As a Customer, I want to receive a notification when a reservation is confirmed, cancelled or is very soon so that I can always stay informed. |
-| US46       | Recommendations Algorithm                 | Low      | unknown     | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience. |
+| US46       | Recommendations Algorithm                 | Low      | Tiago Yin     | As a Customer, I want to see spaces based on my preferences, so that I can have a more enjoyable and personalized experience. |
 
 <div align="center">
   <p>Table 5: Customer user stories.</p>
@@ -110,14 +110,14 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | Identifier | Name                                  | Priority | Responsible | Description                                                                 |
 |------------|---------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
 | US50       | Creating new sports spaces            | High     | unknown     | As a Business Owner, I want to be able to create new sports spaces, so that my clients can interact with my sports space. |
-| US51       | Editing sports spaces details         | High     | unknown     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book. |
+| US51       | Editing sports spaces details         | High     | Tiago Yin     | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book. |
 | US52       | Delete or hide sports spaces          | High     | unknown     | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available. |
-| US53       | Setting sports spaces schedules and capacity | Medium | unknown | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available. |
+| US53       | Setting sports spaces schedules and capacity | Medium | Tiago Yin | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available. |
 | US54       | Accepting, declining, modifing or canceling reservations | Medium | unknown | As a Business Owner, I want to be able to accept, decline, modify or cancel customer reservations, so that I can manage my availability efficiently and avoid scheduling conflicts. | 
-| US55       | Seeing space's reservations in a calendar | Medium | unknown   | As a Business Owner, I want to see all reservations for my spaces in a calendar, so that I can easily track bookings and manage better schedules. |
+| US55       | Seeing space's reservations in a calendar | Medium | Tiago Yin   | As a Business Owner, I want to see all reservations for my spaces in a calendar, so that I can easily track bookings and manage better schedules. |
 | US56       | Respond to reviews                    | Low      | unknown     | As a Business Owner, I want respond to reviews in my sports spaces, so that I can appreciate for positive comments and provide a response to negative reviews. |
-| US57       | Getting notified when a reservation is made | Low | unknown    | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
-| US58       | Discounts                             | Low      | unknown     | As a Business Owner, I want to create and manage discounts for my sports spaces, so that I can attract more customers |
+| US57       | Getting notified when a reservation is made | Low | Tiago Yin    | As a Business Owner, I want to be notified whenever a customer makes a reservation, so that I can manage my schedule effectively |
+| US58       | Discounts                             | Low      | Tiago Yin     | As a Business Owner, I want to create and manage discounts for my sports spaces, so that I can attract more customers |
 
 <div align="center">
   <p>Table 6: Business Owner user stories.</p>
@@ -127,9 +127,9 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 
 | Identifier | Name                                       | Priority | Responsible | Description                                                                 |
 |------------|--------------------------------------------|----------|-------------|-----------------------------------------------------------------------------|
-| US60       | Manage users accounts   | Medium   | unknown  | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized. |
-| US61       | Manage sports spaces                       | Medium | unknown | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users. |
-| US62       | Deleting inappropriate reviews             | Medium  | unknown | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users. |
+| US60       | Manage users accounts   | Medium   | Tiago Yin  | As an Admin, I want to manage user accounts, so that I can maintain control over access, ensure security, and keep the system organized. |
+| US61       | Manage sports spaces                       | Medium | Tiago Yin | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users. |
+| US62       | Deleting inappropriate reviews             | Medium  | Tiago Yin | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users. |
 
 <div align="center">
   <p>Table 7: Admin user stories.</p>

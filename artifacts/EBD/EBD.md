@@ -145,13 +145,11 @@
 
 Changes made to the first submission:
 
-1. Item 1
-2. ..
+(nothing to mention)
 
----
+GROUP25122, 08/10/2025
 
-GROUPYYgg, DD/MM/20YY
-
-* Group member 1 name, email (Editor)
-* Group member 2 name, email
-* ...
+- Group member 1 Gustavo Lourenço up202306578@up.pt
+- Group member 2 Tiago Oliveira, up202007448@up.pt
+- Group member 3 Tiago Yin, up202306438@up.pt
+- Group member 4 Francisco Gomes, up20306498@up.pt

@@ -56,7 +56,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | ------------| -----------------| -------- | ----------- | ---------------------------------------------------------------------------------------------------------------- |
 | US100       | Sign-in          | High     | Gustavo     | As a Visitor, I want to be able to authenticate into the system, so that I can access my profile and my bookings |
 | US101       | Sign-up          | High     | Gustavo     | As a Visitor, I want to be able to create an account in the system, so that I can access its main features       |
-| US102       | Recover Password | Medium   | Gustavo     | As a Visitor, I want to be able to recover my password, so that I can recover it in case I forget.               |
+| US102       | Recover Password | Medium   | Gustavo     | As a Visitor, I want to be able to recover my password, so that I can get it back in case I forget it.               |
 
 <div align="center">
   <p>Table 2: Visitor user stories.</p>
@@ -70,11 +70,11 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | US201      | See About page                  | High     | Tiago Oliveira | As a User, I want to see the about page, so that I can see a description about the main information of the website.            |
 | US202      | See Services informations       | High     | Tiago Oliveira | As a User, I want to see the service's information, so I can understand how the website works.                                 |
 | US203      | Consult FAQ page                | High     | Tiago Oliveira | As a User, I want to see the FAQ, so I can get answers to common questions.                                                    |
-| US204      | Consult Contacts page           | High     | Tiago Oliveira | As a User, I want to see admin’s contacts, so I can come in touch with the website creators.                                   |
+| US204      | Consult Contacts page           | High     | Tiago Oliveira | As a User, I want to see the admin’s contacts, so I can come in touch with the website creators.                                   |
 | US205      | See sports spaces details       | High     | Gustavo        | As a User, I want to see the details of the sports space I select, so that I can plan what to choose.                          |
 | US206      | Full-text Search                | High     | Francisco      | As a user, I want to perform full-text searches, so that I can find relevant sports, spaces or businesses based on partial matches or broader search terms. |
 | US207      | Exact Match Search              | High     | Francisco      | As a user, I want to be able to perform an exact match search, so that I can quickly find specific sports, spaces or businesses based on precise keywords. |
-| US208      | Search Filters                  | Medium   | Francisco      | As a user, I want to apply filters (e.g., date range, sport type, location, business) to my search results, so that I can more freely choose those that better suite me.|
+| US208      | Search Filters                  | Medium   | Francisco      | As a user, I want to apply filters (e.g., date range, sport type, location, business) to my search results, so that I can more freely choose those that better suit me.|
 | US209      | Search over multiple attributes | Medium   | Francisco      | As a user, I want to search across multiple attributes(e.g., sport type, location, business), so that I can find relevant results based on various criteria. |
 | US210      | Placeholders in Form Inputs     | Medium   | Tiago Oliveira | As a user, I want to see placeholders in form input fields, so that I can easily understand what information is expected in each field before I start typing. |
 | US211      | Contextual Error Messages       | Medium   | Tiago Oliveira | As a user, I want to receive contextual error messages when I enter invalid information in form fields, so that I can quickly understand what went wrong and how to fix it.|
@@ -90,7 +90,7 @@ For the _SportsHub_ website, consider the user stories that are presented in the
 | ------------| ---------------------| -------- | ------------| -------------------------------------------------------------------------------------------------------------------------------------- |
 | US300       | View my profile      | High     | Francisco   | As an Authenticated User, I want to be able to view my own profile, so that I can always check my own information.                     |
 | US301       | Editing my profile   | High     | Francisco   | As an Authenticated User, I want to be able to edit my own profile, so that I can update my information and change my profile picture. |
-| US302       | Delete my profile    | Medium   | Francisco   | As an Authenticated User, I want to be able to delete my own profile, so that I can delete my account if I no longer wish to use it.   |
+| US302       | Delete my profile    | Medium   | Francisco   | As an Authenticated User, I want to be able to delete my own profile, so that I can erase my account if I no longer wish to use it.   |
 | US303       | Manage notifications | Medium   | Tiago Yin   | As an Authenticated User, I want to be able to see my own notifications, so I can read all, clean or mark as read.                     |
 
 <div align="center">

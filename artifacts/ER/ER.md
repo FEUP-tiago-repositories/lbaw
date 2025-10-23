@@ -152,7 +152,7 @@ This section contains business rules, technical requirements and other restricti
 
 | Identifier | Name                                | Description                                                                                                               |
 | -----------|------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| BR10       | Deleted Account                     | Upon account deletion, reviews are kept but are made anonymous.                                                           |
+| BR10       | Deleted User Account                | Upon account deletion, reviews are kept but are made anonymous.                                                           |
 | BR11       | Administrator Account               | Administrator accounts are independent of the user accounts, i.e. they cannot make reservations or create a sports space. |
 | BR12       | Reservation details                 | A reservation must be associated with a user, sports space and schedule.                                                  |
 | BR13       | Reservation schedule Constraint     | Customers cannot double-book in the same (or different) sport spaces at the same time slot.                               |
@@ -160,6 +160,11 @@ This section contains business rules, technical requirements and other restricti
 | BR15       | Reservation Dates and hours         | Customers cannot book on a past date or past time of the same day.                                                        |
 | BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation or review but can see all the sports spaces and other funcionalities.        |
 | BR17       | Modify Reservations                 | Customers can cancel or modify reservations only before the reservation start time.                                       |
+| BR18       | Deleted Business Account            | When a Business Owner deletes its profile, their sports spaces are deleted.                                               |
+| BR19       | Closed Spaces                       | When a sports space is closed, all future reservations are canceled.                                                      |
+| BR20       | Permanently Closed Spaces           | When a sports space is permanently closed, all future reservations are canceled and the space's data are deleted except the spaceId, name and main image. |
+| BR21       | Past or canceled reservations for closed sport spaces | When a past or canceled reservation is about a closed space, the "Repeat Reservation" option is not displayed, it is not possible to provide a review of that reservation (if it is a past reservation) and it isn't possible to click on the space to access its page or view its details. |
+| BR22       | Banned User                         | If a user is blocked by an administrator, they cannot do anything: in the case of a customer, they cannot make or edit reservations or leave reviews; in the case of a company, spaces are closed (not permanently) and new spaces cannot be created or edited, nor can they respond to reviews of spaces (which are now closed). |
 
 <div align="center">
   <p>Table 8: SportsHub Business Rules</p>

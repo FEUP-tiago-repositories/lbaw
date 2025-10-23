@@ -8,14 +8,30 @@
 
 ### 1. Class diagram
 
-> UML class diagram containing the classes, associations, multiplicity and roles.\
-> For each class, the attributes, associations and constraints are included in the class diagram.
+<div align="center">
+  <img src="./uploads/diagram.png" alt="Diagram" width="80%">
+  <p align="center">Figure 2: Class Diagram</p>
+</div>
 
 ### 2. Additional Business Rules
 
-> Business rules can be included in the UML diagram as UML notes or in a table in this section.
+| Identifier | Name                                | Description                                                                                                               |
+| -----------|------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| BR10       | Deleted User Account                | Upon account deletion, reviews are kept but are made anonymous.                                                           |
+| BR11       | Administrator Account               | Administrator accounts are independent of the user accounts, i.e. they cannot make reservations or create a sports space. |
+| BR12       | Reservation details                 | A reservation must be associated with a user, sports space and schedule.                                                  |
+| BR13       | Reservation schedule Constraint     | Customers cannot double-book in the same (or different) sport spaces at the same time slot.                               |
+| BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation or review but can see all the sports spaces and other funcionalities.        |
+| BR17       | Modify Reservations                 | Customers can cancel or modify reservations only before the reservation start time.                                       |
+| BR18       | Deleted Business Account            | When a Business Owner deletes its profile, their sports spaces are deleted.                                               |
+| BR19       | Closed Spaces                       | When a sports space is closed, all future reservations are canceled.                                                      |
+| BR20       | Permanently Closed Spaces           | When a sports space is permanently closed, all future reservations are canceled and the space's data are deleted except the spaceId, name and main image. |
+| BR21       | Past or canceled reservations for closed sport spaces | When a past or canceled reservation is about a closed space, the "Repeat Reservation" option is not displayed, it is not possible to provide a review of that reservation (if it is a past reservation) and it isn't possible to click on the space to access its page or view its details. |
+| BR22       | Banned User                         | If a user is blocked by an administrator, they cannot do anything: in the case of a customer, they cannot make or edit reservations or leave reviews; in the case of a company, spaces are closed (not permanently) and new spaces cannot be created or edited, nor can they respond to reviews of spaces (which are now closed). |
 
----
+<div align="center">
+  <p>Table 1: Additional Business Rules</p>
+</div>
 
 ## A5: Relational Schema, validation and schema refinement
 
@@ -145,9 +161,9 @@
 
 Changes made to the first submission:
 
-(nothing to mention)
+(nothing)
 
-GROUP25122, 08/10/2025
+### GROUP25122, 08/10/2025
 
 - Group member 1 Gustavo Lourenço up202306578@up.pt
 - Group member 2 Tiago Oliveira, up202007448@up.pt

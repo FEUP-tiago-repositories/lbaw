@@ -256,6 +256,7 @@ The wireframes below show the template and localization of the important interac
 Changes made to the first submission:
 
 1. Change user story identifiers to 3 digits. Add new user stories (US102, US207, US209, US210, US211, US212, US301, US302 and US303) and minimal changes to others (US100, US206, US208, US300 and US600). (12/10/2025, by Tiago Oliveira)
+2. Add new business rules (BR18 to BR22). (23/10/2025, by Tiago Oliveira)
 
 ###GROUP25122, 08/10/2025
 

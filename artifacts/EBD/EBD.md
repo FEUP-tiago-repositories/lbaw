@@ -37,37 +37,141 @@
 
 ### 1. Relational Schema
 
-> The Relational Schema includes the relation schemas, attributes, domains, primary keys, foreign keys and other integrity rules: UNIQUE, DEFAULT, NOT NULL, CHECK.\
-> Relation schemas are specified in the compact notation:
+> Brief text about relational schema
 
 | Relation reference | Relation Compact Notation |
-|--------------------|---------------------------|
-| R01 | Table1(<ins>id</ins>, attribute **NN**) |
-| R02 | Table2(<ins>id</ins>, attribute → Table1 **NN**) |
-| R03 | Table3(<ins>id</ins>, id2 → Table2, attribute **UK NN**) |
-| R04 | Table4((<ins>id1</ins>, <ins>id2</ins>) → Table3, id3, attribute **CK** attribute \> 0) |
+|-------------------|---------------------------|
+| R01 | User(<ins>userID</ins>, userID -> user **CK** user.role = business_owner, username **NN**, email **UK NN**, phoneNo **UK NN**, role NN, isDeleted **NN DF** False, isBanned **NN DF** False, password **NN**, birthDate **NN CK** birthDate > NOW - 18 years, profilePicURL) |
+| R02 | Space(<ins>spaceID</ins>, title **NN**, address **NN**, description, spacePicURL, isClosed **NN DF** False, sportType, PhoneNo **UK NN**, email **UK NN**, \\favorites **NN**, \\reviews **NN**) |
+| R03 | Admin(<ins>adminID</ins>, email **UK NN**, password **NN**) |
+| R04 | Ban(<ins>banID</ins>, userID -> user, adminID -> admin, motive **NN**, timeStamp **NN DF** now) |
+| R05 | Review(<ins>reviewID</ins>, userID -> user **CK** user.role = customer, text **NN**, timeStamp **NN DF** now, rating **NN CK** rating > 0 AND rating ≤ 5) |
+| R06 | Booking(<ins>bookingID</ins>, spaceID ->space, userID ->user, bookingDate **NN**, timeStamp **NN DF** now, isCancelled **NN DF** False |
+| R07 | Response(<ins>responseID</ins>, userID -> user **CK** user.role = business_owner , reviewID -> review, text **NN**, timeStamp **NN DF** now) |
+| R08 | Payment(<ins>paymentID</ins>, paymentValue **NN CK** value > 0, isDiscounted **NN DF** False, isAccepted **NN DF** False, |
+| R09 | Discount(<ins>discountID</ins>, spaceID -> space, value **NN CK** 0 < value < 100, startDate **NN**, endDate **NN CK** startDate < endDate) |
+| R10 | Notification(<ins>notificationID</ins>, userID -> user, timeStamp **NN DF,** isRead **NN**) |
+| R11 | Schedule( <ins>id_booking</ins> -> booking, spaceID -> space, startTime **NN**, duration **NN CK** duration > 0, maxCapacity **NN CK** maxCapacity > 0) |
+| R12 | Media(<ins>mediaID</ins>, mediaURL **NN**, isCover **NN DF** False) |
+| R13 | Favorited(<ins>spaceID</ins> -> space, <ins>userID</ins> -> user, isFavorite **NN**) |
+
+> Legend:
+> - UK = UNIQUE KEY
+> - NN = NOT NULL
+> - DF = DEFAULT
+> - CK = CHECK
 
 ### 2. Domains
 
 > The specification of additional domains can also be made in a compact form, using the notation:
 
-| Domain Name | Domain Specification |
-|-------------|----------------------|
-| Today | DATE DEFAULT CURRENT_DATE |
-| Priority | ENUM ('High', 'Medium', 'Low') |
+| Domain Name        | Domain Specification                                                |
+|--------------------|---------------------------------------------------------------------|
+| role               | ENUM('Business_Owner', 'Customer') |
+| sportsType         | ENUM('Badminton', 'Basketball', 'Biking', 'Climbing', 'Football', 'Golf', 'Gym', 'Handball', 'Hockey', 'Martial Arts', 'Padel', 'Rugby', 'Running', 'Skating', 'Swimming', 'Tennis', 'Volleyball', 'Other') |
+| notificationTypes  | ENUM('Confirmation', 'Cancelation', 'Reminder', 'Review') |
 
 ### 3. Schema validation
 
 > To validate the Relational Schema obtained from the Conceptual Model, all functional dependencies are identified and the normalization of all relation schemas is accomplished. Should it be necessary, in case the scheme is not in the Boyce–Codd Normal Form (BCNF), the relational schema is refined using normalization.
 
-| **TABLE R01** | User |
-|---------------|------|
-| **Keys** | { id }, { email } |
-| **Functional Dependencies:** |  |
-| FD0101 | id → {email, name} |
-| FD0102 | email → {id, name} |
-| ... | ... |
-| **NORMAL FORM** | BCNF |
+| Table R01 | User |
+|---|---|
+| **Keys:** | {userID}, {email}, {phoneNo} |
+| **Functional Dependencies:** |
+| FD0101 | {userID} -> {username, email, phoneNo, role, isDeleted, isBanned, password, birthday, profilePicURL} |
+| FD0102 | {email} -> {userID, username, phoneNo, role, isDeleted, isBanned, password, birthday, profilePicURL} |
+| FD0103 | {phoneNo} -> {userID, username, email, role, isDeleted, isBanned, password, birthday, profilePicURL} |
+| **Normal Form** | BCNF |
+
+> check if we need user id key later
+
+| Table R02 | Space |
+|---|---|
+| **Keys:** | {spaceID}, {email}, {phoneNo} |
+| **Functional Dependencies:** | |
+| FD0201 | {spaceID} -> (title, address, description, spacePicURL, isClosed, sportType, PhoneNo, email, \\favorites, \\reviews) |
+| FD0202 | {email} -> (spaceID, title, address, description, spacePicURL, isClosed, sportType, PhoneNo, \\favorites, \\reviews) |
+| FD0203 | {phoneNo} -> (spaceID, title, address, description, spacePicURL, isClosed, sportType, email, \\favorites, \\reviews) |
+| **Normal Form** | BCNF |
+
+| Table R03 | Admin |
+|---|---|
+| **Keys:** | {adminID}, {email} |
+| **Functional Dependencies:** | |
+| FD0301 | {adminID} -> (email, password) |
+| FD0302 | {email} -> (adminID, password) |
+| **Normal Form** | BCNF |
+
+| Table R04 | Ban |
+|---|---|
+| **Keys:** | {banID}, {userID} |
+| **Functional Dependencies:** | |
+| FD0401 | {banID} -> {userID -> user, admin -> admin, motive, timeStamp} |
+| FD0402 | {userID} -> {banID, adminID, motive, timeStamp} |
+| **Normal Form** | BCNF |
+
+| Table R05 | Review |
+|---|---|
+| **Keys:** | {reviewID} |
+| **Functional Dependencies:** | |
+| FD0501 | {reviewID} -> {userID -> user, text, timeStamp, rating} |
+| **Normal Form** | BCNF |
+
+| Table R06 | Booking |
+|---|---|
+| **Keys:** | {bookingID} |
+| **Functional Dependencies:** | |
+| FD0601 | {bookingID} -> {spaceID -> space, userID -> user, bookingDate, timeStamp, isCancelled} |
+| **Normal Form** | BCNF |
+
+| Table R07 | Response |
+|---|---|
+| **Keys:** | {responseID} |
+| **Functional Dependencies:** | |
+| FD0701 | {responseID} -> {userID -> user, reviewID -> review, text, timeStamp} |
+| **Normal Form** | BCNF |
+
+| Table R08 | Payment |
+|---|---|
+| **Keys:** | {paymentID} |
+| **Functional Dependencies:** | |
+| FD0801 | {paymentID} -> {paymentValue, isDiscounted, isAccepted} |
+| **Normal Form** | BCNF |
+
+| Table R09 | Discount |
+|---|---|
+| **Keys:** | {discountID} |
+| **Functional Dependencies:** | |
+| FD0901 | {discountID} -> {spaceID -> space, value, startDate, endDate} |
+| **Normal Form** | BCNF |
+
+| Table R10 | Notifications |
+|---|---|
+| **Keys:** | {notificationID} |
+| **Functional Dependencies:** | |
+| FD1001 | {notificationID} -> {userID -> user, timeStamp, isRead} |
+| **Normal Form** | BCNF |
+
+| Table R11 | Schedule |
+|---|---|
+| **Keys:** | {bookingID} |
+| **Functional Dependencies:** | |
+| FD1102 | {bookingID} -> {spaceID -> space, startTime, duration, maxCapacity} |
+| **Normal Form** | BCNF |
+
+| Table R12 | Media |
+|---|---|
+| **Keys:** | {mediaID} |
+| **Functional Dependencies:** | |
+| FD1201 | {mediaID} -> {mediaURL, isCover} |
+| **Normal Form** | BCNF |
+
+| Table R13 | Favorited |
+|---|---|
+| **Keys:** | {spaceID, userID} |
+| **Functional Dependencies:** | *none* |
+| **Normal Form** | BCNF |
 
 > If necessary, description of the changes necessary to convert the schema to BCNF.\
 > Justification of the BCNF.
@@ -82,12 +186,21 @@
 
 > A study of the predicted system load (database load). Estimate of tuples at each relation.
 
-| **Relation reference** | **Relation Name** | **Order of magnitude** | **Estimated growth** |
-|------------------------|-------------------|------------------------|----------------------|
-| R01 | Table1 | units | dozens |
-| R02 | Table2 | units | dozens |
-| R03 | Table3 | units | dozens |
-| R04 | Table4 | units | dozens |
+| Relation | Relation Name | Order of Magnitude | Estimated Growth |
+|----------|--------------|--------------------|------------------|
+| R01      | User         | 10k                | 100 / hour       |
+| R02      | Space        | 1k                 | 10 / hour        |
+| R03      | Admin        | 100                | 1 / hour         |
+| R04      | Ban          | 100                | 1 / hour         |
+| R05      | Review       | 10k                | 100 / hour       |
+| R06      | Booking      | 10k                | 100 / hour       |
+| R07      | Response     | 1k                 | 10 / hour        |
+| R08      | Payment      | 10k                | 100 / hour       |
+| R09      | Discount     | 10k                | 100 / hour       |
+| R10      | Notification | 100k               | 1000 / hour      |
+| R11      | Schedule     | 1k                 | 10 / hour        |
+| R12      | Media        | 1k                 | 10 / hour        |
+| R13      | Favorited    | 10k                | 100 / hour       |
 
 ### 2. Proposed Indices
 

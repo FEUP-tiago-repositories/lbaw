@@ -41,14 +41,16 @@
 
 | Relation reference | Relation Compact Notation |
 |-------------------|---------------------------|
-| R01 | User(<ins>userID</ins>, userID -> user **CK** user.role = business_owner, username **NN**, email **UK NN**, phoneNo **UK NN**, role NN, isDeleted **NN DF** False, isBanned **NN DF** False, password **NN**, birthDate **NN CK** birthDate > NOW - 18 years, profilePicURL) |
-| R02 | Space(<ins>spaceID</ins>, title **NN**, address **NN**, description, spacePicURL, isClosed **NN DF** False, sportType, PhoneNo **UK NN**, email **UK NN**, \\favorites **NN**, \\reviews **NN**) |
-| R03 | Admin(<ins>adminID</ins>, email **UK NN**, password **NN**) |
-| R04 | Ban(<ins>banID</ins>, userID -> user, adminID -> admin, motive **NN**, timeStamp **NN DF** now) |
-| R05 | Review(<ins>reviewID</ins>, userID -> user **CK** user.role = customer, text **NN**, timeStamp **NN DF** now, rating **NN CK** rating > 0 AND rating ≤ 5) |
-| R06 | Booking(<ins>bookingID</ins>, spaceID ->space, userID ->user, bookingDate **NN**, timeStamp **NN DF** now, isCancelled **NN DF** False |
-| R07 | Response(<ins>responseID</ins>, userID -> user **CK** user.role = business_owner , reviewID -> review, text **NN**, timeStamp **NN DF** now) |
-| R08 | Payment(<ins>paymentID</ins>, paymentValue **NN CK** value > 0, isDiscounted **NN DF** False, isAccepted **NN DF** False, |
+| R01 | user(<ins>id</ins>, username **NN**, email **UK NN**, phone_no **UK NN**, is_deleted **NN DF** False, is_banned **NN DF** False, password **NN**, birth_date **NN CK** birth_date > NOW - 18 years, profile_pic_url) |
+| R02 | business_owner(<ins>id</ins>, user_id -> user **NN**)
+| R03 | customer(<ins>id</ins>, user_id -> user **NN**)
+| R04 | space(<ins>id</ins>, owner_id -> business_owner **NN**, sport_type_id -> sport_type **NN**, title **NN**, address **NN**, description, is_closed **NN DF** False, phone_no **NN**, email **NN**, num_favorites **NN**, num_reviews **NN**) |
+| R05 | admin(<ins>id</ins>, email **UK NN**, password **NN**) |
+| R06 | ban(<ins>id</ins>, user_id -> user **NN**, admin_id -> admin **NN**, motive **NN**, time_stamp **NN DF** now) |
+| (continuar aqui) R07 | review(<ins>id</ins>, customer_id -> customer **NN**, booking_id -> booking **NN**, text **NN**, time_stamp **NN DF** now, environment_rating **NN CK** 1 ≤ environment_rating  ≤ 5,  equipment_rating NN CK 1 ≤ equipment_rating ≤ 5, service_rating NN CK 1 ≤ service_rating ≤ 5) |
+| R08 | Booking(<ins>bookingID</ins>, spaceID ->space, userID ->user, bookingDate **NN**, timeStamp **NN DF** now, isCancelled **NN DF** False |
+| R09 | Response(<ins>responseID</ins>, userID -> user **CK** user.role = business_owner , reviewID -> review, text **NN**, timeStamp **NN DF** now) |
+| R10 | Payment(<ins>paymentID</ins>, paymentValue **NN CK** value > 0, isDiscounted **NN DF** False, isAccepted **NN DF** False, |
 | R09 | Discount(<ins>discountID</ins>, spaceID -> space, value **NN CK** 0 < value < 100, startDate **NN**, endDate **NN CK** startDate < endDate) |
 | R10 | Notification(<ins>notificationID</ins>, userID -> user, timeStamp **NN DF,** isRead **NN**) |
 | R11 | Schedule( <ins>id_booking</ins> -> booking, spaceID -> space, startTime **NN**, duration **NN CK** duration > 0, maxCapacity **NN CK** maxCapacity > 0) |

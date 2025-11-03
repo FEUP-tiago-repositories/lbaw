@@ -158,7 +158,7 @@ This section contains business rules, technical requirements and other restricti
 | BR13       | Reservation schedule Constraint     | Customers cannot double-book in the same (or different) sport spaces at the same time slot.                               |
 | BR14       | Valid Reviews                       | Customers can only leave a review at sports spaces where they have already been to (booked in the past)                   |
 | BR15       | Reservation Dates and hours         | Customers cannot book on a past date or past time of the same day.                                                        |
-| BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation or review but can see all the sports spaces and other funcionalities.        |
+| BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation, review or mark a sports space as a favorite but can see all the sports spaces and other funcionalities.        |
 | BR17       | Modify Reservations                 | Customers can cancel or modify reservations only before the reservation start time.                                       |
 | BR18       | Deleted Business Account            | When a Business Owner deletes its profile, their sports spaces are deleted.                                               |
 | BR19       | Closed Spaces                       | When a sports space is closed, all future reservations are canceled.                                                      |
@@ -256,7 +256,8 @@ The wireframes below show the template and localization of the important interac
 Changes made to the first submission:
 
 1. Change user story identifiers to 3 digits. Add new user stories (US102, US207, US209, US210, US211, US212, US301, US302 and US303) and minimal changes to others (US100, US206, US208, US300 and US600). (12/10/2025, by Tiago Oliveira)
-2. Add new business rules (BR18 to BR22). (23/10/2025, by Tiago Oliveira)
+2. Add new business rules (BR18 to BR22). (23/10/2025, by Tiago Oliveira)´
+3. Fix BR16 (especify restriction with favorited spaces). (03/11/2025, by Tiago Oliveira)
 
 ###GROUP25122, 08/10/2025
 

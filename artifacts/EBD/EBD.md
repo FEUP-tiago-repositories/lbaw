@@ -9,8 +9,8 @@
 ### 1. Class diagram
 
 <div align="center">
-  <img src="./uploads/diagram.png" alt="Diagram" width="80%">
-  <p align="center">Figure 2: Class Diagram</p>
+  <img src="./diagram.png" alt="Diagram">
+  <p align="center">Figure 1: Class Diagram</p>
 </div>
 
 ### 2. Additional Business Rules

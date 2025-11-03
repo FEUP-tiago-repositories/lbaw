@@ -1,10 +1,10 @@
 # EBD: Database Specification Component
 
-> Project vision.
+> ~~Project vision.~~
 
 ## A4: Conceptual Data Model
 
-> Brief presentation of the artifact goals.
+> ~~Brief presentation of the artifact goals.~~
 
 ### 1. Class diagram
 
@@ -33,11 +33,11 @@
 
 ## A5: Relational Schema, validation and schema refinement
 
-> Brief presentation of the artifact goals.
+> ~~Brief presentation of the artifact goals.~~
 
 ### A5.1. Relational Schema
 
-> Brief text about relational schema
+> ~~Brief text about relational schema~~
 
 | Relation reference | Relation Compact Notation |
 |-------------------|---------------------------|
@@ -63,6 +63,10 @@
 | R20 | favorited(<ins>space_id</ins> -> space **NN**, <ins>customer_id</ins> -> customer **NN**, is_favorite **NN DF** False) |
 | R21 | sport_type(<ins>id</ins>, name **UK NN**) |
 
+<div align="center">
+  <p>Table 2: Relational Schema Notations</p>
+</div>
+
 > Legend:
 > - UK = UNIQUE KEY
 > - NN = NOT NULL
@@ -76,6 +80,9 @@
 | Authenticated user | Disjoint, Complete | E/R style | Even though they're both users, Customers and Business owners have several different functions. Therefore, it is beneficial to use the E/R style for them, as it will make it easier to differentiate between customer and owner ids when doing tasks such as creating spaces, leaving reviews and responses or booking a space |
 | Notification | Disjoint, Complete | E/R style | Depending on what they're notifying, notifications have different foreign keys. Therefore, the E/R style is the best to represent the notifications, as it provides a strong separation between each type of notification and we predict a lot of notifications will be made, so any unnecessary foreign keys should be present in classes |
 
+<div align="center">
+  <p>Table 3: Generalization Justifications</p>
+</div>
 
 ### A5.2. Domains
 
@@ -84,6 +91,10 @@
 | Domain Name        | Domain Specification                                                |
 |--------------------|---------------------------------------------------------------------|
 | sportsType         | ENUM('Badminton', 'Basketball', 'Biking', 'Climbing', 'Football', 'Golf', 'Gym', 'Handball', 'Hockey', 'Martial Arts', 'Padel', 'Rugby', 'Running', 'Skating', 'Swimming', 'Tennis', 'Volleyball', 'Other') |
+
+<div align="center">
+  <p>Table 4: Domain Specification</p>
+</div>
 
 ### A5.3. Schema validation
 
@@ -242,34 +253,48 @@
 | **Normal Form** | BCNF |
 
 
-> If necessary, description of the changes necessary to convert the schema to BCNF.\
-> Justification of the BCNF.
+> ~~If necessary, description of the changes necessary to convert the schema to BCNF.~~\
+> ~~Justification of the BCNF.~~
 
 ---
 
 ## A6: Indexes, triggers, transactions and database population
 
-> Brief presentation of the artifact goals.
+> ~~Brief presentation of the artifact goals.~~
 
 ### 1. Database Workload
 
 > A study of the predicted system load (database load). Estimate of tuples at each relation.
 
 | Relation | Relation Name | Order of Magnitude | Estimated Growth |
-|----------|--------------|--------------------|------------------|
-| R01      | User         | 10k                | 100 / hour       |
-| R02      | Space        | 1k                 | 10 / hour        |
-| R03      | Admin        | 100                | 1 / hour         |
-| R04      | Ban          | 100                | 1 / hour         |
-| R05      | Review       | 10k                | 100 / hour       |
-| R06      | Booking      | 10k                | 100 / hour       |
-| R07      | Response     | 1k                 | 10 / hour        |
-| R08      | Payment      | 10k                | 100 / hour       |
-| R09      | Discount     | 10k                | 100 / hour       |
-| R10      | Notification | 100k               | 1000 / hour      |
-| R11      | Schedule     | 1k                 | 10 / hour        |
-| R12      | Media        | 1k                 | 10 / hour        |
-| R13      | Favorited    | 10k                | 100 / hour       |
+|----------|---------------|-------------------|------------------|
+| R01 | user | 10k | 100 / day |
+| R02 | customer | 10k | 100 / day |
+| R03 | business_owner | 1k | 10 / day |
+| R04 | space | 1k | 10 / day |
+| R05 | admin | 100 | 1 / day |
+| R06 | ban | 100 | 1 / day |
+| R07 | review | 10k | 100 / day |
+| R08 | booking | 10k | 100 / day |
+| R09 | response | 1k | 10 / day |
+| R10 | payment | 10k | 100 / day |
+| R11 | discount | 10k | 100 / day |
+| R12 | notification | 100k | 1000 / day |
+| R13 | response_notification | 10k | 100 / day |
+| R14 | review_notification | 10k | 100 / day |
+| R15 | booking_confirmation_notification | 10k | 100 / day |
+| R16 | booking_cancelation_notification | 1k | 10 / day |
+| R17 | booking_reminder_notification | 10k | 100 / day |
+| R18 | schedule | 1k | 10 / day |
+| R19 | media | 1k | 10 / day |
+| R20 | favorited | 10k | 100 / day |
+| R21 | sport_type | 100 | 1 / day |
+
+<div align="center">
+  <p>Table 5: Database Workload</p>
+</div>
+
+# Parei aqui
 
 ### 2. Proposed Indices
 

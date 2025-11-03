@@ -35,7 +35,7 @@
 
 > Brief presentation of the artifact goals.
 
-### 1. Relational Schema
+### A5.1. Relational Schema
 
 > Brief text about relational schema
 
@@ -77,17 +77,15 @@
 | Notification | Disjoint, Complete | E/R style | Depending on what they're notifying, notifications have different foreign keys. Therefore, the E/R style is the best to represent the notifications, as it provides a strong separation between each type of notification and we predict a lot of notifications will be made, so any unnecessary foreign keys should be present in classes |
 
 
-### 2. Domains
+### A5.2. Domains
 
 > The specification of additional domains can also be made in a compact form, using the notation:
 
 | Domain Name        | Domain Specification                                                |
 |--------------------|---------------------------------------------------------------------|
-| role               | ENUM('Business_Owner', 'Customer') |
 | sportsType         | ENUM('Badminton', 'Basketball', 'Biking', 'Climbing', 'Football', 'Golf', 'Gym', 'Handball', 'Hockey', 'Martial Arts', 'Padel', 'Rugby', 'Running', 'Skating', 'Swimming', 'Tennis', 'Volleyball', 'Other') |
-| notificationTypes  | ENUM('Confirmation', 'Cancelation', 'Reminder', 'Review') |
 
-### 3. Schema validation
+### A5.3. Schema validation
 
 > To validate the Relational Schema obtained from the Conceptual Model, all functional dependencies are identified and the normalization of all relation schemas is accomplished. Should it be necessary, in case the scheme is not in the Boyce–Codd Normal Form (BCNF), the relational schema is refined using normalization.
 

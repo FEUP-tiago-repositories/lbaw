@@ -19,7 +19,7 @@
 | -----------|------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | BR10       | Deleted User Account                | Upon account deletion, reviews are kept but are made anonymous.                                                           |
 | BR13       | Reservation schedule Constraint     | Customers cannot double-book in the same (or different) sport spaces at the same time slot.                               |
-| BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation or review but can see all the sports spaces and other funcionalities.        |
+| BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation, review or mark a sports space as a favorite but can see all the sports spaces and other funcionalities.        |
 | BR17       | Modify Reservations                 | Customers can cancel or modify reservations only before the reservation start time.                                       |
 | BR18       | Deleted Business Account            | When a Business Owner deletes its profile, their sports spaces are deleted.                                               |
 | BR19       | Closed Spaces                       | When a sports space is closed, all future reservations are canceled.                                                      |

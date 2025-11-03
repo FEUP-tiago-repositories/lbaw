@@ -59,8 +59,8 @@
 | R16 | booking_cancelation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
 | R17 | booking_reminder_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
 | R18 | schedule(<ins>id</ins>, space_id -> space **NN**, schedule_date **NN CK** schedule_date > now, start_time **NN CK** start_time > now, duration **NN CK** duration > 0, max_capacity **NN CK** max_capacity > 0) |
-| R19 | media(<ins>id</ins>, space_id -> space **NN**, media_url **NN**, is_cover **NN DF** False) |
-| R20 | favorited(<ins>space_id -> space</ins>, <ins>customer_id -> customer</ins>, is_favorite **NN DF** False) |
+| R19 | media(<ins>id</ins>, <ins>space_id</ins> -> space **NN**, media_url **NN**, is_cover **NN DF** False) |
+| R20 | favorited(<ins>space_id</ins> -> space **NN**, <ins>customer_id</ins> -> customer **NN**, is_favorite **NN DF** False) |
 | R21 | sport_type(<ins>id</ins>, name **UK NN**) |
 
 > Legend:

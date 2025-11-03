@@ -42,20 +42,26 @@
 | Relation reference | Relation Compact Notation |
 |-------------------|---------------------------|
 | R01 | user(<ins>id</ins>, username **NN**, email **UK NN**, phone_no **UK NN**, is_deleted **NN DF** False, is_banned **NN DF** False, password **NN**, birth_date **NN CK** birth_date > NOW - 18 years, profile_pic_url) |
-| R02 | business_owner(<ins>id</ins>, user_id -> user **NN**)
-| R03 | customer(<ins>id</ins>, user_id -> user **NN**)
-| R04 | space(<ins>id</ins>, owner_id -> business_owner **NN**, sport_type_id -> sport_type **NN**, title **NN**, address **NN**, description, is_closed **NN DF** False, phone_no **NN**, email **NN**, num_favorites **NN**, num_reviews **NN**) |
+| R02 | business_owner(<ins>id</ins>, user_id -> user **NN**) |
+| R03 | customer(<ins>id</ins>, user_id -> user **NN**) |
+| R04 | space(<ins>id</ins>, owner_id -> business_owner **NN**, sport_type_id -> sport_type **NN**, title **NN**, address **NN**, description **NN**, is_closed **NN DF** False, phone_no **NN**, email **NN**, num_favorites **NN**, num_reviews **NN**) |
 | R05 | admin(<ins>id</ins>, email **UK NN**, password **NN**) |
 | R06 | ban(<ins>id</ins>, user_id -> user **NN**, admin_id -> admin **NN**, motive **NN**, time_stamp **NN DF** now) |
-| (continuar aqui) R07 | review(<ins>id</ins>, customer_id -> customer **NN**, booking_id -> booking **NN**, text **NN**, time_stamp **NN DF** now, environment_rating **NN CK** 1 ≤ environment_rating  ≤ 5,  equipment_rating NN CK 1 ≤ equipment_rating ≤ 5, service_rating NN CK 1 ≤ service_rating ≤ 5) |
-| R08 | Booking(<ins>bookingID</ins>, spaceID ->space, userID ->user, bookingDate **NN**, timeStamp **NN DF** now, isCancelled **NN DF** False |
-| R09 | Response(<ins>responseID</ins>, userID -> user **CK** user.role = business_owner , reviewID -> review, text **NN**, timeStamp **NN DF** now) |
-| R10 | Payment(<ins>paymentID</ins>, paymentValue **NN CK** value > 0, isDiscounted **NN DF** False, isAccepted **NN DF** False, |
-| R09 | Discount(<ins>discountID</ins>, spaceID -> space, value **NN CK** 0 < value < 100, startDate **NN**, endDate **NN CK** startDate < endDate) |
-| R10 | Notification(<ins>notificationID</ins>, userID -> user, timeStamp **NN DF,** isRead **NN**) |
-| R11 | Schedule( <ins>id_booking</ins> -> booking, spaceID -> space, startTime **NN**, duration **NN CK** duration > 0, maxCapacity **NN CK** maxCapacity > 0) |
-| R12 | Media(<ins>mediaID</ins>, mediaURL **NN**, isCover **NN DF** False) |
-| R13 | Favorited(<ins>spaceID</ins> -> space, <ins>userID</ins> -> user, isFavorite **NN**) |
+| R07 | review(<ins>id</ins>, customer_id -> customer **NN**, booking_id -> booking **NN**, text **NN**, time_stamp **NN DF** now, environment_rating **NN CK** 1 ≤ environment_rating ≤ 5, equipment_rating **NN CK** 1 ≤ equipment_rating ≤ 5, service_rating **NN CK** 1 ≤ service_rating ≤ 5) |
+| R08 | booking(<ins>id</ins>, space_id -> space **NN**, customer_id -> customer **NN**, schedule_id -> schedule **NN**, booking_created_at **NN DF** now, is_cancelled **NN DF** False) |
+| R09 | response(<ins>id</ins>, owner_id -> business_owner **NN**, review_id -> review **NN**, text **NN**, time_stamp **NN DF** now) |
+| R10 | payment(<ins>id</ins>, booking_id -> booking **NN**, payment_value **NN CK** value > 0, is_discounted **NN DF** False, is_accepted **NN DF** False, payment_provider_ref **NN**, time_stamp **NN DF** now) |
+| R11 | discount(<ins>id</ins>, space_id -> space **NN**, percentage **NN CK** 0 < percentage < 100, start_date **NN**, end_date **NN CK** start_date < end_date) |
+| R12 | notification(<ins>id</ins>, user_id -> user **NN**, time_stamp **NN DF** now, is_read **NN DF** False) |
+| R13 | response_notification(<ins>id</ins>, notification_id -> notification **NN**, response_id -> response **NN**) |
+| R14 | review_notification(<ins>id</ins>, notification_id -> notification **NN**, review_id -> review **NN**) |
+| R15 | booking_confirmation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
+| R16 | booking_cancelation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
+| R17 | booking_reminder_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
+| R18 | schedule(<ins>id</ins>, space_id -> space **NN**, schedule_date **NN CK** schedule_date > now, start_time **NN CK** start_time > now, duration **NN CK** duration > 0, max_capacity **NN CK** max_capacity > 0) |
+| R19 | media(<ins>id</ins>, space_id -> space **NN**, media_url **NN**, is_cover **NN DF** False) |
+| R20 | favorited(<ins>space_id -> space</ins>, <ins>customer_id -> customer</ins>, is_favorite **NN DF** False) |
+| R21 | sport_type(<ins>id</ins>, name **UK NN**) |
 
 > Legend:
 > - UK = UNIQUE KEY

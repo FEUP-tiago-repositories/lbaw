@@ -91,101 +91,156 @@
 
 | Table R01 | User |
 |---|---|
-| **Keys:** | {userID}, {email}, {phoneNo} |
+| **Keys:** | {id}, {email}, {phone_no} |
 | **Functional Dependencies:** |
-| FD0101 | {userID} -> {username, email, phoneNo, role, isDeleted, isBanned, password, birthday, profilePicURL} |
-| FD0102 | {email} -> {userID, username, phoneNo, role, isDeleted, isBanned, password, birthday, profilePicURL} |
-| FD0103 | {phoneNo} -> {userID, username, email, role, isDeleted, isBanned, password, birthday, profilePicURL} |
+| FD0101 | {id} -> {user_name, email, phone_no, role, is_deleted, is_banned, password, birthday, profile_pic_url} |
+| FD0102 | {email} -> {id, user_name, phone_no, role, is_deleted, is_banned, password, birthday, profile_pic_url} |
+| FD0103 | {phone_no} -> {id, user_name, email, role, is_deleted, is_banned, password, birthday, profile_pic_url} |
 | **Normal Form** | BCNF |
 
-> check if we need user id key later
-
-| Table R02 | Space |
+| Table R02 | Business Owner |
 |---|---|
-| **Keys:** | {spaceID}, {email}, {phoneNo} |
-| **Functional Dependencies:** | |
-| FD0201 | {spaceID} -> (title, address, description, spacePicURL, isClosed, sportType, PhoneNo, email, \\favorites, \\reviews) |
-| FD0202 | {email} -> (spaceID, title, address, description, spacePicURL, isClosed, sportType, PhoneNo, \\favorites, \\reviews) |
-| FD0203 | {phoneNo} -> (spaceID, title, address, description, spacePicURL, isClosed, sportType, email, \\favorites, \\reviews) |
+| **Keys:** | {id}, {user_id} |
+| **Functional Dependencies:** | None |
 | **Normal Form** | BCNF |
 
-| Table R03 | Admin |
+| Table R03 | Customer |
 |---|---|
-| **Keys:** | {adminID}, {email} |
-| **Functional Dependencies:** | |
-| FD0301 | {adminID} -> (email, password) |
-| FD0302 | {email} -> (adminID, password) |
+| **Keys:** | {id}, {user_id} |
+| **Functional Dependencies:** | None |
 | **Normal Form** | BCNF |
 
-| Table R04 | Ban |
+| Table R04 | Space |
 |---|---|
-| **Keys:** | {banID}, {userID} |
-| **Functional Dependencies:** | |
-| FD0401 | {banID} -> {userID -> user, admin -> admin, motive, timeStamp} |
-| FD0402 | {userID} -> {banID, adminID, motive, timeStamp} |
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD0201 | {id} -> {title, address, description, space_pic_url, is_closed, sport_type, phone_no, email, #favorites, #reviews} |
 | **Normal Form** | BCNF |
 
-| Table R05 | Review |
+| Table R05 | Admin |
 |---|---|
-| **Keys:** | {reviewID} |
-| **Functional Dependencies:** | |
-| FD0501 | {reviewID} -> {userID -> user, text, timeStamp, rating} |
+| **Keys:** | {id}, {email} |
+| **Functional Dependencies:** |
+| FD0301 | {id} -> {email, password} |
+| FD0302 | {email} -> {id, password} |
 | **Normal Form** | BCNF |
 
-| Table R06 | Booking |
+| Table R06 | Ban |
 |---|---|
-| **Keys:** | {bookingID} |
-| **Functional Dependencies:** | |
-| FD0601 | {bookingID} -> {spaceID -> space, userID -> user, bookingDate, timeStamp, isCancelled} |
+| **Keys:** | {id}, {user_id} |
+| **Functional Dependencies:** |
+| FD0401 | {id} -> {user_id -> user, admin_id -> admin, motive, time_stamp} |
+| FD0402 | {user_id} -> {id, admin_id -> admin, motive, time_stamp} |
 | **Normal Form** | BCNF |
 
-| Table R07 | Response |
+| Table R07 | Review |
 |---|---|
-| **Keys:** | {responseID} |
-| **Functional Dependencies:** | |
-| FD0701 | {responseID} -> {userID -> user, reviewID -> review, text, timeStamp} |
+| **Keys:** | {id}, {booking_id} |
+| **Functional Dependencies:** |
+| FD0501 | {id} -> {user_id -> user, text, time_stamp, rating} |
+| FD0502 | {booking_id} -> {id, user_id -> user, text, time_stamp, rating} |
 | **Normal Form** | BCNF |
 
-| Table R08 | Payment |
+| Table R08 | Booking |
 |---|---|
-| **Keys:** | {paymentID} |
-| **Functional Dependencies:** | |
-| FD0801 | {paymentID} -> {paymentValue, isDiscounted, isAccepted} |
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD0601 | {id} -> {space_id -> space, user_id -> user, booking_date, time_stamp, is_cancelled} |
 | **Normal Form** | BCNF |
 
-| Table R09 | Discount |
+| Table R09 | Response |
 |---|---|
-| **Keys:** | {discountID} |
-| **Functional Dependencies:** | |
-| FD0901 | {discountID} -> {spaceID -> space, value, startDate, endDate} |
+| **Keys:** | {id}, {review_id} |
+| **Functional Dependencies:** |
+| FD0701 | {id} -> {user_id -> user, review_id -> review, text, time_stamp} |
+| FD0702 | {review_id} -> {id, user_id -> user, review_id -> review, text, time_stamp} |
 | **Normal Form** | BCNF |
 
-| Table R10 | Notifications |
+| Table R10 | Payment |
 |---|---|
-| **Keys:** | {notificationID} |
-| **Functional Dependencies:** | |
-| FD1001 | {notificationID} -> {userID -> user, timeStamp, isRead} |
+| **Keys:** | {id}, {booking_id} |
+| **Functional Dependencies:** |
+| FD0801 | {id} -> {booking_id -> booking, payment_value, is_discounted, is_accepted, payment_provider_ref, time_stamp} |
+| FD0802 | {booking_id} -> {id, payment_value, is_discounted, is_accepted, payment_provider_ref, time_stamp} |
 | **Normal Form** | BCNF |
 
-| Table R11 | Schedule |
+| Table R11 | Discount |
 |---|---|
-| **Keys:** | {bookingID} |
-| **Functional Dependencies:** | |
-| FD1102 | {bookingID} -> {spaceID -> space, startTime, duration, maxCapacity} |
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD0901 | {id} -> {space_id -> space, value, start_date, end_date} |
 | **Normal Form** | BCNF |
 
-| Table R12 | Media |
+| Table R12 | Notification |
 |---|---|
-| **Keys:** | {mediaID} |
-| **Functional Dependencies:** | |
-| FD1201 | {mediaID} -> {mediaURL, isCover} |
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD1001 | {id} -> {user_id -> user, time_stamp, is_read} |
 | **Normal Form** | BCNF |
 
-| Table R13 | Favorited |
+| Table R13 | Response Notification |
 |---|---|
-| **Keys:** | {spaceID, userID} |
-| **Functional Dependencies:** | *none* |
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD1101 | {id} -> {user_id -> user, time_stamp, is_read, response_id -> response} |
 | **Normal Form** | BCNF |
+
+| Table R14 | Review Notification |
+|---|---|
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD1102 | {id} -> {user_id -> user, time_stamp, is_read, review_id -> review} |
+| **Normal Form** | BCNF |
+
+| Table R15 | Booking Confirmation Notification |
+|---|---|
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD1103 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
+| **Normal Form** | BCNF |
+
+| Table R16 | Booking Reminder Notification |
+|---|---|
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD1104 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
+| **Normal Form** | BCNF |
+
+| Table R17 | Booking Cancellation Notification |
+|---|---|
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD1105 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
+| **Normal Form** | BCNF |
+
+| Table R18 | Schedule |
+|---|---|
+| **Keys:** | {booking_id} |
+| **Functional Dependencies:** |
+| FD1106 | {booking_id} -> {space_id -> space, start_time, duration, max_capacity} |
+| **Normal Form** | BCNF |
+
+| Table R19 | Media |
+|---|---|
+| **Keys:** | {media_id} |
+| **Functional Dependencies:** |
+| FD1201 | {media_id} -> {media_url, is_cover} |
+| **Normal Form** | BCNF |
+
+| Table R20 | Favorited |
+|---|---|
+| **Keys:** | {space_id, user_id} |
+| **Functional Dependencies:** |
+| FD1301 | {space_id, user_id} -> {is_favorite} |
+| **Normal Form** | BCNF |
+
+| Table R21 | Sport Type |
+|---|---|
+| **Keys:** | {id} |
+| **Functional Dependencies:** |
+| FD1401 | {id} -> {name} |
+| **Normal Form** | BCNF |
+
 
 > If necessary, description of the changes necessary to convert the schema to BCNF.\
 > Justification of the BCNF.

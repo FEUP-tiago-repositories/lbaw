@@ -69,6 +69,14 @@
 > - DF = DEFAULT
 > - CK = CHECK
 
+#### Generalization Justification
+
+| Class | Constraints | Style Used | Justification |
+|-------|-------------|------------|----------------|
+| Authenticated user | Disjoint, Complete | E/R style | Even though they're both users, Customers and Business owners have several different functions. Therefore, it is beneficial to use the E/R style for them, as it will make it easier to differentiate between customer and owner ids when doing tasks such as creating spaces, leaving reviews and responses or booking a space |
+| Notification | Disjoint, Complete | E/R style | Depending on what they're notifying, notifications have different foreign keys. Therefore, the E/R style is the best to represent the notifications, as it provides a strong separation between each type of notification and we predict a lot of notifications will be made, so any unnecessary foreign keys should be present in classes |
+
+
 ### 2. Domains
 
 > The specification of additional domains can also be made in a compact form, using the notation:

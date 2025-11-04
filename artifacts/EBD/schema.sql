@@ -47,16 +47,16 @@ DROP TABLE IF EXISTS "favorited" CASCADE;
 
 CREATE Table users (
     user_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    phone_no VARCHAR(255) NOT NULL UNIQUE,
+    user_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    phone_no VARCHAR(15) NOT NULL UNIQUE,
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     is_banned BOOLEAN NOT NULL DEFAULT FALSE,
-    password VARCHAR(255) NOT NULL, --will be hashed
+    password VARCHAR(100) NOT NULL, --will be hashed
     birth_date TIMESTAMP NOT NULL CHECK (
         birth_date <= NOW() - INTERVAL '18 years'
     ), --Must be 18+ years old
-    profile_pic_url VARCHAR(512)
+    profile_pic_url VARCHAR(255)
 );
 
 CREATE TABLE business_owner (
@@ -71,7 +71,7 @@ CREATE TABLE customer (
 
 CREATE TABLE sport_type (
     sport_type_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(255) NOT NULL UNIQUE CHECK (
+    name VARCHAR(50) NOT NULL UNIQUE CHECK (
         name IN (
             'Badminton',
             'Basketball',
@@ -99,27 +99,27 @@ CREATE TABLE space(
     space_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     owner_id INT NOT NULL REFERENCES business_owner (business_owner_id) ON DELETE RESTRICT,
     sport_type_id INT NOT NULL REFERENCES sport_type (sport_type_id) ON DELETE RESTRICT,
-    title VARCHAR(255) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    address VARCHAR(150) NOT NULL,
+    description VARCHAR(300) NOT NULL,
     is_closed BOOLEAN NOT NULL DEFAULT FALSE,
-    phone_no VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    phone_no VARCHAR(15) NOT NULL,
+    email VARCHAR(150) NOT NULL,
     num_favorites INTEGER DEFAULT 0,
     num_reviews INTEGER DEFAULT 0
 );
 
 CREATE TABLE admin (
     admin_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE ban (
     ban_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id INT NOT NULL REFERENCES users (user_id),
     admin_id INT NOT NULL REFERENCES admin (admin_id) ON DELETE CASCADE,
-    motive VARCHAR(150) NOT NULL,
+    motive VARCHAR(200) NOT NULL,
     time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -146,7 +146,7 @@ CREATE TABLE review (
     customer_id INT REFERENCES customer (customer_id) ON DELETE SET NULL,
     booking_id INT REFERENCES booking (booking_id) ON DELETE SET NULL,
     time_stamp TIMESTAMP NOT NULL DEFAULT NOW(),
-    text VARCHAR(255) NOT NULL,
+    text VARCHAR(500) NOT NULL,
     environment_rating SMALLINT NOT NULL CHECK (
         environment_rating BETWEEN 1 AND 5
     ),
@@ -162,7 +162,7 @@ CREATE TABLE response (
     response_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     owner_id INT REFERENCES business_owner (business_owner_id) ON DELETE SET NULL,
     review_id INT NOT NULL REFERENCES review (review_id) ON DELETE CASCADE,
-    text VARCHAR(255) NOT NULL,
+    text VARCHAR(300) NOT NULL,
     time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -172,7 +172,7 @@ CREATE TABLE payment (
     value FLOAT NOT NULL CHECK (value > 0),
     is_discounted BOOLEAN NOT NULL DEFAULT FALSE,
     is_accepted BOOLEAN NOT NULL DEFAULT FALSE,
-    payment_provider_ref VARCHAR(150) NOT NULL,
+    payment_provider_ref VARCHAR(100) NOT NULL,
     time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

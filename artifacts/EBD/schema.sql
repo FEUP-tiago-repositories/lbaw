@@ -97,8 +97,8 @@ CREATE TABLE sport_type (
 
 CREATE TABLE space(
     space_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    owner_id INT NOT NULL REFERENCES business_owner (business_owner_id) ON DELETE CASCADE,
-    sport_type_id INT NOT NULL REFERENCES sport_type (sport_type_id) ON DELETE CASCADE,
+    owner_id INT NOT NULL REFERENCES business_owner (business_owner_id) ON DELETE RESTRICT,
+    sport_type_id INT NOT NULL REFERENCES sport_type (sport_type_id) ON DELETE RESTRICT,
     title VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,

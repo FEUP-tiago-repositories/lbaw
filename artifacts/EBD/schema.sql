@@ -193,39 +193,39 @@ CREATE TABLE notification (
 
 CREATE TABLE review_notification (
     review_notification_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    notification_id INT NOT NULL REFERENCES notification (notification_id), -- Links to notification table
+    notification_id INT NOT NULL REFERENCES notification (notification_id) ON DELETE CASCADE, -- Links to notification table
     review_id INT NOT NULL REFERENCES review (review_id) ON DELETE CASCADE -- Links to review table
 );
 
 CREATE TABLE booking_confirmation_notification (
     booking_confirmation_notification_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    notification_id INT NOT NULL REFERENCES notification (notification_id), -- Links to notification table
-    booking_id INT NOT NULL REFERENCES booking (booking_id) -- Links to booking table
+    notification_id INT NOT NULL REFERENCES notification (notification_id) ON DELETE CASCADE, -- Links to notification table
+    booking_id INT NOT NULL REFERENCES booking (booking_id) ON DELETE CASCADE -- Links to booking table
 );
 
 CREATE TABLE booking_cancelation_notification (
     booking_cancelation_notification_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    notification_id INT NOT NULL REFERENCES notification (notification_id), -- Links to notification table
-    booking_id INT NOT NULL REFERENCES booking (booking_id) -- Links to booking table
+    notification_id INT NOT NULL REFERENCES notification (notification_id) ON DELETE CASCADE, -- Links to notification table
+    booking_id INT NOT NULL REFERENCES booking (booking_id) ON DELETE CASCADE -- Links to booking table
 );
 
 CREATE TABLE booking_reminder_notification (
     booking_reminder_notification_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    notification_id INT NOT NULL REFERENCES notification (notification_id), -- Links to notification table
-    booking_id INT NOT NULL REFERENCES booking (booking_id) -- Links to booking table
+    notification_id INT NOT NULL REFERENCES notification (notification_id) ON DELETE CASCADE, -- Links to notification table
+    booking_id INT NOT NULL REFERENCES booking (booking_id) ON DELETE CASCADE -- Links to booking table
 );
 
 CREATE TABLE media (
     media_id INT GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space(space_id),
+    space_id INT NOT NULL REFERENCES space(space_id) ON DELETE CASCADE,
     media_url VARCHAR(255) NOT NULL,
     is_cover BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (media_id, space_id)
 );
 
 CREATE TABLE favorited (
-    space_id INT NOT NULL REFERENCES space(space_id),
-    customer_id INT NOT NULL REFERENCES customer (customer_id),
+    space_id INT NOT NULL REFERENCES space(space_id) ON DELETE CASCADE,
+    customer_id INT NOT NULL REFERENCES customer (customer_id) ON DELETE CASCADE,
     is_favorite BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (space_id, customer_id)
 );

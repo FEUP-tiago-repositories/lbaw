@@ -393,14 +393,14 @@ BEGIN
     IF (TG_OP = 'INSERT') THEN
         UPDATE space
         SET num_reviews = num_reviews + 1
-        WHERE id = NEW.space_id;
+        WHERE id = NEW.id;
     END IF;
 
     --when a review is deleted
     IF (TG_OP = 'DELETE') THEN
         UPDATE space
         SET num_reviews = num_reviews - 1
-        WHERE id = OLD.space_id;
+        WHERE id = OLD.id;
     END IF;
 
     RETURN NULL;
@@ -427,14 +427,14 @@ BEGIN
     IF (TG_OP = 'INSERT') THEN
         UPDATE space
         SET num_favorites = num_favorites + 1
-        WHERE id = NEW.space_id;
+        WHERE id = NEW.id;
     END IF;
 
     --when a favorite is removed
     IF (TG_OP = 'DELETE') THEN
         UPDATE space
         SET num_favorites = num_favorites - 1
-        WHERE id = OLD.id_service;
+        WHERE id = OLD.id;
     END IF;
 
     RETURN NULL;

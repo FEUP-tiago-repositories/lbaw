@@ -89,7 +89,10 @@
 
 | Domain Name        | Domain Specification                                                |
 |--------------------|---------------------------------------------------------------------|
-| sportsType         | ENUM('Badminton', 'Basketball', 'Biking', 'Climbing', 'Football', 'Golf', 'Gym', 'Handball', 'Hockey', 'Martial Arts', 'Padel', 'Rugby', 'Running', 'Skating', 'Swimming', 'Tennis', 'Volleyball', 'Other') |
+| SportsType         | ENUM('Badminton', 'Basketball', 'Biking', 'Climbing', 'Football', 'Golf', 'Gym', 'Handball', 'Hockey', 'Martial Arts', 'Padel', 'Rugby', 'Running', 'Skating', 'Swimming', 'Tennis', 'Volleyball', 'Other') |
+|PaymentProviders|  ENUM('Credit / Debit Card', 'MB Way', 'Paypal')|
+|Notification| ENUM('ResponseNotification','ReviewNotification','BookingConfirmationNotification','BookingCancellationNotification')|
+
 
 <div align="center">
   <p>Table 4: Domain Specification</p>

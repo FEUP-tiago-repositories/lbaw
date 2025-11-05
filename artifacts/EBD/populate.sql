@@ -1173,7 +1173,7 @@ VALUES (1, 1),
     (15, 10);
 
 INSERT INTO
-    booking_cancelation_notification (notification_id, booking_id)
+    booking_cancellation_notification (notification_id, booking_id)
 VALUES (4, 4),
     (8, 8),
     (13, 8);

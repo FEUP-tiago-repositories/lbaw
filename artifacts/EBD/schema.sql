@@ -1,5 +1,7 @@
 show search_path;
 
+DROP SCHEMA IF EXISTS lbaw25122 CASCADE;
+
 create schema lbaw25122;
 
 set search_path to lbaw25122;
@@ -127,7 +129,7 @@ CREATE TABLE ban (
 
 CREATE TABLE schedule (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space (id),
+    space_id INT NOT NULL REFERENCES space(id),
     schedule_date DATE NOT NULL CHECK (schedule_date > NOW()), --must be a future DATE
     start_time TIMESTAMP NOT NULL CHECK (start_time > NOW()), --must be a future TIMESTAMP
     duration INT NOT NULL CHECK (duration > 0),
@@ -136,7 +138,7 @@ CREATE TABLE schedule (
 
 CREATE TABLE booking (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space (id),
+    space_id INT NOT NULL REFERENCES space(id),
     customer_id INT NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
     schedule_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE,
     booking_created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -174,7 +176,7 @@ CREATE TABLE payment (
     value FLOAT NOT NULL CHECK (value > 0),
     is_discounted BOOLEAN NOT NULL DEFAULT FALSE,
     is_accepted BOOLEAN NOT NULL DEFAULT FALSE,
-    payment_provider_ref VARCHAR(100) NOT NULL CHECK(
+    payment_provider_ref VARCHAR(100) NOT NULL CHECK (
         payment_provider_ref IN (
             'Credit/Debit Card',
             'MB Way',
@@ -186,7 +188,7 @@ CREATE TABLE payment (
 
 CREATE TABLE discount (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space (id),
+    space_id INT NOT NULL REFERENCES space(id),
     percentage FLOAT NOT NULL CHECK (percentage BETWEEN 0 AND 100),
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL CHECK (end_date > start_date)
@@ -200,9 +202,9 @@ CREATE TABLE notification (
 );
 
 CREATE TABLE response_notification (
-     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-     notification_id INT NOT NULL REFERENCES notification (id) ON DELETE CASCADE, -- Links to notification table
-     response_id INT NOT NULL REFERENCES response (id) ON DELETE CASCADE -- Links to response table
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    notification_id INT NOT NULL REFERENCES notification (id) ON DELETE CASCADE, -- Links to notification table
+    response_id INT NOT NULL REFERENCES response (id) ON DELETE CASCADE -- Links to response table
 );
 
 CREATE TABLE review_notification (
@@ -231,14 +233,14 @@ CREATE TABLE booking_reminder_notification (
 
 CREATE TABLE media (
     id INT GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space (id) ON DELETE CASCADE,
+    space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     media_url VARCHAR(255) NOT NULL,
     is_cover BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id, space_id)
 );
 
 CREATE TABLE favorited (
-    space_id INT NOT NULL REFERENCES space (id) ON DELETE CASCADE,
+    space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     customer_id INT NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
     is_favorite BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (space_id, customer_id)

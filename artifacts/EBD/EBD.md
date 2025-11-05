@@ -57,7 +57,7 @@
 | R15 | booking_confirmation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
 | R16 | booking_cancellation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
 | R17 | booking_reminder_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
-| R18 | schedule(<ins>id</ins>, space_id -> space **NN**, schedule_date **NN CK** schedule_date > now, start_time **NN CK** start_time > now, duration **NN CK** duration > 0, max_capacity **NN CK** max_capacity > 0) |
+| R18 | schedule(<ins>id</ins>, space_id -> space **NN**, start_time **NN CK** start_time > now, duration **NN CK** duration > 0, max_capacity **NN CK** max_capacity > 0) |
 | R19 | media(<ins>id</ins>, <ins>space_id</ins> -> space **NN**, media_url **NN**, is_cover **NN DF** False) |
 | R20 | favorited(<ins>space_id</ins> -> space **NN**, <ins>customer_id</ins> -> customer **NN**, is_favorite **NN DF** False) |
 | R21 | sport_type(<ins>id</ins>, name **UK NN**) |
@@ -556,7 +556,7 @@ CREATE Table "user" (
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     is_banned BOOLEAN NOT NULL DEFAULT FALSE,
     password VARCHAR(100) NOT NULL, --will be hashed
-    birth_date TIMESTAMP NOT NULL CHECK (
+    birth_date DATE NOT NULL CHECK (
         birth_date <= NOW() - INTERVAL '18 years'
     ), --Must be 18+ years old
     profile_pic_url VARCHAR(255)
@@ -630,7 +630,7 @@ CREATE TABLE schedule (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     space_id INT NOT NULL REFERENCES space(id),
     schedule_date DATE NOT NULL CHECK (schedule_date > NOW()), --must be a future DATE
-    start_time TIMESTAMP NOT NULL CHECK (start_time > NOW()), --must be a future TIMESTAMP
+    start_time TIME NOT NULL CHECK (start_time > NOW()), --must be a future TIMESTAMP
     duration INT NOT NULL CHECK (duration > 0),
     max_capacity INT NOT NULL CHECK (max_capacity > 0)
 );

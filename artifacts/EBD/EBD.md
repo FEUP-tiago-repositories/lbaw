@@ -125,7 +125,7 @@
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD0201 | {id} -> {title, address, description, space_pic_url, is_closed, sport_type, phone_no, email, #favorites, #reviews} |
+| FD0201 | {id} -> {title, address, description, space_pic_url, is_closed, sport_type_id -> sport_type, phone_no, email, #favorites, #reviews} |
 | **Normal Form** | BCNF |
 
 | Table R05 | Admin |

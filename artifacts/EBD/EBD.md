@@ -18,8 +18,7 @@
 | Identifier | Name                                | Description                                                                                                               |
 | -----------|------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | BR10       | Deleted User Account                | Upon account deletion, reviews are kept but are made anonymous.                                                           |
-| BR13       | Reservation schedule Constraint     | Customers cannot double-book in the same (or different) sport spaces at the same time slot.                               |
-| BR16       | Business Owners Accounts Limitation | A business owner cannot make any reservation, review or mark a sports space as a favorite but can see all the sports spaces and other funcionalities.        |
+| BR13       | Reservation schedule Constraint     | Customers cannot double-book in the same (or different) sport spaces at the same time slot.                               |       |
 | BR17       | Modify Reservations                 | Customers can cancel or modify reservations only before the reservation start time.                                       |
 | BR18       | Deleted Business Account            | When a Business Owner deletes its profile, their sports spaces are deleted.                                               |
 | BR19       | Closed Spaces                       | When a sports space is closed, all future reservations are canceled.                                                      |
@@ -112,144 +111,148 @@
 | Table R02 | Business Owner |
 |---|---|
 | **Keys:** | {id}, {user_id} |
-| **Functional Dependencies:** | None |
+| **Functional Dependencies:** |  |
+|FD201:| {id} -> {user_id}|
+|FD202:| {user_id} -> {id}|
 | **Normal Form** | BCNF |
 
 | Table R03 | Customer |
 |---|---|
 | **Keys:** | {id}, {user_id} |
-| **Functional Dependencies:** | None |
+| **Functional Dependencies:** |  |
+|FD301:| {id} -> {user_id}|
+|FD302:| {user_id} -> {id}|
 | **Normal Form** | BCNF |
 
 | Table R04 | Space |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD0201 | {id} -> {title, address, description, space_pic_url, is_closed, sport_type_id -> sport_type, phone_no, email, #favorites, #reviews} |
+| FD0401 | {id} -> {title, address, description, space_pic_url, is_closed, sport_type_id -> sport_type, phone_no, email, #favorites, #reviews} |
 | **Normal Form** | BCNF |
 
 | Table R05 | Admin |
 |---|---|
 | **Keys:** | {id}, {email} |
 | **Functional Dependencies:** |
-| FD0301 | {id} -> {email, password} |
-| FD0302 | {email} -> {id, password} |
+| FD0501 | {id} -> {email, password} |
+| FD0502 | {email} -> {id, password} |
 | **Normal Form** | BCNF |
 
 | Table R06 | Ban |
 |---|---|
 | **Keys:** | {id}, {user_id} |
 | **Functional Dependencies:** |
-| FD0401 | {id} -> {user_id -> user, admin_id -> admin, motive, time_stamp} |
-| FD0402 | {user_id} -> {id, admin_id -> admin, motive, time_stamp} |
+| FD0601 | {id} -> {user_id -> user, admin_id -> admin, motive, time_stamp} |
+| FD0602 | {user_id} -> {id, admin_id -> admin, motive, time_stamp} |
 | **Normal Form** | BCNF |
 
 | Table R07 | Review |
 |---|---|
 | **Keys:** | {id}, {booking_id} |
 | **Functional Dependencies:** |
-| FD0501 | {id} -> {user_id -> user, text, time_stamp, rating} |
-| FD0502 | {booking_id} -> {id, user_id -> user, text, time_stamp, rating} |
+| FD0701 | {id} -> {user_id -> user, text, time_stamp, rating} |
+| FD0702 | {booking_id} -> {id, user_id -> user, text, time_stamp, rating} |
 | **Normal Form** | BCNF |
 
 | Table R08 | Booking |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD0601 | {id} -> {space_id -> space, user_id -> user, booking_date, time_stamp, is_cancelled} |
+| FD0801 | {id} -> {space_id -> space, user_id -> user, booking_date, time_stamp, is_cancelled} |
 | **Normal Form** | BCNF |
 
 | Table R09 | Response |
 |---|---|
 | **Keys:** | {id}, {review_id} |
 | **Functional Dependencies:** |
-| FD0701 | {id} -> {user_id -> user, review_id -> review, text, time_stamp} |
-| FD0702 | {review_id} -> {id, user_id -> user, review_id -> review, text, time_stamp} |
+| FD0901 | {id} -> {user_id -> user, review_id -> review, text, time_stamp} |
+| FD0902 | {review_id} -> {id, user_id -> user, review_id -> review, text, time_stamp} |
 | **Normal Form** | BCNF |
 
 | Table R10 | Payment |
 |---|---|
 | **Keys:** | {id}, {booking_id} |
 | **Functional Dependencies:** |
-| FD0801 | {id} -> {booking_id -> booking, payment_value, is_discounted, is_accepted, payment_provider_ref, time_stamp} |
-| FD0802 | {booking_id} -> {id, payment_value, is_discounted, is_accepted, payment_provider_ref, time_stamp} |
+| FD1001 | {id} -> {booking_id -> booking, payment_value, is_discounted, is_accepted, payment_provider_ref, time_stamp} |
+| FD1002 | {booking_id} -> {id, payment_value, is_discounted, is_accepted, payment_provider_ref, time_stamp} |
 | **Normal Form** | BCNF |
 
 | Table R11 | Discount |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD0901 | {id} -> {space_id -> space, value, start_date, end_date} |
+| FD1101 | {id} -> {space_id -> space, value, start_date, end_date} |
 | **Normal Form** | BCNF |
 
 | Table R12 | Notification |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD1001 | {id} -> {user_id -> user, time_stamp, is_read} |
+| FD1201 | {id} -> {user_id -> user, time_stamp, is_read} |
 | **Normal Form** | BCNF |
 
 | Table R13 | Response Notification |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD1101 | {id} -> {user_id -> user, time_stamp, is_read, response_id -> response} |
+| FD1301 | {id} -> {user_id -> user, time_stamp, is_read, response_id -> response} |
 | **Normal Form** | BCNF |
 
 | Table R14 | Review Notification |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD1102 | {id} -> {user_id -> user, time_stamp, is_read, review_id -> review} |
+| FD1402 | {id} -> {user_id -> user, time_stamp, is_read, review_id -> review} |
 | **Normal Form** | BCNF |
 
 | Table R15 | Booking Confirmation Notification |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD1103 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
+| FD1503 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
 | **Normal Form** | BCNF |
 
 | Table R16 | Booking Reminder Notification |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD1104 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
+| FD1604 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
 | **Normal Form** | BCNF |
 
 | Table R17 | Booking Cancellation Notification |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD1105 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
+| FD1705 | {id} -> {user_id -> user, time_stamp, is_read, booking_id -> booking} |
 | **Normal Form** | BCNF |
 
 | Table R18 | Schedule |
 |---|---|
 | **Keys:** | {booking_id} |
 | **Functional Dependencies:** |
-| FD1106 | {booking_id} -> {space_id -> space, start_time, duration, max_capacity} |
+| FD1806 | {booking_id} -> {space_id -> space, start_time, duration, max_capacity} |
 | **Normal Form** | BCNF |
 
 | Table R19 | Media |
 |---|---|
 | **Keys:** | {media_id} |
 | **Functional Dependencies:** |
-| FD1201 | {media_id} -> {media_url, is_cover} |
+| FD1901 | {media_id} -> {media_url, is_cover} |
 | **Normal Form** | BCNF |
 
 | Table R20 | Favorited |
 |---|---|
 | **Keys:** | {space_id, user_id} |
 | **Functional Dependencies:** |
-| FD1301 | {space_id, user_id} -> {is_favorite} |
+| FD2001 | {space_id, user_id} -> {is_favorite} |
 | **Normal Form** | BCNF |
 
 | Table R21 | Sport Type |
 |---|---|
 | **Keys:** | {id} |
 | **Functional Dependencies:** |
-| FD1401 | {id} -> {name} |
+| FD2101 | {id} -> {name} |
 | **Normal Form** | BCNF |
 
 

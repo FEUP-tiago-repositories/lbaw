@@ -34,13 +34,13 @@
 
 > ~~Brief presentation of the artifact goals.~~
 
-### A5.1. Relational Schema
+### 1. Relational Schema
 
 > ~~Brief text about relational schema~~
 
 | Relation reference | Relation Compact Notation |
 |-------------------|---------------------------|
-| R01 | user(<ins>id</ins>, username **NN**, email **UK NN**, phone_no **UK NN**, is_deleted **NN DF** False, is_banned **NN DF** False, password **NN**, birth_date **NN CK** birth_date > NOW - 18 years, profile_pic_url) |
+| R01 | user(<ins>id</ins>, user_name **NN**, email **UK NN**, phone_no **UK NN**, is_deleted **NN DF** False, is_banned **NN DF** False, password **NN**, birth_date **NN CK** birth_date > NOW - 18 years, profile_pic_url) |
 | R02 | business_owner(<ins>id</ins>, user_id -> user **NN**) |
 | R03 | customer(<ins>id</ins>, user_id -> user **NN**) |
 | R04 | space(<ins>id</ins>, owner_id -> business_owner **NN**, sport_type_id -> sport_type **NN**, title **NN**, address **NN**, description **NN**, is_closed **NN DF** False, phone_no **NN**, email **NN**, num_favorites **NN**, num_reviews **NN**) |
@@ -55,7 +55,7 @@
 | R13 | response_notification(<ins>id</ins>, notification_id -> notification **NN**, response_id -> response **NN**) |
 | R14 | review_notification(<ins>id</ins>, notification_id -> notification **NN**, review_id -> review **NN**) |
 | R15 | booking_confirmation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
-| R16 | booking_cancelation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
+| R16 | booking_cancellation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
 | R17 | booking_reminder_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
 | R18 | schedule(<ins>id</ins>, space_id -> space **NN**, schedule_date **NN CK** schedule_date > now, start_time **NN CK** start_time > now, duration **NN CK** duration > 0, max_capacity **NN CK** max_capacity > 0) |
 | R19 | media(<ins>id</ins>, <ins>space_id</ins> -> space **NN**, media_url **NN**, is_cover **NN DF** False) |
@@ -83,7 +83,7 @@
   <p>Table 3: Generalization Justifications</p>
 </div>
 
-### A5.2. Domains
+### 2. Domains
 
 > The specification of additional domains can also be made in a compact form, using the notation:
 
@@ -98,7 +98,7 @@
   <p>Table 4: Domain Specification</p>
 </div>
 
-### A5.3. Schema validation
+### 3. Schema validation
 
 > To validate the Relational Schema obtained from the Conceptual Model, all functional dependencies are identified and the normalization of all relation schemas is accomplished. Should it be necessary, in case the scheme is not in the Boyce–Codd Normal Form (BCNF), the relational schema is refined using normalization.
 
@@ -289,7 +289,7 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
 | R13 | response_notification | 10k | 100 / day |
 | R14 | review_notification | 10k | 100 / day |
 | R15 | booking_confirmation_notification | 10k | 100 / day |
-| R16 | booking_cancelation_notification | 1k | 10 / day |
+| R16 | booking_cancellation_notification | 1k | 10 / day |
 | R17 | booking_reminder_notification | 10k | 100 / day |
 | R18 | schedule | 1k | 10 / day |
 | R19 | media | 1k | 10 / day |
@@ -300,7 +300,11 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
   <p>Table 5: Database Workload</p>
 </div>
 
-# Parei aqui
+<div align="center">
+ <br></br>
+ <h1> Parei aqui</h1>
+  <br></br>
+</div>
 
 ### 2. Proposed Indices
 

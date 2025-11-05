@@ -285,13 +285,13 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
 | R09 | response | 1k | 10 / day |
 | R10 | payment | 10k | 100 / day |
 | R11 | discount | 10k | 100 / day |
-| R12 | notification | 100k | 5000 / day |
+| R12 | notification | 100k | 5k / day |
 | R13 | response_notification | 10k | 100 / day |
 | R14 | review_notification | 10k | 100 / day |
 | R15 | booking_confirmation_notification | 10k | 100 / day |
 | R16 | booking_cancellation_notification | 1k | 10 / day |
 | R17 | booking_reminder_notification | 10k | 100 / day |
-| R18 | schedule | 1k | 10 / day |
+| R18 | schedule | 100k | 10k / day |
 | R19 | media | 1k | 10 / day |
 | R20 | favorited | 10k | 100 / day |
 | R21 | sport_type | 100 | 1 / day |

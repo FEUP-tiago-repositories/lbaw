@@ -55,7 +55,7 @@
 | R13 | response_notification(<ins>id</ins>, notification_id -> notification **NN**, response_id -> response **NN**) |
 | R14 | review_notification(<ins>id</ins>, notification_id -> notification **NN**, review_id -> review **NN**) |
 | R15 | booking_confirmation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
-| R16 | booking_cancelation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
+| R16 | booking_cancellation_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
 | R17 | booking_reminder_notification(<ins>id</ins>, notification_id -> notification **NN**, booking_id -> booking **NN**) |
 | R18 | schedule(<ins>id</ins>, space_id -> space **NN**, schedule_date **NN CK** schedule_date > now, start_time **NN CK** start_time > now, duration **NN CK** duration > 0, max_capacity **NN CK** max_capacity > 0) |
 | R19 | media(<ins>id</ins>, <ins>space_id</ins> -> space **NN**, media_url **NN**, is_cover **NN DF** False) |
@@ -479,8 +479,9 @@ EXECUTE FUNCTION update_is_deleted();
 
 | SQL Reference | TRAN01 |
 |---------------|------------------|
-| Justification | Justification for the transaction. |
-| Isolation level | Isolation level of the transaction. |
+|Description| Create a new reservation for a user and ensure that no double booking occurs for the same space and time period. |
+| Justification | A transaction is required to maintain integrity when multiple customers are booking the same schedule simultaneously. Without transactional control, two users could exceed the schedule’s maximum capacity. The isolation level is Serializable to avoid phantom reads and guarantee that the capacity check remains valid until the transaction commits. |
+| Isolation level | Serializable |
 | `Complete SQL Code` |  |
 
 ## Annex A. SQL Code

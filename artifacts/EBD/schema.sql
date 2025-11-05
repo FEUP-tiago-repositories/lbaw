@@ -172,7 +172,13 @@ CREATE TABLE payment (
     value FLOAT NOT NULL CHECK (value > 0),
     is_discounted BOOLEAN NOT NULL DEFAULT FALSE,
     is_accepted BOOLEAN NOT NULL DEFAULT FALSE,
-    payment_provider_ref VARCHAR(100) NOT NULL,
+    payment_provider_ref VARCHAR(100) NOT NULL CHECK(
+        payment_provider_ref IN (
+            "Credit/Debit Card",
+            "MB Way",
+            "Paypal"
+        )
+    ),
     time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

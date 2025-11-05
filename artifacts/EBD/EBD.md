@@ -259,8 +259,7 @@
 | **Normal Form** | BCNF |
 
 
-> ~~If necessary, description of the changes necessary to convert the schema to BCNF.~~\
-> ~~Justification of the BCNF.~~
+In general, all the relations respect the Boyce-Codd Normal Form, after applying the conversion rules from conceptual to relational model. Since all the non-trivial functional dependencies of each relation have a super-key on the left side.
 
 ---
 

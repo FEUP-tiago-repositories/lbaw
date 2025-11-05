@@ -253,9 +253,10 @@
 
 | Table R21 | Sport Type |
 |---|---|
-| **Keys:** | {id} |
+| **Keys:** | {id,name} |
 | **Functional Dependencies:** |
 | FD2101 | {id} -> {name} |
+|FD2102| {name} -> {id}|
 | **Normal Form** | BCNF |
 
 

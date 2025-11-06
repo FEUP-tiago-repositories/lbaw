@@ -628,7 +628,7 @@ VALUES
         '2025-12-12 18:00:00',
         60,
         35
-    );
+    ),
 
 -- Space 2: Badminton Court (10 schedules)
 (

@@ -472,7 +472,7 @@ EXECUTE FUNCTION update_num_favorites();
 
 | **Trigger** | TRIGGER03 |
 |-------------|-----------|
-| **Description** | Automatically sets the attribute *is_deleted* to true, when a user is deleted |
+| **Description** | When a user is deleted, the attribute “is_deleted” is set as true, and all other attributes will have a specific value |
 **SQL Code**
 ```sql
 -- Function to set the attribute "is_deleted" TRUE

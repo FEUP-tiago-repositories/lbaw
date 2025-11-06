@@ -1007,6 +1007,10 @@ INSERT INTO "user" (user_name, email, phone_no, is_deleted, is_banned, password,
 ```
 ---
 
+## Usage of Generative AI Tools
+
+In this delivery, we have used Copilot, ChatGPT and Perplexity with Claude to help building the populate.sql code, to create a database with a minimally rational size.
+
 ## Revision history
 
 Changes made to the first submission:

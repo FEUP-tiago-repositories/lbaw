@@ -484,19 +484,22 @@ EXECUTE FUNCTION update_is_deleted();
 | Isolation level | Serializable |
 **SQL Code**
  ```sql
- BEGIN TRANSACTION;
+BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
-SELECT space_id FROM schedule
+-- Check if the schedule belongs to the specified space
+SELECT id FROM schedule
 WHERE id = $schedule_id AND space_id = $space_id;
 
+-- Check if the schedule still has available capacity
 SELECT COUNT(*) AS current_bookings
 FROM booking
 WHERE schedule_id = $schedule_id AND is_cancelled = FALSE;
 
 SELECT max_capacity FROM schedule
 WHERE id = $schedule_id;
+
 
 INSERT INTO booking (space_id, customer_id, schedule_id)
 VALUES ($space_id, $customer_id, $schedule_id);

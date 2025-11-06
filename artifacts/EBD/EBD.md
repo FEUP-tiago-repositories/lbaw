@@ -484,6 +484,56 @@ EXECUTE FUNCTION update_is_deleted();
 | Isolation level | Serializable |
 | `Complete SQL Code` |  |
 
+| SQL Reference | TRAN02 |
+|---------------|------------------|
+| Description | Avoid invalid payments by ensuring the booking is valid and preventing duplicate payments for the same booking. |
+| Justification | A transaction is required to maintain integrity when processing payments. Without transactional control, multiple payment requests could be processed for the same booking, or payments could be made for cancelled bookings. The isolation level is Repeatable Read to lock the booking record (using FOR UPDATE) and prevent concurrent modifications while the payment is being processed, avoiding lost updates and ensuring payment consistency. |
+| Isolation level | `REPEATABLE READ` |
+| `Complete SQL Code` | ```sql
+BEGIN TRANSACTION;
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+SELECT is_cancelled, booking_id
+FROM booking
+WHERE booking_id = $booking_id
+FOR UPDATE;
+
+IF is_cancelled = TRUE THEN
+    ROLLBACK;
+    RAISE EXCEPTION 'Cannot process payment for cancelled booking';
+END IF;
+
+-- Check if payment already exists for this booking
+SELECT COUNT(*) INTO existing_payments
+FROM payment
+WHERE booking_id = $booking_id
+AND is_accepted = TRUE;
+
+IF existing_payments > 0 THEN
+    ROLLBACK;
+    RAISE EXCEPTION 'Payment already processed for this booking';
+END IF;
+
+INSERT INTO payment (
+    booking_id,
+    value,
+    is_discounted,
+    is_accepted,
+    payment_provider_ref,
+    payment_date
+)
+VALUES (
+    $booking_id,
+    $value,
+    $is_discounted,
+    TRUE,
+    $payment_provider_ref,
+    NOW()
+);
+
+COMMIT;
+``` |
+```
 ## Annex A. SQL Code
 
 > The database scripts are included in this annex to the EBD component.

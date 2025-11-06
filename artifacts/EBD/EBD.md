@@ -553,7 +553,7 @@ VALUES (
 
 COMMIT;
 ``` 
-```
+
 ## Annex A. SQL Code
 
 > The database scripts are included in this annex to the EBD component.

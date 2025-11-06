@@ -556,6 +556,129 @@ VALUES (
 
 COMMIT;
 ``` 
+| **SQL Reference**   | **TRAN03**                                                                                                                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Description**     | When `space.is_closed = TRUE`, cancel all associated bookings and send cancellation notifications.                                                                                                            |
+| **Justification**   | Implements BR19 and BR20: automatically cancels all future reservations when a space is closed. The isolation level is Serializable to prevent phantom reads and ensure data consistency during cancellation. |
+| **Isolation Level** | Serializable   
+**SQL Code**                                                                                                                                                                                               |
+ ```sql
+ BEGIN TRANSACTION;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+-- Lock the space and get its details
+SELECT id, owner_id, is_closed
+FROM space
+WHERE id = $space_id
+FOR UPDATE;
+
+IF is_closed = TRUE THEN
+    ROLLBACK;
+    RAISE EXCEPTION 'Space is already closed';
+END IF;
+
+-- Update info
+UPDATE space
+SET is_closed = TRUE
+WHERE id = $space_id;
+
+-- Get all future bookings for this space
+CREATE TEMP TABLE affected_bookings AS
+SELECT DISTINCT b.id as booking_id, b.customer_id, c.user_id
+FROM booking b
+JOIN schedule s ON b.schedule_id = s.id
+JOIN customer c ON b.customer_id = c.id
+WHERE s.space_id = $space_id
+  AND s.start_time > NOW()
+  AND b.is_cancelled = FALSE;
+
+-- Cancel all future bookings
+UPDATE booking
+SET is_cancelled = TRUE
+WHERE id IN (SELECT booking_id FROM affected_bookings);
+
+-- Process refunds for cancelled bookings
+UPDATE payment
+SET is_accepted = FALSE
+WHERE booking_id IN (SELECT booking_id FROM affected_bookings)
+  AND is_accepted = TRUE;
+
+-- Create cancellation notifications for all affected customers
+INSERT INTO notification (user_id, time_stamp, is_read)
+SELECT user_id, NOW(), FALSE
+FROM affected_bookings;
+
+INSERT INTO booking_cancellation_notification (notification_id, booking_id)
+SELECT n.id, ab.booking_id
+FROM notification n
+JOIN affected_bookings ab ON n.user_id = ab.user_id
+WHERE n.time_stamp = NOW()
+ORDER BY n.id DESC
+LIMIT (SELECT COUNT(*) FROM affected_bookings);
+
+-- Clean up temporary table
+DROP TEMP TABLE affected_bookings;
+
+COMMIT;
+
+ ``` 
+| **SQL Reference**   | **TRAN04**                                                                                                                                                                                                                                                                                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Description**     | Guarantees a chain of actions when a user is banned.                                                                                                                                                                                                                                                                                                  |
+| **Justification**   | When a user is banned, `user.is_banned` must be updated, a record must be inserted into the `Ban` table, and all future reservations must be cancelled. If the user is a Business Owner, all their spaces must be closed. The isolation level is **Serializable** to prevent phantom reads and ensure consistent updates across all related entities. |
+| **Isolation Level** | Serializable                                                                                                                                                                                                                                                                                                                                          |
+ **SQL Code**
+ ```sql
+ BEGIN TRANSACTION;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+-- Mark user as banned
+UPDATE "user"
+SET is_banned = TRUE
+WHERE id = $user_id;
+
+-- Create ban record
+INSERT INTO ban (user_id, admin_id, motive, time_stamp)
+VALUES ($user_id, $admin_id, $motive, NOW());
+
+-- Check if user is a business owner
+SELECT COUNT(*) INTO is_business_owner
+FROM business_owner
+WHERE user_id = $user_id;
+
+IF is_business_owner > 0 THEN
+    -- Close all spaces owned by banned business owner
+    UPDATE space
+    SET is_closed = TRUE
+    WHERE owner_id IN (
+        SELECT id FROM business_owner WHERE user_id = $user_id
+    );
+    
+    -- Cancel future bookings for closed spaces
+    UPDATE booking
+    SET is_cancelled = TRUE
+    WHERE space_id IN (
+        SELECT id FROM space 
+        WHERE owner_id IN (SELECT id FROM business_owner WHERE user_id = $user_id)
+    )
+    AND schedule_id IN (
+        SELECT id FROM schedule WHERE start_time > NOW()
+    );
+ELSE
+    -- If customer, cancel their future bookings
+    UPDATE booking
+    SET is_cancelled = TRUE
+    WHERE customer_id IN (
+        SELECT id FROM customer WHERE user_id = $user_id
+    )
+    AND schedule_id IN (
+        SELECT id FROM schedule WHERE start_time > NOW()
+    );
+END IF;
+
+COMMIT;
+
+ ``` 
 
 ## Annex A. SQL Code
 

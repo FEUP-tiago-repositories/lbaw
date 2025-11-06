@@ -137,7 +137,7 @@ CREATE TABLE schedule (
 
 CREATE TABLE booking (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space(id),
+    space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     customer_id INT NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
     schedule_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE,
     booking_created_at TIMESTAMP NOT NULL DEFAULT NOW(),

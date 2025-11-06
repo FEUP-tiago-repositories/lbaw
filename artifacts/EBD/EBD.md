@@ -1,10 +1,10 @@
 # EBD: Database Specification Component
 
-> ~~Project vision.~~
+The SportsHub system is being developed as a web-based platform that connects people who want flexible sports options with sports facilities and service providers. It bridges the gap between users who want flexibility and businesses that want to optimize their underused spaces or promote their services in a wider market.
 
 ## A4: Conceptual Data Model
 
-> ~~Brief presentation of the artifact goals.~~
+The purpose of this artifact is to create a comprehensive conceptual data model that illustrates the relationships among various classes within the system. For this, we provide a class UML diagram for understanding how different entities interact, as well as a table containing the remaining business rules.
 
 ### 1. Class diagram
 
@@ -32,11 +32,11 @@
 
 ## A5: Relational Schema, validation and schema refinement
 
-> ~~Brief presentation of the artifact goals.~~
+This artifact contains the Relational Schema obtained by mapping from the Conceptual Data Model. Besides the relational schema, this artifact also contains the validation of each relation according to functional dependencies and normal forms.
 
-### A5.1. Relational Schema
+### 1. Relational Schema
 
-> ~~Brief text about relational schema~~
+The Relational Schema includes each relation schema, attributes, domains, primary keys, foreign keys and other integrity rules.
 
 | Relation reference | Relation Compact Notation |
 |-------------------|---------------------------|
@@ -83,9 +83,8 @@
   <p>Table 3: Generalization Justifications</p>
 </div>
 
-### A5.2. Domains
+### 2. Domains
 
-> The specification of additional domains can also be made in a compact form, using the notation:
 
 | Domain Name        | Domain Specification                                                |
 |--------------------|---------------------------------------------------------------------|
@@ -98,9 +97,8 @@
   <p>Table 4: Domain Specification</p>
 </div>
 
-### A5.3. Schema validation
+### 3. Schema validation
 
-> To validate the Relational Schema obtained from the Conceptual Model, all functional dependencies are identified and the normalization of all relation schemas is accomplished. Should it be necessary, in case the scheme is not in the Boyce–Codd Normal Form (BCNF), the relational schema is refined using normalization.
 
 | Table R01 | User |
 |---|---|
@@ -266,11 +264,9 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
 
 ## A6: Indexes, triggers, transactions and database population
 
-> ~~Brief presentation of the artifact goals.~~
+The goal of this artifact is to outline the physical schema of the database, it includes a description of the expected workload, the proposed indices for full text search and performance and triggers to ensure data integrity. In addition, this artifact also clarifies the transactions that we used along with the justification about why they are necessary to maintain data integrity and why did we choose a certain isolation level for them.
 
 ### 1. Database Workload
-
-> A study of the predicted system load (database load). Estimate of tuples at each relation.
 
 | Relation | Relation Name | Order of Magnitude | Estimated Growth |
 |----------|---------------|-------------------|------------------|
@@ -305,7 +301,6 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
 
 #### 2.1. Performance Indices
 
-> Indices proposed to improve performance of the identified queries.
 
 | **Index** | IDX01 |
 |-----------|-------|
@@ -350,7 +345,6 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
 
 #### 2.2. Full-text Search Indices
 
-> The system being developed must provide full-text search features supported by PostgreSQL. Thus, it is necessary to specify the fields where full-text search will be available and the associated setup, namely all necessary configurations, indexes definitions and other relevant details.
 
 | **Index** | IDX11 |
 |-----------|-------|
@@ -400,7 +394,6 @@ CREATE INDEX search_space_idx ON space USING GIN (tsvectors);
 
 ### 3. Triggers
 
-> User-defined functions and trigger procedures that add control structures to the SQL language or perform complex computations, are identified and described to be trusted by the database server. Every kind of function (SQL functions, Stored procedures, Trigger procedures) can take base types, composite types, or combinations of these as arguments (parameters). In addition, every kind of function can return a base type or a composite type. Functions can also be defined to return sets of base or composite values.
 
 | **Trigger** | TRIGGER01 |
 |-------------|-----------|
@@ -533,10 +526,8 @@ EXECUTE FUNCTION anonymize_closed_space();
 ```
 
 
-
 ### 4. Transactions
 
-> Transactions needed to assure the integrity of the data.
 
 | SQL Reference | TRAN01 |
 |---------------|------------------|
@@ -743,15 +734,11 @@ COMMIT;
 
 ## Annex A. SQL Code
 
-> The database scripts are included in this annex to the EBD component.
->
-> The database creation script and the population script should be presented as separate elements. The creation script includes the code necessary to build (and rebuild) the database. The population script includes an amount of tuples suitable for testing and with plausible values for the fields of the database.
->
-> The complete code of each script must be included in the group's git repository and links added here.
+In this section we provide a comprehensive script for database creation (from the file schema.sql) and another script featuring INSERT statements to populate the database with initial data (from the file populate.sql).
+
+The mentioned files can be checked here: [schema.sql](schema.sql) and [populate.sql](populate.sql)
 
 ### A.1. Database schema
-
-> The complete database creation must be included here and also as a script in the repository.
 
 ```sql
 show search_path;
@@ -886,7 +873,6 @@ CREATE TABLE ban (
 CREATE TABLE schedule (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     space_id INT NOT NULL REFERENCES space(id),
-    schedule_date DATE NOT NULL CHECK (schedule_date > NOW()), --must be a future DATE
     start_time TIMESTAMP NOT NULL CHECK (start_time > NOW()), --must be a future TIMESTAMP
     duration INT NOT NULL CHECK (duration > 0),
     max_capacity INT NOT NULL CHECK (max_capacity > 0)
@@ -894,7 +880,7 @@ CREATE TABLE schedule (
 
 CREATE TABLE booking (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space(id),
+    space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     customer_id INT NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
     schedule_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE,
     booking_created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -1005,7 +991,6 @@ CREATE TABLE favorited (
 
 ### A.2. Database population
 
-> Only a sample of the database population script may be included here, e.g. the first 10 lines. The full script must be available in the repository.
 
 ```sql
 
@@ -1020,7 +1005,6 @@ INSERT INTO "user" (user_name, email, phone_no, is_deleted, is_banned, password,
 ('Seth David', 'mauris.magna@protonmail.ca', '963088105', TRUE, FALSE, 'RBP99EEH9HY', '1971-09-09', 'https://activehub/uploads/picture.png'),
 ('Felicia Hubbard', 'et.magnis@outlook.edu', '903518505', FALSE, FALSE, 'YNY29HYN4EF', '1953-08-31', 'https://activehub/uploads/profile.png'),
 ```
-
 ---
 
 ## Revision history
@@ -1029,7 +1013,7 @@ Changes made to the first submission:
 
 (nothing)
 
-### GROUP25122, 08/10/2025
+### GROUP25122, 06/1/2025
 
 - Group member 1 Gustavo Lourenço up202306578@up.pt
 - Group member 2 Tiago Oliveira, up202007448@up.pt

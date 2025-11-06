@@ -482,8 +482,27 @@ EXECUTE FUNCTION update_is_deleted();
 |Description| Create a new reservation for a user and ensure that no double booking occurs for the same space and time period. |
 | Justification | A transaction is required to maintain integrity when multiple customers are booking the same schedule simultaneously. Without transactional control, two users could exceed the schedule’s maximum capacity. The isolation level is Serializable to avoid phantom reads and guarantee that the capacity check remains valid until the transaction commits. |
 | Isolation level | Serializable |
-| `Complete SQL Code` |  |
+**SQL Code**
+ ```sql
+ BEGIN TRANSACTION;
 
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+SELECT space_id FROM schedule
+WHERE id = $schedule_id AND space_id = $space_id;
+
+SELECT COUNT(*) AS current_bookings
+FROM booking
+WHERE schedule_id = $schedule_id AND is_cancelled = FALSE;
+
+SELECT max_capacity FROM schedule
+WHERE id = $schedule_id;
+
+INSERT INTO booking (space_id, customer_id, schedule_id)
+VALUES ($space_id, $customer_id, $schedule_id);
+
+COMMIT;
+ ``` 
 | SQL Reference | TRAN02 |
 |---------------|------------------|
 | Description | Avoid invalid payments by ensuring the booking is valid and preventing duplicate payments for the same booking. |
@@ -803,6 +822,16 @@ CREATE TABLE favorited (
 
 ```sql
 
+INSERT INTO "user" (user_name, email, phone_no, is_deleted, is_banned, password, birth_date, profile_pic_url) VALUES 
+('Cade Le', 'dolor.nulla@protonmail.couk', '954529117', FALSE, FALSE, 'PDF81OMZ4CZ', '1960-01-23', 'https://activehub/uploads/picture.png'),
+('Miriam Hoover', 'nibh.quisque.nonummy@hotmail.edu', '962922371', FALSE, TRUE, 'NXV25EBT2MC', '1989-04-05', 'https://activehub/uploads/picture.png'),
+('Lysandra Wise', 'ullamcorper@aol.org', '931042084', FALSE, TRUE, 'HIC92UVB1RM', '1963-08-24', 'https://activehub/uploads/picture.png'),
+('Alfreda Curtis', 'sed@aol.net', '972456831', FALSE, TRUE, 'QIR00JTE7MK', '2001-12-10', 'https://activehub/uploads/picture.png'),
+('Constance Yates', 'interdum@protonmail.ca', '989628425', TRUE, TRUE, 'YHP48KYD7QH', '1965-05-27', 'https://activehub/uploads/picture.png'),
+('Nita Jennings', 'auctor.ullamcorper.nisl@icloud.edu', '973066023', FALSE, FALSE, 'XJC87JZZ1PJ', '1986-02-05', 'https://activehub/uploads/picture.jpeg'),
+('Lucy Schroeder', 'quisque.tincidunt@hotmail.couk', '979822651', TRUE, FALSE, 'URS83TKB1JK', '1990-12-28', 'https://activehub/uploads/profile.png'),
+('Seth David', 'mauris.magna@protonmail.ca', '963088105', TRUE, FALSE, 'RBP99EEH9HY', '1971-09-09', 'https://activehub/uploads/picture.png'),
+('Felicia Hubbard', 'et.magnis@outlook.edu', '903518505', FALSE, FALSE, 'YNY29HYN4EF', '1953-08-31', 'https://activehub/uploads/profile.png'),
 ```
 
 ---

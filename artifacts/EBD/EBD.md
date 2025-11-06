@@ -509,7 +509,7 @@ COMMIT;
 | SQL Reference | TRAN02 |
 |---------------|------------------|
 | Description | Avoid invalid payments by ensuring the booking is valid and preventing duplicate payments for the same booking. |
-| Justification | A transaction is required to maintain integrity when processing payments. Without transactional control, multiple payment requests could be processed for the same booking, or payments could be made for cancelled bookings. The isolation level is Repeatable Read to lock the booking record (using FOR UPDATE) and prevent concurrent modifications while the payment is being processed, avoiding lost updates and ensuring payment consistency. |
+| Justification | Ensure no duplicate or orphaned payments are made by locking the booking data while the payment is being made. Repeatable Read is chosen because it locks the booking row with FOR UPDATE, preventing concurrent modifications while ensuring consistent data throughout the transaction, blocking only the specific record needed rather than entire tables like SERIALIZABLE would.|
 | Isolation level | `REPEATABLE READ` |
 **SQL Code**
  ```sql

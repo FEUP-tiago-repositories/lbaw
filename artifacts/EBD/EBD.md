@@ -352,7 +352,7 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
 
 > The system being developed must provide full-text search features supported by PostgreSQL. Thus, it is necessary to specify the fields where full-text search will be available and the associated setup, namely all necessary configurations, indexes definitions and other relevant details.
 
-| **Index** | IDX03 |
+| **Index** | IDX11 |
 |-----------|-------|
 | **Relation** | space |
 | **Attribute** | title, description |

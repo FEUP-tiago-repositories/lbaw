@@ -309,15 +309,25 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
 
 | **Index** | IDX01 |
 |-----------|-------|
-| **Relation** | space |
-| **Attribute** | sport_type |
+| **Relation** | notification |
+| **Attribute** | user_id |
 | **Type** | B-tree|
-| **Cardinality** | medium |
+| **Cardinality** | High |
 | **Clustering** | No |
-| **Justification** | This index improves the performance of queries that filter spaces by sport type (WHERE sportType = 'Football'). Although the column has medium cardinality, the high frequency of these queries justifies its creation. |
-| `SQL code` | `CREATE INDEX space_sport_type ON space USING btree(sport_type);`|
+| **Justification** | Improves the performance of queries that retrieve notifications for a specific user, especially when displaying unread or recent notifications. It prevents a full table scan on the notification table when filtering by user_id. |
+| `SQL code` | `CREATE INDEX notification_user ON notification USING  btree (user_id)`|
 
 | **Index** | IDX02 |
+|-----------|-------|
+| **Relation** | schedule |
+| **Attribute** | space_id |
+| **Type** | B-tree|
+| **Cardinality** | High |
+| **Clustering** | No |
+| **Justification** | This index improves the performance of queries when making a reservation for schedules of a specific space. It prevents a full scan on the schedule table when filtering by space_id. |
+| `SQL code` | `CREATE INDEX schedule_space  ON schedule USING btree (space_id);`|
+
+| **Index** | IDX03 |
 |-----------|-------|
 | **Relation** | booking |
 | **Attribute** | customer_id |
@@ -326,6 +336,17 @@ In general, all the relations respect the Boyce-Codd Normal Form, after applying
 | **Clustering** | No |
 | **Justification** | This index is created to improve the performance of queries that retrieve the booking history of a specific customer. Without the index, the database would need to perform a full table scan on booking, which becomes inefficient as the number of records grows. By indexing customer_id, the system can quickly locate all bookings associated with a given customer, which speeds up reporting and history lookup operations.|
 | `SQL code` | `CREATE INDEX booking_history ON booking USING btree(customer_id);`|
+
+
+| **Index** | IDX04 |
+|-----------|-------|
+| **Relation** | space |
+| **Attribute** | sport_type |
+| **Type** | B-tree|
+| **Cardinality** | medium |
+| **Clustering** | No |
+| **Justification** | This index improves the performance of queries that filter spaces by sport type (WHERE sportType = 'Football'). Although the column has medium cardinality, the high frequency of these queries justifies its creation. |
+| `SQL code` | `CREATE INDEX space_sport_type ON space USING btree(sport_type);`|
 
 #### 2.2. Full-text Search Indices
 
@@ -454,21 +475,61 @@ EXECUTE FUNCTION update_num_favorites();
 | **Description** | Automatically sets the attribute *is_deleted* to true, when a user is deleted |
 **SQL Code**
 ```sql
---function to set the attribute "is_deleted" TRUE
-CREATE FUNCTION update_is_deleted() RETURN TRIGGER AS $$
+-- Function to set the attribute "is_deleted" TRUE
+CREATE FUNCTION update_is_deleted() RETURN TRIGGER AS
+$$
 BEGIN
-   UPDATE user
+
+   UPDATE "user"
    SET is_deleted = TRUE
+   SET user_name = "Deleted user"
+   SET email = 'N/A'
+   SET phone_no = 'N/A'
+   SET password = 'N/A'
+   SET birth_date = 'N/A'
+   SET profile_pic_url = 'N/A'
    WHERE id = OLD.id
-   RETURN NULL; --prevent DELETE
+
+   RETURN NULL;
+END;
+$$
+LANGUAGE plpgsql;
+
+-- Trigger on the user table
+CREATE TRIGGER is_deleted_update
+BEFORE DELETE ON "user" 
+FOR EACH ROW 
+EXECUTE FUNCTION update_is_deleted();
+
+```
+
+| **Trigger** | TRIGGER04 |
+|-------------|-----------|
+| **Description** | When a sports space is permanently closed (for example, when its owner is deleted), is_closed is set to TRUE and address, description, phone_no and email are set to N/A |
+**SQL Code**
+```sql
+CREATE FUNCTION anonymize_closed_space()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.is_closed = TRUE AND OLD.is_closed = FALSE THEN
+        NEW.address := 'N/A';
+        NEW.description := 'N/A';
+        NEW.phone_no := 'N/A';
+        NEW.email := 'N/A';
+    END IF;
+    
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
---trigger on the user table
-CREATE TRIGGER is_deleted_update
-BEFORE DELETE ON user
-FOR EACH ROW 
-EXECUTE FUNCTION update_is_deleted();
+-- Trigger on the space table
+CREATE TRIGGER space_closure_anonymize
+BEFORE UPDATE ON space
+FOR EACH ROW
+WHEN (NEW.is_closed = TRUE AND OLD.is_closed = FALSE)
+EXECUTE FUNCTION anonymize_closed_space();
+
+
 ```
 
 

@@ -489,7 +489,8 @@ EXECUTE FUNCTION update_is_deleted();
 | Description | Avoid invalid payments by ensuring the booking is valid and preventing duplicate payments for the same booking. |
 | Justification | A transaction is required to maintain integrity when processing payments. Without transactional control, multiple payment requests could be processed for the same booking, or payments could be made for cancelled bookings. The isolation level is Repeatable Read to lock the booking record (using FOR UPDATE) and prevent concurrent modifications while the payment is being processed, avoiding lost updates and ensuring payment consistency. |
 | Isolation level | `REPEATABLE READ` |
-| `Complete SQL Code` | ```sql
+**SQL Code**
+ ```sql
 BEGIN TRANSACTION;
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
@@ -532,7 +533,7 @@ VALUES (
 );
 
 COMMIT;
-``` |
+``` 
 ```
 ## Annex A. SQL Code
 

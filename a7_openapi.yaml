@@ -1,0 +1,21 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: 'SportsHub Web API'
+  description: 'Web Resources Specification (A7)'
+
+servers:
+  - url: http://localhost:8000
+  description: 'SportsHub Production Server'
+
+externalDocs:
+  description: 'SportsHub Wiki'
+  url: https://gitlab.up.pt/lbaw/lbaw2526/lbaw25122/-/wikis/home
+
+tags:
+ - name: 'M01: Home Page and Static Pages'
+ - name: 'M02: Authentication and Users Profiles'
+ - name: 'M03: Sports Space Library'
+ - name: 'M04: Bookings and Reviews'
+ - name: 'M05: Administration Pages'

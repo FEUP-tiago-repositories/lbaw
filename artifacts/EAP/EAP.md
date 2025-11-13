@@ -18,7 +18,13 @@
 
 ### 2. Permissions
 
-> Define the permissions used by each module, necessary to access its data and features.
+| Acronym | Name | Description |
+| ------ | ------ | ------ |
+| **VIS** | Visitor | Users without authentication |
+| **USR** | User | Authenticated users |
+| **CST** | Customer | User who can book and review sports spaces |
+| **BOW** | Business Owner | User who can have its own sports spaces |
+| **ADM** | Admin | Platform administrator  |
 
 ### 3. OpenAPI Specification
 

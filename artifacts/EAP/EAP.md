@@ -8,7 +8,13 @@
 
 ### 1. Overview
 
-> Identify and overview the modules that will be part of the application.
+| Module | Specification |
+| ------ | ------ |
+| **M01**: Home Page and Static Pages | Web resources associated with home page and static pages with static content. Pages as Home Page, About Us, FAQ, Terms of Service, Contact Us are associated with this module. |
+| **M02**: Authentication and Users Profiles | Web resources associated with authentication and user profiles management. Pages as Sign-in and Sign-up Page, Logout, Edit Profile, User profile are associated with this module. |
+| **M03**: Sports Space Library | Web resources associated with creating, editing or viewing sports spaces details, searching/filtering and recommended spaces catalog and favorited spaces. |
+| **M04**: Bookings and Reviews | Web resources associated with bookings and reviews. Which include making, seeing and managing own reservations. |
+| **M05**: Administration Pages | Web resources associated with administration pages, as admin dashboard and managing users, sports spaces and reviews. |
 
 ### 2. Permissions
 

@@ -36,7 +36,7 @@ paths:
         - in: path
           name: space_id
           schema:
-            type: Integer
+            type: integer
           required: true
           description: 'ID of the sport space'
       responses:
@@ -185,8 +185,6 @@ paths:
         content:
           application/json:
             schema:
-              application/json:
-                schema:
                   type: object
                   properties:
                     owner_id:
@@ -234,9 +232,9 @@ paths:
                     id:
                       type: integer
                       description: 'ID of the booking'
-                                      schedule_id:
-                    type: integer
-                    description: 'ID of the schedule associated with the booking'
+                    schedule_id:
+                      type: integer
+                      description: 'ID of the schedule associated with the booking'
                     space_id:
                       type: integer
                       description: 'ID of the space associated with the booking'
@@ -256,7 +254,7 @@ paths:
       summary: 'Get all bookings for a user (customer)'
       description: 'Fetches all bookings made by a specific user. Access: CST'
       tags: 
-        - 'M04: Booking and Reviews'
+        - 'M04: Bookings and Reviews'
       parameters:
         - in: path
           name: user_id
@@ -345,66 +343,66 @@ paths:
         description: 'Space or schedule not found'
 
     put:
-    operationId: R408
-    summary: 'Edit a Booking API.'
-    description: 'Allows a user to edit an existing booking for a specific space and schedule. Access: CST'
-    tags:
-      - 'M04: Bookings and Reviews'
-    parameters:
-      - in: path
-        name: space_id
-        schema:
-          type: integer
-        required: true
-        description: 'ID of the space associated with the booking.'
-      - in: path
-        name: schedule_id
-        schema:
-          type: integer
-        required: true
-        description: 'ID of the schedule associated with the booking.'
-      - in: path
-        name: booking_id
-        schema:
-          type: integer
-        required: true
-        description: 'ID of the booking being edited.'
-    requestBody:
-      required: true
-      content:
-        application/json:
+      operationId: R408
+      summary: 'Edit a Booking API.'
+      description: 'Allows a user to edit an existing booking for a specific space and schedule. Access: CST'
+      tags:
+        - 'M04: Bookings and Reviews'
+      parameters:
+        - in: path
+          name: space_id
           schema:
-            type: object
-            properties:
-              customer_id:
-                type: integer
-                description: 'ID of the customer editing the booking.'
-              schedule_id:
-                type: integer
-                description: 'ID of the new schedule associated with the booking.'
-              is_cancelled:
-                type: boolean
-                description: 'Indicates whether the booking is cancelled.'
-    responses:
-      '200':
-        description: 'Booking successfully updated'
+            type: integer
+          required: true
+          description: 'ID of the space associated with the booking.'
+        - in: path
+          name: schedule_id
+          schema:
+            type: integer
+          required: true
+          description: 'ID of the schedule associated with the booking.'
+        - in: path
+          name: booking_id
+          schema:
+            type: integer
+          required: true
+          description: 'ID of the booking being edited.'
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                id:
+                customer_id:
                   type: integer
-                  description: 'ID of the updated booking.'
-                message:
-                  type: string
-                  example: 'Booking successfully updated.'
-      '400':
-        description: 'Invalid input data'
-      '401':
-        description: 'Unauthorized. User must be authenticated.'
-      '404':
-        description: 'Booking not found.'
+                  description: 'ID of the customer editing the booking.'
+                schedule_id:
+                  type: integer
+                  description: 'ID of the new schedule associated with the booking.'
+                is_cancelled:
+                  type: boolean
+                  description: 'Indicates whether the booking is cancelled.'
+      responses:
+        '200':
+          description: 'Booking successfully updated'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: 'ID of the updated booking.'
+                  message:
+                    type: string
+                    example: 'Booking successfully updated.'
+        '400':
+          description: 'Invalid input data'
+        '401':
+          description: 'Unauthorized. User must be authenticated.'
+        '404':
+          description: 'Booking not found.'
   
 /api/space/{space_id}/schedule/{schedule_id}/bookings/{booking_id}/cancel:
   patch:
@@ -432,6 +430,16 @@ paths:
           type: integer
         required: true
         description: 'ID of the booking being canceled.'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              customer_id:
+                type: integer
+                description: 'ID of the customer canceling the booking'
     responses:
       '200':
         description: 'Booking successfully canceled'

@@ -1,0 +1,1588 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0"
+  title: "SportsHub Web API"
+  description: "Web Resources Specification (A7)"
+
+servers:
+  - url: http://localhost:8000
+    description: "SportsHub Production Server"
+
+externalDocs:
+  description: "SportsHub Wiki"
+  url: https://gitlab.up.pt/lbaw/lbaw2526/lbaw25122/-/wikis/home
+
+tags:
+  - name: "M01: Home Page and Static Pages"
+  - name: "M02: Authentication and Users Profiles"
+  - name: "M03: Sports Space Library"
+  - name: "M04: Bookings and Reviews"
+  - name: "M05: Administration Pages"
+
+paths:
+  # ==========================================
+  # M01: Home Page and Static Pages
+  # ==========================================
+  /:
+    get:
+      operationId: R101
+      summary: "R101: Home Page"
+      description: "Show the home page of the Sports Hub. Access: VIS, USR"
+      tags:
+        - "M01: Home Page and Static Pages"
+      responses:
+        "200":
+          description: "Ok. Show Home Page UI."
+  /about-us:
+    get:
+      operationId: R102
+      summary: "R102: About Us"
+      description: "Show the about us page of the Sports Hub. Access: VIS, USR"
+      tags:
+        - "M01: Home Page and Static Pages"
+      responses:
+        "200":
+          description: "Ok. Show About Us UI."
+  /faq:
+    get:
+      operationId: R103
+      summary: "R103: FAQ"
+      description: "Show the FAQ page of the Sports Hub. Access: VIS, USR"
+      tags:
+        - "M01: Home Page and Static Pages"
+      responses:
+        "200":
+          description: "Ok. Show FAQ UI."
+  /terms-of-service:
+    get:
+      operationId: R104
+      summary: "R104: Terms of Service"
+      description: "Show the terms of service page of the Sports Hub. Access: VIS, USR"
+      tags:
+        - "M01: Home Page and Static Pages"
+      responses:
+        "200":
+          description: "Ok. Show Terms of Service UI."
+  /contact-us:
+    get:
+      operationId: R105
+      summary: "R105: Contact Us"
+      description: "Show the Contact Us page of the Sports Hub. Access: VIS, USR"
+      tags:
+        - "M01: Home Page and Static Pages"
+      responses:
+        "200":
+          description: "Ok. Show Contact Us UI."
+
+  # ==========================================
+  # M02: Authentication and User Profiles
+  # ==========================================
+  /sign-in:
+    get:
+      operationId: R201
+      summary: "R201: Sign-in Form"
+      description: "Provide Sign-in form of the Sports Hub. Access: VIS"
+      tags:
+        - "M02: Authentication and Users Profiles"
+      responses:
+        "200":
+          description: "Ok. Show Sign-in UI."
+    post:
+      operationId: R202
+      summary: "R202: Sign-in Action"
+      description: "Processes the sign-in form submission. Access: VIS"
+      tags:
+        - "M02: Authentication and Users Profiles"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        "302":
+          description: "Redirect after processing the sign-in credentials."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful authentication. Redirect to home page."
+                302Error:
+                  description: "Failed authentication. Redirect to sign-in form."
+                  value: "/sign-in"
+  /sign-up:
+    get:
+      operationId: R203
+      summary: "R203: Sign-up Form"
+      description: "Provide new users registration form of the Sports Hub. Access: VIS"
+      tags:
+        - "M02: Authentication and Users Profiles"
+      responses:
+        "200":
+          description: "Ok. Show Sign-up UI."
+    post:
+      operationId: R204
+      summary: "R204: Sign-up Action"
+      description: "Processes the new user registration form submission. Access: VIS"
+      tags:
+        - "M02: Authentication and Users Profiles"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                phone_number:
+                  type: string
+                birth_date:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - user_name
+                - phone_number
+                - birth_date
+                - email
+                - password
+      responses:
+        "302":
+          description: "Redirect after processing the new user information."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful authentication. Redirect to home page."
+                302Error:
+                  description: "Failed authentication. Redirect to sign-in form."
+                  value: "/sign-in"
+
+
+  /users/{id}:
+    get:
+      operationId: R205
+      summary: "R205: View user profile"
+      description: "Show the individual user profile. Access: USR"
+      tags:
+        - "M02: Authentication and Users Profiles"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "Ok. Show user profile UI."
+    patch:
+      operationId: R206
+      summary: "R206: Edit user profile"
+      description: "Allows an authenticated user to update their profile information. Access: USR"
+      tags:
+        - "M02: Authentication and Users Profiles"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "ID of the user to be updated."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                phone_number:
+                  type: string
+                birth_date:
+                  type: string
+                  format: date
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+      responses:
+        "200":
+          description: "Ok. Profile updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  user_name:
+                    type: string
+                  phone_number:
+                    type: string
+                  birth_date:
+                    type: string
+                    format: date
+                  email:
+                    type: string
+                    format: email
+        "400":
+          description: "Invalid data submitted."
+        "401":
+          description: "User not authenticated."
+        "403":
+          description: "User trying to edit a profile that is not theirs."
+
+
+  /logout:
+    post:
+      operationId: R207
+      summary: "R207: Logout Action"
+      description: "Logout the current authenticated user. Access: USR"
+      tags:
+        - "M02: Authentication and Users Profiles"
+      responses:
+        "302":
+          description: "Redirect after processing logout."
+          headers:
+            location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful logout. Redirect to login form."
+                  value: "/login"
+
+  # ==========================================
+  # M03:  Sports Space Library
+  # ==========================================
+
+  /add-space:
+    get:
+      operationId: R301
+      summary: "R301: Add Space Form"
+      description: "Provide the form to create a new space in Sports Hub. Access: BOW"
+      tags:
+        - "M03: Sports Space Library"
+      responses:
+        "200":
+          description: "Ok. Show Add Space UI."
+
+    post:
+      operationId: R302
+      summary: "R302: Add Space Action"
+      description: "Process the creation of a new sports space. Access: BOW"
+      tags:
+        - "M03: Sports Space Library"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                sport_type:
+                  type: string
+                phone_number:
+                  type: string
+                description:
+                  type: string
+                email:
+                  type: string
+                address:
+                  type: string
+              required:
+                - title
+                - sport_type
+                - phone_number
+                - email
+                - address
+      responses:
+        "302":
+          description: "Redirect after processing the new space information."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Space successfully added. Redirect to space page."
+                302Error:
+                  description: "Failed to create space. Redirect to Add Space form."
+                  value: "/add-space"
+  /space:
+    get:
+      operationId: R303
+      summary: "R303: Search and filter sports spaces"
+      description: >
+        Returns a list of sports spaces matching the search query and/or sport type.
+        Supports full-text search over the space title and description.
+        Access: VIS, USR
+      tags:
+        - "M03: Sports Space Library"
+
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+          description: "Full-text search query matching title or description."
+
+        - in: query
+          name: sport_type
+          required: false
+          schema:
+            type: string
+          description: "Filter spaces by sport type."
+
+      responses:
+        "200":
+          description: "List of spaces matching the search and filter criteria."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    space_id:
+                      type: string
+                    title:
+                      type: string
+                    sport_type:
+                      type: string
+                    address:
+                      type: string
+        "400":
+          description: "Invalid search or filter parameters."
+
+  /space/{space_id}:
+    get:
+      operationId: R304
+      summary: "R304: View a space's page"
+      description: "Show a space's page with all of its details. Access: VIS, USR"
+      tags:
+        - "M03: Sports Space Library"
+      parameters:
+        - in: path
+          name: space_id
+          schema:
+            type: string
+          required: true
+          description: "ID of the space to view."
+      responses:
+        "200":
+          description: "Ok. Show space page UI."
+
+    patch:
+      operationId: R305
+      summary: "R305: Edit space information"
+      description: "Allows the owner of a sports space to update its details. Access: BOW"
+      tags:
+        - "M03: Sports Space Library"
+      parameters:
+        - in: path
+          name: space_id
+          schema:
+            type: string
+          required: true
+          description: "ID of the space to be updated."
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: "Updated space title"
+                sport_type:
+                  type: string
+                phone_number:
+                  type: string
+                  description: "Updated contact phone number"
+                description:
+                  type: string
+                  description: "Updated space description"
+                email:
+                  type: string
+                  format: email
+                  description: "Updated contact email"
+                address:
+                  type: string
+                  description: "Updated location address"
+              required:
+                - title
+                - sport_type
+                - phone_number
+                - email
+                - address
+      responses:
+        "200":
+          description: "Ok. Space updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  space_id:
+                    type: string
+                  title:
+                    type: string
+                  sport_type:
+                    type: string
+                  phone_number:
+                    type: string
+                  description:
+                    type: string
+                  email:
+                    type: string
+                  address:
+                    type: string
+        "400":
+          description: "Invalid data submitted."
+        "401":
+          description: "User not authenticated."
+        "403":
+          description: "User attempting to edit a space they do not own."
+        "404":
+          description: "Space not found."
+    delete:
+      operationId: R306
+      summary: "R306: Delete space"
+      description: "Allows the owner of a sports space to delete it. Access: BOW"
+      tags:
+        - "M03: Sports Space Library"
+      parameters:
+        - in: path
+          name: space_id
+          required: true
+          schema:
+            type: string
+          description: "ID of the space to delete."
+      responses:
+        "200":
+          description: "Space deleted successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: "Space deleted."
+        "401":
+          description: "User not authenticated."
+        "403":
+          description: "User attempting to delete a space they do not own."
+        "404":
+          description: "Space not found."
+  /space/{space_id}/favorite:
+    post:
+      operationId: R307
+      summary: "R307: Mark space as favorite"
+      description: "Sets is_favorite = true for the Customer. Access: CST"
+      tags:
+        - "M03: Sports Space Library"
+      parameters:
+        - in: path
+          name: space_id
+          required: true
+          schema:
+            type: string
+          description: "ID of the space to mark as favorite."
+      responses:
+        "200":
+          description: "Space favorited successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  space_id:
+                    type: string
+                  is_favorite:
+                    type: boolean
+                    example: true
+        "401":
+          description: "User not authenticated."
+        "404":
+          description: "Space not found."
+    patch:
+      operationId: R308
+      summary: "R308: Unfavorite space"
+      description: "Sets is_favorite = false for the Customer. Access: CST"
+      tags:
+        - "M03: Sports Space Library"
+      parameters:
+        - in: path
+          name: space_id
+          required: true
+          schema:
+            type: string
+          description: "ID of the space to unfavorite."
+
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              description: "No request body is needed for this operation."
+
+      responses:
+        "200":
+          description: "Space unfavorited successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  space_id:
+                    type: string
+                  is_favorite:
+                    type: boolean
+                    example: false
+        "401":
+          description: "User not authenticated."
+        "404":
+          description: "Space not found."
+
+  #=========================================
+  # M04: Bookings and Reviews paths
+  #========================================
+  /api/space/{space_id}/reviews:
+    get:
+      operationId: R401
+      summary: "R401: Get space Reviews API."
+      description: "Searches and lists all reviews of a specific space (space_id) and returns the results as JSON. Access: VIS,USR"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: space_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the sport space"
+      responses:
+        "200":
+          description: "Ok. A list of reviews"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    customer_id:
+                      type: integer
+                    time_stamp:
+                      type: string
+                      format: date-time
+                    environment_rating:
+                      type: integer
+                      minimum: 1
+                      maximum: 5
+                    equipment_rating:
+                      type: integer
+                      minimum: 1
+                      maximum: 5
+                    service_rating:
+                      type: integer
+                      minimum: 1
+                      maximum: 5
+        "404":
+          description: "Space not found"
+        "400":
+          description: "Invalid space_id"
+    post:
+      operationId: R402
+      summary: "R402: Post a Review API."
+      description: "Allows authenticated users to submit a review for a specific space. Access: CST"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: space_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the sport space being reviewed"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                  description: "ID of the customer submitting the review"
+                environment_rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                  description: "Rating for the equipment (1-5)"
+                equipment_rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                  description: "Rating for the equipment (1-5)"
+                service_rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                  description: "Rating for the service (1-5)"
+                comment:
+                  type: string
+                  description: "Comment about the space"
+      responses:
+        "201":
+          description: "Review successfully created"
+        "400":
+          description: "Invalid input data"
+        "401":
+          description: "Unauthorized. User must be authenticated"
+        "404":
+          description: "Space not found"
+
+  /api/review/{review_id}/response:
+    get:
+      operationId: R403
+      summary: "R403: Get Response to a Review API."
+      description: "Fetches the response to a specific review. Access: VIS, USR"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: review_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the review whose response is being fetched"
+      responses:
+        "200":
+          description: "Response successfully fetched"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: "ID of the response"
+                  owner_id:
+                    type: integer
+                    description: "ID of the business owner who submitted the response"
+                  review_id:
+                    type: integer
+                    description: "ID of the review being responded to"
+                  text:
+                    type: string
+                    description: "The content of the response"
+                  time_stamp:
+                    type: string
+                    format: date-time
+                    description: "The timestamp of when the response was created"
+        "404":
+          description: "Response not found"
+        "400":
+          description: "Invalid review_id"
+
+    post:
+      operationId: R404
+      summary: "R404: Post a Response to a Review API."
+      description: "Allows a business owner to respond to a specific review. Access: BOW"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: review_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the review being responded to"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                owner_id:
+                  type: integer
+                  description: "ID of the business owner submitting the response"
+                text:
+                  type: string
+                  maxLength: 300
+                  description: "The content of the response."
+      responses:
+        "201":
+          description: "Response successfully created"
+        "400":
+          description: "Invalid input data"
+        "401":
+          description: "Unauthorized. User must be authenticated and be a business owner"
+        "404":
+          description: "Review not found"
+
+  ## Booking paths
+  /user/{user_id}/my_reservations:
+    get:
+      operationId: R405
+      summary: "R405: Get my reservations page data."
+      description: "Fetches all data required to render the My Reservations page for a specific user. Access: CST"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the user whose reservations page is being rendered"
+      responses:
+        "200":
+          description: "Page data successfully fetched"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: "ID of the booking"
+                    schedule_id:
+                      type: integer
+                      description: "ID of the schedule associated with the booking"
+                    space_id:
+                      type: integer
+                      description: "ID of the space associated with the booking"
+                    booking_created_at:
+                      type: string
+                      format: date-time
+                      description: "When the booking was created"
+                    is_cancelled:
+                      type: boolean
+                      description: "If the booking was cancelled"
+        "404":
+          description: "User not found"
+
+  # /api/user/{user_id}/my_reservations/bookings:
+  #   get:
+  #     operationId: R406
+  #     summary: "R406: Get all bookings for a user (customer)"
+  #     description: "Fetches all bookings made by a specific user. Access: CST"
+  #     tags:
+  #       - "M04: Bookings and Reviews"
+  #     parameters:
+  #       - in: path
+  #         name: user_id
+  #         schema:
+  #           type: integer
+  #         required: true
+  #         description: "ID of the user whose bookings are being viewed"
+  #     responses:
+  #       "200":
+  #         description: "Bookings successfully fetched"
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 type: object
+  #                 properties:
+  #                   id:
+  #                     type: integer
+  #                     description: "ID of the booking"
+  #                   schedule_id:
+  #                     type: integer
+  #                     description: "ID of the schedule associated with the booking"
+  #                   space_id:
+  #                     type: integer
+  #                     description: "ID of the space associated with the booking"
+  #                   booking_created_at:
+  #                     type: string
+  #                     format: date-time
+  #                     description: "When the booking was created"
+  #                   is_cancelled:
+  #                     type: boolean
+  #                     description: "If the booking was cancelled"
+  #       "404":
+  #         description: "User not found"
+
+  /api/space/{space_id}/schedule/{schedule_id}/bookings:
+    post:
+      operationId: R406
+      summary: "R406: Create a Booking API."
+      description: "Allows a user to create a booking for a specific space and schedule. Access: CST"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: space_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the space for which the booking is being created."
+        - in: path
+          name: schedule_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the schedule associated with the booking"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                  description: "ID of the customer creating the booking"
+      responses:
+        "201":
+          description: "Booking successfully created"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: "ID of the newly created booking"
+                  message:
+                    type: string
+                    example: "Booking successfully created"
+      "400":
+        description: "Invalid input data"
+      "401":
+        description: "Unauthorized. USer must be authenticated"
+      "404":
+        description: "Space or schedule not found"
+
+    put:
+      operationId: R407
+      summary: "R407: Edit a Booking API."
+      description: "Allows a user to edit an existing booking for a specific space and schedule. Access: CST"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: space_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the space associated with the booking."
+        - in: path
+          name: schedule_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the schedule associated with the booking."
+        - in: path
+          name: booking_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the booking being edited."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                  description: "ID of the customer editing the booking."
+                schedule_id:
+                  type: integer
+                  description: "ID of the new schedule associated with the booking."
+                is_cancelled:
+                  type: boolean
+                  description: "Indicates whether the booking is cancelled."
+      responses:
+        "200":
+          description: "Booking successfully updated"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: "ID of the updated booking."
+                  message:
+                    type: string
+                    example: "Booking successfully updated."
+        "400":
+          description: "Invalid input data"
+        "401":
+          description: "Unauthorized. User must be authenticated."
+        "404":
+          description: "Booking not found."
+
+  /api/space/{space_id}/schedule/{schedule_id}/bookings/{booking_id}/cancel:
+    patch:
+      operationId: R408
+      summary: "R408: Cancel a Booking API."
+      description: "Allows a user to cancel an existing booking for a specific space and schedule. Access: CST"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: space_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the space associated with the booking."
+        - in: path
+          name: schedule_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the schedule associated with the booking."
+        - in: path
+          name: booking_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the booking being canceled."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                  description: "ID of the customer canceling the booking"
+      responses:
+        "200":
+          description: "Booking successfully canceled"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: "ID of the canceled booking."
+                  message:
+                    type: string
+                    example: "Booking successfully canceled."
+        "400":
+          description: "Invalid input data"
+        "401":
+          description: "Unauthorized. User must be authenticated."
+        "404":
+          description: "Booking not found."
+
+  # ==========================================
+  # M05: Administration Pages
+  # ==========================================
+
+  /admin:
+    get:
+      operationId: R501
+      summary: 'R501: Admin Dashboard'
+      description: 'Show admin dashboard with platform statistics and overview. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      responses:
+        '200':
+          description: 'Ok. Show admin dashboard UI with statistics (total users, active spaces, bookings, revenue, etc.)'
+        '403':
+          description: 'Forbidden. 
+'
+
+  /admin/users:
+    get:
+      operationId: R502
+      summary: 'R502: Manage Users Page'
+      description: 'Show user management page with search and filters. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: 'Search users by name, email or phone number'
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [all, customer, business_owner]
+          description: 'Filter by user type'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [all, active, banned, deleted]
+          description: 'Filter by user status'
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [name_asc, name_desc, created_asc, created_desc]
+          description: 'Sort order'
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: 'Ok. Show users management UI with search results'
+        '403':
+          description: 'Forbidden. User is not an admin'
+
+  /admin/users/{id}:
+    get:
+      operationId: R503
+      summary: 'R503: View User Details (Admin)'
+      description: 'View detailed information about a specific user. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show user details UI with full information, activity history, bookings, reviews'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'User not found'
+
+    patch:
+      operationId: R504
+      summary: 'R504: Edit User Account (Admin)'
+      description: 'Edit user account information as admin. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                phone_number:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                account_type:
+                  type: string
+                  enum: [customer, business_owner]
+      responses:
+        '200':
+          description: 'Ok. User account updated successfully'
+        '400':
+          description: 'Bad Request. Invalid data'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'User not found'
+
+    delete:
+      operationId: R505
+      summary: 'R505: Delete User Account (Admin)'
+      description: 'Permanently delete a user account. Reviews are kept but anonymized (BR10). Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after deleting user account'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'User deleted successfully. Redirect to users management'
+                  value: '/admin/users'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'User not found'
+
+  /admin/users/create:
+    get:
+      operationId: R506
+      summary: 'R506: Create User Form (Admin)'
+      description: 'Show form to create new user account. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      responses:
+        '200':
+          description: 'Ok. Show create user UI'
+        '403':
+          description: 'Forbidden'
+
+    post:
+      operationId: R507
+      summary: 'R507: Create User Action (Admin)'
+      description: 'Create new user account as admin. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                phone_number:
+                  type: string
+                birth_date:
+                  type: string
+                  format: date
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                account_type:
+                  type: string
+                  enum: [customer, business_owner]
+              required:
+                - user_name
+                - phone_number
+                - birth_date
+                - email
+                - password
+                - account_type
+      responses:
+        '302':
+          description: 'Redirect after user creation'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'User created successfully'
+                  value: '/admin/users/{id}'
+                302Error:
+                  description: 'Failed to create user'
+                  value: '/admin/users/create'
+        '400':
+          description: 'Bad Request'
+        '403':
+          description: 'Forbidden'
+
+  /admin/users/{id}/ban:
+    post:
+      operationId: R508
+      summary: 'R508: Ban User'
+      description: 'Ban/block a user account. Banned customers cannot make reservations or leave reviews. Banned business owners cannot create/edit spaces or respond to reviews (BR22). Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                motive:
+                  type: string
+                  description: 'Reason for banning the user'
+              required:
+                - motive
+      responses:
+        '302':
+          description: 'Redirect after banning user'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'User banned successfully'
+                  value: '/admin/users/{id}'
+        '400':
+          description: 'Bad Request'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'User not found'
+
+  /admin/users/{id}/unban:
+    post:
+      operationId: R509
+      summary: 'R509: Unban User'
+      description: 'Unban/unblock a user account. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after unbanning user'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'User unbanned successfully'
+                  value: '/admin/users/{id}'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'User not found'
+
+  /admin/spaces:
+    get:
+      operationId: R511
+      summary: 'R511: Manage Spaces Page'
+      description: 'Show sports spaces management page. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: 'Search spaces by name, owner or sport type'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [all, active, closed, permanently_closed]
+          description: 'Filter by space status'
+        - in: query
+          name: sport_type
+          schema:
+            type: string
+          description: 'Filter by sport type'
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [name_asc, name_desc, created_asc, created_desc, rating_desc]
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: 'Ok. Show spaces management UI'
+        '403':
+          description: 'Forbidden'
+
+  /admin/spaces/{id}:
+    get:
+      operationId: R512
+      summary: 'R512: View Space Details (Admin)'
+      description: 'View detailed information about a sports space. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show space details with full information, owner, bookings, reviews'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Space not found'
+
+    delete:
+      operationId: R513
+      summary: 'R513: Delete Space (Admin)'
+      description: 'Delete inappropriate sports space. When permanently closed, future reservations are cancelled and only spaceId, name and main image are kept (BR20). Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: 'Reason for deleting the space'
+                permanent:
+                  type: boolean
+                  description: 'If true, permanently delete space (BR20)'
+              required:
+                - reason
+      responses:
+        '302':
+          description: 'Redirect after deleting space'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Space deleted successfully'
+                  value: '/admin/spaces'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Space not found'
+
+  /admin/spaces/{id}/close:
+    post:
+      operationId: R514
+      summary: 'R514: Close Space Temporarily (Admin)'
+      description: 'Temporarily close a sports space. Future reservations are cancelled (BR19). Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+              required:
+                - reason
+      responses:
+        '302':
+          description: 'Redirect after closing space'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Space closed successfully'
+                  value: '/admin/spaces/{id}'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Space not found'
+
+  /admin/spaces/{id}/reopen:
+    post:
+      operationId: R515
+      summary: 'R515: Reopen Space (Admin)'
+      description: 'Reopen a temporarily closed space. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after reopening space'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Space reopened successfully'
+                  value: '/admin/spaces/{id}'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Space not found'
+
+  /admin/reviews:
+    get:
+      operationId: R516
+      summary: 'R516: Manage Reviews Page'
+      description: 'Show reviews management page with filters. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: 'Search reviews by content, reviewer or space name'
+        - in: query
+          name: filter
+          schema:
+            type: string
+            enum: [all, flagged, recent, low_rating]
+          description: 'Filter reviews'
+        - in: query
+          name: rating
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+          description: 'Filter by rating'
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [date_desc, date_asc, rating_desc, rating_asc]
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: 'Ok. Show reviews management UI'
+        '403':
+          description: 'Forbidden'
+
+  /admin/reviews/{id}:
+    get:
+      operationId: R517
+      summary: 'R517: View Review Details (Admin)'
+      description: 'View detailed information about a review. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show review details with context, space, reviewer information'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Review not found'
+
+    delete:
+      operationId: R518
+      summary: 'R518: Delete Review (Admin)'
+      description: 'Delete inappropriate review or comment. Access: ADM'
+      tags:
+        - 'M05: Administration Pages'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: 'Reason for deleting the review'
+              required:
+                - reason
+      responses:
+        '302':
+          description: 'Redirect after deleting review'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Review deleted successfully'
+                  value: '/admin/reviews'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Review not found'

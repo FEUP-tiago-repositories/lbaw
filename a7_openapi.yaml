@@ -352,7 +352,7 @@ paths:
           name: sport_type
           required: false
           schema:
-            $ref: "#/components/schemas/SportType"
+            type: string
           description: "Filter spaces by sport type."
 
       responses:
@@ -370,8 +370,6 @@ paths:
                     title:
                       type: string
                     sport_type:
-                      $ref: "#/components/schemas/SportType"
-                    description:
                       type: string
                     address:
                       type: string
@@ -421,7 +419,7 @@ paths:
                   type: string
                   description: "Updated space title"
                 sport_type:
-                  $ref: "#/components/schemas/SportType"
+                  type: string
                 phone_number:
                   type: string
                   description: "Updated contact phone number"
@@ -454,7 +452,7 @@ paths:
                   title:
                     type: string
                   sport_type:
-                    $ref: "#/components/schemas/SportType"
+                    type: string
                   phone_number:
                     type: string
                   description:

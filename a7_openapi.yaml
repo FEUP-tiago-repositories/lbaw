@@ -301,7 +301,7 @@ paths:
                 title:
                   type: string
                 sport_type:
-                  $ref: "#/components/schemas/SportType"
+                  type: string
                 phone_number:
                   type: string
                 description:

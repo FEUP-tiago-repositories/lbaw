@@ -80,11 +80,11 @@ paths:
         - 'M04: Bookings and Reviews'
       parameters:
         - in: path
-        name: space_id
-        schema:
-          type: integer
-        required: true
-        description: 'ID of the sport space being reviewed'
+          name: space_id
+          schema:
+            type: integer
+          required: true
+          description: 'ID of the sport space being reviewed'
       requestBody:
         required: true
         content:

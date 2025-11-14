@@ -7,7 +7,7 @@ info:
 
 servers:
   - url: http://localhost:8000
-  description: 'SportsHub Production Server'
+    description: 'SportsHub Production Server'
 
 externalDocs:
   description: 'SportsHub Wiki'

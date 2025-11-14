@@ -112,15 +112,15 @@ paths:
                 comment:
                   type: string
                   description: "Comment about the space"
-        responses:
-          "201":
-            description: "Review successfully created"
-          "400":
-            description: "Invalid input data"
-          "401":
-            description: "Unauthorized. User must be authenticated"
-          "404":
-            description: "Space not found"
+      responses:
+        "201":
+          description: "Review successfully created"
+        "400":
+          description: "Invalid input data"
+        "401":
+          description: "Unauthorized. User must be authenticated"
+        "404":
+          description: "Space not found"
 
   /api/review/{review_id}/response:
     get:
@@ -246,53 +246,53 @@ paths:
         "404":
           description: "User not found"
 
-  /api/user/{user_id}/my_reservations/bookings:
-    get:
-      operationId: R406
-      summary: "R406: Get all bookings for a user (customer)"
-      description: "Fetches all bookings made by a specific user. Access: CST"
-      tags:
-        - "M04: Bookings and Reviews"
-      parameters:
-        - in: path
-          name: user_id
-          schema:
-            type: integer
-          required: true
-          description: "ID of the user whose bookings are being viewed"
-      responses:
-        "200":
-          description: "Bookings successfully fetched"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      description: "ID of the booking"
-                    schedule_id:
-                      type: integer
-                      description: "ID of the schedule associated with the booking"
-                    space_id:
-                      type: integer
-                      description: "ID of the space associated with the booking"
-                    booking_created_at:
-                      type: string
-                      format: date-time
-                      description: "When the booking was created"
-                    is_cancelled:
-                      type: boolean
-                      description: "If the booking was cancelled"
-        "404":
-          description: "User not found"
+  # /api/user/{user_id}/my_reservations/bookings:
+  #   get:
+  #     operationId: R406
+  #     summary: "R406: Get all bookings for a user (customer)"
+  #     description: "Fetches all bookings made by a specific user. Access: CST"
+  #     tags:
+  #       - "M04: Bookings and Reviews"
+  #     parameters:
+  #       - in: path
+  #         name: user_id
+  #         schema:
+  #           type: integer
+  #         required: true
+  #         description: "ID of the user whose bookings are being viewed"
+  #     responses:
+  #       "200":
+  #         description: "Bookings successfully fetched"
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 type: object
+  #                 properties:
+  #                   id:
+  #                     type: integer
+  #                     description: "ID of the booking"
+  #                   schedule_id:
+  #                     type: integer
+  #                     description: "ID of the schedule associated with the booking"
+  #                   space_id:
+  #                     type: integer
+  #                     description: "ID of the space associated with the booking"
+  #                   booking_created_at:
+  #                     type: string
+  #                     format: date-time
+  #                     description: "When the booking was created"
+  #                   is_cancelled:
+  #                     type: boolean
+  #                     description: "If the booking was cancelled"
+  #       "404":
+  #         description: "User not found"
 
   /api/space/{space_id}/schedule/{schedule_id}/bookings:
     post:
-      operationId: R407
-      summary: "R407: Create a Booking API."
+      operationId: R406
+      summary: "R406: Create a Booking API."
       description: "Allows a user to create a booking for a specific space and schedule. Access: CST"
       tags:
         - "M04: Bookings and Reviews"
@@ -315,10 +315,10 @@ paths:
           application/json:
             schema:
               type: object
-            properties:
-              customer_id:
-                type: integer
-                description: "ID of the customer creating the booking"
+              properties:
+                customer_id:
+                  type: integer
+                  description: "ID of the customer creating the booking"
       responses:
         "201":
           description: "Booking successfully created"
@@ -341,8 +341,8 @@ paths:
         description: "Space or schedule not found"
 
     put:
-      operationId: R408
-      summary: "R408: Edit a Booking API."
+      operationId: R407
+      summary: "R407: Edit a Booking API."
       description: "Allows a user to edit an existing booking for a specific space and schedule. Access: CST"
       tags:
         - "M04: Bookings and Reviews"
@@ -402,59 +402,59 @@ paths:
         "404":
           description: "Booking not found."
 
-/api/space/{space_id}/schedule/{schedule_id}/bookings/{booking_id}/cancel:
-  patch:
-    operationId: R409
-    summary: "R409: Cancel a Booking API."
-    description: "Allows a user to cancel an existing booking for a specific space and schedule. Access: CST"
-    tags:
-      - "M04: Bookings and Reviews"
-    parameters:
-      - in: path
-        name: space_id
-        schema:
-          type: integer
-        required: true
-        description: "ID of the space associated with the booking."
-      - in: path
-        name: schedule_id
-        schema:
-          type: integer
-        required: true
-        description: "ID of the schedule associated with the booking."
-      - in: path
-        name: booking_id
-        schema:
-          type: integer
-        required: true
-        description: "ID of the booking being canceled."
-    requestBody:
-      required: true
-      content:
-        application/json:
+  /api/space/{space_id}/schedule/{schedule_id}/bookings/{booking_id}/cancel:
+    patch:
+      operationId: R408
+      summary: "R408: Cancel a Booking API."
+      description: "Allows a user to cancel an existing booking for a specific space and schedule. Access: CST"
+      tags:
+        - "M04: Bookings and Reviews"
+      parameters:
+        - in: path
+          name: space_id
           schema:
-            type: object
-            properties:
-              customer_id:
-                type: integer
-                description: "ID of the customer canceling the booking"
-    responses:
-      "200":
-        description: "Booking successfully canceled"
+            type: integer
+          required: true
+          description: "ID of the space associated with the booking."
+        - in: path
+          name: schedule_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the schedule associated with the booking."
+        - in: path
+          name: booking_id
+          schema:
+            type: integer
+          required: true
+          description: "ID of the booking being canceled."
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                id:
+                customer_id:
                   type: integer
-                  description: "ID of the canceled booking."
-                message:
-                  type: string
-                  example: "Booking successfully canceled."
-      "400":
-        description: "Invalid input data"
-      "401":
-        description: "Unauthorized. User must be authenticated."
-      "404":
-        description: "Booking not found."
+                  description: "ID of the customer canceling the booking"
+      responses:
+        "200":
+          description: "Booking successfully canceled"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: "ID of the canceled booking."
+                  message:
+                    type: string
+                    example: "Booking successfully canceled."
+        "400":
+          description: "Invalid input data"
+        "401":
+          description: "Unauthorized. User must be authenticated."
+        "404":
+          description: "Booking not found."

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Runs database/thingy-seed.sql as-is.
-     * The SQL reads current_setting('app.schema', true) and defaults to 'thingy'.
+     * Runs database/sportshub-seed.sql as-is.
+     * The SQL reads current_setting('app.schema', true) and defaults to 'sportshub'.
      */
     public function run(): void
     {
@@ -17,8 +17,7 @@ class DatabaseSeeder extends Seeder
         $schema = env('DB_SCHEMA');
 
         // Load the raw SQL file
-        $path = base_path('database/thingy-seed.sql');
-        $sql = file_get_contents($path);
+        $path = base_path('database/sportshub-seed.sql');
 
         // If DB_SCHEMA is set, expose it to the SQL script
         // (the script reads it via current_setting('app.schema', true))
@@ -27,9 +26,9 @@ class DatabaseSeeder extends Seeder
         }
 
         // Run the SQL script
-        DB::unprepared($sql);
+        DB::unprepared(file_get_contents($path));
 
         // Show a message in the Artisan console
-        $this->command?->info('Database seeded using schema: ' . ($schema ?? 'thingy (default)'));
+        $this->command?->info('Database seeded using schema: ' . ($schema ?? 'sportshub (default)'));
     }
 }

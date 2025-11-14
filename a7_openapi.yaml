@@ -125,7 +125,7 @@ paths:
   /api/review/{review_id}/response:
     get:
       operationId: R403
-      summary: "R404: Get Response to a Review API."
+      summary: "R403: Get Response to a Review API."
       description: "Fetches the response to a specific review. Access: VIS, USR"
       tags:
         - "M04: Bookings and Reviews"

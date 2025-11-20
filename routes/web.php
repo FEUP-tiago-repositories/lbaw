@@ -15,7 +15,7 @@ Route::get('/contact-us', [StaticController::class, 'contact'])->name('contact')
 // ============================================
 // AUTHENTICATION (US100-US102)
 // ============================================
-Auth::routes();
+// - Auth::routes();
 // - GET /login (US100)
 // - POST /login
 // - POST /logout

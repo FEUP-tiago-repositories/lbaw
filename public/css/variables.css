@@ -1,0 +1,9 @@
+:root {
+    /* Cores Principais */
+    --primary-green: #2d4a3e;
+    --secondary-blue: #2041ba;
+}
+
+.primary-text {
+    color: var(--primary-green);
+}

@@ -1023,8 +1023,7 @@ paths:
         '200':
           description: 'Ok. Show admin dashboard UI with statistics (total users, active spaces, bookings, revenue, etc.)'
         '403':
-          description: 'Forbidden. 
-'
+          description: 'Forbidden.'
 
   /admin/users:
     get:

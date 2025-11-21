@@ -2,6 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 
+// ============================================
+// IMPORTAR TODOS OS CONTROLLERS
+// ============================================
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StaticController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SpaceController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ResponseController;
+
 
 // ============================================
 // HOME & STATIC PAGES (US200-US204)

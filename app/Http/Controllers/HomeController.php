@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Space;
 
 class HomeController
 {
     public function index()
     {
-        return view('pages.home');
+        $spaces = Space::orderby ('num_favorites', 'desc') -> take(5) -> get();
+        return view('pages.home', compact('spaces'));
     }
 }

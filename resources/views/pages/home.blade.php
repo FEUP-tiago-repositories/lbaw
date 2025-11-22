@@ -2,14 +2,14 @@
 
 @section('content')
 <div class = "pt-56 text-center">
-    <h1>Bem-vindo ao SportsHub</h1>
-    <p>Encontre e reserve os melhores espaços desportivos.</p>
-
-    {{-- Adicione aqui o conteúdo da homepage --}}
-    <div class="featured-spaces pt-8">
-        <h2>Enquanto que o website não se encontra pronto, fique sentado a apreciar esta praia ⮧</h2>
-        <img class="mx-auto block pt-4" src="/images/praia.jpg" alt="🏖️">
-        {{-- Lista de espaços será adicionada aqui --}}
-    </div>
+    <img class="mx-auto block pt-4" src="/images/praia.jpg" alt="🏖️">
+    <h2>Best Reviewed:</h2>
+    @foreach ($spaces as $space)
+        <div class="featured-spaces pt-8">
+            <h3 class="space name">{{ $space->title }}</h3>
+            <p class="space address">{{ $space->address }}</p>
+            <p class="space num_favorites">Favorites: {{ $space->num_favorites }}</p>
+        </div>
+    @endforeach
 </div>
 @endsection

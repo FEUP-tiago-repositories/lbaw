@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Space;
 use Illuminate\Http\Request;
 
-class SpaceController
+class SpaceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        // route --> /spaces/
+        // fetch all spaces into the index view
     }
 
     /**
@@ -33,15 +35,15 @@ class SpaceController
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Space $space)
     {
-        //
+        // used for the route /space/{space}
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Space $space)
     {
         //
     }
@@ -49,7 +51,7 @@ class SpaceController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Space $space)
     {
         //
     }
@@ -57,7 +59,7 @@ class SpaceController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Space $space)
     {
         //
     }

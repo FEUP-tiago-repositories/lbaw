@@ -274,7 +274,7 @@ paths:
   # M03:  Sports Space Library
   # ==========================================
 
-  /add-space:
+  /spaces/create:
     get:
       operationId: R301
       summary: "R301: Add Space Form"
@@ -285,51 +285,7 @@ paths:
         "200":
           description: "Ok. Show Add Space UI."
 
-    post:
-      operationId: R302
-      summary: "R302: Add Space Action"
-      description: "Process the creation of a new sports space. Access: BOW"
-      tags:
-        - "M03: Sports Space Library"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                sport_type:
-                  type: string
-                phone_number:
-                  type: string
-                description:
-                  type: string
-                email:
-                  type: string
-                address:
-                  type: string
-              required:
-                - title
-                - sport_type
-                - phone_number
-                - email
-                - address
-      responses:
-        "302":
-          description: "Redirect after processing the new space information."
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Space successfully added. Redirect to space page."
-                302Error:
-                  description: "Failed to create space. Redirect to Add Space form."
-                  value: "/add-space"
-  /space:
+  /spaces:
     get:
       operationId: R303
       summary: "R303: Search and filter sports spaces"
@@ -375,8 +331,52 @@ paths:
                       type: string
         "400":
           description: "Invalid search or filter parameters."
+    post:
+      operationId: R302
+      summary: "R302: Add Space Action"
+      description: "Process the creation of a new sports space. Access: BOW"
+      tags:
+        - "M03: Sports Space Library"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                sport_type:
+                  type: string
+                phone_number:
+                  type: string
+                description:
+                  type: string
+                email:
+                  type: string
+                address:
+                  type: string
+              required:
+                - title
+                - sport_type
+                - phone_number
+                - email
+                - address
+      responses:
+        "302":
+          description: "Redirect after processing the new space information."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Space successfully added. Redirect to space page."
+                302Error:
+                  description: "Failed to create space. Redirect to Add Space form."
+                  value: "/spaces/create"
 
-  /space/{space_id}:
+  /spaces/{space_id}:
     get:
       operationId: R304
       summary: "R304: View a space's page"
@@ -499,7 +499,7 @@ paths:
           description: "User attempting to delete a space they do not own."
         "404":
           description: "Space not found."
-  /space/{space_id}/favorite:
+  /spaces/{space_id}/favorite:
     post:
       operationId: R307
       summary: "R307: Mark space as favorite"
@@ -1329,6 +1329,7 @@ paths:
           schema:
             type: string
             enum: [name_asc, name_desc, created_asc, created_desc, rating_desc]
+          description: 'Sort order'
         - in: query
           name: page
           schema:

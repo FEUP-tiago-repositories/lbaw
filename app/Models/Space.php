@@ -13,6 +13,8 @@ class Space extends Model
     protected $table = 'space';
 
     protected $fillable = [
+        'owner_id',
+        'sport_type_id',
         'title',
         'address',
         'description',
@@ -26,5 +28,10 @@ class Space extends Model
     public function owner()
     {
         return $this->belongsTo(BusinessOwner::class);
+    }
+
+    public function sportType()
+    {
+        return $this->belongsTo(SportType::class);
     }
 }

@@ -79,7 +79,11 @@ CREATE TABLE space(
     phone_no VARCHAR(15) NOT NULL,
     email VARCHAR(150) NOT NULL,
     num_favorites INTEGER DEFAULT 0,
-    num_reviews INTEGER DEFAULT 0
+    num_reviews INTEGER DEFAULT 0,
+    current_environment_rating INTEGER NOT NULL DEFAULT 0,
+    current_equipment_rating INTEGER NOT NULL DEFAULT 0,
+    current_service_rating INTEGER NOT NULL DEFAULT 0,
+    current_total_rating INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE admin (
@@ -490,7 +494,11 @@ INSERT INTO
         phone_no,
         email,
         num_favorites,
-        num_reviews
+        num_reviews,
+        current_environment_rating,
+        current_equipment_rating,
+        current_service_rating,
+        current_total_rating
     )
 VALUES (
         3,
@@ -502,7 +510,11 @@ VALUES (
         '912345678',
         'porto_field@mail.com',
         15,
-        4
+        4,
+        5,
+        4,
+        5,
+        14
     ),
     (
         2,
@@ -514,7 +526,11 @@ VALUES (
         '911223344',
         'boavista_badminton@mail.com',
         9,
-        2
+        2,
+        5,
+        5,
+        5,
+        15
     ),
     (
         1,
@@ -526,7 +542,11 @@ VALUES (
         '935678901',
         'iron_gym@mail.com',
         22,
-        8
+        8,
+        4,
+        4,
+        4,
+        12
     ),
     (
         4,
@@ -538,7 +558,11 @@ VALUES (
         '937654321',
         'gaia_bike@mail.com',
         17,
-        6
+        6,
+        5,
+        4,
+        5,
+        14
     ),
     (
         3,
@@ -550,7 +574,11 @@ VALUES (
         '934567890',
         'downtown_bball@mail.com',
         30,
-        10
+        10,
+        4,
+        4,
+        3,
+        11
     ),
     (
         1,
@@ -562,7 +590,11 @@ VALUES (
         '938888777',
         'foz_golf@mail.com',
         12,
-        3
+        3,
+        5,
+        5,
+        5,
+        15
     ),
     (
         5,
@@ -574,7 +606,11 @@ VALUES (
         '936789123',
         'padel_arena@mail.com',
         25,
-        9
+        9,
+        4,
+        5,
+        3,
+        12
     ),
     (
         3,
@@ -586,7 +622,11 @@ VALUES (
         '932112233',
         'swim_complex@mail.com',
         19,
-        7
+        7,
+        5,
+        4,
+        4,
+        13
     ),
     (
         5,
@@ -598,7 +638,11 @@ VALUES (
         '931445566',
         'climb_zone@mail.com',
         14,
-        5
+        5,
+        5,
+        4,
+        5,
+        14
     ),
     (
         3,
@@ -610,7 +654,11 @@ VALUES (
         '939334455',
         'hockey_norte@mail.com',
         8,
-        3
+        3,
+        4,
+        3,
+        4,
+        11
     ),
     (
         1,
@@ -622,7 +670,11 @@ VALUES (
         '937223344',
         'riverside_run@mail.com',
         20,
-        6
+        6,
+        5,
+        4,
+        5,
+        14
     );
 
 INSERT INTO
@@ -2089,102 +2141,102 @@ INSERT INTO
     media (space_id, media_url, is_cover)
 VALUES (
         1,
-        'https://activehub/uploads/spaces/football_field_cover.jpg',
+        '/images/uploads/spaces/1/football_field_cover.jpg',
         TRUE
     ),
     (
         1,
-        'https://activehub/uploads/spaces/football_field_inside.jpg',
+        '/images/uploads/spaces/1/football_field_inside.jpg',
         FALSE
     ),
     (
         2,
-        'https://activehub/uploads/spaces/badminton_boavista_cover.jpg',
+        '/images/uploads/spaces/2/badminton_boavista_cover.jpg',
         TRUE
     ),
     (
         2,
-        'https://activehub/uploads/spaces/badminton_boavista_inside.jpg',
+        '/images/uploads/spaces/2/badminton_boavista_inside.jpg',
         FALSE
     ),
     (
         3,
-        'https://activehub/uploads/spaces/iron_gym_cover.jpg',
+        '/images/uploads/spaces/3/iron_gym_cover.jpg',
         TRUE
     ),
     (
         3,
-        'https://activehub/uploads/spaces/iron_gym_equipment.jpg',
+        '/images/uploads/spaces/3/iron_gym_equipment.jpg',
         FALSE
     ),
     (
         4,
-        'https://activehub/uploads/spaces/gaia_biking_cover.jpg',
+        '/images/uploads/spaces/4/gaia_biking_cover.jpg',
         TRUE
     ),
     (
         4,
-        'https://activehub/uploads/spaces/gaia_biking_trail.jpg',
+        '/images/uploads/spaces/4/gaia_biking_trail.jpg',
         FALSE
     ),
     (
         5,
-        'https://activehub/uploads/spaces/downtown_basketball_cover.jpg',
+        '/images/uploads/spaces/5/downtown_basketball_cover.jpg',
         TRUE
     ),
     (
         5,
-        'https://activehub/uploads/spaces/downtown_basketball_court.jpg',
+        '/images/uploads/spaces/5/downtown_basketball_court.jpg',
         FALSE
     ),
     (
         6,
-        'https://activehub/uploads/spaces/golf_club_foz_cover.jpg',
+        '/images/uploads/spaces/6/golf_club_foz_cover.jpg',
         TRUE
     ),
     (
         6,
-        'https://activehub/uploads/spaces/golf_club_foz_course.jpg',
+        '/images/uploads/spaces/6/golf_club_foz_course.jpg',
         FALSE
     ),
     (
         7,
-        'https://activehub/uploads/spaces/padel_arena_cover.jpg',
+        '/images/uploads/spaces/7/padel_arena_cover.jpg',
         TRUE
     ),
     (
         7,
-        'https://activehub/uploads/spaces/padel_arena_inside.jpg',
+        '/images/uploads/spaces/7/padel_arena_inside.jpg',
         FALSE
     ),
     (
         8,
-        'https://activehub/uploads/spaces/swimming_complex_cover.jpg',
+        '/images/uploads/spaces/8/swimming_complex_cover.jpg',
         TRUE
     ),
     (
         8,
-        'https://activehub/uploads/spaces/swimming_complex_pool.jpg',
+        '/images/uploads/spaces/8/swimming_complex_pool.jpg',
         FALSE
     ),
     (
         9,
-        'https://activehub/uploads/spaces/climbing_zone_cover.jpg',
+        '/images/uploads/spaces/9/climbing_zone_cover.jpg',
         TRUE
     ),
     (
         9,
-        'https://activehub/uploads/spaces/climbing_zone_wall.jpg',
+        '/images/uploads/spaces/9/climbing_zone_wall.jpg',
         FALSE
     ),
     (
         10,
-        'https://activehub/uploads/spaces/hockey_arena_cover.jpg',
+        '/images/uploads/spaces/10/hockey_arena_cover.jpg',
         TRUE
     ),
     (
         10,
-        'https://activehub/uploads/spaces/hockey_arena_inside.jpg',
+        '/images/uploads/spaces/10/hockey_arena_inside.jpg',
         FALSE
     );
 

@@ -18,4 +18,8 @@ class BusinessOwner extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function spaces(){
+        return $this->hasMany(Space::class);
+    }
 }

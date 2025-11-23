@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Space extends Model
-{   
-    //space is associated with one business owner
+{
+    // space is associated with one business owner
     public $timestamps = false;
 
     // our table is named Space, so we execute this command:
@@ -22,4 +22,9 @@ class Space extends Model
     ];
 
     protected $primaryKey = 'id';
+
+    public function owner()
+    {
+        return $this->belongsTo(BusinessOwner::class);
+    }
 }

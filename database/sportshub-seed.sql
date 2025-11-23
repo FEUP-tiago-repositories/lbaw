@@ -110,7 +110,9 @@ CREATE TABLE booking (
     customer_id INT NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
     schedule_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE,
     booking_created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    is_cancelled BOOLEAN NOT NULL DEFAULT FALSE
+    is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
+    number_of_persons INT NOT NULL DEFAULT 1,
+    total_duration INT NOT NULL DEFAULT 60
 );
 
 CREATE TABLE review (
@@ -1476,112 +1478,144 @@ INSERT INTO
     customer_id,
     schedule_id,
     booking_created_at,
-    is_cancelled
+    is_cancelled,
+    number_of_persons,
+    total_duration
 )
 VALUES (
            1,
            1,
            1,
            '2025-11-01 14:25:00',
-           FALSE
+           FALSE,
+            2,
+            30
        ),
        (
            1,
            2,
            2,
            '2025-11-02 10:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            2,
            3,
            3,
            '2025-11-02 11:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            2,
            4,
            4,
            '2025-11-03 15:30:00',
-           TRUE
+           TRUE,
+           2,
+           30
        ),
        (
            3,
            5,
            5,
            '2025-11-04 09:20:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            3,
            6,
            6,
            '2025-11-04 12:10:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            4,
            7,
            7,
            '2025-11-05 08:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            4,
            8,
            8,
            '2025-11-05 16:10:00',
-           TRUE
+           TRUE,
+           2,
+           30
        ),
        (
            5,
            9,
            9,
            '2025-11-06 13:45:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            5,
            10,
            10,
            '2025-11-07 14:30:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            6,
            11,
            11,
            '2025-11-07 18:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            7,
            12,
            12,
            '2025-11-08 10:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            8,
            13,
            13,
            '2025-11-08 15:30:00',
-           TRUE
+           TRUE,
+           2,
+           30
        ),
        (
            9,
            14,
            14,
            '2025-11-09 17:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            10,
            15,
            15,
            '2025-11-09 18:15:00',
-           FALSE
+           FALSE,
+           2,
+           30
        );
 
 INSERT INTO

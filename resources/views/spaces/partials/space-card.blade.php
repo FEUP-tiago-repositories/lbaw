@@ -4,7 +4,8 @@
     <!-- Image -->
     <div class="h-48 overflow-hidden bg-gray-200">
         @if($space->media && $space->media->isNotEmpty())
-            <img src="{{ $space->coverImage->media_url }}" alt="{{ $space->title }}" class="w-full h-full object-cover">
+            <img src="{{ asset('images/sportsplace.jpg') }}" class="w-full h-full object-cover">
+            <!-- <img src="{{ $space->coverImage->media_url }}" alt="{{ $space->title }}" class="w-full h-full object-cover"> -->
         @else
             <div class="w-full h-full flex items-center justify-center">
                 <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +77,7 @@
         <!-- Action Button -->
         <div class="mt-4">
             <a href="{{ route('spaces.show', $space->id) }}"
-                class="block w-full bg-green-200 text-white text-center px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm font-medium">
+                class="block w-full bg-green-200 text-black text-center px-4 py-2 rounded-lg hover:bg-green-700 hover:text-white transition text-sm font-medium">
                 View Details
             </a>
         </div>

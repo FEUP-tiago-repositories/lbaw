@@ -2238,6 +2238,16 @@ VALUES (
         10,
         '/images/uploads/spaces/10/hockey_arena_inside.jpg',
         FALSE
+    ),
+    (
+        11,
+        '/images/uploads/spaces/11/riverside_running_track_cover.jpg',
+        TRUE
+    ),
+    (
+        11,
+        '/images/uploads/spaces/11/riverside_running_track_inside.jpg',
+        FALSE
     );
 
 INSERT INTO

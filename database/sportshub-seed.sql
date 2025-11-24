@@ -99,7 +99,7 @@ CREATE TABLE ban (
 CREATE TABLE schedule (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     space_id INT NOT NULL REFERENCES space(id),
-    start_time TIMESTAMP NOT NULL CHECK (start_time > NOW()), --must be a future TIMESTAMP
+    start_time TIMESTAMP NOT NULL, --must be a future TIMESTAMP
     duration INT NOT NULL CHECK (duration > 0),
     max_capacity INT NOT NULL CHECK (max_capacity > 0)
 );
@@ -108,9 +108,11 @@ CREATE TABLE booking (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     customer_id INT NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
-    schedule_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE,
+    schedule_id INT NOT NULL REFERENCES schedule (id) ON DELETE CASCADE,
     booking_created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    is_cancelled BOOLEAN NOT NULL DEFAULT FALSE
+    is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
+    number_of_persons INT NOT NULL DEFAULT 1,
+    total_duration INT NOT NULL DEFAULT 60
 );
 
 CREATE TABLE review (
@@ -1468,6 +1470,18 @@ VALUES
         '2025-12-10 18:00:00',
         60,
         35
+    ),
+    (
+        3,
+        '2025-11-10 17:30:00',
+        90,
+        20
+    ),
+    (
+        2,
+        '2025-11-01 17:30:00',
+        60,
+        4
     );
 
 INSERT INTO
@@ -1476,112 +1490,171 @@ INSERT INTO
     customer_id,
     schedule_id,
     booking_created_at,
-    is_cancelled
+    is_cancelled,
+    number_of_persons,
+    total_duration
 )
 VALUES (
            1,
            1,
            1,
            '2025-11-01 14:25:00',
-           FALSE
+           FALSE,
+            2,
+            30
        ),
        (
            1,
            2,
            2,
            '2025-11-02 10:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            2,
            3,
            3,
            '2025-11-02 11:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            2,
            4,
            4,
            '2025-11-03 15:30:00',
-           TRUE
+           TRUE,
+           2,
+           30
        ),
        (
            3,
            5,
            5,
            '2025-11-04 09:20:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            3,
            6,
            6,
            '2025-11-04 12:10:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            4,
            7,
            7,
            '2025-11-05 08:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            4,
            8,
            8,
            '2025-11-05 16:10:00',
-           TRUE
+           TRUE,
+           2,
+           30
        ),
        (
            5,
            9,
            9,
            '2025-11-06 13:45:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            5,
            10,
            10,
            '2025-11-07 14:30:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            6,
            11,
            11,
            '2025-11-07 18:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            7,
            12,
            12,
            '2025-11-08 10:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            8,
            13,
            13,
            '2025-11-08 15:30:00',
-           TRUE
+           TRUE,
+           2,
+           30
        ),
        (
            9,
            14,
            14,
            '2025-11-09 17:00:00',
-           FALSE
+           FALSE,
+           2,
+           30
        ),
        (
            10,
            15,
            15,
            '2025-11-09 18:15:00',
-           FALSE
+           FALSE,
+           2,
+           30
+       ),
+       (
+           2,
+           1,
+           132,
+           '2025-11-01 14:35:00',
+           FALSE,
+           2,
+           30
+       ),
+       (
+           3,
+           1,
+           131,
+           '2025-11-01 14:15:00',
+           FALSE,
+           2,
+           30
+       ),
+       (
+           4,
+           1,
+           56,
+           '2025-11-01 14:15:00',
+           TRUE,
+           2,
+           29
        );
 
 INSERT INTO
@@ -1913,6 +1986,54 @@ VALUES (
            FALSE,
            'Credit/Debit Card',
            '2025-11-05 16:15:00'
+       ),
+       (
+           12,
+           15.00,
+           TRUE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-08 10:05:00'
+       ),
+       (
+           14,
+           22.50,
+           FALSE,
+           TRUE,
+           'MB Way',
+           '2025-11-09 17:05:00'
+       ),
+       (
+           15,
+           18.00,
+           TRUE,
+           TRUE,
+           'Paypal',
+           '2025-11-09 18:20:00'
+       ),
+       (
+           16,
+           20.00,
+           FALSE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-01 14:40:00'
+       ),
+       (
+           17,
+           17.50,
+           TRUE,
+           TRUE,
+           'MB Way',
+           '2025-11-01 14:20:00'
+       ),
+       (
+           18,
+           17.50,
+           TRUE,
+           TRUE,
+           'MB Way',
+           '2025-11-01 14:20:00'
        );
 
 INSERT INTO
@@ -2055,17 +2176,17 @@ INSERT INTO
     media (space_id, media_url, is_cover)
 VALUES (
            1,
-           'https://activehub/uploads/spaces/football_field_cover.jpg',
+           '/images/uploads/spaces/1/football_field_cover.jpg',
            TRUE
        ),
        (
            1,
-           'https://activehub/uploads/spaces/football_field_inside.jpg',
+           '/images/uploads/spaces/1/football_field_inside.jpg',
            FALSE
        ),
        (
            2,
-           'https://activehub/uploads/spaces/badminton_boavista_cover.jpg',
+           '/images/uploads/spaces/2/badminton.jpg',
            TRUE
        ),
        (
@@ -2075,7 +2196,7 @@ VALUES (
        ),
        (
            3,
-           'https://activehub/uploads/spaces/iron_gym_cover.jpg',
+           '/images/uploads/spaces/3/iron_gym.webp',
            TRUE
        ),
        (
@@ -2085,7 +2206,7 @@ VALUES (
        ),
        (
            4,
-           'https://activehub/uploads/spaces/gaia_biking_cover.jpg',
+           '/images/uploads/spaces/4/biking_park.jpg',
            TRUE
        ),
        (

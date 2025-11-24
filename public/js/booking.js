@@ -370,3 +370,8 @@ function goToReservations() {
     const userId = document.querySelector('meta[name="user-id"]')?.content;
     window.location.href = `/user/${userId}/my_reservations`;
 }
+
+function openEditModal(bookingId) {
+    // Redirecionar para página de edição
+    window.location.href = `/test/bookings/${bookingId}/edit`;
+}

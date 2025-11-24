@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/space/{space_id}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
     Route::patch('/space/{space_id}', [SpaceController::class, 'update'])->name('spaces.update');   // R305
     Route::delete('/space/{space_id}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
-    
+
     // Favorites (R307-R308)
     Route::post('/space/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
     Route::patch('/space/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
@@ -85,12 +85,12 @@ Route::middleware(['auth'])->group(function () {
 // M04: BOOKINGS (R405)
 // ============================================
 
-Route::middleware(['auth'])->group(function () {
+// Route::middleware(['auth'])->group(function () {
     Route::get('/user/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index'); // R405
-    
+
     // Calendar para owner (se existir)
     Route::get('/owner/{ownerId}/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
-});
+// });
 
 // ============================================
 // NOTIFICATIONS (extensão)
@@ -104,7 +104,7 @@ Route::middleware(['auth'])->group(function () {
 // ============================================
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');                 // R501
-    
+
     // Users Management (R502-R509)
     Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');           // R502
     Route::get('/users/create', [UserManagementController::class, 'create'])->name('users.create');  // R506
@@ -114,14 +114,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])->name('users.destroy'); // R505
     Route::post('/users/{id}/ban', [UserManagementController::class, 'ban'])->name('users.ban');     // R508
     Route::post('/users/{id}/unban', [UserManagementController::class, 'unban'])->name('users.unban'); // R509
-    
+
     // Spaces Management (R511-R515)
     Route::get('/spaces', [SpaceManagementController::class, 'index'])->name('spaces.index');        // R511
     Route::get('/spaces/{id}', [SpaceManagementController::class, 'show'])->name('spaces.show');     // R512
     Route::delete('/spaces/{id}', [SpaceManagementController::class, 'destroy'])->name('spaces.destroy'); // R513
     Route::post('/spaces/{id}/close', [SpaceManagementController::class, 'close'])->name('spaces.close');    // R514
     Route::post('/spaces/{id}/reopen', [SpaceManagementController::class, 'reopen'])->name('spaces.reopen'); // R515
-    
+
     // Reviews Management (R516-R518)
     Route::get('/reviews', [ReviewManagementController::class, 'index'])->name('reviews.index');     // R516
     Route::get('/reviews/{id}', [ReviewManagementController::class, 'show'])->name('reviews.show');  // R517

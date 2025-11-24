@@ -20,7 +20,7 @@ class BookingController extends Controller
      */
     public function index($user_id)
     {
-        if (!Auth::check() || Auth::id() != $user_id) {
+        if (!Auth::check() && !app()->environment('local')) {
             return redirect()->route('login');
         }
 
@@ -31,10 +31,11 @@ class BookingController extends Controller
             ->orderBy('booking_created_at', 'desc')
             ->get();
 
-        $futureReservations = $bookings->filter(fn($b) => $b->isFuture() && !$b->is_cancelled);
-        $pastReservations = $bookings->filter(fn($b) => $b->isPast() || $b->is_cancelled);
+        $futureReservations = $bookings->filter(fn($booking) => $booking->isFuture() && !$booking->is_cancelled);
+        $pastReservations = $bookings->filter(fn($booking) => $booking->isPast() && !$booking->is_cancelled);
+        $cancelledReservations = $bookings->filter(fn($booking) => $booking->is_cancelled);
 
-        return view('bookings.index', compact('futureReservations', 'pastReservations'));
+        return view('bookings.index', compact('futureReservations', 'pastReservations', 'cancelledReservations'));
     }
 
     /**

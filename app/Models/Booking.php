@@ -48,22 +48,17 @@ class Booking extends Model
     // Métodos essenciais
     public function isFuture(): bool
     {
-        return $this->schedule && $this->schedule->start_time > now();
+        return $this->schedule && $this->schedule->start_time >= now();
     }
 
     public function isPast(): bool
     {
-        return $this->schedule && $this->schedule->start_time <= now();
+        return $this->schedule && $this->schedule->start_time < now();
     }
 
     protected static function boot()
     {
         parent::boot();
 
-        static::creating(function ($booking) {
-            if (empty($booking->booking_created_at)) {
-                $booking->booking_created_at = now();
-            }
-        });
     }
 }

@@ -65,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
 // ============================================
 
 // Public routes
-Route::get('/space', [SpaceController::class, 'index'])->name('spaces.index');             // R303
+Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');             // R303
 Route::get('/space/{space_id}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
 
 // Authenticated routes

@@ -14,6 +14,9 @@ class SpaceController extends Controller
     {
         // route --> /spaces/
         // fetch all spaces into the index view
+        $spaces = Space::with(['sportType', 'media'])->orderBy('id', 'desc')->get(); // we will only need this info in the Space Card
+
+        return view('spaces.index', compact('spaces'));
     }
 
     /**
@@ -30,7 +33,7 @@ class SpaceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // --> /spaces/ (POST)
     }
 
     /**

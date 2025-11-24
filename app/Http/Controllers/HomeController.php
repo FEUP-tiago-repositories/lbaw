@@ -9,7 +9,7 @@ class HomeController
 {
     public function index()
     {
-        $spaces = Space::orderby ('num_favorites', 'desc') -> take(5) -> get();
+        $spaces = Space::orderby ('num_favorites', 'desc') -> take(4) -> get();
         return view('pages.home', compact('spaces'));
     }
 }

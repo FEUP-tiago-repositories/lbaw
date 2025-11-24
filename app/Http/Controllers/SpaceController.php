@@ -21,7 +21,8 @@ class SpaceController extends Controller
      */
     public function create()
     {
-        //
+        // display creation form /spaces/create
+        return view('spaces.create');
     }
 
     /**

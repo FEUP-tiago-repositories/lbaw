@@ -50,14 +50,39 @@ making a booking --}}
             {{-- Section About and Reviews and Calendar --}}
             <div class="flex gap-4 mt-6">
                 {{-- Section About and Revies, will have JS behaviour --}}
-                <div>
+                <div class="flex-1">
                     <div class="flex border-b-2 border-gray-200 pb-2.5">
-                        <h2 class="text-xl font-medium border-r-2 pr-2.5 text-green-700">About</h2>
-                        <h2 class="text-xl font-medium pl-2.5 hover:text-green-700">Reviews</h2>
+                        <h2 id="about-tab"
+                            class="text-xl font-medium border-r-2 pr-2.5 text-green-700 cursor-pointer transition-colors">
+                            About</h2>
+                        <h2 id="reviews-tab"
+                            class="text-xl font-medium pl-2.5 hover:text-green-700 pb-2 cursor-pointer transition-colors">
+                            Reviews</h2>
                     </div>
-                    <p class="text-base mt-3.5">{{ $space->description}}</p>
+                    {{-- About Content --}}
+                    <div id="about-content" class="mt-3.5">
+                        <p class="text-base">{{ $space->description }}</p>
+                    </div>
+
+                    {{-- Review Content --}}
+                    <div id="reviews-content" class="mt-3.5 hidden"> {{-- Will initially be hidden --}}
+                        <p class="text-base">Reviews section coming soon...</p>
+                        {{-- Will add later --}}
+                    </div>
                 </div>
             </div>
+            {{-- -Where the calendar-widget will be placed when done --}}
+            {{-- <div class="lg:col-span-1">
+                <div class="sticky top-8">
+                    @include('bookings.partials.calendar-widget', ['space' => $space])
+                </div>
+            </div> --}}
         </section>
     </main>
+    {{-- @include(bookings.modals.payment-modal) --}}
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/spaces.show.js') }}"></script>
+    <script src="{{ asset('js/booking.js') }}"></script>
+@endpush

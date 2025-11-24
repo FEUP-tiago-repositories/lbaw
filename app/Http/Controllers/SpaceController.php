@@ -42,6 +42,9 @@ class SpaceController extends Controller
     public function show(Space $space)
     {
         // used for the route /space/{space}
+        $space->load(['sportType', 'media', 'owner', 'coverImage']);
+
+        return view('spaces.show', compact('space'));
     }
 
     /**
@@ -65,6 +68,9 @@ class SpaceController extends Controller
      */
     public function destroy(Space $space)
     {
-        //
+        // used for /space/{spaces} to destroy the space
+        $space->delete();
+
+        return redirect()->route('spaces.index')->with('success', 'Space deleted successfully!');
     }
 }

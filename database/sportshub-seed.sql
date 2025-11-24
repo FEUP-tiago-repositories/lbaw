@@ -102,7 +102,7 @@ CREATE TABLE ban (
 
 CREATE TABLE schedule (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space(id),
+    space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     start_time TIMESTAMP NOT NULL CHECK (start_time > NOW()), --must be a future TIMESTAMP
     duration INT NOT NULL CHECK (duration > 0),
     max_capacity INT NOT NULL CHECK (max_capacity > 0)

@@ -12,7 +12,7 @@
 
         {{-- -This section will be used for the Spaces Grid --}}
         {{-- -We will use the predefined space card partial for each space --}}
-        <div class="flex overflow-x-auto flex-wrap gap-2 justify-center">
+        <div class="flex overflow-x-auto flex-wrap gap-2 just">
             @forelse ($spaces as $space)
                 @include('spaces.partials.space-card', ['space' => $space])
             @empty

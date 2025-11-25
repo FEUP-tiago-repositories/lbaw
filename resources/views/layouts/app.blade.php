@@ -34,7 +34,7 @@
     <main>
         @yield('content')
     </main>
-
+    @stack('scripts')
     {{-- JavaScript --}}
     <script src="{{ asset('js/app.js') }}" defer></script>
 </body>

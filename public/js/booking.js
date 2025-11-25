@@ -1,4 +1,6 @@
-// Estado global
+// ============================================
+// ESTADO GLOBAL
+// ============================================
 let state = {
     spaceId: null,
     selectedDate: null,
@@ -10,368 +12,488 @@ let state = {
     payment: null
 };
 
-// Inicializar
+let isEditMode = false;
+let originalBookingData = null;
+let currentDate = new Date();
+let selectedPaymentMethod = null;
+
+// ============================================
+// INICIALIZAÇÃO
+// ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    const space = document.querySelector('[data-space-id]');
-    if (space) {
-        state.spaceId = space.dataset.spaceId;
+    const widget = document.querySelector('[data-space-id]');
+    if (!widget) return;
+
+    state.spaceId = widget.dataset.spaceId;
+    const mode = widget.dataset.mode;
+
+    if (mode === 'edit' && window.editMode && window.bookingData) {
+        isEditMode = true;
+        originalBookingData = window.bookingData;
+        state.bookingId = window.bookingData.id;
+        initEditMode();
+    } else {
         initCalendar();
     }
 });
 
 // ============================================
+// MODO DE EDIÇÃO
+// ============================================
+function initEditMode() {
+    const bookingDate = new Date(originalBookingData.date);
+    state.selectedDate = bookingDate;
+    state.scheduleId = originalBookingData.scheduleId;
+    state.time = originalBookingData.time;
+    state.duration = originalBookingData.duration;
+    state.persons = originalBookingData.persons;
+    currentDate = bookingDate;
+
+    initCalendar();
+
+    setTimeout(async () => {
+        await selectDate(bookingDate);
+        document.getElementById('durationInput').value = state.duration;
+        document.getElementById('personsInput').value = state.persons;
+        showSection('time-section');
+        showSection('duration-section');
+        showSection('persons-section');
+        showSection('confirm-section');
+    }, 100);
+}
+
+// ============================================
+// GESTÃO DE SEÇÕES PROGRESSIVAS
+// ============================================
+function showSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) section.classList.remove('hidden');
+}
+
+function hideSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) section.classList.add('hidden');
+}
+
+function resetFromSection(sectionId) {
+    const sections = ['time-section', 'duration-section', 'persons-section', 'confirm-section'];
+    const startIndex = sections.indexOf(sectionId);
+
+    for (let i = startIndex; i < sections.length; i++) {
+        hideSection(sections[i]);
+    }
+}
+
+// ============================================
 // CALENDÁRIO
 // ============================================
-
-let currentDate = new Date();
-
 function initCalendar() {
     renderCalendar();
+
+    const prevBtn = document.getElementById('prevMonth');
+    const nextBtn = document.getElementById('nextMonth');
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+    }
 }
 
 function renderCalendar() {
-    const month = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    document.getElementById('currentMonth').textContent = month;
-
+    const monthElement = document.getElementById('currentMonth');
     const grid = document.getElementById('calendarGrid');
+
+    if (!monthElement || !grid) return;
+
+    const month = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    monthElement.textContent = month;
+
     grid.innerHTML = '';
 
     // Headers
-    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach(day => {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    days.forEach(day => {
         const header = document.createElement('div');
-        header.className = 'text-center text-sm font-semibold text-gray-600 py-2';
+        header.className = 'text-xs font-semibold text-gray-600 py-2';
         header.textContent = day;
         grid.appendChild(header);
     });
 
-    // Days
+    // Dias do mês
     const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+    const startingDayOfWeek = firstDay.getDay() === 0 ? 7 : firstDay.getDay();
 
-    // Empty cells
-    for (let i = 0; i < startDay; i++) {
+    // Dias vazios
+    for (let i = 1; i < startingDayOfWeek; i++) {
         grid.appendChild(document.createElement('div'));
     }
 
-    // Days
+    // Dias
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     for (let day = 1; day <= lastDay.getDate(); day++) {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-        date.setHours(0, 0, 0, 0);
+        const dayDiv = document.createElement('div');
+        const isPast = date < today;
+        const isSelected = state.selectedDate && date.toDateString() === state.selectedDate.toDateString();
 
-        const cell = document.createElement('div');
-        cell.textContent = day;
-        cell.className = 'text-center py-2 cursor-pointer hover:bg-blue-50 rounded';
+        dayDiv.className = `py-2 text-sm rounded-lg cursor-pointer transition ${
+            isPast
+                ? 'text-gray-300 cursor-not-allowed'
+                : isSelected
+                    ? 'bg-blue-600 text-white font-bold'
+                    : 'hover:bg-gray-100 text-gray-900'
+        }`;
 
-        if (date < today) {
-            cell.className = 'text-center py-2 text-gray-300';
-        } else {
-            cell.onclick = () => selectDate(date);
+        dayDiv.textContent = day;
+
+        if (!isPast) {
+            dayDiv.onclick = () => selectDate(date);
         }
 
-        grid.appendChild(cell);
+        grid.appendChild(dayDiv);
     }
-}
-
-function previousMonth() {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar();
-}
-
-function nextMonth() {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar();
 }
 
 async function selectDate(date) {
     state.selectedDate = date;
-
-    const dateStr = date.toISOString().split('T')[0];
-    const response = await fetch(`/api/space/${state.spaceId}/schedules/available?date=${dateStr}`);
-    const data = await response.json();
-
-    renderTimes(data.schedules);
-    showStep('step-times');
-    updateSummary();
+    renderCalendar();
+    resetFromSection('time-section');
+    showSection('time-section');
+    await loadAvailableTimes(date);
 }
 
-function renderTimes(schedules) {
-    const grid = document.getElementById('timesGrid');
-    grid.innerHTML = '';
+async function loadAvailableTimes(date) {
+    const dateStr = date.toISOString().split('T')[0];
+    const timeGrid = document.getElementById('timeGrid');
 
-    schedules.forEach(s => {
-        const btn = document.createElement('button');
-        btn.textContent = s.start_time;
-        btn.className = 'p-2 border rounded hover:bg-blue-600 hover:text-white';
-        btn.onclick = () => {
-            state.scheduleId = s.id;
-            state.time = s.start_time;
-            state.duration = s.duration;
-            showStep('step-duration');
-            updateSummary();
-        };
-        grid.appendChild(btn);
+    if (!timeGrid) return;
+
+    timeGrid.innerHTML = '<div class="col-span-full text-center py-4 text-gray-500">Loading...</div>';
+
+    try {
+        const response = await fetch(`/api/space/${state.spaceId}/schedule?date=${dateStr}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const times = await response.json();
+        timeGrid.innerHTML = '';
+
+        if (times.length === 0) {
+            timeGrid.innerHTML = '<div class="col-span-full text-center py-4 text-gray-500">No available times</div>';
+            return;
+        }
+
+        times.forEach(schedule => {
+            const timeBtn = document.createElement('button');
+            timeBtn.type = 'button';
+            timeBtn.className = `px-3 py-2 text-sm border border-gray-300 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition ${
+                state.scheduleId === schedule.id ? 'border-blue-600 bg-blue-50 font-semibold' : ''
+            }`;
+            timeBtn.textContent = schedule.start_time;
+            timeBtn.onclick = () => selectTime(schedule.id, schedule.start_time);
+            timeGrid.appendChild(timeBtn);
+        });
+    } catch (error) {
+        console.error('Error loading times:', error);
+        timeGrid.innerHTML = '<div class="col-span-full text-center py-4 text-red-500">Error loading times</div>';
+    }
+}
+
+function selectTime(scheduleId, time) {
+    state.scheduleId = scheduleId;
+    state.time = time;
+
+    document.querySelectorAll('#timeGrid button').forEach(btn => {
+        btn.classList.remove('border-blue-600', 'bg-blue-50', 'font-semibold');
     });
+    event.target.classList.add('border-blue-600', 'bg-blue-50', 'font-semibold');
+
+    showSection('duration-section');
 }
 
 // ============================================
 // DURAÇÃO E PESSOAS
 // ============================================
-
-function changeDuration(amount) {
-    state.duration = Math.max(30, state.duration + amount);
-    document.getElementById('durationValue').textContent = state.duration + ' min';
-    updateSummary();
-}
-
-function changePersons(amount) {
-    state.persons = Math.max(1, state.persons + amount);
-    document.getElementById('personsValue').textContent = state.persons;
-    updateSummary();
-}
-
-// ============================================
-// NAVEGAÇÃO
-// ============================================
-
-function showStep(stepId) {
-    ['step-calendar', 'step-times', 'step-duration', 'step-persons'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
-    });
-    document.getElementById(stepId).classList.remove('hidden');
-
-    if (stepId !== 'step-calendar') {
-        document.getElementById('bookingSummary').classList.remove('hidden');
+function decrementDuration() {
+    const input = document.getElementById('durationInput');
+    const value = parseInt(input.value);
+    if (value > 30) {
+        input.value = value - 30;
+        updateDuration();
     }
 }
 
-function updateSummary() {
-    if (!state.selectedDate) return;
+function incrementDuration() {
+    const input = document.getElementById('durationInput');
+    input.value = parseInt(input.value) + 30;
+    updateDuration();
+}
 
-    document.getElementById('summaryDate').textContent =
-        state.selectedDate.toLocaleDateString('pt-PT');
-    document.getElementById('summaryTime').textContent = state.time || '-';
-    document.getElementById('summaryDuration').textContent = state.duration + ' min';
-    document.getElementById('summaryPersons').textContent = state.persons;
+function updateDuration() {
+    state.duration = parseInt(document.getElementById('durationInput').value);
+    showSection('persons-section');
+}
 
-    const total = Math.ceil(state.duration / 30) * state.persons * 10;
-    document.getElementById('summaryTotal').textContent = total.toFixed(2) + '€';
+function decrementPersons() {
+    const input = document.getElementById('personsInput');
+    const value = parseInt(input.value);
+    if (value > 1) {
+        input.value = value - 1;
+        updatePersons();
+    }
+}
+
+function incrementPersons() {
+    const input = document.getElementById('personsInput');
+    input.value = parseInt(input.value) + 1;
+    updatePersons();
+}
+
+function updatePersons() {
+    state.persons = parseInt(document.getElementById('personsInput').value);
+    showSection('confirm-section');
 }
 
 // ============================================
-// CRIAR RESERVA
+// CRIAR/ATUALIZAR RESERVA
 // ============================================
-
 async function createBooking() {
+    if (!state.selectedDate || !state.scheduleId) {
+        alert('Please complete all steps');
+        return;
+    }
+
     const customerId = document.querySelector('meta[name="customer-id"]')?.content;
 
-    const response = await fetch(
-        `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({
-                customer_id: parseInt(customerId),
-                duration: state.duration,
-                number_of_persons: state.persons,
-                payment_provider_ref: 'Credit/Debit Card'
-            })
+    if (!customerId) {
+        alert('Please login to continue');
+        window.location.href = '/sign-in';
+        return;
+    }
+
+    try {
+        let response, data;
+
+        if (isEditMode) {
+            response = await fetch(
+                `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings/${state.bookingId}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        new_schedule_id: state.scheduleId,
+                        duration: state.duration,
+                        number_of_persons: state.persons,
+                        payment_provider_ref: 'Credit/Debit Card'
+                    })
+                }
+            );
+        } else {
+            response = await fetch(
+                `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        customer_id: parseInt(customerId),
+                        duration: state.duration,
+                        number_of_persons: state.persons,
+                        payment_provider_ref: 'Credit/Debit Card'
+                    })
+                }
+            );
         }
-    );
 
-    const data = await response.json();
+        data = await response.json();
 
-    if (data.success) {
-        state.bookingId = data.booking_id;
-        state.payment = data.payment;
-        openPaymentModal(data.payment.value);
-    } else {
-        alert('Failed to create booking');
+        if (data.success) {
+            state.bookingId = data.booking_id;
+            state.payment = data.payment || { value: data.additional_payment || 0 };
+            openPaymentModal(data.payment?.value || data.additional_payment);
+        } else {
+            alert(data.error || 'Failed to process booking');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
     }
 }
 
 // ============================================
-// PAGAMENTO
+// MODAL DE PAGAMENTO
 // ============================================
-
-function openPaymentModal(amount) {
-    document.getElementById('paymentAmount').textContent = amount.toFixed(2) + '€';
-    document.getElementById('paymentModal').classList.remove('hidden');
-}
-
-function closePaymentModal() {
-    document.getElementById('paymentModal').classList.add('hidden');
-}
-
-function selectPayment(method) {
-    document.querySelectorAll('.payment-btn').forEach(btn => {
-        btn.classList.remove('bg-blue-600', 'text-white');
-    });
-    event.target.classList.add('bg-blue-600', 'text-white');
-    state.payment = method;
-}
-
-async function confirmPayment() {
-    const response = await fetch('/api/bookings/confirm-payment', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-    });
-
-    if (response.ok) {
-        closePaymentModal();
-        alert('Payment confirmed!');
-        window.location.href = `/user/${document.querySelector('meta[name="user-id"]').content}/my_reservations`;
-    }
-}
-
-// ============================================
-// CANCELAR
-// ============================================
-
-let cancelBookingId = null;
-
-function openCancelModal(id, space, date, time, refund) {
-    cancelBookingId = id;
-    document.getElementById('cancelSpace').textContent = space;
-    document.getElementById('cancelDate').textContent = date;
-    document.getElementById('cancelTime').textContent = time;
-    document.getElementById('cancelRefund').textContent = refund.toFixed(2);
-    document.getElementById('cancelModal').classList.remove('hidden');
-}
-
-function closeCancelModal() {
-    document.getElementById('cancelModal').classList.add('hidden');
-}
-
-async function confirmCancel() {
-    const customerId = document.querySelector('meta[name="customer-id"]').content;
-
-    const response = await fetch(
-        `/api/space/0/schedule/0/bookings/${cancelBookingId}/cancel`,
-        {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({ customer_id: parseInt(customerId) })
-        }
-    );
-
-    if (response.ok) {
-        closeCancelModal();
-        alert('Booking cancelled!');
-        location.reload();
-    }
-}
-
-// ============================================
-// EDITAR
-// ============================================
-
-function editReservation(id) {
-    alert('Edit functionality - redirect to edit page');
-}
-
-// ============================================
-// PAYMENT MODAL
-// ============================================
-
-let selectedPaymentMethod = null;
-
-function openPaymentModal(amount) {
-    document.getElementById('paymentAmount').textContent = amount.toFixed(2) + '€';
-    document.getElementById('paymentModal').classList.remove('hidden');
-    document.getElementById('confirmPayBtn').disabled = true; // Desabilitar até selecionar método
-}
-
-function closePaymentModal() {
-    document.getElementById('paymentModal').classList.add('hidden');
-
-    // Reset
-    document.querySelectorAll('.payment-btn').forEach(btn => {
-        btn.classList.remove('border-blue-500', 'bg-blue-50');
-    });
-
-    // Hide all forms
-    document.getElementById('cardPaymentForm').classList.add('hidden');
-    document.getElementById('mbwayPaymentForm').classList.add('hidden');
-    document.getElementById('paypalPaymentForm').classList.add('hidden');
-
-    selectedPaymentMethod = null;
-}
-
-function selectPayment(method) {
+function selectPaymentMethod(method) {
     selectedPaymentMethod = method;
 
-    // Update button styles
-    document.querySelectorAll('.payment-btn').forEach(btn => {
-        btn.classList.remove('border-blue-500', 'bg-blue-50');
+    document.querySelectorAll('.payment-method').forEach(btn => {
+        btn.classList.remove('border-blue-600', 'bg-blue-50');
     });
-    event.currentTarget.classList.add('border-blue-500', 'bg-blue-50');
 
-    // Hide all forms first
-    document.getElementById('cardPaymentForm').classList.add('hidden');
-    document.getElementById('mbwayPaymentForm').classList.add('hidden');
-    document.getElementById('paypalPaymentForm').classList.add('hidden');
+    event.target.classList.add('border-blue-600', 'bg-blue-50');
 
-    // Show relevant form
-    if (method === 'Credit/Debit Card') {
-        document.getElementById('cardPaymentForm').classList.remove('hidden');
-    } else if (method === 'MB Way') {
-        document.getElementById('mbwayPaymentForm').classList.remove('hidden');
-    } else if (method === 'Paypal') {
-        document.getElementById('paypalPaymentForm').classList.remove('hidden');
+    document.getElementById('cardForm').classList.add('hidden');
+    document.getElementById('mbwayForm').classList.add('hidden');
+    document.getElementById('paypalForm').classList.add('hidden');
+
+    if (method === 'card') {
+        document.getElementById('cardForm').classList.remove('hidden');
+    } else if (method === 'mbway') {
+        document.getElementById('mbwayForm').classList.remove('hidden');
+    } else if (method === 'paypal') {
+        document.getElementById('paypalForm').classList.remove('hidden');
     }
-
-    // Enable confirm button
-    document.getElementById('confirmPayBtn').disabled = false;
 }
 
-async function confirmPayment() {
+function openPaymentModal(amount) {
+    document.getElementById('paymentAmount').textContent = '€' + amount.toFixed(2);
+    document.getElementById('paymentModal').classList.remove('hidden');
+
+    selectedPaymentMethod = null;
+    document.querySelectorAll('.payment-method').forEach(btn => {
+        btn.classList.remove('border-blue-600', 'bg-blue-50');
+    });
+    document.getElementById('cardForm').classList.add('hidden');
+    document.getElementById('mbwayForm').classList.add('hidden');
+    document.getElementById('paypalForm').classList.add('hidden');
+}
+
+function closePaymentModal() {
+    document.getElementById('paymentModal').classList.add('hidden');
+}
+
+async function processPayment() {
     if (!selectedPaymentMethod) {
         alert('Please select a payment method');
         return;
     }
 
-    try {
-        const response = await fetch('/api/bookings/confirm-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        });
+    let isValid = false;
 
-        if (!response.ok) throw new Error('Payment failed');
+    if (selectedPaymentMethod === 'card') {
+        const cardNumber = document.getElementById('cardNumber').value;
+        const cardExpiry = document.getElementById('cardExpiry').value;
+        const cardCVV = document.getElementById('cardCVV').value;
+        isValid = cardNumber && cardExpiry && cardCVV;
+    } else if (selectedPaymentMethod === 'mbway') {
+        const mbwayPhone = document.getElementById('mbwayPhone').value;
+        isValid = mbwayPhone && mbwayPhone.length === 9;
+    } else if (selectedPaymentMethod === 'paypal') {
+        const paypalEmail = document.getElementById('paypalEmail').value;
+        isValid = paypalEmail && paypalEmail.includes('@');
+    }
 
-        // Close payment modal
-        closePaymentModal();
+    if (!isValid) {
+        alert('Please fill in all payment details');
+        return;
+    }
 
-        // Show success modal
-        document.getElementById('paymentSuccessModal').classList.remove('hidden');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    window.location.href = '/bookings/payment-success';
+}
 
-    } catch (error) {
-        console.error('Payment error:', error);
-        alert('Payment failed. Please try again.');
+// ============================================
+// MODAL DE CANCELAMENTO
+// ============================================
+function openCancelModalFromData(button) {
+    const bookingId = button.dataset.bookingId;
+    const spaceName = button.dataset.spaceName;
+    const date = button.dataset.date;
+    const time = button.dataset.time;
+    const duration = button.dataset.duration;
+    const amount = parseFloat(button.dataset.amount);
+    const spaceId = button.dataset.spaceId;
+    const scheduleId = button.dataset.scheduleId;
+
+    openCancelModal(bookingId, spaceName, date, time, duration, amount, spaceId, scheduleId);
+}
+
+function openCancelModal(bookingId, spaceName, date, time, duration, amount, spaceId, scheduleId) {
+    const modal = document.getElementById('cancelModal');
+
+    if (!modal) {
+        console.error('Cancel modal not found');
+        return;
+    }
+
+    document.getElementById('cancelSpaceName').textContent = spaceName;
+    document.getElementById('cancelDate').textContent = date;
+    document.getElementById('cancelTime').textContent = time + ', (' + duration + ' min)';
+    document.getElementById('cancelAmount').textContent = amount.toFixed(2) + '€';
+    document.getElementById('cancelBookingId').value = bookingId;
+    document.getElementById('cancelSpaceId').value = spaceId;
+    document.getElementById('cancelScheduleId').value = scheduleId;
+
+    modal.classList.remove('hidden');
+}
+
+function closeCancelModal() {
+    const modal = document.getElementById('cancelModal');
+    if (modal) {
+        modal.classList.add('hidden');
     }
 }
 
-function goToReservations() {
-    const userId = document.querySelector('meta[name="user-id"]')?.content;
-    window.location.href = `/user/${userId}/my_reservations`;
-}
+async function confirmCancel() {
+    const bookingId = document.getElementById('cancelBookingId')?.value;
+    const spaceId = document.getElementById('cancelSpaceId')?.value;
+    const scheduleId = document.getElementById('cancelScheduleId')?.value;
 
-function openEditModal(bookingId) {
-    // Redirecionar para página de edição
-    window.location.href = `/test/bookings/${bookingId}/edit`;
-}
+    if (!bookingId || !spaceId || !scheduleId) {
+        alert('Invalid booking data. Please try again.');
+        console.error('Missing data:', { bookingId, spaceId, scheduleId });
+        return;
+    }
+
+    const confirmBtn = event.target;
+    const originalText = confirmBtn.textContent;
+    confirmBtn.textContent = 'Cancelling...';
+    confirmBtn.disabled = true;
+
+    try {
+        const url = `/api/space/${spaceId}/schedule/${scheduleId}/bookings/${bookingId}/cancel`;
+
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            closeCancelModal();
+            alert('Booking cancelled successfully!');
+            window.location.reload();
+        } else {
+            alert(data.error || data.message || 'Failed to cancel booking');
+            confirmBtn.textContent = originalText;
+            confirmBtn.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error cancelling booking:', error);
+        alert('An error occurred while cancelling the booking. Please try again.');
+        confirmBtn.textContent = originalText;
+        confirmBtn.disabled = false;
+    }}

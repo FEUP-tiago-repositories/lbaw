@@ -3,19 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Payment extends Model
 {
     protected $table = 'payment';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [
-        'booking_id',
         'value',
-        'is_discounted',
-        'is_accepted',
         'payment_provider_ref',
         'time_stamp',
+        'is_discounted',
+        'is_accepted',
     ];
 
     protected $casts = [
@@ -32,14 +33,18 @@ class Payment extends Model
     ];
 
     // Relacionamento
-    public function booking()
+    public function bookings(): HasMany
     {
-        return $this->belongsTo(Booking::class, 'booking_id');
+        return $this->hasMany(Booking::class, 'payment_id');
     }
 
-    // Método principal: cálculo de valor
-    public static function calculateValue(int $durationInMinutes, int $numberOfPersons, int $scheduleDuration = 30, ?float $discountPercentage = null): float
-    {
+    // Método de cálculo
+    public static function calculateValue(
+        int $durationInMinutes,
+        int $numberOfPersons,
+        int $scheduleDuration = 30,
+        ?float $discountPercentage = null
+    ): float {
         $numberOfSchedules = (int) ceil($durationInMinutes / $scheduleDuration);
         $totalCapacityUsed = $numberOfSchedules * $numberOfPersons;
         $baseValue = $totalCapacityUsed * 10.0;

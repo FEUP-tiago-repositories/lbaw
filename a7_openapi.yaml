@@ -795,49 +795,6 @@ paths:
         "404":
           description: "User not found"
 
-  # /api/user/{user_id}/my_reservations/bookings:
-  #   get:
-  #     operationId: R406
-  #     summary: "R406: Get all bookings for a user (customer)"
-  #     description: "Fetches all bookings made by a specific user. Access: CST"
-  #     tags:
-  #       - "M04: Bookings and Reviews"
-  #     parameters:
-  #       - in: path
-  #         name: user_id
-  #         schema:
-  #           type: integer
-  #         required: true
-  #         description: "ID of the user whose bookings are being viewed"
-  #     responses:
-  #       "200":
-  #         description: "Bookings successfully fetched"
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: array
-  #               items:
-  #                 type: object
-  #                 properties:
-  #                   id:
-  #                     type: integer
-  #                     description: "ID of the booking"
-  #                   schedule_id:
-  #                     type: integer
-  #                     description: "ID of the schedule associated with the booking"
-  #                   space_id:
-  #                     type: integer
-  #                     description: "ID of the space associated with the booking"
-  #                   booking_created_at:
-  #                     type: string
-  #                     format: date-time
-  #                     description: "When the booking was created"
-  #                   is_cancelled:
-  #                     type: boolean
-  #                     description: "If the booking was cancelled"
-  #       "404":
-  #         description: "User not found"
-
   /api/space/{space_id}/schedule/{schedule_id}/bookings:
     post:
       operationId: R406

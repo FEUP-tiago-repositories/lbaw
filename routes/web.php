@@ -81,13 +81,10 @@ Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite
 // ============================================
 // M04: BOOKINGS (R405)
 // ============================================
+Route::get('/user/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
+Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
+Route::get('/bookings/payment-success', fn() => view('bookings.payment-success'))->name('bookings.payment.success');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/user/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index'); // R405
-
-    // Calendar para owner (se existir)
-    Route::get('/owner/{ownerId}/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
-});
 
 // ============================================
 // NOTIFICATIONS (extensão)

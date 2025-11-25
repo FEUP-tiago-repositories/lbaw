@@ -3,7 +3,7 @@ making a booking --}}
 @extends('layouts.app')
 @section('title', $space->title . ' - Sports Hub')
 @section('content')
-    <main class="container mx-auto px-8 py-8">
+    <main class="container mx-auto px-8 py-8 bg-amber-100 rounded-2xl mt-2.5 shadow">
         {{-- -Info Section --}}
         <section class="mx-auto">
             {{-- Div that will be used for Buttons to Delete and Edit space --}}
@@ -16,7 +16,8 @@ making a booking --}}
                         onsubmit="return confirm('Are you sure you want to delete this space?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="px-4 py-1 bg-red-600 rounded-md hover:bg-red-700 transition">
+                        <button type="submit"
+                            class="px-4 py-1 bg-red-600 rounded-md hover:bg-red-700 transition cursor-pointer">
                             <p class="text-white">Delete</p>
                         </button>
                     </form>
@@ -36,6 +37,21 @@ making a booking --}}
             <div class="flex gap-3.5">
                 <p class="text-2xl font-bold">Sport Type: </p>
                 <p class="text-2xl underline">{{ $space->sportType->name }}</p>
+            </div>
+            {{-- -Email flex --}}
+            <div class="flex gap-3.5">
+                <p class="text-2xl font-bold">Email: </p>
+                <p class="text-2xl underline">{{ $space->email }}</p>
+            </div>
+            {{-- -Phone Number flex --}}
+            <div class="flex gap-3.5">
+                <p class="text-2xl font-bold">Phone: </p>
+                <p class="text-2xl underline">{{ $space->phone_no }}</p>
+            </div>
+            {{-- -Owner flex --}}
+            <div class="flex gap-3.5">
+                <p class="text-2xl font-bold">Owner: </p>
+                <p class="text-2xl underline">{{ $space->owner->user->user_name }}</p>
             </div>
             {{-- Images --}}
             <div class="flex gap-4 mt-4">

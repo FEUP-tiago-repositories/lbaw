@@ -42,7 +42,7 @@ class SpaceController extends Controller
     public function show(Space $space)
     {
         // used for the route /space/{space}
-        $space->load(['sportType', 'media', 'owner', 'coverImage']);
+        $space->load(['sportType', 'media', 'owner.user', 'coverImage']);
 
         return view('spaces.show', compact('space'));
     }
@@ -52,7 +52,15 @@ class SpaceController extends Controller
      */
     public function edit(Space $space)
     {
-        //
+        // used to display the edit forms!
+
+        // Load relationships needed
+        $space->load(['sportType', 'media', 'coverImage']);
+
+        // Get all SportTypes for the drop down menu
+        $sportTypes = \App\Models\SportType::all();
+
+        return view('spaces.edit', compact('space', 'sportTypes'));
     }
 
     /**
@@ -60,7 +68,24 @@ class SpaceController extends Controller
      */
     public function update(Request $request, Space $space)
     {
-        //
+        // Validate input
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:100',
+            'sport_type_id' => 'required|exists:sport_type,id',
+            'address' => 'required|string|max:150',
+            'description' => 'required|string|max:300',
+            'phone_no' => 'required|string|max:15',
+            'email' => 'required|email|max:150',
+            'is_closed' => 'nullable|boolean',
+        ]);
+
+        $validatedData['is_closed'] = $request->has('is_closed');
+
+        $space->update($validatedData);
+
+        return redirect()->route('spaces.show', $space)
+            ->with('success', 'Space updated successfully!');
+
     }
 
     /**

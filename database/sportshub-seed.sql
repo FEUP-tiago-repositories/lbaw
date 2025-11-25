@@ -162,7 +162,7 @@ CREATE TABLE payment (
 
 CREATE TABLE discount (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space(id),
+    space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     percentage FLOAT NOT NULL CHECK (percentage BETWEEN 0 AND 100),
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL CHECK (end_date > start_date)
@@ -2331,22 +2331,36 @@ CREATE INDEX search_space_idx ON space USING GIN (tsvectors);
 -- =========================
 -- BUSINESS LOGIC TRIGGERS
 -- =========================
+DROP TRIGGER IF EXISTS num_favorites_update ON favorited;
+
+DROP FUNCTION IF EXISTS update_num_favorites ();
+
+DROP TRIGGER IF EXISTS review_num_update ON review;
+
+DROP FUNCTION IF EXISTS update_num_reviews ();
 
 -- TRIGGER01: Update num_reviews when review is inserted/deleted
 CREATE FUNCTION update_num_reviews() RETURNS TRIGGER AS $$
+DECLARE
+    v_space_id INT;
 BEGIN
     --when a new review is inserted
     IF (TG_OP = 'INSERT') THEN
-        UPDATE space
-        SET num_reviews = num_reviews + 1
-        WHERE id = NEW.id;
+        -- get the space_id from the booking association
+        SELECT b.space_id INTO v_space_id
+        FROM booking b
+        WHERE b.id = NEW.booking_id;
     END IF;
 
     --when a review is deleted
     IF (TG_OP = 'DELETE') THEN
+        SELECT b.space_id INTO v_space_id
+        FROM booking b
+        WHERE b.id = OLD.booking_id;
+
         UPDATE space
         SET num_reviews = num_reviews - 1
-        WHERE id = OLD.id;
+        WHERE id = v_space_id;
     END IF;
 
     RETURN NULL;
@@ -2368,14 +2382,14 @@ BEGIN
     IF (TG_OP = 'INSERT') THEN
         UPDATE space
         SET num_favorites = num_favorites + 1
-        WHERE id = NEW.id;
+        WHERE id = NEW.space_id;
     END IF;
 
     --when a favorite is removed
     IF (TG_OP = 'DELETE') THEN
         UPDATE space
         SET num_favorites = num_favorites - 1
-        WHERE id = OLD.id;
+        WHERE id = OLD.space_id;
     END IF;
 
     RETURN NULL;

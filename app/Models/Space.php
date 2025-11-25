@@ -6,28 +6,51 @@ use Illuminate\Database\Eloquent\Model;
 
 class Space extends Model
 {
-    protected $table = 'space';
+    // space is associated with one business owner
     public $timestamps = false;
 
-    protected $fillable = ['title', 'address', 'description', 'is_closed'];
+    // our table is named Space, so we execute this command:
+    protected $table = 'space';
 
-    protected $casts = [
-        'is_closed' => 'boolean',
+    protected $fillable = [
+        'owner_id',
+        'sport_type_id',
+        'title',
+        'address',
+        'description',
+        'is_closed',
+        'phone_no',
+        'email',
+        'num_favorites',
+        'num_reviews',
+        'current_environment_rating',
+        'current_equipment_rating',
+        'current_service_rating',
+        'current_total_rating',
     ];
 
-    public function schedules()
+    protected $primaryKey = 'id';
+
+    public function owner()
     {
-        return $this->hasMany(Schedule::class, 'space_id');
+        return $this->belongsTo(BusinessOwner::class);
     }
 
-    public function bookings()
+    public function sportType()
     {
-        return $this->hasMany(Booking::class, 'space_id');
+        return $this->belongsTo(SportType::class);
     }
 
-    // Stub para media (retorna coleção vazia)
     public function media()
     {
-        return $this->hasMany(Media::class, 'space_id');
+        return $this->hasMany(Media::class);
+    }
+
+    /**
+     * Get the cover image of a space
+     */
+    public function coverImage()
+    {
+        return $this->hasOne(Media::class, 'space_id')->where('is_cover', true);
     }
 }

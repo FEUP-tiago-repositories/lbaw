@@ -1,27 +1,24 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\AdminController;
 // ============================================
 // CONTROLLERS
 // ============================================
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\StaticController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\SpaceController;
-use App\Http\Controllers\BookingController;
-
-// Admin Controllers
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\UserManagementController;
-use App\Http\Controllers\Admin\SpaceManagementController;
 use App\Http\Controllers\Admin\ReviewManagementController;
-
-// Auth Controllers
+use App\Http\Controllers\Admin\SpaceManagementController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+// Admin Controllers
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SpaceController;
+// Auth Controllers
+use App\Http\Controllers\StaticController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 // ============================================
 // M01: HOME & STATIC PAGES (R101-R105)
@@ -64,22 +61,22 @@ Route::middleware(['auth'])->group(function () {
 // M03: SPACES (R301-R308)
 // ============================================
 
-// Public routes
-Route::get('/space', [SpaceController::class, 'index'])->name('spaces.index');             // R303
-Route::get('/space/{space_id}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
-
 // Authenticated routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/add-space', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
-    Route::post('/add-space', [SpaceController::class, 'store'])->name('spaces.store');    // R302
-    Route::get('/space/{space_id}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
-    Route::patch('/space/{space_id}', [SpaceController::class, 'update'])->name('spaces.update');   // R305
-    Route::delete('/space/{space_id}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
+// Route::middleware(['auth'])->group(function () {
+Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
+Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');    // R302 (action)
+Route::get('/spaces/{space}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
+Route::patch('/spaces/{space}', [SpaceController::class, 'update'])->name('spaces.update');   // R305
+Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
 
-    // Favorites (R307-R308)
-    Route::post('/space/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
-    Route::patch('/space/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
-});
+// Public routes
+Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');             // R303
+Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
+
+// Favorites (R307-R308)
+Route::post('/spaces/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
+Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
+// });
 
 // ============================================
 // M04: BOOKINGS (R405)

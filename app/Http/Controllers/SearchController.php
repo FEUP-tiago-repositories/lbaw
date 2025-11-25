@@ -14,17 +14,10 @@ class SearchController
 
         $exactSpaces = Space::where('title', $query)->orWhere('address', $query)->get();
 
-        $exactSportTypes = SportType::where('name', $query)->get();
-
         $partialSpaces = Space::where('title', 'ILIKE', "%{$query}%")->orwhere('address', 'ILIKE', "%{$query}%")->get();
-
-        $partialSportTypes = SportType::where('name', 'ILIKE', "%{$query}%")->get();
 
         $spaces = $exactSpaces->merge($partialSpaces)->unique('id');
 
-        $sportTypes = $exactSportTypes->merge($partialSportTypes)->unique('id');
-
-
-        return view('spaces.index', compact('spaces', 'sportTypes', 'query'));
+        return view('spaces.index', compact('spaces', 'query'));
     }
 }

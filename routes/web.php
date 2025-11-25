@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SpaceController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\SearchController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\AdminController;
@@ -127,3 +128,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/reviews/{id}', [ReviewManagementController::class, 'show'])->name('reviews.show');  // R517
     Route::delete('/reviews/{id}', [ReviewManagementController::class, 'destroy'])->name('reviews.destroy'); // R518
 });
+
+
+Route::get('/search', [SearchController::class, 'search'])->name('search');

@@ -2,7 +2,7 @@
 @section('title', 'Edit ' . $space->title . ' - Sports Hub')
 
 @section('content')
-<div class="container mx-auto px-8 py-8 max-w-4xl bg-amber-50 rounded-2xl shadow my-3.5">
+<div class="container mx-auto px-8 py-8 max-w-4xl bg-white rounded-2xl shadow my-3.5">
     <h1 class="text-3xl font-bold mb-6">Edit Space: {{ $space->title }}</h1>
 
     {{-- Display errors --}}
@@ -25,7 +25,7 @@
         <div class="mb-6">
             <label for="title" class="block text-lg font-medium mb-2">Title *</label>
             <input type="text" name="title" id="title" value="{{ old('title', $space->title) }}"
-                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
                 required maxlength="100">
             <p class="text-sm text-gray-500 mt-1">Maximum 100 characters</p>
         </div>
@@ -34,7 +34,7 @@
         <div class="mb-6">
             <label for="sport_type_id" class="block text-lg font-medium mb-2">Sport Type *</label>
             <select name="sport_type_id" id="sport_type_id"
-                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
                 required>
                 @foreach($sportTypes as $sportType)
                     <option value="{{ $sportType->id }}" {{ old('sport_type_id', $space->sport_type_id) == $sportType->id ? 'selected' : '' }}>
@@ -49,7 +49,7 @@
         <div class="mb-6">
             <label for="address" class="block text-lg font-medium mb-2">Address *</label>
             <input type="text" name="address" id="address" value="{{ old('address', $space->address) }}"
-                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
                 required maxlength="150">
         </div>
 
@@ -57,7 +57,7 @@
         <div class="mb-6">
             <label for="description" class="block text-lg font-medium mb-2">Description *</label>
             <textarea name="description" id="description"
-                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
                 rows="4" required maxlength="300">{{ old('description', $space->description) }}</textarea>
             <p class="text-sm text-gray-500 mt-1">Maximum 300 characters</p>
         </div>
@@ -66,7 +66,7 @@
         <div class="mb-6">
             <label for="phone_no" class="block text-lg font-medium mb-2">Phone Number *</label>
             <input type="tel" name="phone_no" id="phone_no" value="{{ old('phone_no', $space->phone_no) }}"
-                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
                 required maxlength="15" pattern="[0-9]{9,15}">
             <p class="text-sm text-gray-500 mt-1">Format: 9 to 15 digits</p>
         </div>
@@ -75,7 +75,7 @@
         <div class="mb-6">
             <label for="email" class="block text-lg font-medium mb-2">Email *</label>
             <input type="email" name="email" id="email" value="{{ old('email', $space->email) }}"
-                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
                 required maxlength="150">
         </div>
 
@@ -87,7 +87,7 @@
                        id="is_closed" 
                        value="1"
                        {{ old('is_closed', $space->is_closed) ? 'checked' : '' }}
-                       class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                       class="w-5 h-5 text-green-600 border-gray-300 rounded focus:green-500">
                 <span class="ml-2 text-lg">Mark space as closed</span>
             </label>
             <p class="text-sm text-red-500 mt-1">Warning: Marking as closed will anonymize space data (address, description, phone, email)</p>
@@ -100,7 +100,7 @@
                 Save Changes
             </button>
             <a href="{{ route('spaces.show', $space->id) }}" 
-               class="px-6 py-3 bg-red-700 text-white rounded-lg hover:bg-red-200 transition font-medium">
+               class="px-6 py-3 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors ease-in-out font-medium border-2 border-black">
                 Cancel
             </a>
         </div>

@@ -13,6 +13,8 @@ class SpaceController extends Controller
     public function index()
     {
         // route --> /spaces/
+        // all users have access to this page
+        // $this->authorize('viewAny', Space::class);
         // fetch all spaces into the index view
         $spaces = Space::with(['sportType', 'media'])->orderBy('id', 'desc')->get(); // we will only need this info in the Space Card
 
@@ -29,9 +31,8 @@ class SpaceController extends Controller
         $sportTypes = \App\Models\SportType::all();
         // display creation form /spaces/create
 
-        //pass all BO with relation with user
+        // pass all BO with relation with user
         $businessOwners = \App\Models\BusinessOwner::with('user')->get();
-
 
         return view('spaces.create', compact('sportTypes', 'businessOwners'));
     }

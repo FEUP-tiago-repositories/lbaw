@@ -3,7 +3,7 @@ making a booking --}}
 @extends('layouts.app')
 @section('title', $space->title . ' - Sports Hub')
 @section('content')
-    <main class="container mx-auto px-8 py-8 bg-amber-100 rounded-2xl mt-2.5 shadow">
+    <main class="container mx-auto px-8 py-8 bg-white rounded-2xl mt-2.5 shadow">
         {{-- -Info Section --}}
         <section class="mx-auto">
             {{-- Div that will be used for Buttons to Delete and Edit space --}}

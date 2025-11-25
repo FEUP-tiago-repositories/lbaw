@@ -123,7 +123,6 @@ function renderCalendar() {
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     days.forEach(day => {
         const header = document.createElement('div');
-        header.className = 'text-xs font-semibold text-gray-600 py-2';
         header.textContent = day;
         grid.appendChild(header);
     });
@@ -148,12 +147,12 @@ function renderCalendar() {
         const isPast = date < today;
         const isSelected = state.selectedDate && date.toDateString() === state.selectedDate.toDateString();
 
-        dayDiv.className = `py-2 text-sm rounded-lg cursor-pointer transition ${
+        dayDiv.className = `py-2 rounded-lg border border-gray-200 transition ${
             isPast
-                ? 'text-gray-300 cursor-not-allowed'
+                ? 'text-gray-300 line-through cursor-not-allowed'
                 : isSelected
                     ? 'bg-blue-600 text-white font-bold'
-                    : 'hover:bg-gray-100 text-gray-900'
+                    : 'hover:bg-gray-100 cursor-pointer text-gray-900'
         }`;
 
         dayDiv.textContent = day;
@@ -193,15 +192,15 @@ async function loadAvailableTimes(date) {
         timeGrid.innerHTML = '';
 
         if (times.length === 0) {
-            timeGrid.innerHTML = '<div class="col-span-full text-center py-4 text-gray-500">No available times</div>';
+            timeGrid.innerHTML = '<div class="col-span-full text-center py-4">No available times</div>';
             return;
         }
 
         times.forEach(schedule => {
             const timeBtn = document.createElement('button');
             timeBtn.type = 'button';
-            timeBtn.className = `px-3 py-2 text-sm border border-gray-300 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition ${
-                state.scheduleId === schedule.id ? 'border-blue-600 bg-blue-50 font-semibold' : ''
+            timeBtn.className = `px-3 py-2 border border-gray-300 rounded-lg hover:border-2 hover:border-blue-600 hover:bg-blue-100 transition ${
+                state.scheduleId === schedule.id ? 'border-2 border-blue-600 bg-blue-100 font-semibold' : ''
             }`;
             timeBtn.textContent = schedule.start_time;
             timeBtn.onclick = () => selectTime(schedule.id, schedule.start_time);
@@ -218,9 +217,9 @@ function selectTime(scheduleId, time) {
     state.time = time;
 
     document.querySelectorAll('#timeGrid button').forEach(btn => {
-        btn.classList.remove('border-blue-600', 'bg-blue-50', 'font-semibold');
+        btn.classList.remove('border-2','border-blue-600', 'bg-blue-100', 'font-semibold');
     });
-    event.target.classList.add('border-blue-600', 'bg-blue-50', 'font-semibold');
+    event.target.classList.add('border-2','border-blue-600', 'bg-blue-100', 'font-semibold');
 
     showSection('duration-section');
 }
@@ -231,15 +230,15 @@ function selectTime(scheduleId, time) {
 function decrementDuration() {
     const input = document.getElementById('durationInput');
     const value = parseInt(input.value);
-    if (value > 30) {
-        input.value = value - 30;
+    if (value > parseInt(input.min)) {
+        input.value = value - parseInt(input.step);
         updateDuration();
     }
 }
 
 function incrementDuration() {
     const input = document.getElementById('durationInput');
-    input.value = parseInt(input.value) + 30;
+    input.value = parseInt(input.value) + parseInt(input.step);
     updateDuration();
 }
 

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="min-h-screen bg-gray-50 py-8">
-        <div class="max-w-2xl mx-auto px-4">
+    <div class="min-h-screen py-8">
+        <div>
             @include('bookings.partials.calendar-widget', ['booking' => $booking])
         </div>
     </div>

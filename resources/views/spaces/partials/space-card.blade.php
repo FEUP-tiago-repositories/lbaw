@@ -67,7 +67,7 @@
             @if($space->is_closed)
                 <div class="mt-2">
                     <span
-                        class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-medium hover:bg-white transition-colors duration-300 ease-in-out">
+                        class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-medium hover:bg-red-500 transition-colors duration-300 ease-in-out">
                         Currently Closed
                     </span>
                 </div>

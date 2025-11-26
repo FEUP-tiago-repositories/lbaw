@@ -27,14 +27,17 @@ class SpaceController extends Controller
     public function create()
     {
 
+        if (! auth()->user()->businessOwner()) {
+            abort(403, 'Only business owners can create a space!');
+        }
         // Get all SportTypes for the drop down menu
         $sportTypes = \App\Models\SportType::all();
         // display creation form /spaces/create
 
-        // pass all BO with relation with user
-        $businessOwners = \App\Models\BusinessOwner::with('user')->get();
+        // // pass all BO with relation with user
+        // $businessOwners = \App\Models\BusinessOwner::with('user')->get();
 
-        return view('spaces.create', compact('sportTypes', 'businessOwners'));
+        return view('spaces.create', compact('sportTypes'));
     }
 
     /**
@@ -44,7 +47,6 @@ class SpaceController extends Controller
     {
         // --> /spaces/ (POST)
         $validatedData = $request->validate([
-            'owner_id' => 'required|exists:business_owner,id',
             'sport_type_id' => 'required|exists:sport_type,id',
             'title' => 'required|string|max:100',
             'address' => 'required|string|max:150',
@@ -52,6 +54,8 @@ class SpaceController extends Controller
             'phone_no' => 'required|string|max:15',
             'email' => 'required|email|max:150',
         ]);
+
+        $validatedData['owner_id'] = auth()->user()->businessOwner->id;
 
         // Create the space
         // num_favorites, num_reviews and ratings will automatically be 0

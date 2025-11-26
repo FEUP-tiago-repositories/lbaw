@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +19,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('cards.index');
+            return redirect()->route('users.show', Auth::id());
         } else {
             return view('auth.login');
         }
@@ -45,9 +44,10 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             // Regenerate the session ID to prevent session fixation attacks.
             $request->session()->regenerate();
- 
-            // Redirect the user to their intended destination (default: /cards).
-            return redirect()->intended(route('cards.index'));
+     
+            return redirect()->intended(
+                route('users.show', Auth::id())
+            );
         }
  
         // Authentication failed: return back with an error message.

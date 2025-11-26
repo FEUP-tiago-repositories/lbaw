@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
+use Illuminate\Support\Facades\Route;
+
 // ============================================
 // CONTROLLERS
 // ============================================
@@ -18,20 +19,11 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\SpaceManagementController;
 use App\Http\Controllers\Admin\ReviewManagementController;
-use App\Http\Controllers\Admin\SpaceManagementController;
-use App\Http\Controllers\Admin\UserManagementController;
+
+// Auth Controllers
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
-// Admin Controllers
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\SpaceController;
-// Auth Controllers
-use App\Http\Controllers\StaticController;
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 
 // ============================================
 // M01: HOME & STATIC PAGES (R101-R105)
@@ -80,29 +72,30 @@ Route::middleware(['auth'])->group(function () {
 // ============================================
 
 // Authenticated routes
-// Route::middleware(['auth'])->group(function () {
-Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
-Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');    // R302 (action)
-Route::get('/spaces/{space}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
-Route::patch('/spaces/{space}', [SpaceController::class, 'update'])->name('spaces.update');   // R305
-Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
+Route::middleware(['auth'])->group(function () {
+    Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
+    Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');    // R302 (action)
+    Route::get('/spaces/{space}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
+    Route::patch('/spaces/{space}', [SpaceController::class, 'update'])->name('spaces.update');   // R305
+    Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
 
-// Public routes
-Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');             // R303
-Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
+    // Public routes
+    Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');             // R303
+    Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
 
-// Favorites (R307-R308)
-Route::post('/spaces/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
-Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
-// });
+    // Favorites (R307-R308)
+    Route::post('/spaces/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
+    Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
+});
 
 // ============================================
 // M04: BOOKINGS (R405)
 // ============================================
-Route::get('/user/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
-Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
-Route::get('/bookings/payment-success', fn() => view('bookings.payment-success'))->name('bookings.payment.success');
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
+    Route::get('/bookings/payment-success', fn() => view('bookings.modals.payment-success'))->name('bookings.payment.success');
+});
 
 // ============================================
 // NOTIFICATIONS (extensão)

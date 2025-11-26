@@ -5,31 +5,31 @@
     <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PATCH')
-        {{User_name}}
+        {{-- User_name --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Username</label>
             <input type="text" name="user_name" value="{{ old('user_name', $user->user_name) }}"
                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
-        {{Email}}
+        {{-- Email --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Email</label>
             <input type="email" name="email" value="{{ old('email', $user->email) }}"
                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
-        {{Phone}}
+        {{-- Phone --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Phone</label>
             <input type="text" name="phone_no" value="{{ old('phone_no', $user->phone_no) }}"
                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
-        {{Birth Date}}
+        {{-- Birth Date --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Birth Date</label>
             <input type="date" name="birth_date" value="{{ old('birth_date', $user->birth_date) }}"
                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
-        {{Profile Picture}}
+        {{-- Profile Picture --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Profile Picture</label>
             <div class="flex items-center gap-4">
@@ -40,7 +40,7 @@
             </div>
         </div>
         <hr class="my-6">
-        {{Save Button}}
+        {{-- Save Button --}}
         <div class="flex justify-end gap-4">
             <a href="{{ route('users.show', $user->id) }}"
                class="px-5 py-3 bg-gray-300 text-gray-800 rounded-xl hover:bg-gray-400 transition">

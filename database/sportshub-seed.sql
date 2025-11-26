@@ -108,6 +108,21 @@ CREATE TABLE schedule (
     max_capacity INT NOT NULL CHECK (max_capacity > 0)
 );
 
+CREATE TABLE payment (
+     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+     value FLOAT NOT NULL CHECK (value > 0),
+     is_discounted BOOLEAN NOT NULL DEFAULT FALSE,
+     is_accepted BOOLEAN NOT NULL DEFAULT FALSE,
+     payment_provider_ref VARCHAR(100) NOT NULL CHECK (
+         payment_provider_ref IN (
+              'Credit/Debit Card',
+              'MB Way',
+              'Paypal'
+             )
+         ),
+     time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE booking (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
@@ -116,7 +131,8 @@ CREATE TABLE booking (
     booking_created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
     number_of_persons INT NOT NULL DEFAULT 1,
-    total_duration INT NOT NULL DEFAULT 60
+    total_duration INT NOT NULL DEFAULT 60,
+    payment_id INT REFERENCES payment (id) ON DELETE SET NULL
 );
 
 CREATE TABLE review (
@@ -141,22 +157,6 @@ CREATE TABLE response (
     owner_id INT REFERENCES business_owner (id) ON DELETE SET NULL,
     review_id INT NOT NULL REFERENCES review (id) ON DELETE CASCADE,
     text VARCHAR(300) NOT NULL,
-    time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-CREATE TABLE payment (
-    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    booking_id INT REFERENCES booking (id) ON DELETE SET NULL,
-    value FLOAT NOT NULL CHECK (value > 0),
-    is_discounted BOOLEAN NOT NULL DEFAULT FALSE,
-    is_accepted BOOLEAN NOT NULL DEFAULT FALSE,
-    payment_provider_ref VARCHAR(100) NOT NULL CHECK (
-        payment_provider_ref IN (
-            'Credit/Debit Card',
-            'MB Way',
-            'Paypal'
-        )
-    ),
     time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -1597,6 +1597,162 @@ VALUES
     );
 
 INSERT INTO
+    payment (
+    value,
+    is_discounted,
+    is_accepted,
+    payment_provider_ref,
+    time_stamp
+)
+VALUES (
+           25.50,
+           TRUE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-01 14:30:00'
+       ),
+       (
+           28.00,
+           FALSE,
+           TRUE,
+           'MB Way',
+           '2025-11-02 10:05:00'
+       ),
+       (
+           12.00,
+           TRUE,
+           TRUE,
+           'MB Way',
+           '2025-11-02 11:05:00'
+       ),
+       (
+           18.90,
+           TRUE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-04 09:25:00'
+       ),
+       (
+           21.00,
+           FALSE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-04 12:20:00'
+       ),
+       (
+           30.00,
+           FALSE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-05 08:10:00'
+       ),
+       (
+           10.00,
+           TRUE,
+           TRUE,
+           'Paypal',
+           '2025-11-06 13:50:00'
+       ),
+       (
+           10.00,
+           TRUE,
+           FALSE,
+           'MB Way',
+           '2025-11-07 14:40:00'
+       ),
+       (
+           45.00,
+           FALSE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-07 18:10:00'
+       ),
+       (
+           20.00,
+           TRUE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-08 10:15:00'
+       ),
+       (
+           15.00,
+           TRUE,
+           FALSE,
+           'Paypal',
+           '2025-11-08 15:35:00'
+       ),
+       (
+           18.00,
+           FALSE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-09 17:10:00'
+       ),
+       (
+           25.00,
+           FALSE,
+           TRUE,
+           'MB Way',
+           '2025-11-09 18:20:00'
+       ),
+       (
+           12.00,
+           FALSE,
+           FALSE,
+           'Paypal',
+           '2025-11-03 15:35:00'
+       ),
+       (
+           20.00,
+           FALSE,
+           FALSE,
+           'Credit/Debit Card',
+           '2025-11-05 16:15:00'
+       ),
+       (
+           15.00,
+           TRUE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-08 10:05:00'
+       ),
+       (
+           22.50,
+           FALSE,
+           TRUE,
+           'MB Way',
+           '2025-11-09 17:05:00'
+       ),
+       (
+           18.00,
+           TRUE,
+           TRUE,
+           'Paypal',
+           '2025-11-09 18:20:00'
+       ),
+       (
+           20.00,
+           FALSE,
+           TRUE,
+           'Credit/Debit Card',
+           '2025-11-01 14:40:00'
+       ),
+       (
+           17.50,
+           TRUE,
+           TRUE,
+           'MB Way',
+           '2025-11-01 14:20:00'
+       ),
+       (
+           17.50,
+           TRUE,
+           TRUE,
+           'MB Way',
+           '2025-11-01 14:20:00'
+       );
+
+INSERT INTO
     booking (
     space_id,
     customer_id,
@@ -1604,7 +1760,8 @@ INSERT INTO
     booking_created_at,
     is_cancelled,
     number_of_persons,
-    total_duration
+    total_duration,
+    payment_id
 )
 VALUES (
            1,
@@ -1613,7 +1770,8 @@ VALUES (
            '2025-11-01 14:25:00',
            FALSE,
             2,
-            30
+            30,
+        1
        ),
        (
            1,
@@ -1622,7 +1780,8 @@ VALUES (
            '2025-11-02 10:00:00',
            FALSE,
            2,
-           30
+           30,
+        2
        ),
        (
            2,
@@ -1631,7 +1790,8 @@ VALUES (
            '2025-11-02 11:00:00',
            FALSE,
            2,
-           30
+           30,
+        3
        ),
        (
            2,
@@ -1640,7 +1800,8 @@ VALUES (
            '2025-11-03 15:30:00',
            TRUE,
            2,
-           30
+           30,
+        14
        ),
        (
            3,
@@ -1649,7 +1810,8 @@ VALUES (
            '2025-11-04 09:20:00',
            FALSE,
            2,
-           30
+           30,
+        4
        ),
        (
            3,
@@ -1658,7 +1820,8 @@ VALUES (
            '2025-11-04 12:10:00',
            FALSE,
            2,
-           30
+           30,
+        5
        ),
        (
            4,
@@ -1667,7 +1830,8 @@ VALUES (
            '2025-11-05 08:00:00',
            FALSE,
            2,
-           30
+           30,
+        10
        ),
        (
            4,
@@ -1676,7 +1840,8 @@ VALUES (
            '2025-11-05 16:10:00',
            TRUE,
            2,
-           30
+           30,
+        11
        ),
        (
            5,
@@ -1685,7 +1850,8 @@ VALUES (
            '2025-11-06 13:45:00',
            FALSE,
            2,
-           30
+           30,
+        7
        ),
        (
            5,
@@ -1694,7 +1860,8 @@ VALUES (
            '2025-11-07 14:30:00',
            FALSE,
            2,
-           30
+           8,
+        16
        ),
        (
            6,
@@ -1703,7 +1870,8 @@ VALUES (
            '2025-11-07 18:00:00',
            FALSE,
            2,
-           30
+           30,
+        16
        ),
        (
            7,
@@ -1712,7 +1880,8 @@ VALUES (
            '2025-11-08 10:00:00',
            FALSE,
            2,
-           30
+           30,
+        16
        ),
        (
            8,
@@ -1721,7 +1890,9 @@ VALUES (
            '2025-11-08 15:30:00',
            TRUE,
            2,
-           30
+           30,
+        16
+
        ),
        (
            9,
@@ -1730,7 +1901,9 @@ VALUES (
            '2025-11-09 17:00:00',
            FALSE,
            2,
-           30
+           30,
+        16
+
        ),
        (
            10,
@@ -1739,7 +1912,8 @@ VALUES (
            '2025-11-09 18:15:00',
            FALSE,
            2,
-           30
+           30,
+            18
        ),
        (
            2,
@@ -1748,7 +1922,8 @@ VALUES (
            '2025-11-01 14:35:00',
            FALSE,
            2,
-           30
+           30,
+        19
        ),
        (
            3,
@@ -1757,7 +1932,8 @@ VALUES (
            '2025-11-01 14:15:00',
            FALSE,
            2,
-           30
+           30,
+        20
        ),
        (
            4,
@@ -1766,7 +1942,8 @@ VALUES (
            '2025-11-01 14:15:00',
            TRUE,
            2,
-           29
+           29,
+        21
        );
 
 INSERT INTO
@@ -1969,184 +2146,6 @@ VALUES (
         '2025-11-29 00:00:00',
         '2025-12-15 23:59:00'
     );
-
-INSERT INTO
-    payment (
-        booking_id,
-        value,
-        is_discounted,
-        is_accepted,
-        payment_provider_ref,
-        time_stamp
-    )
-VALUES (
-           1,
-           25.50,
-           TRUE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-01 14:30:00'
-       ),
-       (
-           2,
-           28.00,
-           FALSE,
-           TRUE,
-           'MB Way',
-           '2025-11-02 10:05:00'
-       ),
-       (
-           3,
-           12.00,
-           TRUE,
-           TRUE,
-           'MB Way',
-           '2025-11-02 11:05:00'
-       ),
-       (
-           5,
-           18.90,
-           TRUE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-04 09:25:00'
-       ),
-       (
-           6,
-           21.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-04 12:20:00'
-       ),
-       (
-           7,
-           30.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-05 08:10:00'
-       ),
-       (
-           9,
-           10.00,
-           TRUE,
-           TRUE,
-           'Paypal',
-           '2025-11-06 13:50:00'
-       ),
-       (
-           10,
-           10.00,
-           TRUE,
-           FALSE,
-           'MB Way',
-           '2025-11-07 14:40:00'
-       ),
-       (
-           11,
-           45.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-07 18:10:00'
-       ),
-       (
-           7,
-           20.00,
-           TRUE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-08 10:15:00'
-       ),
-       (
-           8,
-           15.00,
-           TRUE,
-           FALSE,
-           'Paypal',
-           '2025-11-08 15:35:00'
-       ),
-       (
-           9,
-           18.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-09 17:10:00'
-       ),
-       (
-           10,
-           25.00,
-           FALSE,
-           TRUE,
-           'MB Way',
-           '2025-11-09 18:20:00'
-       ),
-       (
-           4,
-           12.00,
-           FALSE,
-           FALSE,
-           'Paypal',
-           '2025-11-03 15:35:00'
-       ),
-       (
-           8,
-           20.00,
-           FALSE,
-           FALSE,
-           'Credit/Debit Card',
-           '2025-11-05 16:15:00'
-       ),
-       (
-           12,
-           15.00,
-           TRUE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-08 10:05:00'
-       ),
-       (
-           14,
-           22.50,
-           FALSE,
-           TRUE,
-           'MB Way',
-           '2025-11-09 17:05:00'
-       ),
-       (
-           15,
-           18.00,
-           TRUE,
-           TRUE,
-           'Paypal',
-           '2025-11-09 18:20:00'
-       ),
-       (
-           16,
-           20.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-01 14:40:00'
-       ),
-       (
-           17,
-           17.50,
-           TRUE,
-           TRUE,
-           'MB Way',
-           '2025-11-01 14:20:00'
-       ),
-       (
-           18,
-           17.50,
-           TRUE,
-           TRUE,
-           'MB Way',
-           '2025-11-01 14:20:00'
-       );
 
 INSERT INTO
     notification (user_id, time_stamp, is_read)

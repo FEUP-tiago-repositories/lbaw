@@ -13,6 +13,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\SearchController;
 
 // Admin Controllers
+use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\SpaceManagementController;
@@ -35,6 +36,11 @@ use Illuminate\Support\Facades\Route;
 // ============================================
 // M01: HOME & STATIC PAGES (R101-R105)
 // ============================================
+
+$middleware = [];
+if (!app()->environment('local')) {
+    $middleware = ['auth', 'admin']; // login + admin só em produção
+}
 
 Route::get('/', [HomeController::class, 'index'])->name('home');                           // R101
 Route::get('/about-us', [StaticController::class, 'about'])->name('about');                // R102
@@ -108,7 +114,7 @@ Route::middleware(['auth'])->group(function () {
 // ============================================
 // M05: ADMIN ROUTES (R501-R518)
 // ============================================
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware($middleware)->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');                 // R501
 
     // Users Management (R502-R509)
@@ -120,7 +126,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])->name('users.destroy'); // R505
     Route::post('/users/{id}/ban', [UserManagementController::class, 'ban'])->name('users.ban');     // R508
     Route::post('/users/{id}/unban', [UserManagementController::class, 'unban'])->name('users.unban'); // R509
-
+    Route::get('/users/{id}/edit', [UserManagementController::class, 'edit'])->name('users.edit'); 
+    
     // Spaces Management (R511-R515)
     Route::get('/spaces', [SpaceManagementController::class, 'index'])->name('spaces.index');        // R511
     Route::get('/spaces/{id}', [SpaceManagementController::class, 'show'])->name('spaces.show');     // R512
@@ -134,5 +141,3 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/reviews/{id}', [ReviewManagementController::class, 'destroy'])->name('reviews.destroy'); // R518
 });
 
-
-Route::get('/search', [SearchController::class, 'search'])->name('search');

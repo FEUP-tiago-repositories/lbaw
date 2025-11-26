@@ -284,6 +284,8 @@ async function createBooking() {
         return;
     }
 
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
     try {
         let response, data;
 
@@ -294,8 +296,10 @@ async function createBooking() {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
                     },
+                    credentials: 'same-origin',
                     body: JSON.stringify({
                         new_schedule_id: state.scheduleId,
                         duration: state.duration,
@@ -305,18 +309,31 @@ async function createBooking() {
                 }
             );
         } else {
+            const requestData = {
+                customer_id: parseInt(customerId),
+                duration: state.duration,
+                number_of_persons: state.persons,
+                payment_provider_ref: 'Credit/Debit Card'
+            };
+
+            console.log('📤 Sending POST request:', {
+                url: `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings`,
+                data: requestData
+            });
             response = await fetch(
                 `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings`,
                 {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
                     },
+                    credentials: 'same-origin',
                     body: JSON.stringify({
                         customer_id: parseInt(customerId),
-                        duration: state.duration,
-                        number_of_persons: state.persons,
+                        duration: parseInt(state.duration),
+                        number_of_persons: parseInt(state.persons),
                         payment_provider_ref: 'Credit/Debit Card'
                     })
                 }
@@ -468,6 +485,8 @@ async function confirmCancel() {
     confirmBtn.textContent = 'Cancelling...';
     confirmBtn.disabled = true;
 
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
     try {
         const url = `/api/space/${spaceId}/schedule/${scheduleId}/bookings/${bookingId}/cancel`;
 
@@ -475,8 +494,10 @@ async function confirmCancel() {
             method: 'PATCH',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            credentials: 'same-origin'
         });
 
         const data = await response.json();

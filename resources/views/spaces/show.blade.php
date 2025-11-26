@@ -9,24 +9,29 @@ making a booking --}}
             {{-- Div that will be used for Buttons to Delete and Edit space --}}
             <div class="flex justify-between">
                 <h1 class="text-3xl font-bold mb-6">{{ $space->title }}</h1>
-                {{-- -Delete and Edit buttons --}}
-                <div class="flex gap-2.5">
-                    {{-- -Delete Button --}}
-                    <form action="{{ route('spaces.destroy', $space->id) }}" method="POST"
-                        onsubmit="return confirm('Are you sure you want to delete this space?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                            class="px-4 py-1 bg-red-600 rounded-md hover:bg-red-700 transition cursor-pointer">
-                            <p class="text-white">Delete</p>
-                        </button>
-                    </form>
-                    {{-- -Edit Button --}}
-                    <a href="{{ route('spaces.edit', $space->id) }}"
-                        class="px-4 py-1 bg-green-600 rounded-md hover:bg-green-700 transition flex items-center">
-                        <p class="text-white">Edit</p>
-                    </a>
-                </div>
+                {{-- Only show Delete and Edit Buttons if the user is the owner of that space --}}
+                @auth
+                    @if(auth()->user()->businessOwner && auth()->user()->businessOwner->id === $space->owner_id)
+                        {{-- -Delete and Edit buttons --}}
+                        <div class="flex gap-2.5">
+                            {{-- -Delete Button --}}
+                            <form action="{{ route('spaces.destroy', $space->id) }}" method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this space?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="px-4 py-1 bg-red-600 rounded-md hover:bg-red-700 transition cursor-pointer">
+                                    <p class="text-white">Delete</p>
+                                </button>
+                            </form>
+                            {{-- -Edit Button --}}
+                            <a href="{{ route('spaces.edit', $space->id) }}"
+                                class="px-4 py-1 bg-green-600 rounded-md hover:bg-green-700 transition flex items-center">
+                                <p class="text-white">Edit</p>
+                            </a>
+                        </div>
+                    @endif
+                @endauth
             </div>
             {{-- -Address flex --}}
             <div class="flex gap-3.5">
@@ -87,7 +92,7 @@ making a booking --}}
                     </div>
                 </div>
             </div>
-            {{-- -Where the calendar-widget will be placed  --}}
+            {{-- -Where the calendar-widget will be placed --}}
             <div class="lg:col-span-1">
                 <div class="sticky top-8">
                     @include('bookings.partials.calendar-widget', ['space' => $space])

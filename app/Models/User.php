@@ -22,10 +22,21 @@ class User extends Authenticable
         'profile_pic_url',
     ];
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'is_deleted' => 'boolean',
+        'is_banned' => 'boolean',
+        'birth_date' => 'date',
+    ];
+
     // Relation Ships
     public function businessOwner()
     {
-        return $this->hasOne(BusinessOwner::class, 'user_id', 'id');
+        return $this->hasOne(BusinessOwner::class, 'user_id');
     }
 
     public function customer()

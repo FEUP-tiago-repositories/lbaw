@@ -20,7 +20,7 @@
         <form action="{{ route('spaces.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            {{-- Business Owner Selection, temporary because I still dont have the logic for BO authentication --}}
+            {{-- Business Owner Selection, temporary because I still dont have the logic for BO authentication
             <div class="mb-6">
                 <label for="owner_id" class="block text-lg font-medium mb-2">Business Owner *</label>
                 <select name="owner_id" id="owner_id"
@@ -35,7 +35,7 @@
                 </select>
                 <p class="text-sm mt-1 text-red-400">This will be automatically set when authentication is
                     implemented</p>
-            </div>
+            </div> --}}
 
             {{-- Title --}}
             <div class="mb-6">

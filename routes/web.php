@@ -71,6 +71,10 @@ Route::middleware(['auth'])->group(function () {
 // M03: SPACES (R301-R308)
 // ============================================
 
+// Public routes
+Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');             // R303
+Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
+
 // Authenticated routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
@@ -78,10 +82,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/spaces/{space}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
     Route::patch('/spaces/{space}', [SpaceController::class, 'update'])->name('spaces.update');   // R305
     Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
-
-    // Public routes
-    Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');             // R303
-    Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
 
     // Favorites (R307-R308)
     Route::post('/spaces/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307

@@ -12,7 +12,7 @@
             @if($futureReservations->isNotEmpty())
                 <section>
                     <h2 class="text-2xl font-semibold mb-4">Upcoming Reservations</h2>
-                    <div class="flex gap-6 pb-4">
+                    <div class="flex overflow-x-auto gap-6 pb-4">
                         @foreach($futureReservations as $booking)
                             @include('bookings.partials.booking-card', ['booking' => $booking])
                         @endforeach
@@ -23,7 +23,7 @@
             @if($pastReservations->isNotEmpty())
                 <section>
                     <h2 class="text-2xl font-semibold mb-4">Past Reservations</h2>
-                    <div class="flex gap-6 pb-4">
+                    <div class="flex overflow-x-auto gap-6 pb-4">
                         @foreach($pastReservations as $booking)
                             @include('bookings.partials.booking-card', ['booking' => $booking])
                         @endforeach
@@ -34,7 +34,7 @@
             @if($cancelledReservations->isNotEmpty())
                 <section>
                     <h2 class="text-2xl font-semibold mb-4">Cancelled Reservations</h2>
-                    <div class="flex gap-6 pb-4">
+                    <div class="flex overflow-x-auto gap-6 pb-4">
                         @foreach($cancelledReservations as $booking)
                             @include('bookings.partials.booking-card', ['booking' => $booking])
                         @endforeach

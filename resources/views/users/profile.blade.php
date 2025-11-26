@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-3xl mx-auto mt-12 mb-12 bg-white shadow-lg rounded-2xl p-10">
 
-    {{Header}}
+    {{-- Header --}}
     <div class="flex items-center gap-8">
         <img
             src="{{ $user->profile_pic_url ?? 'https://via.placeholder.com/120' }}"
@@ -19,7 +19,7 @@
 
     <hr class="my-8">
 
-    {{Info}}
+    {{-- Info --}}
     <div class="space-y-4">
         <h2 class="text-2xl font-semibold text-gray-800">Account Info</h2>
 
@@ -60,7 +60,7 @@
 
     <hr class="my-8">
 
-    {{Buttons}}
+    {{-- Buttons --}}
     <div class="flex gap-4">
         <a href="{{ route('users.edit', $user->id) }}"
            class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-md">

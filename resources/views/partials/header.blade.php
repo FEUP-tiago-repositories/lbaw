@@ -1,22 +1,20 @@
-<nav
-    class="navbar h-16 max-w-7xl mx-auto flex items-center px-5 pt-5 pb-4 justify-between bg-white shadow-md rounded-2xl mt-3">
-    <div class="flex items-center">
+<nav class="navbar h-18 mx-auto text-xl flex items-center px-20 py-4 justify-between bg-white shadow-md text-green-800 font-semibold transition-colors duration-300 ease-in-out">
+    <div>
         <a href="{{ route('home') }}"
-            class="text-lg font-medium hover:text-green-700 transition-colors duration-300 ease-in-out">Home</a>
+            class="hover:text-green-400">Home</a>
         <a href="{{ route('spaces.index') }}"
-            class="ml-6 text-lg font-medium hover:text-green-700 transition-colors duration-300 ease-in-out">Spaces</a>
+            class="ml-6 hover:text-green-400">Spaces</a>
     </div>
 
-    <form action="{{ route('spaces.search') }}" method="GET" class="flex items-center">
+    <form action="{{ route('spaces.search') }}" method="GET">
             <input type="text" name="q" placeholder="Search Spaces or Sports..." class="border p-2 rounded-md ">
             <button type="submit" class="bg-green-500 text-white p-2 font-bold rounded-md">Search</button>
     </form>
 
-
-    <div class="flex items-center">
+    <div>
         @auth {{-- -If user is authenticated --}}
             <a href="{{ route('logout') }}"
-                class="text-lg font-medium hover:text-green-700 transition-colors duration-300 ease-in-out"
+                class="hover:text-green-400"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 Logout
             </a>
@@ -25,9 +23,9 @@
             </form>
         @else
             <a href="{{ route('login') }}"
-                class="text-lg font-medium hover:text-green-700 transition-colors duration-300 ease-in-out">Login</a>
+                class="hover:text-green-400">Login</a>
             <a href="{{ route('register') }}"
-                class="ml-6 text-lg font-medium hover:text-green-700 transition-colors duration-300 ease-in-out">Register</a>
+                class="ml-6 hover:text-green-400">Register</a>
         @endauth
     </div>
 </nav>

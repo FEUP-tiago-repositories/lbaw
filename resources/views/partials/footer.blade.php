@@ -1,16 +1,16 @@
 <nav
-    class="navbar h-16 max-w-7xl mx-auto flex items-center px-5 pt-5 pb-4 justify-end bg-white shadow-md rounded-2xl mt-3">
+    class="h-22 text-xl text-green-800 mx-auto flex items-center px-20 py-4 justify-end bg-white b font-medium border underline transition-colors duration-300 ease-in-out">
     <div class="flex items-center">
         <a href="{{ route('terms') }}"
-            class="text-lg font-medium  underline hover:text-green-700 transition-colors duration-300 ease-in-out mr-4">Terms
+            class="hover:text-green-400 mr-4">Terms
             Of Service</a>
         <a href="{{ route('faq') }}"
-            class="text-lg font-medium  underline hover:text-green-700 transition-colors duration-300 ease-in-out mr-4">FAQ</a>
+            class="hover:text-green-400 mr-4">FAQ</a>
         <a href="{{ route('contact') }}"
-            class="text-lg font-medium  underline hover:text-green-700 transition-colors duration-300 ease-in-out mr-4">Contact
+            class="hover:text-green-400 mr-4">Contact
             Us</a>
         <a href="{{ route('about') }}"
-            class="text-lg font-medium  underline hover:text-green-700 transition-colors duration-300 ease-in-out mr-4">About
+            class="hover:text-green-400">About
             Us</a>
     </div>
 </nav>

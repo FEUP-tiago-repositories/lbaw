@@ -17,19 +17,28 @@
 
     <title>@yield('title', 'Sports Hub')</title>
 
+    {{-- Leaflet CSS --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    {{-- Leaflet JS --}}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
     {{-- CSS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-lime-200 mx-auto my-0 text-3xl">
+<body class="bg-gray-100 mx-auto my-0 text-3xl">
     @include('partials.header')
 
     <main>
         @yield('content')
     </main>
-    @stack('scripts')
 
     @include('partials.footer')
+
+    @stack('scripts')
 
     {{-- JavaScript --}}
     <script src="{{ asset('js/app.js') }}" defer></script>

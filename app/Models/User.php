@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticable;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends Authenticable
 {
     public $timestamps = false;
 
@@ -31,4 +32,4 @@ class User extends Model
     {
         return $this->hasOne(Customer::class, 'user_id', 'id');
     }
-}
+} 

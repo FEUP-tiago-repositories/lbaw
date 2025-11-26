@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
+use Illuminate\Support\Facades\Route;
+
 // ============================================
 // CONTROLLERS
 // ============================================
@@ -18,20 +19,11 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\SpaceManagementController;
 use App\Http\Controllers\Admin\ReviewManagementController;
-use App\Http\Controllers\Admin\SpaceManagementController;
-use App\Http\Controllers\Admin\UserManagementController;
+
+// Auth Controllers
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
-// Admin Controllers
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\SpaceController;
-// Auth Controllers
-use App\Http\Controllers\StaticController;
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 
 // ============================================
 // M01: HOME & STATIC PAGES (R101-R105)

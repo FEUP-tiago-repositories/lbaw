@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Space;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class SpacePolicy
 {
@@ -13,7 +12,7 @@ class SpacePolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**

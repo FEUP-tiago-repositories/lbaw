@@ -7,6 +7,12 @@
             class="ml-6 text-lg font-medium hover:text-green-700 transition-colors duration-300 ease-in-out">Spaces</a>
     </div>
 
+    <form action="{{ route('spaces.search') }}" method="GET" class="flex items-center">
+            <input type="text" name="q" placeholder="Search Spaces or Sports..." class="border p-2 rounded-md ">
+            <button type="submit" class="bg-green-500 text-white p-2 font-bold rounded-md">Search</button>
+    </form>
+
+
     <div class="flex items-center">
         @auth {{-- -If user is authenticated --}}
             <a href="{{ route('logout') }}"

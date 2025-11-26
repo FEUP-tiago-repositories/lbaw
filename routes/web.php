@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Public routes
 Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');             // R303
+Route::get('/spaces/search', [SearchController::class, 'search'])->name('spaces.search');
 Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
 
 // Authenticated routes
@@ -133,4 +134,3 @@ Route::middleware($middleware)->prefix('admin')->name('admin.')->group(function 
     Route::get('/reviews/{id}', [ReviewManagementController::class, 'show'])->name('reviews.show');  // R517
     Route::delete('/reviews/{id}', [ReviewManagementController::class, 'destroy'])->name('reviews.destroy'); // R518
 });
-

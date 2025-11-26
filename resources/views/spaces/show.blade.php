@@ -88,11 +88,11 @@ making a booking --}}
                 </div>
             </div>
             {{-- -Where the calendar-widget will be placed when done --}}
-            {{-- <div class="lg:col-span-1">
+            <div class="lg:col-span-1">
                 <div class="sticky top-8">
                     @include('bookings.partials.calendar-widget', ['space' => $space])
                 </div>
-            </div> --}}
+            </div>
         </section>
     </main>
     {{-- @include(bookings.modals.payment-modal) --}}

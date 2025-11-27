@@ -20,7 +20,7 @@
         <div class="flex">
             {{-- -This section will be used for the Spaces Grid --}}
             {{-- -We will use the predefined space card partial for each space --}}
-            <div class="flex-[3] grid grid-cols-[repeat(auto-fit,minmax(450px,850px))] gap-4 justify-items">
+            <div class="flex-[3] grid grid-cols-[repeat(auto-fit,minmax(450px,850px))] gap-4 items-start">
                 @forelse ($spaces as $space)
                     @include('spaces.partials.space-card-horizontal', ['space' => $space])
                 @empty
@@ -30,7 +30,7 @@
                 @endforelse
             </div>
             {{-- Mapa com todos os espaços --}}
-            <div class="flex-[2] sticky top-4 self-start h-[950px] bg-emerald-900 rounded-lg shadow-xl p-2 ">
+            <div class="flex-[2] sticky top-4 self-start h-[900px] bg-emerald-900 rounded-lg shadow-xl p-2 ">
                 @php
                     $spaces = \App\Models\Space::all();
                     $markers = $spaces->map(function ($space) {

@@ -177,11 +177,13 @@ making a booking --}}
                         ])
         </div>
     </div>
+                        @auth
                             @if(auth()->user()->customer)
                                         <div class="flex-[1]">
                                             @include('bookings.partials.calendar-widget', ['space' => $space])
                                 </div>
                             @endif
+                        @endauth
                         </div>
                     </section>
                 </main>

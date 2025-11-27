@@ -1,6 +1,6 @@
 {{-- filepath: resources/views/spaces/partials/space-card.blade.php --}}
 <div
-    class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full w-70 hover:shadow-lg transition-shadow duration-300">
+    class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full hover:shadow-lg transition-shadow duration-300">
     <!-- Image -->
     <div class="h-48 overflow-hidden bg-gray-200 shrink-0">
         {{-- Will uncomment this once we have the logic to upload an image --}}

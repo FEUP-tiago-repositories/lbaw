@@ -3,7 +3,7 @@
 @section('title', 'Sport Spaces - Sports Hub')
 @section('content')
     {{-- -Main section --}}
-    <div class="container mx-auto px-8 py-8">
+    <div class="container mx-auto p-8">
         {{-- Flex for Main tile and Add Space button! --}}
         <div class="flex justify-between">
             <h1 class="text-3xl font-bold mb-8">Take a look at our Sports Spaces!</h1>

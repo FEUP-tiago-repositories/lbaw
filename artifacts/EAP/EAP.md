@@ -103,12 +103,12 @@ openapi: 3.0.0
 
 ## Credentials
 
-###Customer
+### Customer
 
 Email: nibh.quisque.nonummy@hotmail.edu
 Password: NXV25EBT2MC
 
-###Business Owner
+### Business Owner
 Email: dolor.nulla@protonmail.couk
 Password: PDF81OMZ4CZ
 

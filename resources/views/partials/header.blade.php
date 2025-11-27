@@ -20,8 +20,11 @@
 
     <div>
         @auth {{-- -If user is authenticated --}}
+            <a href="{{ route('users.show', Auth::id()) }}" class="hover:text-emerald-400">
+                My Profile
+            </a>
             <a href="{{ route('logout') }}"
-                class="hover:text-emerald-400"
+                class="ml-6 hover:text-emerald-400"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 Logout
             </a>

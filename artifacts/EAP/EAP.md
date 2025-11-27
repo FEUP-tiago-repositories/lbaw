@@ -101,6 +101,18 @@ openapi: 3.0.0
 
 ---
 
+## Credentials
+
+###Customer
+
+Email: nibh.quisque.nonummy@hotmail.edu
+Password: NXV25EBT2MC
+
+###Business Owner
+Email: dolor.nulla@protonmail.couk
+Password: PDF81OMZ4CZ
+
+
 ## Revision history
 
 Changes made to the first submission:

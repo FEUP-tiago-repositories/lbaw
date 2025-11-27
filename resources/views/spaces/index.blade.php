@@ -6,7 +6,7 @@
     <div class="container mx-auto px-8 py-8">
         {{-- Flex for Main tile and Add Space button! --}}
         <div class="flex justify-between">
-            <h1 class="text-3xl font-bold mb-8">Take a look at our Spaces!</h1>
+            <h1 class="text-3xl font-bold mb-8">Take a look at our Sports Spaces!</h1>
             @auth
                 @if(auth()->user()->businessOwner)
                     {{-- Add space button --}}
@@ -30,33 +30,14 @@
                 @endforelse
             </div>
             {{-- Mapa com todos os espaços --}}
-            <div class="flex-[2] sticky top-4 self-start h-[900px] bg-emerald-900 rounded-lg shadow-xl p-2 ">
-                @php
-                    $spaces = \App\Models\Space::all();
-                    $markers = $spaces->map(function ($space) {
-                        return [
-                            'lat' => $space->latitude ?? 41.1579,
-                            'lng' => $space->longitude ?? -8.6291,
-                            'popup' => '<div class="text-center">
-                                                        <div class="font-bold text-base mb-2" style="color: #1f2937;">
-                                                            ' . e($space->title) . '
-                                                        </div>
-                                                        <a href="' . route('spaces.show', $space->id) . '"
-                                                           class="text-emerald-800 hover:underline">
-                                                            View Details
-                                                        </a>
-                                                    </div>'
-                        ];
-                    })->toArray();
-                @endphp
-
+            <div class="flex-[2] sticky top-4 self-start h-[900px] bg-emerald-900 rounded-lg shadow-xl p-2">
                 @include('partials.map', [
                     'mapId' => 'homeMap',
-                    'markers' => $markers,
-                    'zoom' => 15,
-                    'height' => 'h-full'
+                    'spaces' => $spaces,
+                    'zoom' => 13,
+                    'fitBoundsPadding' => 10,
+                    'popupImageHeight' => 'h-32'
                 ])
             </div>
         </div>
-    </div>
 @endsection

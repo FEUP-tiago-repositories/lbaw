@@ -12,34 +12,18 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Explore Spaces Near You
+                Explore Sports Spaces Near You
             </h2>
-
-            @php
-                $spaces = \App\Models\Space::all();
-                $markers = $spaces->map(function ($space) {
-                    return [
-                        'lat' => $space->latitude ?? 41.1579,
-                        'lng' => $space->longitude ?? -8.6291,
-                        'popup' => '<div class="text-center">
-                                                    <div class="font-bold text-base mb-2" style="color: #1f2937;">
-                                                        ' . e($space->title) . '
-                                                    </div>
-                                                    <a href="' . route('spaces.show', $space->id) . '"
-                                                       class="text-emerald-600 hover:underline">
-                                                        View Details
-                                                    </a>
-                                                </div>'
-                    ];
-                })->toArray();
-            @endphp
-
-            @include('partials.map', [
-                'mapId' => 'homeMap',
-                'markers' => $markers,
-                'zoom' => 12,
-                'height' => 'h-[300px]'
-            ])
+            <div class="h-[300px]">
+                @include('partials.map', [
+                    'mapId' => 'homeMap',
+                    'spaces' => $spaces,
+                    'zoom' => 12,
+                    'showPopupImage' => true,
+                    'popupImageHeight' => 'h-24',
+                    'fitBoundsPadding' => 20
+                ])
+            </div>
 
         </div>
 

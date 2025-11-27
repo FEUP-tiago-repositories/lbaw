@@ -2333,7 +2333,7 @@ VALUES (
     ),
     (
         3,
-        '/images/uploads/spaces/3/iron_gym_cover.jpg',
+        '/images/uploads/spaces/3/iron_gym.webp',
         TRUE
     ),
     (
@@ -2343,7 +2343,7 @@ VALUES (
     ),
     (
         4,
-        '/images/uploads/spaces/4/gaia_biking_cover.jpg',
+        '/images/uploads/spaces/4/biking_park.jpg',
         TRUE
     ),
     (

@@ -3,7 +3,7 @@
         <a href="{{ route('home') }}"
             class="hover:text-emerald-400">Home</a>
         <a href="{{ route('spaces.index') }}"
-            class="ml-6 hover:text-emerald-400">Spaces</a>
+            class="ml-6 hover:text-emerald-400">Sports Spaces</a>
     </div>
 
     {{-- Input de search --}}

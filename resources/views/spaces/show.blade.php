@@ -7,13 +7,13 @@ making a booking --}}
         {{-- -Info Section --}}
         <section class="mx-auto">
             <div class="flex items-center justify-start gap-2 mb-4 text-lg">
-                <a href="{{ route('home') }}">
+                <a href="{{ route('home') }}" class="text-emerald-600 hover:text-emerald-400">
                     <img alt="Home Page" src="/images/home-icon.svg" height="18" width="18">
                 </a>
                 <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
-                <a href="{{route('spaces.index')}}">
+                <a href="{{route('spaces.index')}}" class="text-emerald-600 hover:text-emerald-400">
                     Sports Spaces
                 </a>
                 <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -95,7 +95,7 @@ Route::middleware(['auth'])->group(function () {
 // M04: BOOKINGS (R405)
 // ============================================
 Route::middleware(['auth'])->group(function () {
-    Route::get('/user/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/users/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
     Route::get('/bookings/payment-success', fn () => view('bookings.modals.payment-success'))->name('bookings.payment.success');
 });

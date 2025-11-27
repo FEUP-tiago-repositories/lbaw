@@ -3,10 +3,10 @@ making a booking --}}
 @extends('layouts.app')
 @section('title', $space->title . ' - Sports Hub')
 @section('content')
-    <main class="container mx-auto p-8 rounded-2xl">
+    <main class="container mx-auto p-8">
         {{-- -Info Section --}}
-        <section class="mx-auto">
-            <div class="flex items-center justify-start gap-2 mb-4 text-lg">
+        <section>
+            <div class="mx-auto flex items-center justify-start gap-2 mb-4 text-lg">
                 <a href="{{ route('home') }}" class="text-emerald-600 hover:text-emerald-400">
                     <img alt="Home Page" src="/images/home-icon.svg" height="18" width="18">
                 </a>
@@ -30,22 +30,30 @@ making a booking --}}
                 @auth
                     @if(auth()->user()->businessOwner && auth()->user()->businessOwner->id === $space->owner_id)
                         {{-- -Delete and Edit buttons --}}
-                        <div class="flex gap-2.5">
-                            {{-- -Delete Button --}}
-                            <form action="{{ route('spaces.destroy', $space->id) }}" method="POST"
-                                onsubmit="return confirm('Are you sure you want to delete this space?');">
+                        <div class="flex items-center gap-2.5">
+                            {{-- Delete Button --}}
+                            <form action="{{ route('spaces.destroy', $space->id) }}" method="POST" class="inline-block"
+                                  onsubmit="return confirm('Are you sure you want to delete this space?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="px-4 py-1 bg-red-600 rounded-md hover:bg-red-700 transition cursor-pointer">
-                                    <p class="text-white">Delete</p>
+                                        class="inline-flex items-center px-6 py-2.5 bg-red-600 text-white text-base font-medium rounded-lg hover:bg-red-700 transition-colors shadow-sm hover:shadow-md">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                    Delete
                                 </button>
                             </form>
-                            {{-- -Edit Button --}}
-                            <a href="{{ route('spaces.edit', $space->id) }}"
-                                class="px-4 py-1 bg-emerald-800 rounded-md hover:bg-emerald-200 transition flex items-center">
-                                <p class="text-white hover:text-black">Edit</p>
-                            </a>
+
+                            {{-- Edit Button --}}
+                            <button type="button"
+                                    onclick="window.location.href='{{ route('spaces.edit', $space->id) }}'"
+                                    class="inline-flex items-center px-6 py-2.5 bg-emerald-800 text-white text-base font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-sm hover:shadow-md">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                                Edit
+                            </button>
                         </div>
                     @endif
                 @endauth

@@ -72,7 +72,7 @@ Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index'); 
 Route::get('/spaces/search', [SearchController::class, 'search'])->name('spaces.search');
 
 // Authenticated routes - /spaces/create MUST come BEFORE /spaces/{space}
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','business.owner'])->group(function () {
     Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
     Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');          // R302 (action)
 });

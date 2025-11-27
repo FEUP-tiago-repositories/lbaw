@@ -10,27 +10,38 @@
         <form action="{{ route('admin.users.store') }}" method="POST">
             @csrf
 
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-700 p-2 mb-4 rounded">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="user_name">Username</label>
-                <input type="text" name="user_name" id="user_name" 
+                <input type="text" name="user_name"
                        class="w-full border p-2 rounded" required>
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="email">Email</label>
-                <input type="email" name="email" id="email" 
+                <input type="email" name="email"
                        class="w-full border p-2 rounded" required>
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="phone_no">Phone</label>
-                <input type="text" name="phone_no" id="phone_no" 
+                <input type="text" name="phone_no"
                        class="w-full border p-2 rounded">
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="birth_date">Birth Date</label>
-                <input type="date" name="birth_date" id="birth_date" 
+                <input type="date" name="birth_date"
                        class="w-full border p-2 rounded">
             </div>
 
@@ -41,17 +52,17 @@
                 <div class="flex items-center gap-6">
 
                     <label class="flex items-center gap-2">
-                        <input type="radio" name="role" value="customer" required {{ old('role') == 'customer' ? 'checked' : '' }}>
+                        <input type="radio" name="account_type" value="customer" required {{ old('account_type') == 'customer' ? 'checked' : '' }}>
                         <span>Customer</span>
                     </label>
 
                     <label class="flex items-center gap-2">
-                        <input type="radio" name="role" value="business_owner" required {{ old('role') == 'business_owner' ? 'checked' : '' }}>
+                        <input type="radio" name="account_type" value="business_owner" required {{ old('account_type') == 'business_owner' ? 'checked' : '' }}>
                         <span>Business Owner</span>
                     </label>
 
                 </div>
-                @error('role')
+                @error('account_type')
                     <span class="text-red-500 text-sm mb-1 block">{{ $message }}</span>
                 @enderror
             </div>
@@ -64,7 +75,7 @@
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="password">Password</label>
-                <input type="password" name="password" id="password" 
+                <input type="password" name="password"
                        class="w-full border p-2 rounded" required>
             </div>
 

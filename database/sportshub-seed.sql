@@ -2584,10 +2584,10 @@ BEGIN
    UPDATE "user"
    SET is_deleted = TRUE,
        user_name = 'Deleted user',
-       email = 'N/A',
-       phone_no = 'N/A',
+       email = 'deleted_user_' || OLD.id || '@example.com',
+       phone_no = 'deleted_user_' || OLD.id,
        password = 'N/A',
-       birth_date = 'N/A',
+       birth_date = '0001-01-01',
        profile_pic_url = 'N/A'
    WHERE id = OLD.id;
 

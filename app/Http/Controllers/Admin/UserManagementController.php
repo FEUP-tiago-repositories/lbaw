@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Customer;
+use App\Models\BusinessOwner;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserManagementController
@@ -43,7 +46,14 @@ class UserManagementController
             'account_type' => 'required|in:customer,business_owner',
         ]);
 
-        $data = [
+        $profileImagePath = null;
+
+        if ($request->hasFile('profile_pic_url')) {
+            $profileImagePath = $request->file('profile_pic_url')
+                ->store('uploads/profile_pics', 'public');
+        }
+
+         $user = User::create([
             'user_name' => $request->user_name,
             'email' => $request->email,
             'phone_no' => $request->phone_no,
@@ -52,9 +62,13 @@ class UserManagementController
             'profile_pic_url' => $profileImagePath ? '/storage/' . $profileImagePath : null,
             'is_banned' => false,
             'is_deleted' => false,
-        ];
+        ]);
 
-        User::create($data);
+        if ($request->account_type === 'customer') {
+            Customer::create(['user_id' => $user->id]);
+        } else {
+            BusinessOwner::create(['user_id' => $user->id]);
+        }
 
         return redirect()->route('admin.users.index');
     }

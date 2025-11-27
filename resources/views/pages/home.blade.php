@@ -26,7 +26,7 @@
                                                         ' . e($space->title) . '
                                                     </div>
                                                     <a href="' . route('spaces.show', $space->id) . '"
-                                                       class="text-blue-600 hover:underline">
+                                                       class="text-emerald-600 hover:underline">
                                                         View Details
                                                     </a>
                                                 </div>'
@@ -45,9 +45,9 @@
 
         <h2 class = "mb-4 mt-4 text-3xl font-semibold">Best Reviewed:</h2>
 
-        <div class="flex overflow-x-auto gap-2 pb-4">
+        <div class="flex overflow-x-auto gap-6 pb-4">
             @foreach ($spaces as $space)
-                <div class="shrink-0 w-80">
+                <div class="shrink-0 max-w-80">
                 @include('spaces.partials.space-card', ['space' => $space])
                 </div>
             @endforeach

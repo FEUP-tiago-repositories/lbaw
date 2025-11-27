@@ -40,7 +40,7 @@
             // Ajustar zoom para mostrar todos os markers
             if (bounds{{ Str::studly($mapId) }}.length > 1) {
                 map{{ Str::studly($mapId) }}.fitBounds(bounds{{ Str::studly($mapId) }}, {
-                    padding: [30, 30]
+                    padding: [15, 15]
                 });
             }
             @else

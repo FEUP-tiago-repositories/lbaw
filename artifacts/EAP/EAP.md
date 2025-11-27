@@ -101,15 +101,18 @@ openapi: 3.0.0
 
 ---
 
-## Credentials
+### Credentials
 
-### Customer
+#### Customer
 
 Email: nibh.quisque.nonummy@hotmail.edu
+
 Password: NXV25EBT2MC
 
-### Business Owner
+#### Business Owner
+
 Email: dolor.nulla@protonmail.couk
+
 Password: PDF81OMZ4CZ
 
 
@@ -122,8 +125,9 @@ Changes made to the first submission:
 
 ---
 
-GROUPYYgg, DD/MM/20YY
+### GROUP25122, 27/11/2025
 
-* Group member 1 name, email (Editor)
-* Group member 2 name, email
-* ...
+- Group member 1 Gustavo Lourenço up202306578@up.pt
+- Group member 2 Tiago Oliveira, up202007448@up.pt
+- Group member 3 Tiago Yin, up202306438@up.pt
+- Group member 4 Francisco Gomes, up20306498@up.pt

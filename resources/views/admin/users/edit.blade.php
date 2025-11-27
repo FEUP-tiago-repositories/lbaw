@@ -11,6 +11,16 @@
             @csrf
             @method('PATCH')
 
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-700 p-2 mb-4 rounded">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="user_name">Username</label>
                 <input type="text" name="user_name" value="{{ $user->user_name }}"
@@ -31,7 +41,7 @@
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="birth_date">Birth Date</label>
-                <input type="date" name="birth_date" value="{{ $user->birth_date?->format('Y-m-d') }}" 
+                <input type="date" name="birth_date" value="{{ $user->birth_date}}" 
                     class="w-full border p-2 rounded">
             </div>
 

@@ -8,7 +8,7 @@
             <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Create Account</h2>
 
             @if ($errors->any())
-                <div class="bg-red-100 text-red-700 px-4 py-3 rounded-lg mb-5">
+                <div class="bg-red-100 text-red-700 px-4 py-3 rounded-lg mb-5 text-sm">
                     <ul class="list-disc pl-5 text-sm">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -113,13 +113,13 @@
                 </div>
 
                 <button
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-xl shadow-md mt-6 transition">
+                    class="w-full bg-emerald-800 hover:bg-emerald-200 text-white hover:text-black font-semibold p-3 rounded-xl shadow-md mt-6 transition">
                     Create Account
                 </button>
 
                 <p class="text-center mt-4 text-gray-600">
                     Already have an account?
-                    <a href="{{ route('login') }}" class="text-blue-600 hover:underline font-medium">Sign in</a>
+                    <a href="{{ route('login') }}" class="text-emerald-800 hover:underline font-medium">Sign in</a>
                 </p>
 
             </form>

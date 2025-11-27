@@ -8,7 +8,7 @@
         <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Login</h2>
 
         @if (session('error'))
-            <div class="bg-red-100 text-red-700 px-4 py-2 rounded-lg mb-4 text-center">
+            <div class="bg-red-100 text-red-700 px-4 py-2 rounded-lg mb-4 text-center text-sm">
                 {{ session('error') }}
             </div>
         @endif
@@ -31,13 +31,13 @@
             </div>
 
             <button
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-xl shadow-md transition">
+                class="w-full bg-emerald-800 hover:bg-emerald-200 hover:text-black text-white font-semibold p-3 rounded-xl shadow-md transition">
                 Sign In
             </button>
 
             <p class="text-center mt-4 text-gray-600">
                 Don't have an account?
-                <a href="{{ route('register') }}" class="text-blue-600 hover:underline font-medium">Create one</a>
+                <a href="{{ route('register') }}" class="text-emerald-800 hover:underline font-medium">Create one</a>
             </p>
         </form>
     </div>

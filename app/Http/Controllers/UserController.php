@@ -72,7 +72,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::with(['businessOwner', 'customer'])->findOrFail($id);
-        
+        $user = User::with('spaces')->find($id);
         return view('users.profile', compact('user'));
     }
 

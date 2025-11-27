@@ -118,7 +118,7 @@
 @if($user->businessOwner && $user->spaces->count() > 0)
     <div class="max-w-6xl mx-auto mt-12 mb-12">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Your Sports Spaces</h2>
-        <div class="flex overflow-x-auto gap-6 pb-4">
+        <div class="flex overflow-x-auto gap-10 pb-4">
             @foreach ($user->spaces as $space)
                 <div class="shrink-0 w-64">
                     @include('spaces.partials.space-card', ['space' => $space])

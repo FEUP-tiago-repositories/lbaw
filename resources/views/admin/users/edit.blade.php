@@ -13,31 +13,37 @@
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="user_name">Username</label>
-                <input type="text" name="user_name" id="user_name" value="{{ $user->user_name }}"
+                <input type="text" name="user_name" value="{{ $user->user_name }}"
                        class="w-full border p-2 rounded" required>
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="email">Email</label>
-                <input type="email" name="email" id="email" value="{{ $user->email }}"
+                <input type="email" name="email" value="{{ $user->email }}"
                        class="w-full border p-2 rounded" required>
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="phone_no">Phone</label>
-                <input type="text" name="phone_no" id="phone_no" value="{{ $user->phone_no }}"
+                <input type="text" name="phone_no" value="{{ $user->phone_no }}"
                        class="w-full border p-2 rounded">
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="birth_date">Birth Date</label>
-                <input type="date" name="birth_date" id="birth_date" value="{{ $user->birth_date }}"
-                       class="w-full border p-2 rounded">
+                <input type="date" name="birth_date" value="{{ $user->birth_date?->format('Y-m-d') }}" 
+                    class="w-full border p-2 rounded">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold mb-1">Profile Picture</label>
+                <input type="file" name="profile_pic_url"
+                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="is_banned">Banned</label>
-                <select name="is_banned" id="is_banned" class="w-full border p-2 rounded">
+                <select name="is_banned" class="w-full border p-2 rounded">
                     <option value="0" {{ !$user->is_banned ? 'selected' : '' }}>No</option>
                     <option value="1" {{ $user->is_banned ? 'selected' : '' }}>Yes</option>
                 </select>

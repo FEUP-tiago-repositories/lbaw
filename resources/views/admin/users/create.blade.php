@@ -34,18 +34,38 @@
                        class="w-full border p-2 rounded">
             </div>
 
+
+            <div class="mb-4">
+                <label class="block font-semibold mb-1">Account Type</label>
+
+                <div class="flex items-center gap-6">
+
+                    <label class="flex items-center gap-2">
+                        <input type="radio" name="role" value="customer" required {{ old('role') == 'customer' ? 'checked' : '' }}>
+                        <span>Customer</span>
+                    </label>
+
+                    <label class="flex items-center gap-2">
+                        <input type="radio" name="role" value="business_owner" required {{ old('role') == 'business_owner' ? 'checked' : '' }}>
+                        <span>Business Owner</span>
+                    </label>
+
+                </div>
+                @error('role')
+                    <span class="text-red-500 text-sm mb-1 block">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold mb-1">Profile Picture (optional)</label>
+                <input type="file" name="profile_pic_url"
+                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="password">Password</label>
                 <input type="password" name="password" id="password" 
                        class="w-full border p-2 rounded" required>
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-semibold mb-1" for="is_banned">Banned</label>
-                <select name="is_banned" id="is_banned" class="w-full border p-2 rounded">
-                    <option value="0" selected>No</option>
-                    <option value="1">Yes</option>
-                </select>
             </div>
 
             <div class="flex items-center gap-4">

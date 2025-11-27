@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+
 
 class UserManagementController
 {   
@@ -12,8 +14,8 @@ class UserManagementController
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $users = User::orderBy('id', 'asc')->get();
+    {   
+        $users = User::with(['businessOwner', 'customer'])->orderBy('id', 'asc')->get();
 
         return view('admin.users.index', compact('users'));
     }
@@ -35,19 +37,21 @@ class UserManagementController
             'user_name' => 'required|string',
             'email' => 'required|email|unique:user,email',
             'phone_no' => 'required|string|unique:user,phone_no',
-            'password' => 'required|string',
+            'password' => 'required|string|min:6',
             'birth_date' => 'required|date|before:-18 years',
-            'profile_pic_url' => 'nullable|url',
+            'profile_pic_url' => 'nullable|image|max:2048',
+            'account_type' => 'required|in:customer,business_owner',
         ]);
 
         $data = [
             'user_name' => $request->user_name,
             'email' => $request->email,
             'phone_no' => $request->phone_no,
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
             'birth_date' => $request->birth_date,
-            'profile_pic_url' => $request->profile_pic_url,
+            'profile_pic_url' => $profileImagePath ? '/storage/' . $profileImagePath : null,
             'is_banned' => false,
+            'is_deleted' => false,
         ];
 
         User::create($data);
@@ -86,9 +90,8 @@ class UserManagementController
             'user_name' => 'required|string',
             'email' => 'required|email|unique:user,email,' . $id,
             'phone_no' => 'required|string|unique:user,phone_no,' . $id,
-            'password' => 'nullable|string|confirmed',
             'birth_date' => 'required|date|before:-18 years',
-            'profile_pic_url' => 'nullable|url',
+            'profile_pic_url' => 'nullable|image|max:2048',
             'is_banned' => 'required|boolean',
         ]);
 
@@ -102,6 +105,22 @@ class UserManagementController
         $user->profile_pic_url = $request->profile_pic_url;
         $user->is_banned = $request->is_banned;
 
+        if ($request->hasFile('profile_pic_url')) {
+            $path = $request->file('profile_pic_url')->store('profiles', 'public');
+            $user->profile_pic_url = '/storage/' . $path;
+        }
+
+        if ($request->account_type === 'customer') {
+            DB::table('customer')->updateOrInsert(
+                ['user_id' => $user->id],
+                []
+            );
+        } else {
+            DB::table('business_owner')->updateOrInsert(
+                ['user_id' => $user->id],
+                []
+            );
+        }
         $user->save();
 
         return redirect()->route('admin.users.index');

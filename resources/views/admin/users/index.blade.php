@@ -20,6 +20,7 @@
                     <th class="px-4 py-2 border">Birth</th>
                     <th class="px-4 py-2 border">Email</th>
                     <th class="px-4 py-2 border">Phone</th>
+                    <th class="px-4 py-2 border">Accoount Type</th>
                     <th class="px-4 py-2 border">Banned</th>
                 </tr>
             </thead>
@@ -32,6 +33,18 @@
                         <td class="px-4 py-2 border">{{ $user->email }}</td>
                         <td class="px-4 py-2 border">{{ $user->phone_no }}</td>
                         <td class="px-4 py-2 border">
+                            @if(optional($user->customer)->id)
+                                <p class="font-semibold">Customer</sppan>
+
+                            @elseif(optional($user->businessOwner)->id)
+                                <p class="font-semibold">Business Owner</p>
+
+                            @else
+                                <p class="font-semibold">Not defined</p>
+                            @endif
+                        </td>
+
+                        <td class="px-4 py-2 border">
                             @if($user->is_banned)
                                 <p class="font-semibold"> Yes </p>
                             @else
@@ -39,8 +52,14 @@
                             @endif
                         </td>
                         <td class="px-4 py-2 border">
-                            <a href="{{ route('admin.users.edit', $user->id) }}" 
-                            class="text-blue-600 hover:underline"> Edit </a>
+                            <a href="{{ route('admin.users.show', $user->id) }}" 
+                            class="text-blue-600 hover:underline"> Show </a>
+                        </td>
+                        <td class="px-4 py-2 border">
+                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this user?');"> 
+                                @csrf @method('DELETE') 
+                                <button class="text-red-600 hover:underline">Delete</button> 
+                            </form>
                         </td>
                     </tr>
                 @endforeach

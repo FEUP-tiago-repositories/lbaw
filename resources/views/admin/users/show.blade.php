@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', 'User Profile')
+
 @section('content')
     <div class="max-w-3xl mx-auto mt-12 mb-12 bg-white shadow-lg rounded-2xl p-10">
 
@@ -13,8 +15,7 @@
                 <p class="text-gray-600 text-lg">{{ $user->email }}</p>
                 <p class="text-gray-600 text-lg">Telefone: {{ $user->phone_no }}</p>
             </div>
-            
-            <a href="{{ route('admin.users.edit', $user->id) }}" class="absolute top-0 right-0 bg-blue-500 text-white px-3 py-1 rounded-md text-2xl hover:bg-blue-600"> Edit </a>
+            <a href="{{ route('admin.users.edit', $user->id) }}" class="absolute top-0 right-0 bg-emerald-800 font-bold text-white px-5 py-2 rounded-md text-2xl hover:bg-emerald-400"> Edit </a>
         </div>
 
         <hr class="my-8">
@@ -31,9 +32,9 @@
             <p class="text-lg">
                 <span class="font-medium text-gray-700">Role:</span>
                 @if($user->customer)
-                    <span class="text-green-700 font-bold">Customer</span>
+                    <span class="font-bold">Customer</span>
                 @elseif($user->businessOwner)
-                    <span class="text-blue-700 font-bold">Business Owner</span>
+                    <span class="font-bold">Business Owner</span>
                 @else
                     <span class="text-gray-600 font-bold">Not defined</span>
                 @endif
@@ -42,18 +43,18 @@
             <p class="text-lg">
                 <span class="font-medium text-gray-700">Banned Account:</span>
                 @if($user->is_banned)
-                    <span class="text-red-600 font-bold">Yes</span>
+                    <span class="font-bold">Yes</span>
                 @else
-                    <span class="text-green-700 font-bold">No</span>
+                    <span class="font-bold">No</span>
                 @endif
             </p>
 
             <p class="text-lg">
                 <span class="font-medium text-gray-700">Deleted Account:</span>
                 @if($user->is_deleted)
-                    <span class="text-red-600 font-bold">Yes</span>
+                    <span class="font-bold">Yes</span>
                 @else
-                    <span class="text-green-700 font-bold">No</span>
+                    <span class="font-bold">No</span>
                 @endif
             </p>
         </div>

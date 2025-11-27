@@ -1,12 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Create User - Sport Hub')
+@section('title', 'Create User')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-6">Create New User</h1>
+<div class="flex justify-center items-center min-h-screen py-10">
 
-    <div class="bg-white p-6 max-w-lg rounded shadow-md">
+    <div class="bg-white p-8 w-full max-w-lg rounded shadow-xl rounded-2xl">
         <form action="{{ route('admin.users.store') }}" method="POST">
             @csrf
 
@@ -19,30 +18,31 @@
                     </ul>
                 </div>
             @endif
-
+            
+            <h1 class="text-2xl font-bold mb-6">Create New User</h1>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="user_name">Username</label>
                 <input type="text" name="user_name"
-                       class="w-full border p-2 rounded" required>
+                       class="w-full border-gray-300 p-3 rounded-xl shadow-sm" required>
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="email">Email</label>
                 <input type="email" name="email"
-                       class="w-full border p-2 rounded" required>
+                       class="w-full border-gray-300 p-3 rounded-xl shadow-sm" required>
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="phone_no">Phone</label>
                 <input type="text" name="phone_no"
-                       class="w-full border p-2 rounded">
+                       class="w-full border-gray-300 p-3 rounded-xl shadow-sm">
             </div>
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="birth_date">Birth Date</label>
                 <input type="date" name="birth_date"
-                       class="w-full border p-2 rounded">
+                       class="w-full border-gray-300 p-3 rounded-xl shadow-sm">
             </div>
 
 
@@ -76,14 +76,14 @@
             <div class="mb-4">
                 <label class="block font-semibold mb-1" for="password">Password</label>
                 <input type="password" name="password"
-                       class="w-full border p-2 rounded" required>
+                       class="w-full border-gray-300 p-3 rounded-xl shadow-sm" required>
             </div>
 
             <div class="flex items-center gap-4">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                <button type="submit" class="bg-emerald-800 font-bold text-white px-5 py-2 rounded-md hover:bg-emerald-400">
                     Create User
                 </button>
-                <a href="{{ route('admin.users.index') }}" class="text-gray-600 hover:underline">
+                <a href="{{ route('admin.users.index') }}" class="bg-red-700 font-bold text-white px-5 py-2 rounded-md hover:bg-red-500">
                     Cancel
                 </a>
             </div>

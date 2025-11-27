@@ -9,26 +9,39 @@
         <div>
             <label class="block text-gray-700 font-medium mb-1">Username</label>
             <input type="text" name="user_name" value="{{ old('user_name', $user->user_name) }}"
-                   class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                required minlength="3" maxlength="20"
+                pattern="[A-Za-z0-9_]+"
+                title="Username can only contain letters, numbers, and underscores."
+                class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
+
         {{-- Email --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Email</label>
             <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                   class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                required maxlength="255"
+                class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
+
         {{-- Phone --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Phone</label>
             <input type="text" name="phone_no" value="{{ old('phone_no', $user->phone_no) }}"
-                   class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                pattern="[0-9]{9}" maxlength="9"
+                title="Phone number must be exactly 9 digits."
+                class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
+
         {{-- Birth Date --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Birth Date</label>
             <input type="date" name="birth_date" value="{{ old('birth_date', $user->birth_date) }}"
-                   class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                max="{{ date('Y-m-d', strtotime('-18 years')) }}"
+                title="You must be at least 18 years old."
+                required
+                class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
+
         {{-- Profile Picture --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Profile Picture</label>

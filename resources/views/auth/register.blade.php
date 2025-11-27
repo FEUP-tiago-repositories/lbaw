@@ -22,36 +22,51 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
+                    {{-- Username --}}
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Username</label>
                         <input type="text" name="user_name"
-                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required>
+                            value="{{ old('user_name') }}"
+                            required minlength="3" maxlength="20"
+                            pattern="[A-Za-z0-9_]+"
+                            title="Username can only contain letters, numbers, and underscores."
+                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
+                    {{-- Email --}}
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Email</label>
                         <input type="email" name="email"
-                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required>
+                            value="{{ old('email') }}"
+                            required maxlength="255"
+                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
+                    {{-- Phone --}}
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Phone Number</label>
                         <input type="text" name="phone_no"
-                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required>
+                            value="{{ old('phone_no') }}"
+                            required pattern="[0-9]{9}" maxlength="9"
+                            title="Phone number must be exactly 9 digits."
+                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
+                    {{-- Birth Date --}}
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Birth Date</label>
                         <input type="date" name="birth_date"
-                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required>
+                            value="{{ old('birth_date') }}"
+                            required
+                            max="{{ \Carbon\Carbon::now()->subYears(18)->format('Y-m-d') }}"
+                            title="You must be at least 18 years old."
+                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
+
 
                 </div>
 
+                {{-- Account Type --}}
                 <div class="mt-4">
                     <label class="block font-medium text-gray-700 mb-2">Account Type</label>
 
@@ -80,18 +95,21 @@
                         class="w-full border-gray-300 rounded-xl p-3 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
+                {{-- Password --}}
                 <div class="mt-4">
                     <label class="block font-medium text-gray-700 mb-1">Password</label>
                     <input type="password" name="password"
+                        required minlength="6"
                         class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                         required>
                 </div>
 
+                {{-- Confirm Password --}}
                 <div class="mt-4">
                     <label class="block font-medium text-gray-700 mb-1">Confirm Password</label>
                     <input type="password" name="password_confirmation"
+                        required minlength="6"
                         class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        required>
                 </div>
 
                 <button

@@ -30,7 +30,6 @@ class User extends Authenticable
     protected $casts = [
         'is_deleted' => 'boolean',
         'is_banned' => 'boolean',
-        'birth_date' => 'date',
     ];
 
     // Relation Ships

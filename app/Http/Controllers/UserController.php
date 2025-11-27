@@ -72,6 +72,11 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::with(['businessOwner', 'customer'])->findOrFail($id);
+
+        if (auth()->id() !== $user->id) {
+            abort(403, 'Unauthorized access.');
+        }
+        
         $user = User::with('spaces')->find($id);
         return view('users.profile', compact('user'));
     }

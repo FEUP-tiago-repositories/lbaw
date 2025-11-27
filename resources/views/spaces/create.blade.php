@@ -19,24 +19,6 @@
         {{-- The rest of the page will be a form section --}}
         <form action="{{ route('spaces.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
-            {{-- Business Owner Selection, temporary because I still dont have the logic for BO authentication
-            <div class="mb-6">
-                <label for="owner_id" class="block text-lg font-medium mb-2">Business Owner *</label>
-                <select name="owner_id" id="owner_id"
-                    class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
-                    required>
-                    <option value="">Select a business owner</option>
-                    @foreach($businessOwners as $owner)
-                        <option value="{{ $owner->id }}" {{ old('owner_id') == $owner->id ? 'selected' : '' }}>
-                            {{ $owner->user->user_name }} ({{ $owner->user->email }})
-                        </option>
-                    @endforeach
-                </select>
-                <p class="text-sm mt-1 text-red-400">This will be automatically set when authentication is
-                    implemented</p>
-            </div> --}}
-
             {{-- Title --}}
             <div class="mb-6">
                 <label for="title" class="block text-lg font-medium mb-2">Title *</label>

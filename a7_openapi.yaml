@@ -146,7 +146,7 @@ paths:
               properties:
                 user_name:
                   type: string
-                phone_number:
+                phone_no:
                   type: string
                 birth_date:
                   type: string
@@ -156,7 +156,7 @@ paths:
                   type: string
               required:
                 - user_name
-                - phone_number
+                - phone_no
                 - birth_date
                 - email
                 - password
@@ -224,33 +224,22 @@ paths:
               required:
                 - email
       responses:
-        "200":
-          description: "Ok. Profile updated successfully."
-          content:
-            application/json:
+        "302":
+          description: "Redirects to the user profile page after updating."
+          headers:
+            location:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  user_name:
-                    type: string
-                  phone_number:
-                    type: string
-                  birth_date:
-                    type: string
-                    format: date
-                  email:
-                    type: string
-                    format: email
+                type: string
+              examples:
+                302Success:
+                  description: "Successful account creation. Redirect to profile page."
+                  value: "/users/{id}"
         "400":
           description: "Invalid data submitted."
         "401":
           description: "User not authenticated."
         "403":
           description: "User trying to edit a profile that is not theirs."
-
-
   /logout:
     post:
       operationId: R207
@@ -274,7 +263,7 @@ paths:
   # M03:  Sports Space Library
   # ==========================================
 
-  /add-space:
+  /spaces/create:
     get:
       operationId: R301
       summary: "R301: Add Space Form"
@@ -285,51 +274,7 @@ paths:
         "200":
           description: "Ok. Show Add Space UI."
 
-    post:
-      operationId: R302
-      summary: "R302: Add Space Action"
-      description: "Process the creation of a new sports space. Access: BOW"
-      tags:
-        - "M03: Sports Space Library"
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                sport_type:
-                  type: string
-                phone_number:
-                  type: string
-                description:
-                  type: string
-                email:
-                  type: string
-                address:
-                  type: string
-              required:
-                - title
-                - sport_type
-                - phone_number
-                - email
-                - address
-      responses:
-        "302":
-          description: "Redirect after processing the new space information."
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: "Space successfully added. Redirect to space page."
-                302Error:
-                  description: "Failed to create space. Redirect to Add Space form."
-                  value: "/add-space"
-  /space:
+  /spaces:
     get:
       operationId: R303
       summary: "R303: Search and filter sports spaces"
@@ -357,26 +302,60 @@ paths:
 
       responses:
         "200":
-          description: "List of spaces matching the search and filter criteria."
+          description: "HTML page listing sports spaces."
           content:
-            application/json:
+            text/html:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    space_id:
-                      type: string
-                    title:
-                      type: string
-                    sport_type:
-                      type: string
-                    address:
-                      type: string
+                type: string
+                example: "<html><body>Spaces list page</body></html>"
         "400":
           description: "Invalid search or filter parameters."
+    post:
+      operationId: R302
+      summary: "R302: Add Space Action"
+      description: "Process the creation of a new sports space. Access: BOW"
+      tags:
+        - "M03: Sports Space Library"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                sport_type_id:
+                  type: integer
+                phone_no:
+                  type: string
+                description:
+                  type: string
+                email:
+                  type: string
+                address:
+                  type: string
+              required:
+                - title
+                - sport_type_id
+                - phone_no
+                - email
+                - address
+      responses:
+        "302":
+          description: "Redirect after processing the new space information."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Space successfully added. Redirect to space page."
+                302Error:
+                  description: "Failed to create space. Redirect to Add Space form."
+                  value: "/spaces/create"
 
-  /space/{space_id}:
+  /spaces/{space_id}:
     get:
       operationId: R304
       summary: "R304: View a space's page"
@@ -418,9 +397,9 @@ paths:
                 title:
                   type: string
                   description: "Updated space title"
-                sport_type:
-                  type: string
-                phone_number:
+                sport_type_id:
+                  type: integer
+                phone_no:
                   type: string
                   description: "Updated contact phone number"
                 description:
@@ -440,27 +419,17 @@ paths:
                 - email
                 - address
       responses:
-        "200":
+        "302":
           description: "Ok. Space updated successfully."
-          content:
-            application/json:
+          headers:
+            location:
               schema:
-                type: object
-                properties:
-                  space_id:
-                    type: string
-                  title:
-                    type: string
-                  sport_type:
-                    type: string
-                  phone_number:
-                    type: string
-                  description:
-                    type: string
-                  email:
-                    type: string
-                  address:
-                    type: string
+                type: string
+              examples:
+                302Success:
+                  description: "Successful update. Redirect to space page."
+                  value: "/spaces/{space_id}"
+
         "400":
           description: "Invalid data submitted."
         "401":
@@ -483,23 +452,23 @@ paths:
             type: string
           description: "ID of the space to delete."
       responses:
-        "200":
+        "302":
           description: "Space deleted successfully."
-          content:
-            application/json:
+          headers:
+            location:
               schema:
-                type: object
-                properties:
-                  result:
-                    type: string
-                    example: "Space deleted."
+                type: string
+              examples:
+                302Success:
+                  description: "Successful delete. Redirect to general spaces page."
+                  value: "/spaces"
         "401":
           description: "User not authenticated."
         "403":
           description: "User attempting to delete a space they do not own."
         "404":
           description: "Space not found."
-  /space/{space_id}/favorite:
+  /spaces/{space_id}/favorite:
     post:
       operationId: R307
       summary: "R307: Mark space as favorite"
@@ -768,75 +737,11 @@ paths:
           description: "ID of the user whose reservations page is being rendered"
       responses:
         "200":
-          description: "Page data successfully fetched"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      description: "ID of the booking"
-                    schedule_id:
-                      type: integer
-                      description: "ID of the schedule associated with the booking"
-                    space_id:
-                      type: integer
-                      description: "ID of the space associated with the booking"
-                    booking_created_at:
-                      type: string
-                      format: date-time
-                      description: "When the booking was created"
-                    is_cancelled:
-                      type: boolean
-                      description: "If the booking was cancelled"
+          description: "Page successfully rendered"
+        "401":
+          description: "Unauthorized. User must be authenticated."
         "404":
           description: "User not found"
-
-  # /api/user/{user_id}/my_reservations/bookings:
-  #   get:
-  #     operationId: R406
-  #     summary: "R406: Get all bookings for a user (customer)"
-  #     description: "Fetches all bookings made by a specific user. Access: CST"
-  #     tags:
-  #       - "M04: Bookings and Reviews"
-  #     parameters:
-  #       - in: path
-  #         name: user_id
-  #         schema:
-  #           type: integer
-  #         required: true
-  #         description: "ID of the user whose bookings are being viewed"
-  #     responses:
-  #       "200":
-  #         description: "Bookings successfully fetched"
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: array
-  #               items:
-  #                 type: object
-  #                 properties:
-  #                   id:
-  #                     type: integer
-  #                     description: "ID of the booking"
-  #                   schedule_id:
-  #                     type: integer
-  #                     description: "ID of the schedule associated with the booking"
-  #                   space_id:
-  #                     type: integer
-  #                     description: "ID of the space associated with the booking"
-  #                   booking_created_at:
-  #                     type: string
-  #                     format: date-time
-  #                     description: "When the booking was created"
-  #                   is_cancelled:
-  #                     type: boolean
-  #                     description: "If the booking was cancelled"
-  #       "404":
-  #         description: "User not found"
 
   /api/space/{space_id}/schedule/{schedule_id}/bookings:
     post:
@@ -921,15 +826,20 @@ paths:
             schema:
               type: object
               properties:
-                customer_id:
-                  type: integer
-                  description: "ID of the customer editing the booking."
-                schedule_id:
+                new_schedule_id:
                   type: integer
                   description: "ID of the new schedule associated with the booking."
-                is_cancelled:
-                  type: boolean
-                  description: "Indicates whether the booking is cancelled."
+                duration:
+                  type: integer
+                  description: "Total duration of the booking in minutes."
+                  minimum: 15
+                number_of_persons:
+                  type: integer
+                  description: "Number of persons for the booking."
+                  minimum: 1
+                payment_provider_ref:
+                  type: string
+                  description: "Reference from the payment provider."
       responses:
         "200":
           description: "Booking successfully updated"
@@ -938,12 +848,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    description: "ID of the updated booking."
-                  message:
+                  success:
+                    type: boolean
+                    example: true
+                  booking_id:
                     type: string
-                    example: "Booking successfully updated."
+                    description: "ID of the updated booking."
+                  requires_payment:
+                    type: boolean
+                    description: "Indicates if additional payment is required."
+                  additional_payment:
+                    type: number
+                    format: float
+                    description: "Amount of additional payment required, if any."
+
         "400":
           description: "Invalid input data"
         "401":
@@ -978,15 +896,12 @@ paths:
           required: true
           description: "ID of the booking being canceled."
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
               type: object
-              properties:
-                customer_id:
-                  type: integer
-                  description: "ID of the customer canceling the booking"
+              description: "No request body is required for canceling a booking."
       responses:
         "200":
           description: "Booking successfully canceled"
@@ -995,9 +910,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    description: "ID of the canceled booking."
+                  success:
+                    type: boolean
+                    examle: true
                   message:
                     type: string
                     example: "Booking successfully canceled."
@@ -1023,8 +938,7 @@ paths:
         '200':
           description: 'Ok. Show admin dashboard UI with statistics (total users, active spaces, bookings, revenue, etc.)'
         '403':
-          description: 'Forbidden. 
-'
+          description: 'Forbidden.'
 
   /admin/users:
     get:
@@ -1330,6 +1244,7 @@ paths:
           schema:
             type: string
             enum: [name_asc, name_desc, created_asc, created_desc, rating_desc]
+          description: 'Sort order'
         - in: query
           name: page
           schema:

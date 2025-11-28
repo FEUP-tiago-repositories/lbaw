@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,5 +32,13 @@ class DatabaseSeeder extends Seeder
 
         // Show a message in the Artisan console
         $this->command?->info('Database seeded using schema: ' . ($schema ?? 'sportshub (default)'));
+        
+        // Hash all plaintext passwords
+        user::all()->each(function ($user) {
+            if (!password_get_info($user->password)['algo']) {
+                $user->password = Hash::make($user->password);
+                $user->save();
+            }
+        });
     }
 }

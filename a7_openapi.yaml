@@ -146,7 +146,7 @@ paths:
               properties:
                 user_name:
                   type: string
-                phone_number:
+                phone_no:
                   type: string
                 birth_date:
                   type: string
@@ -156,7 +156,7 @@ paths:
                   type: string
               required:
                 - user_name
-                - phone_number
+                - phone_no
                 - birth_date
                 - email
                 - password

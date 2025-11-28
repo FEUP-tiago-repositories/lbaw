@@ -737,30 +737,9 @@ paths:
           description: "ID of the user whose reservations page is being rendered"
       responses:
         "200":
-          description: "Page data successfully fetched"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      description: "ID of the booking"
-                    schedule_id:
-                      type: integer
-                      description: "ID of the schedule associated with the booking"
-                    space_id:
-                      type: integer
-                      description: "ID of the space associated with the booking"
-                    booking_created_at:
-                      type: string
-                      format: date-time
-                      description: "When the booking was created"
-                    is_cancelled:
-                      type: boolean
-                      description: "If the booking was cancelled"
+          description: "Page successfully rendered"
+        "401":
+          description: "Unauthorized. User must be authenticated."
         "404":
           description: "User not found"
 
@@ -847,15 +826,20 @@ paths:
             schema:
               type: object
               properties:
-                customer_id:
-                  type: integer
-                  description: "ID of the customer editing the booking."
-                schedule_id:
+                new_schedule_id:
                   type: integer
                   description: "ID of the new schedule associated with the booking."
-                is_cancelled:
-                  type: boolean
-                  description: "Indicates whether the booking is cancelled."
+                duration:
+                  type: integer
+                  description: "Total duration of the booking in minutes."
+                  minimum: 15
+                number_of_persons:
+                  type: integer
+                  description: "Number of persons for the booking."
+                  minimum: 1
+                payment_provider_ref:
+                  type: string
+                  description: "Reference from the payment provider."
       responses:
         "200":
           description: "Booking successfully updated"
@@ -864,12 +848,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    description: "ID of the updated booking."
-                  message:
+                  success:
+                    type: boolean
+                    example: true
+                  booking_id:
                     type: string
-                    example: "Booking successfully updated."
+                    description: "ID of the updated booking."
+                  requires_payment:
+                    type: boolean
+                    description: "Indicates if additional payment is required."
+                  additional_payment:
+                    type: number
+                    format: float
+                    description: "Amount of additional payment required, if any."
+
         "400":
           description: "Invalid input data"
         "401":
@@ -904,15 +896,12 @@ paths:
           required: true
           description: "ID of the booking being canceled."
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
               type: object
-              properties:
-                customer_id:
-                  type: integer
-                  description: "ID of the customer canceling the booking"
+              description: "No request body is required for canceling a booking."
       responses:
         "200":
           description: "Booking successfully canceled"
@@ -921,9 +910,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    description: "ID of the canceled booking."
+                  success:
+                    type: boolean
+                    examle: true
                   message:
                     type: string
                     example: "Booking successfully canceled."

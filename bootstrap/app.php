@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+        $middleware->alias(['business.owner' => \App\Http\Middleware\CheckBusinessOwner::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -19,12 +19,10 @@ class BookingController extends Controller
      */
     public function index($user_id)
     {
-        // Permitir acesso em ambiente local sem autenticação
-        if (!app()->environment('local')) {
-            if (!Auth::check() || Auth::id() != $user_id) {
-                return redirect()->route('login');
-            }
+        if (!Auth::check() || Auth::id() != $user_id) {
+            return redirect()->route('login');
         }
+
 
         $customer = Customer::where('user_id', $user_id)->firstOrFail();
 
@@ -46,17 +44,11 @@ class BookingController extends Controller
      */
     public function edit($booking_id)
     {
-        // Permitir acesso em ambiente local
-        if (!app()->environment('local') && !Auth::check()) {
+        if (!Auth::check()) {
             return redirect()->route('login');
         }
 
         $booking = Booking::with(['space', 'schedule', 'payment'])->findOrFail($booking_id);
-
-        // Verificar permissão (exceto em local)
-        if (!app()->environment('local')) {
-            $this->authorize('update', $booking);
-        }
 
         return view('bookings.edit', compact('booking'));
     }
@@ -69,7 +61,7 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'customer_id' => 'required|integer|exists:customer,id',
-            'duration' => 'required|integer|min:30',
+            'duration' => 'required|integer|min:15',
             'number_of_persons' => 'required|integer|min:1',
             'payment_provider_ref' => 'required|string|in:' . implode(',', Payment::PAYMENT_PROVIDERS)
         ]);
@@ -102,7 +94,7 @@ class BookingController extends Controller
             $payment = Payment::create([
                 'value' => $totalPrice,
                 'payment_provider_ref' => $validated['payment_provider_ref'],
-                'is_accepted' => false, // Será confirmado depois
+                'is_accepted' => false,
             ]);
 
             // Criar reserva
@@ -114,7 +106,7 @@ class BookingController extends Controller
                 'number_of_persons' => $validated['number_of_persons'],
                 'payment_id' => $payment->id,
                 'booking_created_at' => now(),
-                'is_cancelled' => false
+                'is_cancelled' => false,
             ]);
 
             // Reservar capacidade
@@ -145,14 +137,9 @@ class BookingController extends Controller
     {
         $booking = Booking::findOrFail($booking_id);
 
-        // Verificar permissão em produção
-        if (!app()->environment('local')) {
-            $this->authorize('update', $booking);
-        }
-
         $validated = $request->validate([
             'new_schedule_id' => 'required|integer|exists:schedule,id',
-            'duration' => 'required|integer|min:30',
+            'duration' => 'required|integer|min:15',
             'number_of_persons' => 'required|integer|min:1',
             'payment_provider_ref' => 'required|string'
         ]);
@@ -205,7 +192,9 @@ class BookingController extends Controller
                 ]);
                 $booking->payment_id = $payment->id;
             } else {
-                $booking->payment->update(['value' => $newPrice]);
+                if($booking->payment) {
+                    $booking->payment->update(['value' => $newPrice]);
+                }
             }
 
             // Atualizar reserva
@@ -242,11 +231,6 @@ class BookingController extends Controller
         try {
             // Buscar booking com relacionamentos
             $booking = Booking::with(['schedule'])->findOrFail($booking_id);
-
-            // Verificar permissão (ambiente local ignora)
-            if (!app()->environment('local') && Auth::check()) {
-                $this->authorize('cancel', $booking);
-            }
 
             // Validar se já foi cancelada
             if ($booking->is_cancelled) {

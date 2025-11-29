@@ -1,9 +1,9 @@
 <!-- Modal de Pagamento -->
-<div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+<div id="paymentModal" class="hidden fixed inset-0 backdrop-blur-sm z-[9998] backdrop-brightness-50 flex items-center justify-center z-50">
+    <div class="text-xl bg-white rounded-lg shadow-xl max-w-md w-full mx-4 z-[9999]">
         <!-- Header -->
         <div class="p-6 border-b border-gray-200 bg-gray-50">
-            <h2 class="text-xl font-bold text-gray-900">Confirm payment</h2>
+            <h2 class="font-bold text-gray-900">Confirm payment</h2>
         </div>
 
         <!-- Body -->

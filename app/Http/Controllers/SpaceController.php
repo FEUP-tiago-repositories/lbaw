@@ -27,14 +27,17 @@ class SpaceController extends Controller
     public function create()
     {
 
+        if (! auth()->user()->businessOwner()) {
+            abort(403, 'Only business owners can create a space!');
+        }
         // Get all SportTypes for the drop down menu
         $sportTypes = \App\Models\SportType::all();
         // display creation form /spaces/create
 
-        // pass all BO with relation with user
-        $businessOwners = \App\Models\BusinessOwner::with('user')->get();
+        // // pass all BO with relation with user
+        // $businessOwners = \App\Models\BusinessOwner::with('user')->get();
 
-        return view('spaces.create', compact('sportTypes', 'businessOwners'));
+        return view('spaces.create', compact('sportTypes'));
     }
 
     /**
@@ -42,9 +45,12 @@ class SpaceController extends Controller
      */
     public function store(Request $request)
     {
+
+        if (! auth()->user()->businessOwner) {
+            abort(403, 'Only business owners can create spaces.');
+        }
         // --> /spaces/ (POST)
         $validatedData = $request->validate([
-            'owner_id' => 'required|exists:business_owner,id',
             'sport_type_id' => 'required|exists:sport_type,id',
             'title' => 'required|string|max:100',
             'address' => 'required|string|max:150',
@@ -52,6 +58,8 @@ class SpaceController extends Controller
             'phone_no' => 'required|string|max:15',
             'email' => 'required|email|max:150',
         ]);
+
+        $validatedData['owner_id'] = auth()->user()->businessOwner->id;
 
         // Create the space
         // num_favorites, num_reviews and ratings will automatically be 0
@@ -78,6 +86,9 @@ class SpaceController extends Controller
     public function edit(Space $space)
     {
         // used to display the edit forms!
+        if (! auth()->user()->businessOwner || auth()->user()->businessOwner->id !== $space->owner_id) {
+            abort(403, 'You are not authorized to edit this space.');
+        }
 
         // Load relationships needed
         $space->load(['sportType', 'media', 'coverImage']);
@@ -93,6 +104,10 @@ class SpaceController extends Controller
      */
     public function update(Request $request, Space $space)
     {
+        if (! auth()->user()->businessOwner || auth()->user()->businessOwner->id !== $space->owner_id) {
+            abort(403, 'You are not authorized to edit this space.');
+        }
+
         // Validate input
         $validatedData = $request->validate([
             'title' => 'required|string|max:100',
@@ -118,6 +133,9 @@ class SpaceController extends Controller
      */
     public function destroy(Space $space)
     {
+        if (! auth()->user()->businessOwner() || auth()->user()->businessOwner->id !== $space->owner_id) {
+            abort(403, 'You are not allowed to delete this space!');
+        }
         // used for /space/{spaces} to destroy the space
         $space->delete();
 

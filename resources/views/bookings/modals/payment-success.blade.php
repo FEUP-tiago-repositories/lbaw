@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="text-xl bg-white rounded-lg shadow-xl max-w-md w-full">
             <!-- Header -->
             <div class="p-6 border-b border-gray-200 bg-gray-50">
-                <h2 class="text-xl font-bold text-gray-900 text-center">Confirm payment</h2>
+                <h2 class="font-bold text-gray-900 text-center">Confirm payment</h2>
             </div>
 
             <!-- Body -->

@@ -1,15 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
-<div class = "pt-56 text-center">
-    <h1>Bem-vindo ao SportsHub</h1>
-    <p>Encontre e reserve os melhores espaços desportivos.</p>
+    <div class="container mx-auto px-8 py-8">
 
-    {{-- Adicione aqui o conteúdo da homepage --}}
-    <div class="featured-spaces pt-8">
-        <h2>Enquanto que o website não se encontra pronto, fique sentado a apreciar esta praia ⮧</h2>
-        <img class="mx-auto block pt-4" src="/images/praia.jpg" alt="🏖️">
-        {{-- Lista de espaços será adicionada aqui --}}
+        {{-- Mapa com todos os espaços --}}
+        <div class="bg-emerald-900 rounded-lg shadow-xl p-2">
+            <h2 class="flex items-center font-bold text-white mb-2 p-2">
+                <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Explore Sports Spaces Near You
+            </h2>
+            <div class="h-[300px]">
+                @include('partials.map', [
+                    'mapId' => 'homeMap',
+                    'spaces' => $spaces,
+                    'zoom' => 12,
+                    'showPopupImage' => true,
+                    'popupImageHeight' => 'h-24',
+                    'fitBoundsPadding' => 20
+                ])
+            </div>
+
+        </div>
+
+        <h2 class = "mb-4 mt-4 text-3xl font-semibold">Best Reviewed:</h2>
+
+        <div class="flex overflow-x-auto gap-6 pb-4">
+            @foreach ($spaces as $space)
+                <div class="shrink-0 max-w-80">
+                @include('spaces.partials.space-card', ['space' => $space])
+                </div>
+            @endforeach
+        </div>
     </div>
-</div>
 @endsection

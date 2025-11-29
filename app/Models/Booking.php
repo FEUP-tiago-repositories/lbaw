@@ -17,6 +17,7 @@ class Booking extends Model
         'is_cancelled',
         'number_of_persons',
         'total_duration',
+        'payment_id'
     ];
 
     protected $casts = [
@@ -42,7 +43,7 @@ class Booking extends Model
 
     public function payment()
     {
-        return $this->hasOne(Payment::class, 'booking_id');
+        return $this->belongsTo(Payment::class, 'payment_id');
     }
 
     // Métodos essenciais

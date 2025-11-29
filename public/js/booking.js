@@ -151,7 +151,7 @@ function renderCalendar() {
             isPast
                 ? 'text-gray-300 line-through cursor-not-allowed'
                 : isSelected
-                    ? 'bg-blue-600 text-white font-bold'
+                    ? 'bg-emerald-800 text-white font-bold'
                     : 'hover:bg-gray-100 cursor-pointer text-gray-900'
         }`;
 
@@ -199,8 +199,8 @@ async function loadAvailableTimes(date) {
         times.forEach(schedule => {
             const timeBtn = document.createElement('button');
             timeBtn.type = 'button';
-            timeBtn.className = `px-3 py-2 border border-gray-300 rounded-lg hover:border-2 hover:border-blue-600 hover:bg-blue-100 transition ${
-                state.scheduleId === schedule.id ? 'border-2 border-blue-600 bg-blue-100 font-semibold' : ''
+            timeBtn.className = `px-3 py-2 border border-gray-300 rounded-lg hover:border-2 hover:border-emerald-600 hover:bg-emerald-100 transition ${
+                state.scheduleId === schedule.id ? 'border-2 border-emerald-600 bg-emerald-100 font-semibold' : ''
             }`;
             timeBtn.textContent = schedule.start_time;
             timeBtn.onclick = () => selectTime(schedule.id, schedule.start_time);
@@ -217,9 +217,9 @@ function selectTime(scheduleId, time) {
     state.time = time;
 
     document.querySelectorAll('#timeGrid button').forEach(btn => {
-        btn.classList.remove('border-2','border-blue-600', 'bg-blue-100', 'font-semibold');
+        btn.classList.remove('border-2','border-emerald-600', 'bg-emerald-100', 'font-semibold');
     });
-    event.target.classList.add('border-2','border-blue-600', 'bg-blue-100', 'font-semibold');
+    event.target.classList.add('border-2','border-emerald-600', 'bg-emerald-100', 'font-semibold');
 
     showSection('duration-section');
 }
@@ -284,6 +284,8 @@ async function createBooking() {
         return;
     }
 
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
     try {
         let response, data;
 
@@ -294,8 +296,10 @@ async function createBooking() {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
                     },
+                    credentials: 'same-origin',
                     body: JSON.stringify({
                         new_schedule_id: state.scheduleId,
                         duration: state.duration,
@@ -305,18 +309,31 @@ async function createBooking() {
                 }
             );
         } else {
+            const requestData = {
+                customer_id: parseInt(customerId),
+                duration: state.duration,
+                number_of_persons: state.persons,
+                payment_provider_ref: 'Credit/Debit Card'
+            };
+
+            console.log('📤 Sending POST request:', {
+                url: `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings`,
+                data: requestData
+            });
             response = await fetch(
                 `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings`,
                 {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
                     },
+                    credentials: 'same-origin',
                     body: JSON.stringify({
                         customer_id: parseInt(customerId),
-                        duration: state.duration,
-                        number_of_persons: state.persons,
+                        duration: parseInt(state.duration),
+                        number_of_persons: parseInt(state.persons),
                         payment_provider_ref: 'Credit/Debit Card'
                     })
                 }
@@ -345,10 +362,10 @@ function selectPaymentMethod(method) {
     selectedPaymentMethod = method;
 
     document.querySelectorAll('.payment-method').forEach(btn => {
-        btn.classList.remove('border-blue-600', 'bg-blue-50');
+        btn.classList.remove('border-emerald-600', 'bg-emerald-50');
     });
 
-    event.target.classList.add('border-blue-600', 'bg-blue-50');
+    event.target.classList.add('border-emerald-600', 'bg-emerald-50');
 
     document.getElementById('cardForm').classList.add('hidden');
     document.getElementById('mbwayForm').classList.add('hidden');
@@ -369,7 +386,7 @@ function openPaymentModal(amount) {
 
     selectedPaymentMethod = null;
     document.querySelectorAll('.payment-method').forEach(btn => {
-        btn.classList.remove('border-blue-600', 'bg-blue-50');
+        btn.classList.remove('border-emerald-600', 'bg-emerald-50');
     });
     document.getElementById('cardForm').classList.add('hidden');
     document.getElementById('mbwayForm').classList.add('hidden');
@@ -468,6 +485,8 @@ async function confirmCancel() {
     confirmBtn.textContent = 'Cancelling...';
     confirmBtn.disabled = true;
 
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
     try {
         const url = `/api/space/${spaceId}/schedule/${scheduleId}/bookings/${bookingId}/cancel`;
 
@@ -475,8 +494,10 @@ async function confirmCancel() {
             method: 'PATCH',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            credentials: 'same-origin'
         });
 
         const data = await response.json();

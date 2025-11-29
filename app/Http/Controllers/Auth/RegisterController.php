@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\BusinessOwner;
+use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
 use Illuminate\View\View;
-
-use App\Models\User;
 
 class RegisterController extends Controller
 {
@@ -37,17 +36,34 @@ class RegisterController extends Controller
     {
         // Validate registration input.
         $request->validate([
-            'name' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
+            'user_name' => 'required|string|max:250',
+            'email' => 'required|email|max:250|unique:user',
+            'password' => 'required|min:8|confirmed',
+            'phone_no' => 'required|string|min:9|unique:user',
+            'birth_date' => 'required|date',
+            'profile_pic_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'role' => 'required|in:customer,business_owner',
         ]);
 
         // Create the new user.
-        User::create([
-            'name' => $request->name,
+        $user = User::create([
+            'user_name' => $request->user_name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'phone_no' => $request->phone_no,
+            'birth_date' => $request->birth_date,
+            'profile_pic_url' => $request->profile_pic_url,
         ]);
+
+        if ($request->role === 'customer') {
+            Customer::create([
+                'user_id' => $user->id,
+            ]);
+        } elseif ($request->role === 'business_owner') {
+            BusinessOwner::create([
+                'user_id' => $user->id,
+            ]);
+        }
 
         // Attempt login for the newly registered user.
         $credentials = $request->only('email', 'password');
@@ -56,8 +72,8 @@ class RegisterController extends Controller
         // Regenerate session for security (protection against session fixation).
         $request->session()->regenerate();
 
-        // Redirect to cards page with a success message.
-        return redirect()->route('cards.index')
+        // Redirect to profile page with a success message.
+        return redirect()->route('users.show', Auth::id())
             ->withSuccess('You have successfully registered & logged in!');
     }
 }

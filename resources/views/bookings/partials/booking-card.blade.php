@@ -58,7 +58,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                {{ number_format($booking->payment->value, 2) }}€
+                @if($booking->payment)
+                    {{ number_format($booking->payment->value, 2) }}€
+                @else
+                    N/A
+                @endif
             </div>
         </div>
 
@@ -69,7 +73,7 @@
                     ✗ Cancelled
                 </span>
                 <button onclick="alert('Repeat booking feature - Coming soon!')"
-                        class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                        class="flex-1 bg-emerald-800 text-white px-4 py-2 rounded-lg hover:bg-emerald-800 hover:text-black transition text-sm font-medium">
                     Repeat reservation
                 </button>
             </div>
@@ -77,7 +81,7 @@
             <!-- Botões para reservas futuras -->
             <div class="flex gap-2 mt-4">
                 <button onclick="window.location.href='{{ route('bookings.edit', $booking->id) }}';"
-                        class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                        class="flex-1 border bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-200 hover:text-black transition text-sm font-medium">
                     Edit reservation
                 </button>
                 <button type="button"
@@ -98,11 +102,11 @@
             <!-- Botões para reservas passadas -->
             <div class="flex gap-2 mt-4">
                 <button onclick="alert('Write review feature - Coming soon!')"
-                        class="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition text-sm font-medium">
+                        class="flex-1 border bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-200 hover:text-black transition text-sm font-medium">
                     Write a review
                 </button>
                 <button onclick="alert('Repeat booking feature - Coming soon!')"
-                        class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                        class="flex-1 bg-emerald-800 text-white px-4 py-2 rounded-lg hover:bg-emerald-800 hover:text-black transition text-sm font-medium">
                     Repeat reservation
                 </button>
             </div>

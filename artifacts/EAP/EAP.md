@@ -50,11 +50,34 @@ openapi: 3.0.0
 
 > Identify the user stories that were implemented in the prototype.
 
-| User Story reference | Name | Priority | Responsible | Description |
-|----------------------|------|----------|-------------|-------------|
-| US01 | Name of the user story | Priority of the user story | Main responsible by the implementation | Description of the user story |
+| User Story | Name | Priority | Description |
+|------------|------|----------|-------------|
+| US100 | Sign-in | High | As a Visitor, I want to be able to authenticate into the system, so that I can access my profile and my bookings |
+| US101 | Sign-up | High | As a Visitor, I want to be able to create an account in the system, so that I can access its main features |
+| US200 | See Home Page | High | As a User, I want to access the home page, so that I can have access to main features and a brief presentation of the website |
+| US201 | See About page | High | As a User, I want to see the about page, so that I can see a description about the main information of the website |
+| US202 | See Services informations | High | As a User, I want to see the service's information, so I can understand how the website works |
+| US203 | Consult FAQ page | High | As a User, I want to see the FAQ, so I can get answers to common questions |
+| US204 | Consult Contacts page | High | As a User, I want to see the admin's contacts, so I can come in touch with the website creators |
+| US205 | See sports spaces details | High | As a User, I want to see the details of the sports space I select, so that I can plan what to choose |
+| US206 | Full-text Search | High | As a user, I want to perform full-text searches, so that I can find relevant sports, spaces or businesses based on partial matches or broader search terms |
+| US207 | Exact Match Search | High | As a user, I want to be able to perform an exact match search, so that I can quickly find specific sports, spaces or businesses based on precise keywords |
+| US300 | View Profile | High | As an Authenticated User, I want to be able to view my own profile, so that I can always check my own information |
+| US301 | Editing Profile | High | As an Authenticated User, I want to be able to edit my own profile, so that I can update my information and change my profile picture |
+| US400 | Book a sport space | High | As a Customer, I want to be able to book a sport space, so that I can ensure a slot in that space |
+| US401 | Edit reservation | High | As a Customer, I want to be able to edit my future reservations, so that I can keep my reservations up-to-date |
+| US402 | Cancel reservation | High | As a Customer, I want to be able to cancel a reservation I made, so that I can free up the space if I am unable to attend |
+| US403 | See Reservations | High | As a Customer, I want to be able to see my future or past reservations, so that I can remember and review past reservations and keep me updated or edit my future reservations |
+| US404 | Review a sport space | High | As a Customer, I want to review a sport space I have attended, so that other users can make informed decisions about the quality of each space |
+| US500 | Creating new spaces | High | As a Business Owner, I want to be able to create new sports spaces, so that my clients can interact with my sports space |
+| US501 | Editing spaces details | High | As a Business Owner, I want to be able to edit the details of my spaces, so that customers always have accurate and detailed information to help them decide and book |
+| US502 | Delete or hide spaces | High | As a Business Owner, I want to delete or hide sports spaces, so that customers cannot see or try to book spaces that are no longer available |
+| US503 | Setting sports spaces schedules and capacity | High | As a Business Owner, I want to set schedules and capacities for my sports spaces, so that my customers know when each spaces are available |
+| US504 | Accepting, declining, modifing or canceling reservations | High | As a Business Owner, I want to be able to accept, decline, modify or cancel customer reservations, so that I can manage my availability efficiently and avoid scheduling conflicts |
+| US600 | Manage users accounts | High | As an Admin, I want to manage user accounts, so that I can maintain control over access and ensure security by searching, viewing, creating, deleting, blocking/unblocking and editing user accounts |
+| US601 | Manage sports spaces | High | As an Admin, I want to delete inappropriate sports spaces, so that the platform remains safe and trustworthy for all users |
+| US602 | Deleting inappropriate reviews | High | As an Admin, I want to delete inappropriate comments, so that the platform remains respectful and welcoming for all users |
 
-...
 
 #### 1.2. Implemented Web Resources
 
@@ -78,6 +101,21 @@ openapi: 3.0.0
 
 ---
 
+### Credentials
+
+#### Customer
+
+Email: nibh.quisque.nonummy@hotmail.edu
+
+Password: NXV25EBT2MC
+
+#### Business Owner
+
+Email: dolor.nulla@protonmail.couk
+
+Password: PDF81OMZ4CZ
+
+
 ## Revision history
 
 Changes made to the first submission:
@@ -87,8 +125,9 @@ Changes made to the first submission:
 
 ---
 
-GROUPYYgg, DD/MM/20YY
+### GROUP25122, 27/11/2025
 
-* Group member 1 name, email (Editor)
-* Group member 2 name, email
-* ...
+- Group member 1 Gustavo Lourenço up202306578@up.pt
+- Group member 2 Tiago Oliveira, up202007448@up.pt
+- Group member 3 Tiago Yin, up202306438@up.pt
+- Group member 4 Francisco Gomes, up20306498@up.pt

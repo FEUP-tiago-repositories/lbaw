@@ -16,8 +16,6 @@ use App\Http\Controllers\NotificationController;
 // API ROUTES
 // ============================================
 
-// Route::middleware(['auth'])->group(function () {
-
     // ============================================
     // M04: REVIEWS API (R401-R404)
     // ============================================
@@ -31,24 +29,31 @@ use App\Http\Controllers\NotificationController;
     // M04: SCHEDULES
     // ============================================
     Route::get('/space/{space_id}/schedule', [ScheduleController::class, 'index']);
-    Route::post('/space/{space_id}/schedule', [ScheduleController::class, 'store']);
-    Route::patch('/space/{space_id}/schedule/{schedule_id}', [ScheduleController::class, 'update']);
-    Route::delete('/space/{space_id}/schedule/{schedule_id}', [ScheduleController::class, 'destroy']);
+    Route::middleware(['auth'])->group(function () {
+        Route::post('/space/{space_id}/schedule', [ScheduleController::class, 'store']);
+        Route::patch('/space/{space_id}/schedule/{schedule_id}', [ScheduleController::class, 'update']);
+        Route::delete('/space/{space_id}/schedule/{schedule_id}', [ScheduleController::class, 'destroy']);
+    });
 
     // ============================================
     // M04: BOOKINGS API (R406-R408)
     // ============================================
-    Route::post('/space/{space_id}/schedule/{schedule_id}/bookings', [BookingController::class, 'store']); // R406
-    Route::put('/space/{space_id}/schedule/{schedule_id}/bookings/{booking}', [BookingController::class, 'update']); // R407
-    Route::patch('/space/{space_id}/schedule/{schedule_id}/bookings/{booking}/cancel', [BookingController::class, 'cancel']); // R408
+    Route::middleware(['auth','web'])->group(function () {
+        Route::post('/space/{space_id}/schedule/{schedule_id}/bookings', [BookingController::class, 'store']); // R406
+        Route::put('/space/{space_id}/schedule/{schedule_id}/bookings/{booking}', [BookingController::class, 'update']); // R407
+        Route::patch('/space/{space_id}/schedule/{schedule_id}/bookings/{booking}/cancel', [BookingController::class, 'cancel']); // R408
+    });
 
     // ============================================
     // PAYMENT
     // ============================================
-    Route::post('/bookings/confirm-payment', [BookingController::class, 'confirmPayment'])->middleware('auth');
-    Route::post('/bookings/confirm-update-payment', [BookingController::class, 'confirmUpdatePayment'])->middleware('auth');
+    Route::middleware(['auth'])->group(function () {
+        Route::post('/bookings/confirm-payment', [BookingController::class, 'confirmPayment']);
+        Route::post('/bookings/confirm-update-payment', [BookingController::class, 'confirmUpdatePayment']);
+    });
     // ============================================
     // NOTIFICATIONS
     // ============================================
-    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-//});
+    Route::middleware(['auth'])->group(function () {
+        Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    });

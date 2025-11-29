@@ -4,29 +4,17 @@ use App\Http\Controllers\Admin\AdminController;
 // ============================================
 // CONTROLLERS
 // ============================================
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\StaticController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\SpaceController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\SearchController;
-
-// Admin Controllers
-use App\Http\Controllers\Admin\AdminAuthController;
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\UserManagementController;
-use App\Http\Controllers\Admin\SpaceManagementController;
 use App\Http\Controllers\Admin\ReviewManagementController;
 use App\Http\Controllers\Admin\SpaceManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
-// Admin Controllers
 use App\Http\Controllers\BookingController;
+// Admin Controllers
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SpaceController;
 // Auth Controllers
 use App\Http\Controllers\StaticController;
@@ -38,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 // ============================================
 
 $middleware = [];
-if (!app()->environment('local')) {
+if (! app()->environment('local')) {
     $middleware = ['auth', 'admin']; // login + admin só em produção
 }
 
@@ -79,30 +67,38 @@ Route::middleware(['auth'])->group(function () {
 // M03: SPACES (R301-R308)
 // ============================================
 
-// Authenticated routes
-// Route::middleware(['auth'])->group(function () {
-Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
-Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');    // R302 (action)
-Route::get('/spaces/{space}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
-Route::patch('/spaces/{space}', [SpaceController::class, 'update'])->name('spaces.update');   // R305
-Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
-
 // Public routes
 Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');             // R303
-Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');    // R304
+Route::get('/spaces/search', [SearchController::class, 'search'])->name('spaces.search');
 
-// Favorites (R307-R308)
-Route::post('/spaces/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
-Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
-// });
+// Authenticated routes - /spaces/create MUST come BEFORE /spaces/{space}
+Route::middleware(['auth','business.owner'])->group(function () {
+    Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
+    Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');          // R302 (action)
+});
+
+// Public parameterized route - comes after specific routes
+Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');        // R304
+
+// More authenticated routes with {space} parameter
+Route::middleware(['auth'])->group(function () {
+    Route::get('/spaces/{space}/edit', [SpaceController::class, 'edit'])->name('spaces.edit');
+    Route::patch('/spaces/{space}', [SpaceController::class, 'update'])->name('spaces.update');   // R305
+    Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
+
+    // Favorites (R307-R308)
+    Route::post('/spaces/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
+    Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
+});
 
 // ============================================
 // M04: BOOKINGS (R405)
 // ============================================
-Route::get('/user/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
-Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
-Route::get('/bookings/payment-success', fn() => view('bookings.payment-success'))->name('bookings.payment.success');
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/users/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
+    Route::get('/bookings/payment-success', fn () => view('bookings.modals.payment-success'))->name('bookings.payment.success');
+});
 
 // ============================================
 // NOTIFICATIONS (extensão)
@@ -126,8 +122,8 @@ Route::middleware($middleware)->prefix('admin')->name('admin.')->group(function 
     Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])->name('users.destroy'); // R505
     Route::post('/users/{id}/ban', [UserManagementController::class, 'ban'])->name('users.ban');     // R508
     Route::post('/users/{id}/unban', [UserManagementController::class, 'unban'])->name('users.unban'); // R509
-    Route::get('/users/{id}/edit', [UserManagementController::class, 'edit'])->name('users.edit'); 
-    
+    Route::get('/users/{id}/edit', [UserManagementController::class, 'edit'])->name('users.edit');
+
     // Spaces Management (R511-R515)
     Route::get('/spaces', [SpaceManagementController::class, 'index'])->name('spaces.index');        // R511
     Route::get('/spaces/{id}', [SpaceManagementController::class, 'show'])->name('spaces.show');     // R512
@@ -140,4 +136,3 @@ Route::middleware($middleware)->prefix('admin')->name('admin.')->group(function 
     Route::get('/reviews/{id}', [ReviewManagementController::class, 'show'])->name('reviews.show');  // R517
     Route::delete('/reviews/{id}', [ReviewManagementController::class, 'destroy'])->name('reviews.destroy'); // R518
 });
-

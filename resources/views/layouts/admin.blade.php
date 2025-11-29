@@ -10,10 +10,10 @@
 <head>
 
 <body class="bg-gray-100">
-    <nav class="bg-gray-800 text-white p-4 flex justify-center w-full">
-        <a href="{{ route('admin.dashboard') }}" class="mr-4">Dashboard</a>
-        <a href="{{ route('admin.users.index') }}" class="mr-4">Users</a>
-        <a href="{{ route('admin.spaces.index') }}">Spaces</a>
+    <nav class="navbar h-20 mx-auto text-xl flex items-center px-20 py-4 bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out">
+        <a href="{{ route('admin.dashboard') }}" class="hover:text-emerald-400">Dashboard</a>
+        <a href="{{ route('admin.users.index') }}" class="ml-6 hover:text-emerald-400">Users</a>
+        <a href="{{ route('admin.spaces.index') }}" class="ml-6 hover:text-emerald-400">Spaces</a>
     </nav>
 
     <main>

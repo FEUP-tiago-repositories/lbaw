@@ -73,7 +73,7 @@
                     ✗ Cancelled
                 </span>
                 <button onclick="alert('Repeat booking feature - Coming soon!')"
-                        class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                        class="flex-1 bg-emerald-800 text-white px-4 py-2 rounded-lg hover:bg-emerald-800 hover:text-black transition text-sm font-medium">
                     Repeat reservation
                 </button>
             </div>
@@ -81,7 +81,7 @@
             <!-- Botões para reservas futuras -->
             <div class="flex gap-2 mt-4">
                 <button onclick="window.location.href='{{ route('bookings.edit', $booking->id) }}';"
-                        class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                        class="flex-1 border bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-200 hover:text-black transition text-sm font-medium">
                     Edit reservation
                 </button>
                 <button type="button"
@@ -102,11 +102,11 @@
             <!-- Botões para reservas passadas -->
             <div class="flex gap-2 mt-4">
                 <button onclick="alert('Write review feature - Coming soon!')"
-                        class="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition text-sm font-medium">
+                        class="flex-1 border bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-200 hover:text-black transition text-sm font-medium">
                     Write a review
                 </button>
                 <button onclick="alert('Repeat booking feature - Coming soon!')"
-                        class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                        class="flex-1 bg-emerald-800 text-white px-4 py-2 rounded-lg hover:bg-emerald-800 hover:text-black transition text-sm font-medium">
                     Repeat reservation
                 </button>
             </div>

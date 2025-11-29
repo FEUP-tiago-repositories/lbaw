@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -70,7 +72,12 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::with(['businessOwner', 'customer'])->findOrFail($id);
+
+        if (auth()->id() !== $user->id) {
+            abort(403, 'Unauthorized access.');
+        }
         
+        $user = User::with('spaces')->find($id);
         return view('users.profile', compact('user'));
     }
 

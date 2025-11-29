@@ -72,7 +72,7 @@ Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index'); 
 Route::get('/spaces/search', [SearchController::class, 'search'])->name('spaces.search');
 
 // Authenticated routes - /spaces/create MUST come BEFORE /spaces/{space}
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','business.owner'])->group(function () {
     Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
     Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');          // R302 (action)
 });
@@ -95,7 +95,7 @@ Route::middleware(['auth'])->group(function () {
 // M04: BOOKINGS (R405)
 // ============================================
 Route::middleware(['auth'])->group(function () {
-    Route::get('/user/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/users/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
     Route::get('/bookings/payment-success', fn () => view('bookings.modals.payment-success'))->name('bookings.payment.success');
 });

@@ -30,7 +30,6 @@ class User extends Authenticable
     protected $casts = [
         'is_deleted' => 'boolean',
         'is_banned' => 'boolean',
-        'birth_date' => 'date',
     ];
 
     // Relation Ships
@@ -43,4 +42,16 @@ class User extends Authenticable
     {
         return $this->hasOne(Customer::class, 'user_id', 'id');
     }
+    public function spaces()
+    {
+        return $this->hasManyThrough(
+            Space::class,         
+            BusinessOwner::class, 
+            'user_id',           
+            'owner_id',           
+            'id',                 
+            'id'                 
+        );
+    }
+    
 } 

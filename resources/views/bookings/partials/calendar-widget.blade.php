@@ -55,7 +55,7 @@
                    min="15"
                    step="15"
                    onchange="updateDuration()"
-                   class="w-20 text-center border border-gray-300 rounded-lg pl-3 py-2 font-semibold focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                   class="w-20 text-center border border-gray-300 rounded-lg pl-3 py-2 font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
             <span class="text-base text-gray-600">min.</span>
             <button type="button" onclick="incrementDuration()" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg transition">
                 <span class="font-bold">+</span>
@@ -75,7 +75,7 @@
                    value="1"
                    min="1"
                    onchange="updatePersons()"
-                   class="w-20 text-center border border-gray-300 rounded-lg pl-3 py-2 font-semibold focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                   class="w-20 text-center border border-gray-300 rounded-lg pl-3 py-2 font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
             <button type="button" onclick="incrementPersons()" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg transition">
                 <span>+</span>
             </button>
@@ -86,14 +86,14 @@
     <div id="confirm-section" class="hidden p-4 border-t border-gray-200">
         <button type="button"
                 onclick="createBooking()"
-                class="text-xl w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition shadow-sm">
+                class="text-xl w-full bg-emerald-800 hover:bg-emerald-200 text-white hover:text-black font-semibold py-3 rounded-lg transition shadow-sm">
             {{ $mode === 'edit' ? 'Update and pay' : 'Confirm and pay' }}
         </button>
     </div>
 
     <!-- Loading State -->
     <div id="loading-state" class="hidden p-4 text-center">
-        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-200 border-t-blue-600"></div>
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-200 border-t-emerald-600"></div>
         <p class="text-md mt-2">Loading...</p>
     </div>
 </div>

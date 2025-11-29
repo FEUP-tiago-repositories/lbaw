@@ -2333,7 +2333,7 @@ VALUES (
     ),
     (
         3,
-        '/images/uploads/spaces/3/iron_gym_cover.jpg',
+        '/images/uploads/spaces/3/iron_gym.webp',
         TRUE
     ),
     (
@@ -2343,7 +2343,7 @@ VALUES (
     ),
     (
         4,
-        '/images/uploads/spaces/4/gaia_biking_cover.jpg',
+        '/images/uploads/spaces/4/biking_park.jpg',
         TRUE
     ),
     (
@@ -2584,10 +2584,10 @@ BEGIN
    UPDATE "user"
    SET is_deleted = TRUE,
        user_name = 'Deleted user',
-       email = 'N/A',
-       phone_no = 'N/A',
+       email = 'deleted_user_' || OLD.id || '@example.com',
+       phone_no = 'deleted_user_' || OLD.id,
        password = 'N/A',
-       birth_date = 'N/A',
+       birth_date = '0001-01-01',
        profile_pic_url = 'N/A'
    WHERE id = OLD.id;
 

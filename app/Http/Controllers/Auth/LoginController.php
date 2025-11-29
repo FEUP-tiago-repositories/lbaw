@@ -49,10 +49,7 @@ class LoginController extends Controller
                 route('users.show', Auth::id())
             );
         }
- 
-        // Authentication failed: return back with an error message.
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        return back()->with('error', 'Incorrect email or password.')
+                    ->onlyInput('email');
     }
 }

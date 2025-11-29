@@ -1,55 +1,106 @@
 @props([
     'mapId' => 'map',
-    'latitude' => 41.1579,  // Porto centro por defeito
+    'latitude' => 41.1579,
     'longitude' => -8.6291,
-    'zoom' => 13,
-    'height' => 'h-96',
-    'markers' => []  // Array de markers: [['lat' => 41.15, 'lng' => -8.62, 'popup' => 'Texto']]
+    'zoom' => 12,
+    'height' => 'h-full',
+    'markers' => [],
+    'spaces' => null,
+    'showPopupImage' => true,
+    'popupImageHeight' => 'h-32',
+    'fitBoundsPadding' => 15 // padding em pixels
 ])
 
-<div id="{{ $mapId }}" class="{{ $height }} w-full rounded-lg shadow-lg z-0"></div>
+@php
+    // Se spaces foi fornecido, converte para markers automaticamente
+    if ($spaces) {
+        $markers = $spaces->map(function ($space) use ($showPopupImage, $popupImageHeight) {
+            // Gera o HTML da imagem/SVG
+            $imageHtml = '';
+            if ($showPopupImage) {
+                if ($space->media->isNotEmpty()) {
+                    $imageUrl = e($space->media->first()->media_url);
+                    $imageHtml = '
+                        <div class="mb-2 ' . $popupImageHeight . ' w-full overflow-hidden">
+                            <img src="' . $imageUrl . '"
+                                 alt="' . e($space->title) . '"
+                                 class="w-full h-full object-cover"
+                                 onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">
+                            <div class="w-full h-full hidden items-center justify-center bg-gray-100">
+                                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                            </div>
+                        </div>';
+                } else {
+                    $imageHtml = '
+                        <div class="' . $popupImageHeight . ' w-full flex items-center justify-center bg-gray-100">
+                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>';
+                }
+            }
+
+            return [
+                'lat' => $space->latitude ?? 41.1579,
+                'lng' => $space->longitude ?? -8.6291,
+                'popup' => '
+                    <div style="text-align: center; min-width: 150px; width: 100%;">
+                        ' . $imageHtml . '
+                        <div style="font-weight: bold; font-size: 1rem; margin-bottom: 0.5rem; color: #1f2937;">
+                            ' . e($space->title) . '
+                        </div>
+                        <a href="' . route('spaces.show', $space->id) . '"
+                           style="display: inline-block; background-color: #065f46; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; text-decoration: none; transition: background-color 0.2s;"
+                           onmouseover="this.style.backgroundColor=\'#d1fae5\'; this.style.color=\'black\'"
+                           onmouseout="this.style.backgroundColor=\'#065f46\'; this.style.color=\'white\'">
+                            View Details
+                        </a>
+                    </div>'
+            ];
+        })->toArray();
+    }
+@endphp
+
+<div id="{{ $mapId }}" class="{{ $height }} w-full rounded-lg"></div>
 
 @push('scripts')
     <script>
         (function() {
-            // Inicializar mapa
-            const map{{ Str::studly($mapId) }} = L.map('{{ $mapId }}').setView([{{ $latitude }}, {{ $longitude }}], {{ $zoom }});
+            // Inicializa o mapa
+            const map = L.map('{{ $mapId }}').setView([{{ $latitude }}, {{ $longitude }}], {{ $zoom }});
 
-            // Adicionar tile layer do OpenStreetMap
+            // Adiciona tiles do OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 19,
-            }).addTo(map{{ Str::studly($mapId) }});
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
 
-            @if(!empty($markers))
-            // Adicionar markers
-            const markers{{ Str::studly($mapId) }} = @json($markers);
-            const bounds{{ Str::studly($mapId) }} = [];
+            // Adiciona markers
+            const markers = @json($markers);
+            const bounds = []; // Array de coordenadas [lat, lng]
 
-            markers{{ Str::studly($mapId) }}.forEach(marker => {
-                const leafletMarker = L.marker([marker.lat, marker.lng])
-                    .addTo(map{{ Str::studly($mapId) }});
+            markers.forEach(marker => {
+                const leafletMarker = L.marker([marker.lat, marker.lng]).addTo(map);
 
                 if (marker.popup) {
-                    leafletMarker.bindPopup(marker.popup);
+                    leafletMarker.bindPopup(marker.popup, {
+                        maxWidth: 250,
+                        minWidth: 150
+                    });
                 }
 
-                bounds{{ Str::studly($mapId) }}.push([marker.lat, marker.lng]);
+                // Adiciona coordenadas ao bounds
+                bounds.push([marker.lat, marker.lng]);
             });
 
-            // Ajustar zoom para mostrar todos os markers
-            if (bounds{{ Str::studly($mapId) }}.length > 1) {
-                map{{ Str::studly($mapId) }}.fitBounds(bounds{{ Str::studly($mapId) }}, {
-                    padding: [30, 30]
+            // Ajusta o zoom para mostrar todos os markers se houver múltiplos
+            if (bounds.length > 1) {
+                map.fitBounds(bounds, {
+                    padding: [{{ $fitBoundsPadding }}, {{ $fitBoundsPadding }}] // padding em pixels
                 });
             }
-            @else
-            // Sem markers, adicionar um marker na posição central
-            L.marker([{{ $latitude }}, {{ $longitude }}])
-                .addTo(map{{ Str::studly($mapId) }})
-                .bindPopup('📍 Localização')
-                .openPopup();
-            @endif
         })();
     </script>
 @endpush

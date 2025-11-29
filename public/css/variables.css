@@ -1,9 +1,28 @@
 :root {
     /* Cores Principais */
-    --primary-green: #2d4a3e;
-    --secondary-blue: #2041ba;
+    --primary-color: #008236;
+    --light-primary-color: #0db151;
+    --secondary-color: #2041ba;
+    --light-secondary-color: #345efa;
+    --primary-background-color: #fef4f6;
 }
 
 .primary-text {
-    color: var(--primary-green);
+    color: var(--primary-color);
+}
+
+.light-primary-text {
+    color: var(--light-primary-color);
+}
+
+.secondary-text {
+    color: var(--secondary-color);
+}
+
+.light-secondary-text {
+    color: var(--light-secondary-color);
+}
+
+.primary-background {
+    background-color: var(--primary-color);
 }

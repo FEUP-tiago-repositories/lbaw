@@ -25,11 +25,6 @@ use Illuminate\Support\Facades\Route;
 // M01: HOME & STATIC PAGES (R101-R105)
 // ============================================
 
-$middleware = [];
-if (! app()->environment('local')) {
-    $middleware = ['auth', 'admin']; // login + admin só em produção
-}
-
 Route::get('/', [HomeController::class, 'index'])->name('home');                           // R101
 Route::get('/about-us', [StaticController::class, 'about'])->name('about');                // R102
 Route::get('/faq', [StaticController::class, 'faq'])->name('faq');                        // R103
@@ -107,10 +102,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 });
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/sign-in', [AdminController::class, 'showLoginForm'])->name('login');
+    Route::post('/sign-in', [AdminController::class, 'login'])->name('login.submit');
+});
+
 // ============================================
 // M05: ADMIN ROUTES (R501-R518)
 // ============================================
-Route::middleware($middleware)->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');                 // R501
 
     // Users Management (R502-R509)

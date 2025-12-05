@@ -40,13 +40,7 @@ class UserController extends Controller
         'profile_pic_url' => ['nullable', 'image', 'max:2048'],
         'account_type' => ['required', 'in:customer,business'],
     ]);
-
-    $profileImagePath = null;
-
-    if ($request->hasFile('profile_pic_url')) {
-        $profileImagePath = $request->file('profile_pic_url')
-            ->store('uploads/profile_pics', 'public');
-    }
+ 
 
     // Create the user
     $user = User::create([
@@ -101,9 +95,10 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phone_no = $request->phone_no;
         $user->birth_date = $request->birth_date;
+        $user->is_deleted = $request->is_deleted;
 
         if ($request->hasFile('profile_pic_url')) {
-            $path = $request->file('profile_pic_url')->store('profiles', 'public');
+            $path = $request->file('profile_pic_url')->store('public/images/uploads/profiles', 'public');
             $user->profile_pic_url = '/storage/' . $path;
         }
 
@@ -130,6 +125,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->is_deleted = True;
     }
 }

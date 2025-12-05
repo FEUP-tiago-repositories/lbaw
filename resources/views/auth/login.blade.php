@@ -39,6 +39,10 @@
                 Don't have an account?
                 <a href="{{ route('register') }}" class="text-emerald-800 hover:underline font-medium">Create one</a>
             </p>
+            <p class="text-center mt-4 text-gray-600">
+                Forgot your Password?
+                <a href="{{ route('register') }}" class="text-emerald-800 hover:underline font-medium">Recover it here</a>
+            </p>
         </form>
     </div>
 

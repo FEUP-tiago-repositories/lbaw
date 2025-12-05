@@ -45,6 +45,12 @@ class RegisterController extends Controller
             'role' => 'required|in:customer,business_owner',
         ]);
 
+        if ($request->hasFile('profile_pic_url')) {
+
+            $file = $request->file('profile_pic_url');
+            $profilePicName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move('public/images/uploads/profiles', $profilePicName);
+        }
         // Create the new user.
         $user = User::create([
             'user_name' => $request->user_name,

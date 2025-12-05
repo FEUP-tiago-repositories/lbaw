@@ -45,6 +45,16 @@
                 {{ $user->birth_date }}
             </p>
 
+            <p class="text-lg">
+            <span class="font-medium text-gray-700">Deleted Account:</span>
+            @if($user->is_deleted)
+                <span class="text-red-600 font-bold">Yes</span>
+            @else
+                <span class="text-green-700 font-bold">No</span>
+            @endif
+            </p>
+
+
             <p class="text-lg flex items-center gap-2">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -76,6 +86,14 @@
                     Log Out
                 </button>
             </form>
+
+            <button 
+                onclick="openDeleteModal()"
+                class="px-6 py-3 text-lg bg-red-600 text-white rounded-lg hover:bg-orange-300 hover:text-black transition shadow text-center font-medium">
+                Delete Account
+            </button>
+
+
         </div>
     </div>
 
@@ -127,4 +145,5 @@
         </div>
     </div>
 @endif
+@include('users.delete')
 @endsection

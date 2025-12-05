@@ -2,7 +2,7 @@
 @section('content')
 <div class="max-w-3xl mx-auto mt-12 mb-12 bg-white shadow-lg rounded-2xl p-10">
     <h1 class="text-3xl font-bold text-gray-900 mb-6">Edit Profile</h1>
-    <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" text-xl>
         @csrf
         @method('PATCH')
         {{-- Username --}}

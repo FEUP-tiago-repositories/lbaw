@@ -13,9 +13,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input type="text" name="q" placeholder="Search spaces or sports..." class="border focus:outline-1 focus:outline-emerald-800 italic p-2 pl-12 pr-15 rounded-md w-full">
+            <input type="text" name="q" placeholder="Search spaces or sports..." class="border focus:outline-1 focus:outline-emerald-400 italic p-2 pl-12 pr-15 rounded-xl w-full">
         </div>
-        <button type="submit" class="bg-emerald-800 font-medium text-white py-2 px-5 rounded-md ">Search</button>
+        <button type="submit" class="bg-emerald-800 font-medium text-white py-2 px-5 rounded-xl hover:bg-emerald-200 hover:text-black">Search</button>
     </form>
 
     <div>

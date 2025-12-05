@@ -1,7 +1,7 @@
 {{-- filepath: resources/views/spaces/partials/space-card.blade.php --}}
-<div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full w-70 hover:shadow-lg transition-shadow duration-300">
+<div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full w-64 hover:shadow-lg transition-shadow duration-300">
     <!-- Image -->
-    <div class="h-48 overflow-hidden bg-gray-200 shrink-0">
+    <div class="h-40 overflow-hidden bg-gray-200 shrink-0">
         {{-- Will uncomment this once we have the logic to upload an image --}}
 
         {{-- @if($space->media && $space->media->isNotEmpty())
@@ -96,7 +96,7 @@
         <!-- Action Button -->
         <div class="mt-auto">
             <a href="{{ route('spaces.show', $space->id) }}"
-                class="block w-full bg-emerald-800 text-white text-center px-4 py-2 rounded-lg hover:bg-emerald-200 hover:text-black transition text-sm font-medium">
+                class="block w-full bg-emerald-800 text-white text-center px-4 py-2 rounded-xl hover:bg-emerald-200 hover:text-black transition text-sm font-medium">
                 View Details
             </a>
         </div>

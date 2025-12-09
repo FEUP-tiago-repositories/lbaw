@@ -134,7 +134,7 @@ making a booking --}}
                         <div class="flex-1">
                             <div class="flex border-b-2 border-gray-200 pb-2.5">
                                 <h2 id="about-tab"
-                                    class="text-xl font-medium border-r-2 pr-2.5 text-emerald-800 cursor-pointer transition-colors">
+                                    class="text-xl font-medium pr-2.5 text-emerald-800 cursor-pointer transition-colors">
                                     About</h2>
                                 <h2 id="reviews-tab"
                                     class="text-xl font-medium pl-2.5 hover:text-emerald-800 cursor-pointer transition-colors">
@@ -147,8 +147,32 @@ making a booking --}}
 
                             {{-- Review Content --}}
                             <div id="reviews-content" class="mt-3.5 hidden"> {{-- Will initially be hidden --}}
-                                <p class="text-base">Reviews section coming soon...</p>
-                                {{-- Will add later --}}
+                                @if($reviews->isNotempty())
+                                    {{-- Include general reviews info --}}
+                                    @include('reviews.partials.general-reviews-info',[
+                                        'averageRating' => $averageRating,
+                                        'avgEnvironment' => $avgEnvironment,
+                                        'avgEquipment' => $avgEquipment,
+                                        'avgService' => $avgService,
+                                        'totalReviews' => $totalReviews
+                                    ])
+
+                                    {{-- Review List --}}
+                                    <div class="space-y-4 mt-6">
+                                        @foreach ( $reviews as $review )
+                                            @include('reviews.partials.review-card',['review' => $review])
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="text-center py-12">
+                                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                        </svg>
+                                        <p class="text-gray-500 text-lg">No reviews yet</p>
+                                        <p class="text-gray-400 text-sm mt-2">Be the first to book and review this space!</p>
+                                    </div>
+                                    @endif
                             </div>
                         </div>
                     </div>

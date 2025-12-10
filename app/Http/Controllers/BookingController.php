@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Discount;
 use App\Models\Payment;
 use App\Models\Schedule;
+use App\Models\Space;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -292,4 +293,75 @@ class BookingController extends Controller
 
         return Payment::calculateValue($duration, $persons, $scheduleDuration, $discount?->percentage);
     }
+
+    /**
+     * Show space selection page for Business Owner
+     * GET /manage-reservations
+     */
+    public function selectSpace()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $user = Auth::user();
+
+        // Verificar se é Business Owner
+        if (!$user->businessOwner) {
+            abort(403, 'Only business owners can access this page.');
+        }
+
+        // Buscar todos os espaços do Business Owner
+        $spaces = Space::where('owner_id', $user->businessOwner->id)
+            ->with(['sportType', 'coverImage'])
+            ->orderBy('title', 'asc')
+            ->get();
+
+        return view('spaces.select', compact('spaces'));
+    }
+
+    /**
+     * Show bookings for a specific space (Business Owner view)
+     * GET /spaces/{space}/bookings
+     */
+    public function spaceBookings($space_id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $user = Auth::user();
+
+        // Verificar se é Business Owner
+        if (!$user->businessOwner) {
+            abort(403, 'Only business owners can access this page.');
+        }
+
+        // Buscar o espaço e verificar propriedade
+        $space = Space::findOrFail($space_id);
+
+        if ($space->owner_id !== $user->businessOwner->id) {
+            abort(403, 'You do not own this space.');
+        }
+
+        // Buscar todas as reservas do espaço
+        $bookings = Booking::where('space_id', $space_id)
+            ->with(['customer.user', 'schedule', 'payment'])
+            ->orderBy('booking_created_at', 'desc')
+            ->get();
+
+        // Filtrar reservas por estado
+        $futureReservations = $bookings->filter(fn($b) => $b->isFuture() && !$b->is_cancelled);
+        $pastReservations = $bookings->filter(fn($b) => $b->isPast() && !$b->is_cancelled);
+        $cancelledReservations = $bookings->filter(fn($b) => $b->is_cancelled);
+
+        return view('bookings.space-bookings', compact(
+            'space',
+            'futureReservations',
+            'pastReservations',
+            'cancelledReservations'
+        ));
+    }
+
+
 }

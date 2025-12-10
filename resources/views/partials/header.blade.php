@@ -1,4 +1,4 @@
-<nav class="navbar h-20 mx-auto text-xl flex items-center px-20 py-4 justify-between bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out">
+<nav class="navbar h-20 mx-auto text-lg flex items-center px-20 py-4 justify-between bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out">
     <div>
         <a href="{{ route('home') }}"
             class="hover:text-emerald-400">Home</a>

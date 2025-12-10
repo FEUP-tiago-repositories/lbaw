@@ -98,6 +98,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
     Route::get('/bookings/payment-success', fn () => view('bookings.modals.payment-success'))->name('bookings.payment.success');
+    // Business Owner - Manage Reservations
+    Route::get('/manage-reservations', [BookingController::class, 'selectSpace'])->name('spaces.bookings.select');
+    Route::get('/spaces/{space}/bookings', [BookingController::class, 'spaceBookings'])->name('spaces.bookings');
 });
 
 // ============================================

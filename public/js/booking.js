@@ -433,6 +433,7 @@ async function processPayment() {
 function openCancelModalFromData(button) {
     const bookingId = button.dataset.bookingId;
     const spaceName = button.dataset.spaceName;
+    const customerName = button.dataset.customerName;
     const date = button.dataset.date;
     const time = button.dataset.time;
     const duration = button.dataset.duration;
@@ -440,10 +441,10 @@ function openCancelModalFromData(button) {
     const spaceId = button.dataset.spaceId;
     const scheduleId = button.dataset.scheduleId;
 
-    openCancelModal(bookingId, spaceName, date, time, duration, amount, spaceId, scheduleId);
+    openCancelModal(bookingId, spaceName, customerName, date, time, duration, amount, spaceId, scheduleId);
 }
 
-function openCancelModal(bookingId, spaceName, date, time, duration, amount, spaceId, scheduleId) {
+function openCancelModal(bookingId, spaceName, customerName, date, time, duration, amount, spaceId, scheduleId) {
     const modal = document.getElementById('cancelModal');
 
     if (!modal) {
@@ -452,6 +453,7 @@ function openCancelModal(bookingId, spaceName, date, time, duration, amount, spa
     }
 
     document.getElementById('cancelSpaceName').textContent = spaceName;
+    document.getElementById('cancelCustomerName').textContent = customerName;
     document.getElementById('cancelDate').textContent = date;
     document.getElementById('cancelTime').textContent = time + ', (' + duration + ' min)';
     document.getElementById('cancelAmount').textContent = amount.toFixed(2) + '€';

@@ -107,7 +107,7 @@ CREATE TABLE schedule (
     space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     start_time TIMESTAMP NOT NULL, --must be a future TIMESTAMP
     duration INT NOT NULL CHECK (duration > 0),
-    max_capacity INT NOT NULL CHECK (max_capacity > 0)
+    max_capacity INT NOT NULL CHECK (max_capacity >= 0)
 );
 
 CREATE TABLE payment (
@@ -133,7 +133,7 @@ CREATE TABLE booking (
     booking_created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
     number_of_persons INT NOT NULL DEFAULT 1,
-    total_duration INT NOT NULL DEFAULT 60,
+    total_duration INT NOT NULL DEFAULT 30,
     payment_id INT REFERENCES payment (id) ON DELETE SET NULL
 );
 

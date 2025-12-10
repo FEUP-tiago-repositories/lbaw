@@ -10,7 +10,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
             <a href="{{ route('users.show', Auth::id()) }}" class="text-emerald-600 hover:text-emerald-400">
-                Perfil de {{ Auth::user()->user_name }}
+                Profile of {{ Auth::user()->user_name }}
             </a>
             <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -19,7 +19,7 @@
                 My Reservations
             </p>
         </div>
-        <h1 class="text-4xl font-bold mb-8">My Reservations</h1>
+        <h1 class="text-3xl font-bold my-8">My Reservations</h1>
         @if($futureReservations->isEmpty() && $pastReservations->isEmpty() && $cancelledReservations->isEmpty())
             <div class="text-center py-16">
                 <p class="text-xl text-gray-600">No reservations found</p>

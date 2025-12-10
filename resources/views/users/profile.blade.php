@@ -92,7 +92,7 @@
                 </div>
 
                 {{-- Right Column: Role-Specific Actions --}}
-                <div class="w-80">
+                <div class="w-72">
                     @if($user->customer)
                         <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg">
                             <div class="flex flex-col gap-3">
@@ -113,7 +113,7 @@
 
                                 <a href="{{ route('home') }}"
                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition ">
-                                    Reservations Schedule
+                                    Manage Schedules
                                 </a>
 
                                 <a href="{{ route('spaces.bookings.select') }}"

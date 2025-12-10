@@ -18,7 +18,9 @@ class SpaceController extends Controller
         // fetch all spaces into the index view
         $spaces = Space::with(['sportType', 'media'])->orderBy('id', 'desc')->get(); // we will only need this info in the Space Card
 
-        return view('spaces.index', compact('spaces'));
+        $sports = \App\Models\SportType::all();
+
+        return view('spaces.index', compact('spaces', 'sports'));
     }
 
     /**

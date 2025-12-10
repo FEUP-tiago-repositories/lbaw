@@ -10,14 +10,39 @@ class SearchController
 {
     public function search(Request $request)
     {
-        $query = $request->input('q');
 
-        $exactSpaces = Space::where('title', $query)->orWhere('address', $query)->get();
+        $query = Space::query();
+        
+        if ($request->filled('sport_type')) {
+            $query->whereHas('sportType', function($q) use ($request) {
+                $q->where('id', $request->input('sport_type'));
+            });
+        }
 
-        $partialSpaces = Space::where('title', 'ILIKE', "%{$query}%")->orwhere('address', 'ILIKE', "%{$query}%")->get();
+        if($request->filled('q')){
+            
+            $terms = preg_split('/\s+/', trim($request->q));
 
-        $spaces = $exactSpaces->merge($partialSpaces)->unique('id');
+            $query->where(function ($campos) use ($terms) {
 
-        return view('spaces.index', compact('spaces', 'query'));
+                foreach ($terms as $term) {
+                    $campos->where(function ($camposSpace) use ($term) {
+
+                        $camposSpace->where('title', 'ILIKE', "%{$term}%")
+                        ->orWhere('address', 'ILIKE', "%{$term}%")
+                        
+                        ->orWhereHas('sportType', function ($stype) use ($term) {
+                            $stype->where('name', 'ILIKE', "%{$term}%");
+                        });
+                    });
+                }
+            });
+        }
+        
+        $spaces = $query->get(); 
+
+        $sports = SportType::all();
+
+        return view('spaces.index', ['spaces' => $spaces, 'sports'  => $sports, 'query' => $request->input('q'), 'filters' => $request->all() ]);
     }
 }

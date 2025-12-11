@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@include('users.partials.delete')
 @section('content')
 <div class="max-w-6xl mx-auto mt-12 mb-12 flex gap-6">
 
@@ -7,8 +7,8 @@
 
         {{-- Header --}}
         <div class="flex items-center gap-8">
-            <img src="{{ 'https://picsum.photos/200' }}"
-                class="w-28 h-28 rounded-full object-cover border-2 border-gray-200 shadow-sm">
+        <img src="{{ $user->profile_pic_url ? asset($user->profile_pic_url) : 'https://via.placeholder.com/120' }}"
+        class="w-20 h-20 rounded-full object-cover border-gray-200 shadow">
             <div class="space-y-1">
                 <h1 class="text-4xl font-bold text-gray-900">{{ $user->user_name }}</h1>
 
@@ -82,14 +82,14 @@
 
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button class="px-6 py-3 text-lg bg-red-500 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
+                <button class="px-6 py-3 text-lg bg-gray-300 text-black rounded-lg hover:bg-gray-200 hover:text-gray-800 transition shadow text-center font-medium">
                     Log Out
                 </button>
             </form>
 
             <button 
                 onclick="openDeleteModal()"
-                class="px-6 py-3 text-lg bg-red-600 text-white rounded-lg hover:bg-orange-300 hover:text-black transition shadow text-center font-medium">
+                class="px-6 py-3 text-lg bg-red-600 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
                 Delete Account
             </button>
 
@@ -145,5 +145,4 @@
         </div>
     </div>
 @endif
-@include('users.delete')
 @endsection

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@include('auth.partials.recover')
 @section('content')
 <div class="flex justify-center items-center min-h-screen py-10">
 
@@ -41,7 +41,7 @@
             </p>
             <p class="text-center mt-4 text-gray-600">
                 Forgot your Password?
-                <a href="{{ route('register') }}" class="text-emerald-800 hover:underline font-medium">Recover it here</a>
+                <a href="#" onclick="openRecoverModal()" class="text-emerald-800 hover:underline font-medium">Recover it here</a>
             </p>
         </form>
     </div>

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -42,18 +43,26 @@ class UserController extends Controller
     ]);
  
 
-    // Create the user
+    $profileImagePath = null;
+
+    if ($request->hasFile('profile_pic_url')) {
+        $profileImagePath = $request->file('profile_pic_url')->store(
+            'images/uploads/profiles', 
+            'public'
+        );
+    }
+    
     $user = User::create([
         'user_name' => $request->user_name,
         'email' => $request->email,
         'phone_no' => $request->phone_no,
         'birth_date' => $request->birth_date,
         'password' => Hash::make($request->password), // hash required for login
-        'profile_pic_url' => $profileImagePath ? '/storage/' . $profileImagePath : null,
+        'profile_pic_url' => $profileImagePath,  
         'is_banned' => false,
         'is_deleted' => false,
     ]);
-
+    
     Auth::login($user);
 
     return redirect()->route('users.show', $user->id)
@@ -87,7 +96,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,string $id)
+    public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
 
@@ -95,11 +104,14 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phone_no = $request->phone_no;
         $user->birth_date = $request->birth_date;
-        $user->is_deleted = $request->is_deleted;
 
         if ($request->hasFile('profile_pic_url')) {
-            $path = $request->file('profile_pic_url')->store('public/images/uploads/profiles', 'public');
-            $user->profile_pic_url = '/storage/' . $path;
+            $file = $request->file('profile_pic_url');
+            $profilePicName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $request->file('profile_pic_url')->move(public_path('images/uploads/profiles'), $profilePicName);
+            $profilePicPath = 'images/uploads/profiles/' . $profilePicName;
+            $user->profile_pic_url = $profilePicPath;
+            $user->save();
         }
 
         if ($request->account_type === 'customer') {
@@ -123,8 +135,13 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        $user->is_deleted = True;
+        $user = User::findOrFail($id);
+
+        $user->is_deleted = true;
+        $user->save();
+
+        return redirect()->route('home');
     }
 }

@@ -45,12 +45,18 @@ class RegisterController extends Controller
             'role' => 'required|in:customer,business_owner',
         ]);
 
+        // Handle profile picture upload
+        $profilePicPath = null;
+
         if ($request->hasFile('profile_pic_url')) {
 
             $file = $request->file('profile_pic_url');
             $profilePicName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move('public/images/uploads/profiles', $profilePicName);
+
+            $file->move(public_path('images/uploads/profiles'), $profilePicName);
+            $profilePicPath = 'images/uploads/profiles/' . $profilePicName;
         }
+
         // Create the new user.
         $user = User::create([
             'user_name' => $request->user_name,
@@ -58,7 +64,7 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
             'phone_no' => $request->phone_no,
             'birth_date' => $request->birth_date,
-            'profile_pic_url' => $request->profile_pic_url,
+            'profile_pic_url' => $profilePicPath,
         ]);
 
         if ($request->role === 'customer') {

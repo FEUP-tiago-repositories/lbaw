@@ -46,8 +46,6 @@
         <div>
             <label class="block text-gray-700 font-medium mb-1">Profile Picture</label>
             <div class="flex items-center gap-4">
-                <img src="{{ $user->profile_pic_url ?? 'https://via.placeholder.com/120' }}"
-                     class="w-20 h-20 rounded-full object-cover border shadow">
                 <input type="file" name="profile_pic_url"
                        class="block w-full text-gray-700">
             </div>

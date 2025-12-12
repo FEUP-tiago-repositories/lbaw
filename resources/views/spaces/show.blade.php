@@ -60,7 +60,7 @@ making a booking --}}
                 @endauth
             </div>
             <div class="flex">
-                <div class="flex-[2]">
+                <div class="flex-2">
                     <div class="text-xl">
                         {{-- -Address flex --}}
                         <div class="flex items-center justify-start gap-2 mb-1">

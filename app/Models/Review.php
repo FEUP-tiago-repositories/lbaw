@@ -70,4 +70,10 @@ class Review extends Model
             'space_id'      // Local key on bookings table
         );
     }
+
+    // get response
+    public function response()
+    {
+        return $this->hasOne(Response::class, 'review_id');
+    }
 }

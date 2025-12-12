@@ -6,8 +6,7 @@
             {{-- Profile Picture --}}
             <div class="shrink-0 w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                 @if($review->customer->user->profile_pic_url)
-                    <img src="{{ $review->customer->user->profile_pic_url }}" alt=""
-                        class="w-full h-full object-cover"
+                    <img src="{{ $review->customer->user->profile_pic_url }}" alt="" class="w-full h-full object-cover"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <svg class="w-8 h-8 text-gray-400 hidden" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -92,5 +91,62 @@
     {{-- Review Text --}}
     <p class="text-gray-700 leading-relaxed">{{ $review->text}}</p>
 
+    {{-- Response Button --}}
+    {{-- this button should only appear if the space owner of the review is the current logged in BO --}}
+    @can('createForReview', [App\Models\Response::class, $review])
+        <div id="write-response-btn-container" class="flex justify-center mt-4">
+            <button onclick="showResponseForm()"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md hover:shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <p class="cursor-defautl">Respond to Review</p>
+            </button>
+        </div>
 
+        {{-- Response Form (hidden by default, will be handled by JS) --}}
+        <div id="response-form-container" class="hidden mt-6 ml-16">
+            @include('responses.response-form', ['review' => $review])
+        </div>
+    @endcan
+
+    {{-- Response Section --}}
+
+    {{-- need to check if the review has a response associated and if so show it --}}
+    @if ($review->response)
+        <div class="mt-4 ml-16 pl-4 border-l-4 border-emerald-500 rounded-r-lg p-4 bg-emerald-50">
+            <div class="flex items-start gap-3">
+                {{-- Avatar icon --}}
+                <div class="shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </div>
+
+                {{-- Response Content itself --}}
+                <div class="flex-1">
+                    <div class="mb-1">
+                        <p class="font-semibold text-gray-900">
+                            Response from {{ $review->response->owner->user->user_name }}
+                        </p>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            {{ $review->response->time_stamp->format('F j, Y') }}
+                        </p>
+                    </div>
+                    <p class="text-gray-700 text-sm leading-relaxed mt-2">
+                        {{ $review->response->text }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
+
+@push('scripts')
+    <script src="{{ asset('js/response.js') }}"></script>
+    <script src="{{ asset('js/response-form.js') }}"></script>
+@endpush

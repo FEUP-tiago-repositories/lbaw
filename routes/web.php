@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ResponseController;
 
 // Admin Controllers
 use App\Http\Controllers\HomeController;
@@ -102,10 +103,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ============================================
-// M04: REVIEWS
+// M04: REVIEWS and RESPONSES
 // ============================================
 Route::middleware(['auth'])->group(function () {
     Route::post('/reviews', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::post('/responses',[App\Http\Controllers\ResponseController::class, 'store'])->name('responses.store');
 });
 
 // ============================================

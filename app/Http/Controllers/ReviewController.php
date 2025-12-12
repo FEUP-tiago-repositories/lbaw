@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ReviewController
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -37,17 +41,17 @@ class ReviewController
             'text' => 'required|string|max:500',
         ]);
 
+        // check if user can create reviews
+        $this->authorize('create',Review::class);
+
+        // check if user can review this space
+        if(!Gate::allows('createForBooking',[Review::class,$validatedData['booking_id']])){
+            abort(403, 'You cannot review this booking.');
+        }
+
         // booking belongs to auth user
         $booking = Booking::findOrFail($validatedData['booking_id']);
 
-        if ($booking->customer_id !== auth()->user()->customer->id) {
-            abort(403, 'Unauthorized');
-        }
-
-        // check if review already exists
-        if ($booking->review) {
-            return redirect()->back()->with('error', 'You have already reviewed this booking');
-        }
 
         // create a review
         Review::create([

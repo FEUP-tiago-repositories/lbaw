@@ -30,7 +30,8 @@
                             required minlength="3" maxlength="20"
                             pattern="[A-Za-z0-9_]+"
                             title="Username can only contain letters, numbers, and underscores."
-                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="User123">
                     </div>
 
                     {{-- Email --}}
@@ -39,17 +40,19 @@
                         <input type="email" name="email"
                             value="{{ old('email') }}"
                             required maxlength="255"
-                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="example@gmail.com">
                     </div>
 
                     {{-- Phone --}}
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Phone Number</label>
                         <input type="text" name="phone_no"
-                            value="{{ old('phone_no') }}"
+                            value="{{ old('phone_number') }}"
                             required pattern="[0-9]{9}" maxlength="9"
                             title="Phone number must be exactly 9 digits."
-                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="936548954">
                     </div>
 
                     {{-- Birth Date --}}
@@ -101,6 +104,7 @@
                     <input type="password" name="password"
                         required minlength="6"
                         class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Minimum 6 characters"
                         required>
                 </div>
 
@@ -110,6 +114,7 @@
                     <input type="password" name="password_confirmation"
                         required minlength="6"
                         class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Confirm your password"
                 </div>
 
                 <button

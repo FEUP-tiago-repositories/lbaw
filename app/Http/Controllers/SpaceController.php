@@ -75,11 +75,11 @@ class SpaceController extends Controller
     public function show(Space $space)
     {
         // used for the route /space/{space}
-        $space->load(['sportType', 'media', 'owner.user', 'coverImage', 'bookings.review.customer.user'/* 'bookings.review.responses' */]);
+        $space->load(['sportType', 'media', 'owner.user', 'coverImage'/*, 'bookings.review.customer.user'/* 'bookings.review.responses' */]);
 
         // Get all reviews for this space
         $reviews = $space->reviews()
-            ->with(['customer.user'/* 'responses.businessOwner.user' */])
+            ->with(['customer.user'/* 'responses.businessOwner.user' */,'booking'])
             ->orderBy('time_stamp', 'desc')
             ->get();
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
+
 // Admin Controllers
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
@@ -72,7 +73,7 @@ Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index'); 
 Route::get('/spaces/search', [SearchController::class, 'search'])->name('spaces.search');
 
 // Authenticated routes - /spaces/create MUST come BEFORE /spaces/{space}
-Route::middleware(['auth','business.owner'])->group(function () {
+Route::middleware(['auth', 'business.owner'])->group(function () {
     Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
     Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');          // R302 (action)
 });
@@ -98,6 +99,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
     Route::get('/bookings/payment-success', fn () => view('bookings.modals.payment-success'))->name('bookings.payment.success');
+});
+
+// ============================================
+// M04: REVIEWS
+// ============================================
+Route::middleware(['auth'])->group(function () {
+    Route::post('/reviews', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
 });
 
 // ============================================

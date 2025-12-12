@@ -1,0 +1,11 @@
+[90m= [39m[34;4mApp\Models\Review[39;24m {#5789
+    [34mid[39m: [35m12[39m,
+    [34mcustomer_id[39m: [35m15[39m,
+    [34mbooking_id[39m: [35m10[39m,
+    [34mtime_stamp[39m: "[32m2025-12-10 22:00:00[39m",
+    [34mtext[39m: "[32mNice hockey arena, though changing rooms need upgrades.[39m",
+    [34menvironment_rating[39m: [35m4[39m,
+    [34mequipment_rating[39m: [35m3[39m,
+    [34mservice_rating[39m: [35m4[39m,
+  }
+

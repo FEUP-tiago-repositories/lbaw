@@ -88,6 +88,18 @@
                        class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
                         My Reservations                 
                     </a>
+                    
+                    <a href="{{ route('notifications.index') }}"
+                    class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium group">
+                        
+                        Notifications
+                        
+                        @if($unreadCount > 0)
+                            <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
+                                {{ $unreadCount }}
+                            </span>
+                        @endif
+                    </a>
                 </div>
             </div>
 
@@ -107,6 +119,17 @@
                     <a href="{{ route('home') }}"
                        class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-lg font-medium">
                         Manage Reservations
+                    </a>
+
+                    <a href="{{ route('notifications.index') }}"
+                       class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
+                        Notifications  
+                        
+                        @if($unreadCount > 0)
+                            <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
+                                {{ $unreadCount }}
+                            </span>
+                        @endif
                     </a>
                 </div>
             </div>

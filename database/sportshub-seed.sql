@@ -174,7 +174,8 @@ CREATE TABLE notification (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id INT NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
     time_stamp TIMESTAMP NOT NULL DEFAULT NOW(),
-    is_read BOOLEAN NOT NULL DEFAULT FALSE
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    content TEXT NOT NULL
 );
 
 CREATE TABLE response_notification (
@@ -2173,108 +2174,30 @@ VALUES (
         '2025-12-15 23:59:00'
     );
 
-INSERT INTO
-    notification (user_id, time_stamp, is_read)
-VALUES (
-        2,
-        '2025-11-01 14:35:00',
-        TRUE
-    ),
-    (
-        3,
-        '2025-11-02 10:10:00',
-        TRUE
-    ),
-    (
-        4,
-        '2025-11-02 19:45:00',
-        TRUE
-    ),
-    (
-        5,
-        '2025-11-03 15:40:00',
-        TRUE
-    ),
-    (
-        8,
-        '2025-11-04 09:30:00',
-        TRUE
-    ),
-    (
-        9,
-        '2025-11-04 12:25:00',
-        TRUE
-    ),
-    (
-        10,
-        '2025-11-05 08:15:00',
-        TRUE
-    ),
-    (
-        12,
-        '2025-11-05 16:20:00',
-        TRUE
-    ),
-    (
-        13,
-        '2025-11-06 13:55:00',
-        TRUE
-    ),
-    (
-        15,
-        '2025-11-07 14:45:00',
-        TRUE
-    ),
-    (
-        16,
-        '2025-11-07 18:10:00',
-        TRUE
-    ),
-    (
-        17,
-        '2025-11-08 10:20:00',
-        TRUE
-    ),
-    (
-        18,
-        '2025-11-08 15:40:00',
-        TRUE
-    ),
-    (
-        19,
-        '2025-11-09 17:15:00',
-        TRUE
-    ),
-    (
-        20,
-        '2025-11-09 18:25:00',
-        TRUE
-    ),
-    (
-        3,
-        '2025-12-03 21:30:00',
-        FALSE
-    ),
-    (
-        9,
-        '2025-12-04 20:10:00',
-        FALSE
-    ),
-    (
-        10,
-        '2025-12-05 13:20:00',
-        FALSE
-    ),
-    (
-        19,
-        '2025-12-09 20:00:00',
-        FALSE
-    ),
-    (
-        20,
-        '2025-12-10 22:10:00',
-        FALSE
-    );
+INSERT INTO notification (user_id, time_stamp, is_read, content)
+VALUES 
+    (2, '2025-11-01 14:35:00', TRUE, 'Your reservation has been confirmed.'),
+    (3, '2025-11-02 10:10:00', TRUE, 'The reservation was cancelled by the host.'),
+    (4, '2025-11-02 19:45:00', TRUE, 'You have a reservation tomorrow at 8 PM.'),
+    (5, '2025-11-03 15:40:00', TRUE, 'Payment received successfully.'),
+    (8, '2025-11-04 09:30:00', TRUE, 'Welcome to our platform!'),
+    (9, '2025-11-04 12:25:00', TRUE, 'New reservation awaiting approval.'),
+    (10, '2025-11-05 08:15:00', TRUE, 'Don’ t forget to leave a review.'),
+    (12, '2025-11-05 16:20:00', TRUE, 'Your reservation has been confirmed.'),
+    (13, '2025-11-06 13:55:00', TRUE, 'Your cancellation request has been accepted.'),
+    (15, '2025-11-07 14:45:00', TRUE, 'We have updated our terms of service.'),
+    (16, '2025-11-07 18:10:00', TRUE, 'Reservation confirmed for 2 people.'),
+    (17, '2025-11-08 10:20:00', TRUE, 'Your reservation starts in 1 hour.'),
+    (18, '2025-11-08 15:40:00', TRUE, 'The host has accepted your request.'),
+    (19, '2025-11-09 17:15:00', TRUE, 'You have received a new discount coupon!'),
+    (20, '2025-11-09 18:25:00', TRUE, 'Reservation completed. Thank you!'),
+
+    (3, '2025-12-03 21:30:00', FALSE, 'Your subscription will expire soon.'),
+    (9, '2025-12-04 20:10:00', FALSE, 'You have received a new message from the host.'),
+    (10, '2025-12-05 13:20:00', FALSE, 'Please confirm your attendance for reservation .'),
+    (19, '2025-12-09 20:00:00', FALSE, 'A schedule change has been requested.'),
+    (20, '2025-12-10 22:10:00', FALSE, 'System maintenance is scheduled.');
+
 
 INSERT INTO
     review_notification (notification_id, review_id)

@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticable
 {
+    use Notifiable;
+
     public $timestamps = false;
 
     protected $table = 'user';
@@ -52,6 +55,12 @@ class User extends Authenticable
             'id',                 
             'id'                 
         );
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class, 'user_id')
+                    ->orderBy('time_stamp', 'desc');
     }
     
 } 

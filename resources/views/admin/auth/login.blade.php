@@ -13,7 +13,7 @@
 
     <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
 
-        <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Login</h2>
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Admin Login</h2>
 
         @if (session('error'))
             <div class="bg-red-100 text-red-700 px-4 py-2 rounded-lg mb-4 text-center text-sm">

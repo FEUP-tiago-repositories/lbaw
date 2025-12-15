@@ -102,15 +102,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/sign-in', [AdminController::class, 'showLoginForm'])->name('login');
-    Route::post('/sign-in', [AdminController::class, 'login'])->name('login.submit');
+
+// ============================================
+// ADMIN AUTHENTICATION (Guest routes)
+// ============================================
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('/login',[AdminController::class,'showLoginForm'])->name('login');
+    Route::post('/login', [AdminController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 });
 
 // ============================================
 // M05: ADMIN ROUTES (R501-R518)
 // ============================================
-Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware([\App\Http\Middleware\CheckAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');                 // R501
 
     // Users Management (R502-R509)

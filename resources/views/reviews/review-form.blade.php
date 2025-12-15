@@ -87,9 +87,7 @@
                 maxlength="500"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700 transition-colors"
                 placeholder="Share your experience at this space..."
-                required
-            >
-            </textarea>
+                required></textarea>
             <div class="flex justify-end mt-1">
                 <span id="char-count" class="text-sm text-gray-500">0/500 chars</span>
             </div>

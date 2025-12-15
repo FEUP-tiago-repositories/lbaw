@@ -29,7 +29,7 @@ class AdminController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'As credenciais não correspondem aos nossos registos.',
+            'email' => 'The credentials do not match our records.',
         ])->onlyInput('email');
     }
 }

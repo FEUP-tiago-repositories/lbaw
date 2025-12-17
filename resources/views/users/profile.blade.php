@@ -10,8 +10,12 @@
         <img src="{{ $user->profile_pic_url ? asset($user->profile_pic_url) : 'https://via.placeholder.com/120' }}"
         class="w-20 h-20 rounded-full object-cover border-gray-200 shadow">
             <div class="space-y-1">
-                <h1 class="text-4xl font-bold text-gray-900">{{ $user->user_name }}</h1>
-
+            <h1 class="text-4xl font-bold text-gray-900">
+                {{ $user->first_name }} {{ $user->surname }}
+            </h1>
+                <p class="text-gray-500 text-lg">
+                    Username: <span class="font-medium text-gray-700">{{ $user->user_name }}</span>
+                </p>
                 <p class="text-gray-600 text-lg flex items-center gap-2">
                     <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

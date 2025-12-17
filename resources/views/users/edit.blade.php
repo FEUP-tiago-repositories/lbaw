@@ -5,6 +5,27 @@
     <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" text-xl>
         @csrf
         @method('PATCH')
+        <div class="flex gap-4">
+            {{-- First Name --}}
+            <div class="w-1/2">
+                <label class="block text-gray-700 font-medium mb-1">First Name</label>
+                <input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}"
+                    required minlength="2" maxlength="15"
+                    pattern="[A-Za-z]+"
+                    title="First name can only contain letters."
+                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            {{-- Surname --}}
+            <div class="w-1/2">
+                <label class="block text-gray-700 font-medium mb-1">Surname</label>
+                <input type="text" name="surname" value="{{ old('surname', $user->surname) }}"
+                    required minlength="2" maxlength="15"
+                    pattern="[A-Za-z]+"
+                    title="Surname can only contain letters."
+                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+        </div>
         {{-- Username --}}
         <div>
             <label class="block text-gray-700 font-medium mb-1">Username</label>

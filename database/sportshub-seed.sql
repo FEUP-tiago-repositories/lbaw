@@ -20,6 +20,8 @@ $do$ LANGUAGE plpgsql;
 
 CREATE Table "user" (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    first_name VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
     user_name VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     phone_no VARCHAR(15) NOT NULL UNIQUE,
@@ -235,8 +237,9 @@ CREATE TABLE password_resets (
 -- DATA POPULATION (around 1950 lines of code, scroll down to see indexes and triggers)
 -- =======================================================================================
 
-INSERT INTO
-    "user" (
+    INSERT INTO "user" (
+        first_name,
+        surname,
         user_name,
         email,
         phone_no,
@@ -247,7 +250,9 @@ INSERT INTO
         profile_pic_url
     )
 VALUES (
-        'Cade Le',
+        'Cade',
+        'Le',
+        'cade_le',
         'dolor.nulla@protonmail.couk',
         '954529117',
         FALSE,
@@ -257,7 +262,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Miriam Hoover',
+        'Miriam',
+        'Hoover',
+        'miriam_hoover',
         'nibh.quisque.nonummy@hotmail.edu',
         '962922371',
         FALSE,
@@ -267,7 +274,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Lysandra Wise',
+        'Lysandra',
+        'Wise',
+        'lysandra_wise',
         'ullamcorper@aol.org',
         '931042084',
         FALSE,
@@ -277,7 +286,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Alfreda Curtis',
+        'Alfreda',
+        'Curtis',
+        'alfreda_curtis',
         'sed@aol.net',
         '972456831',
         FALSE,
@@ -287,7 +298,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Constance Yates',
+        'Constance',
+        'Yates',
+        'constance_yates',
         'interdum@protonmail.ca',
         '989628425',
         TRUE,
@@ -297,7 +310,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Nita Jennings',
+        'Nita',
+        'Jennings',
+        'nita_jennings',
         'auctor.ullamcorper.nisl@icloud.edu',
         '973066023',
         FALSE,
@@ -307,7 +322,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Lucy Schroeder',
+        'Lucy',
+        'Schroeder',
+        'lucy_schroeder',
         'quisque.tincidunt@hotmail.couk',
         '979822651',
         TRUE,
@@ -317,7 +334,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Seth David',
+        'Seth',
+        'David',
+        'seth_david',
         'mauris.magna@protonmail.ca',
         '963088105',
         TRUE,
@@ -327,7 +346,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Felicia Hubbard',
+        'Felicia',
+        'Hubbard',
+        'felicia_hubbard',
         'et.magnis@outlook.edu',
         '903518505',
         FALSE,
@@ -337,7 +358,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Kamal Burnett',
+        'Kamal',
+        'Burnett',
+        'kamal_burnett',
         'convallis@yahoo.couk',
         '930572268',
         FALSE,
@@ -347,7 +370,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Murphy Cunningham',
+        'Murphy',
+        'Cunningham',
+        'murphy_cunningham',
         'mauris.sapien.cursus@hotmail.org',
         '975166436',
         FALSE,
@@ -357,7 +382,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Peter Haynes',
+        'Peter',
+        'Haynes',
+        'peter_haynes',
         'tortor.at.risus@protonmail.edu',
         '912031257',
         FALSE,
@@ -367,7 +394,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Xaviera Williams',
+        'Xaviera',
+        'Williams',
+        'xaviera_williams',
         'eget@google.net',
         '986863406',
         TRUE,
@@ -377,7 +406,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Tatiana Trujillo',
+        'Tatiana',
+        'Trujillo',
+        'tatiana_trujillo',
         'curabitur@aol.ca',
         '931704357',
         FALSE,
@@ -387,7 +418,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Gage Ramos',
+        'Gage',
+        'Ramos',
+        'gage_ramos',
         'congue@outlook.org',
         '995219633',
         TRUE,
@@ -397,7 +430,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Cynthia Barnett',
+        'Cynthia',
+        'Barnett',
+        'cynthia_barnett',
         'dictum.sapien.aenean@protonmail.edu',
         '998339655',
         TRUE,
@@ -407,7 +442,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Imani Wilkinson',
+        'Imani',
+        'Wilkinson',
+        'imani_wilkinson',
         'lorem.eu@yahoo.edu',
         '940636822',
         TRUE,
@@ -417,7 +454,9 @@ VALUES (
         'images/profile.jpg'    
     ),
     (
-        'Ebony Hill',
+        'Ebony',
+        'Hill',
+        'ebony_hill',
         'nulla@outlook.ca',
         '973648036',
         TRUE,
@@ -427,7 +466,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Jasper Briggs',
+        'Jasper',
+        'Briggs',
+        'jasper_briggs',
         'sem.ut@protonmail.net',
         '917847326',
         TRUE,
@@ -437,7 +478,9 @@ VALUES (
         'images/profile.jpg'
     ),
     (
-        'Ulric Vasquez',
+        'Ulric',
+        'Vasquez',
+        'ulric_vasquez',
         'amet@aol.ca',
         '923223688',
         FALSE,

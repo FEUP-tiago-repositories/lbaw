@@ -33,6 +33,8 @@ class UserController extends Controller
     {
         // Validate the form data
     $request->validate([
+        'first_name' => ['required|string|max:250'],
+        'surname' => ['required|string|max:250'],
         'user_name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'email', 'unique:user,email'],
         'phone_no' => ['required', 'string'],
@@ -53,6 +55,8 @@ class UserController extends Controller
     }
     
     $user = User::create([
+        'first_name' => $request->first_name,
+        'surname' => $request->surname,
         'user_name' => $request->user_name,
         'email' => $request->email,
         'phone_no' => $request->phone_no,
@@ -100,6 +104,8 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
+        $user->first_name = $request->first_name;
+        $user->surname = $request->surname;
         $user->user_name = $request->user_name;
         $user->email = $request->email;
         $user->phone_no = $request->phone_no;

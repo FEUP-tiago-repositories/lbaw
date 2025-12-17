@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Auth\RecoverController;
 // Admin Controllers
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
@@ -48,6 +49,12 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/sign-up', 'showRegistrationForm')->name('register');                      // R203
     Route::post('/sign-up', 'register');                                                   // R204
+});
+
+Route::controller(RecoverController::class)->group(function () {
+    Route::get('/password/reset/{token}', 'showResetForm')->name('password.reset');
+    Route::post('/password/reset', 'resetPassword')->name('password.update');
+    Route::post('/sign-in/recover', 'sendRecoveryEmail');
 });
 
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth'); // R207

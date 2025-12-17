@@ -222,6 +222,15 @@ CREATE TABLE favorited (
     PRIMARY KEY (space_id, customer_id)
 );
 
+CREATE TABLE password_resets (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id INT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    expires_at TIMESTAMP NOT NULL
+);
+
+
 -- =======================================================================================
 -- DATA POPULATION (around 1950 lines of code, scroll down to see indexes and triggers)
 -- =======================================================================================
@@ -245,7 +254,7 @@ VALUES (
         FALSE,
         'PDF81OMZ4CZ',
         '1960-01-23',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
         'Miriam Hoover',
@@ -255,7 +264,7 @@ VALUES (
         TRUE,
         'NXV25EBT2MC',
         '1989-04-05',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
         'Lysandra Wise',
@@ -265,7 +274,7 @@ VALUES (
         TRUE,
         'HIC92UVB1RM',
         '1963-08-24',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
         'Alfreda Curtis',
@@ -275,7 +284,7 @@ VALUES (
         TRUE,
         'QIR00JTE7MK',
         '2001-12-10',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
         'Constance Yates',
@@ -285,7 +294,7 @@ VALUES (
         TRUE,
         'YHP48KYD7QH',
         '1965-05-27',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
         'Nita Jennings',
@@ -295,7 +304,7 @@ VALUES (
         FALSE,
         'XJC87JZZ1PJ',
         '1986-02-05',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
         'Lucy Schroeder',
@@ -305,7 +314,7 @@ VALUES (
         FALSE,
         'URS83TKB1JK',
         '1990-12-28',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
         'Seth David',
@@ -315,7 +324,7 @@ VALUES (
         FALSE,
         'RBP99EEH9HY',
         '1971-09-09',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
         'Felicia Hubbard',
@@ -325,7 +334,7 @@ VALUES (
         FALSE,
         'YNY29HYN4EF',
         '1953-08-31',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
         'Kamal Burnett',
@@ -335,7 +344,7 @@ VALUES (
         FALSE,
         'JQD86QMT1PV',
         '1979-12-24',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
         'Murphy Cunningham',
@@ -345,7 +354,7 @@ VALUES (
         TRUE,
         'BDK84KFB0BM',
         '2006-10-12',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
         'Peter Haynes',
@@ -355,7 +364,7 @@ VALUES (
         FALSE,
         'TXL28IPE7HU',
         '1952-12-19',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
         'Xaviera Williams',
@@ -365,7 +374,7 @@ VALUES (
         TRUE,
         'JGX59DHI7EX',
         '1975-02-26',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
         'Tatiana Trujillo',
@@ -375,7 +384,7 @@ VALUES (
         FALSE,
         'PPX44LRY9TW',
         '1987-06-28',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
         'Gage Ramos',
@@ -385,7 +394,7 @@ VALUES (
         FALSE,
         'EKV03QXK6BT',
         '1961-03-18',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
         'Cynthia Barnett',
@@ -395,7 +404,7 @@ VALUES (
         FALSE,
         'RBR82JEP2WS',
         '1998-06-24',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
         'Imani Wilkinson',
@@ -405,7 +414,7 @@ VALUES (
         TRUE,
         'CLM27NIQ8IO',
         '1959-07-29',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'    
     ),
     (
         'Ebony Hill',
@@ -415,7 +424,7 @@ VALUES (
         FALSE,
         'AFA68UOX0FY',
         '1973-05-12',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
         'Jasper Briggs',
@@ -425,7 +434,7 @@ VALUES (
         FALSE,
         'TUP96PDI4DM',
         '1966-08-28',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
         'Ulric Vasquez',
@@ -435,7 +444,7 @@ VALUES (
         TRUE,
         'TDN80GTU5DJ',
         '2002-02-09',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     );
 
 INSERT INTO

@@ -122,7 +122,7 @@
                     </a>
 
                     <a href="{{ route('notifications.index') }}"
-                       class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
+                       class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
                         Notifications  
                         
                         @if($unreadCount > 0)

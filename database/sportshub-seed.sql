@@ -208,6 +208,12 @@ CREATE TABLE booking_reminder_notification (
     booking_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE -- Links to booking table
 );
 
+CREATE TABLE new_reservation_notifications (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    notification_id INT NOT NULL REFERENCES notification (id) ON DELETE CASCADE, -- Links to notification table
+    booking_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE -- Links to booking table
+);
+
 CREATE TABLE media (
     id INT GENERATED ALWAYS AS IDENTITY,
     space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
@@ -926,7 +932,7 @@ VALUES
     ),
     (
         11,
-        '2025-12-12 18:00:00',
+        '2025-12-17 18:00:00',
         60,
         35
     ),

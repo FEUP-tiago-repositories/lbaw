@@ -12,7 +12,7 @@ use App\Models\Schedule;
 use App\Models\BusinessOwner;
 use App\Models\Notification;
 use App\Models\BookingConfirmationNotification;
-use App\Models\BookingCancelationNotification;
+use App\Models\BookingCancellationNotification;
 use App\Models\NewReservationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -297,13 +297,13 @@ class BookingController extends Controller
             $booking->save();
 
             $notification = Notification::create([
-                'user_id' => $booking->customer_id,
+                'user_id' => $booking->customer->user_id,
                 'content' => 'Your reservation has been successfully cancelled.',
                 'is_read' => false,
                 'time_stamp' => now(),
             ]);
 
-            BookingCancelationNotification::create(['notification_id' => $notification->id, 'booking_id' => $booking->id]);
+            BookingCancellationNotification::create(['notification_id' => $notification->id, 'booking_id' => $booking->id]);
 
             event(new NotificationSent($notification));
 

@@ -1,6 +1,6 @@
 {{-- filepath: resources/views/spaces/partials/space-card.blade.php --}}
 <a href="{{ route('spaces.show', $space->id) }}">
-    <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full w-[270px] hover:shadow-lg transition-shadow duration-300">
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full w-[250px] hover:shadow-lg transition-shadow duration-300">
         <!-- Image -->
         <div class="h-40 overflow-hidden bg-gray-200 shrink-0">
             @include('partials.space-image', ['space' => $space])

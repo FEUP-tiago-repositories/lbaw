@@ -11,7 +11,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
                 <a href="{{ route('users.show', Auth::id()) }}" class="text-emerald-600 hover:text-emerald-400">
-                    Profile of {{ Auth::user()->user_name }}
+                    Profile of {{ Auth::user()->first_name }} {{ Auth::user()->surname }}
                 </a>
             </div>
             <div class="flex gap-6">
@@ -61,31 +61,21 @@
                             {{ $user->birth_date }}
                         </p>
 
-            <p class="text-lg">
-            <span class="font-medium text-gray-700">Deleted Account:</span>
-            @if($user->is_deleted)
-                <span class="text-red-600 font-bold">Yes</span>
-            @else
-                <span class="text-green-700 font-bold">No</span>
-            @endif
-            </p>
-
-
-            <p class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                <span class="font-medium text-gray-700">Role:</span>
-                @if($user->customer)
-                    <span class="font-bold">Customer</span>
-                @elseif($user->businessOwner)
-                    <span class="font-bold">Business Owner</span>
-                @else
-                    <span class="font-bold">Not defined</span>
-                @endif
-            </p>
-        </div>
+                        <p class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span class="font-medium text-gray-700">Role:</span>
+                            @if($user->customer)
+                                <span class="font-bold">Customer</span>
+                            @elseif($user->businessOwner)
+                                <span class="font-bold">Business Owner</span>
+                            @else
+                                <span class="font-bold">Not defined</span>
+                            @endif
+                        </p>
+                    </div>
 
                     <hr class="my-8">
 
@@ -96,46 +86,46 @@
                             Edit Profile
                         </a>
 
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
-                    Log Out
-                </button>
-            </form>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
+                                Log Out
+                            </button>
+                        </form>
 
-            <button
-                onclick="openDeleteModal()"
-                class="px-6 py-3 text-lg bg-red-600 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
-                Delete Account
-            </button>
+                        <button
+                            onclick="openDeleteModal()"
+                            class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
+                            Delete Account
+                        </button>
 
 
-        </div>
-    </div>
-
-    {{-- Right Column: Role-Specific Actions --}}
-    <div class="w-72">
-        @if($user->customer)
-            <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg">
-                <div class="flex flex-col gap-3">
-                    <a href="{{ route('bookings.index', ['user_id' => auth()->id()]) }}"
-                       class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
-                        My Reservations                 
-                    </a>
-
-                    <a href="{{ route('notifications.index') }}"
-                    class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium group">
-
-                        Notifications
-
-                        @if($unreadCount > 0)
-                            <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
-                                {{ $unreadCount }}
-                            </span>
-                        @endif
-                    </a>
+                    </div>
                 </div>
-            </div>
+
+                {{-- Right Column: Role-Specific Actions --}}
+                <div class="w-72">
+                    @if($user->customer)
+                        <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg">
+                            <div class="flex flex-col gap-3">
+                                <a href="{{ route('bookings.index', ['user_id' => auth()->id()]) }}"
+                                   class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
+                                    My Reservations
+                                </a>
+
+                                <a href="{{ route('notifications.index') }}"
+                                class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium group">
+
+                                    Notifications
+
+                                    @if($unreadCount > 0)
+                                        <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
+                                            {{ $unreadCount }}
+                                        </span>
+                                    @endif
+                                </a>
+                            </div>
+                        </div>
 
                     @elseif($user->businessOwner)
                         <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg text-center font-medium">

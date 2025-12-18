@@ -1,6 +1,6 @@
 <!-- Modal de Cancelamento -->
 <div id="cancelModal" class="hidden fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 p-6">
         <h2 class="text-xl font-bold text-center">Are you sure you want to cancel this reservation?</h2>
         <p class="text-base mb-4 text-center">This action cannot be undone.</p>
 

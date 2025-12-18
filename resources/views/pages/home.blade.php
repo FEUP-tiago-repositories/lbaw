@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- Mapa com todos os espaços --}}
-    <div class="container mx-auto bg-emerald-900 rounded-2xl shadow-xl py-4 px-8 mt-6 max-w-7xl">
+    <div class="container mx-auto bg-emerald-900 rounded-2xl shadow-xl py-4 px-8 mt-6 max-w-6xl">
         <h2 class="text-2xl flex items-center font-bold text-white p-2 mb-4">
             <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -25,12 +25,12 @@
     </div>
 
 
-    <div class="container px-8 py-8 mx-auto max-w-7xl">
+    <div class="container px-8 py-8 mx-auto max-w-6xl">
         <h2 class = "mb-4 text-3xl font-semibold">Best Reviewed:</h2>
 
         <div class="flex overflow-x-auto gap-4 pb-2">
             @foreach ($spaces as $space)
-                <div class="shrink-0 w-64">
+                <div class="shrink-0 w-[250px]">
                     @include('spaces.partials.space-card', ['space' => $space])
                 </div>
             @endforeach

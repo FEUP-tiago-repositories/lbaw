@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationSent;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\Discount;
 use App\Models\Payment;
-use App\Models\Schedule;
 use App\Models\Space;
+use App\Models\Schedule;
+use App\Models\BusinessOwner;
+use App\Models\Notification;
+use App\Models\BookingConfirmationNotification;
+use App\Models\BookingCancellationNotification;
+use App\Models\NewReservationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -101,7 +107,36 @@ class BookingController extends Controller
                 'is_cancelled' => false,
             ]);
 
+            // Reservar capacidade
             ScheduleController::reserveCapacity($result['schedules'], $validated['number_of_persons']);
+
+            $space = Space::findOrFail($space_id);
+            $ownerUserId = null;
+
+            if (!empty($space->owner_id)) {
+                $businessOwner = BusinessOwner::find($space->owner_id);
+                if ($businessOwner) {
+                    $ownerUserId = $businessOwner->user_id;
+                }
+            }
+
+            if ($ownerUserId && $ownerUserId != Auth::id()) {
+
+                $ownerNotif = Notification::create([
+                    'user_id' => $ownerUserId,
+                    'content' => "You received a new reservation",
+                    'is_read' => false,
+                    'time_stamp' => now(),
+                ]);
+
+                NewReservationNotification::create([
+                    'notification_id' => $ownerNotif->id,
+                    'booking_id' => $booking->id
+                ]);
+
+                event(new NotificationSent($ownerNotif));
+            }
+
             DB::commit();
 
             return response()->json([
@@ -182,7 +217,9 @@ class BookingController extends Controller
                 'number_of_persons' => $validated['number_of_persons'],
             ]);
 
+            // Reservar nova capacidade
             ScheduleController::reserveCapacity($newResult['schedules'], $validated['number_of_persons']);
+
             DB::commit();
 
             return response()->json([
@@ -225,6 +262,17 @@ class BookingController extends Controller
 
             $booking->is_cancelled = true;
             $booking->save();
+
+            $notification = Notification::create([
+                'user_id' => $booking->customer->user_id,
+                'content' => 'Your reservation has been successfully cancelled.',
+                'is_read' => false,
+                'time_stamp' => now(),
+            ]);
+
+            BookingCancellationNotification::create(['notification_id' => $notification->id, 'booking_id' => $booking->id]);
+
+            event(new NotificationSent($notification));
 
             DB::commit();
 
@@ -342,13 +390,13 @@ class BookingController extends Controller
     private function buildDayTimeline($date, $space_id, $schedules)
     {
         $timeline = [];
-        
+
         // Generate all possible 30-min slots from 00:00 to 23:30
         for ($hour = 0; $hour < 24; $hour++) {
             for ($minute = 0; $minute < 60; $minute += 30) {
                 $slotTime = Carbon::parse($date)->setTime($hour, $minute, 0);
                 $slotKey = $slotTime->format('H:i');
-                
+
                 // Find schedule for this slot
                 $schedule = $schedules->first(function($s) use ($slotTime) {
                     return Carbon::parse($s->start_time)->format('H:i') === $slotTime->format('H:i');
@@ -362,7 +410,7 @@ class BookingController extends Controller
 
                     $activeBookings = $bookings->where('is_cancelled', false);
                     $usedCapacity = $activeBookings->sum('number_of_persons');
-                    
+
                     // max_capacity is remaining, so total = used + remaining
                     $totalCapacity = $usedCapacity + $schedule->max_capacity;
                     $occupancyPercentage = $totalCapacity > 0 ? ($usedCapacity / $totalCapacity) * 100 : 0;

@@ -91,17 +91,29 @@
                     </div>
                 </div>
 
-                {{-- Right Column: Role-Specific Actions --}}
-                <div class="w-72">
-                    @if($user->customer)
-                        <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg">
-                            <div class="flex flex-col gap-3">
-                                <a href="{{ route('bookings.index', ['user_id' => auth()->id()]) }}"
-                                   class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center font-medium">
-                                    My Reservations
-                                </a>
-                            </div>
-                        </div>
+    {{-- Right Column: Role-Specific Actions --}}
+    <div class="w-72">
+        @if($user->customer)
+            <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg">
+                <div class="flex flex-col gap-3">
+                    <a href="{{ route('bookings.index', ['user_id' => auth()->id()]) }}"
+                       class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
+                        My Reservations                 
+                    </a>
+
+                    <a href="{{ route('notifications.index') }}"
+                    class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium group">
+
+                        Notifications
+
+                        @if($unreadCount > 0)
+                            <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
+                                {{ $unreadCount }}
+                            </span>
+                        @endif
+                    </a>
+                </div>
+            </div>
 
                     @elseif($user->businessOwner)
                         <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg text-center font-medium">
@@ -111,15 +123,25 @@
                                     Create New Space
                                 </a>
 
-                                <a href="{{ route('home') }}"
-                                   class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition ">
-                                    Manage Schedules
-                                </a>
+                    <a href="{{ route('home') }}"
+                       class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition ">
+                        Manage Schedules
+                    </a>
 
-                                <a href="{{ route('spaces.bookings.select') }}"
-                                   class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
-                                    Manage Reservations
-                                </a>
+                    <a href="{{ route('spaces.bookings.select') }}"
+                       class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                        Manage Reservations
+                    </a>
+                    <a href="{{ route('notifications.index') }}"
+                       class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
+                        Notifications
+
+                        @if($unreadCount > 0)
+                            <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
+                                {{ $unreadCount }}
+                            </span>
+                        @endif
+                    </a>
                             </div>
                         </div>
                     @endif

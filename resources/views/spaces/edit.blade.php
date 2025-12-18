@@ -3,7 +3,29 @@
 
 @section('content')
 <div class="container mx-auto px-8 py-8 max-w-4xl bg-white rounded-2xl shadow my-3.5">
-    <h1 class="text-3xl font-bold mb-6">Edit Space: {{ $space->title }}</h1>
+    <div class = "flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold mb-6">Edit Space: {{ $space->title }}</h1>
+
+        <button type="button" onclick="toggleModal()" 
+            class="w-12 h-12 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center hover:bg-emerald-500 transition shadow-lg">
+            ?
+        </button>
+    </div>
+
+    <div id="helpModal" class="fixed inset-0 bg-transparent bg-opacity-60 flex items-center justify-center z-50 hidden backdrop-blur-sm transition-opacity duration-300">
+            
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-3xl w-full min-h-[500px] relative transform transition-all scale-100 mx-4">
+            <div class="text-gray-600 text-center mb-8 leading-relaxed">
+                @include('partials.help.edit_space')
+            </div>
+
+            <div class="flex justify-center">
+                <button onclick="toggleModal()" class="px-8 py-3 bg-red-600 text-white rounded-full font-semibold shadow-lg hover:bg-red-700 hover:shadow-xl transition transform hover:-translate-y-0.5">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     {{-- Display errors --}}
     @if ($errors->any())

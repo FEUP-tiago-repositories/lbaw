@@ -11,6 +11,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ResponseController;
+
 // Admin Controllers
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
@@ -72,7 +74,7 @@ Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index'); 
 Route::get('/spaces/search', [SearchController::class, 'search'])->name('spaces.search');
 
 // Authenticated routes - /spaces/create MUST come BEFORE /spaces/{space}
-Route::middleware(['auth','business.owner'])->group(function () {
+Route::middleware(['auth', 'business.owner'])->group(function () {
     Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create');   // R301 (form)
     Route::post('/spaces', [SpaceController::class, 'store'])->name('spaces.store');          // R302 (action)
 });
@@ -104,10 +106,21 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ============================================
+// M04: REVIEWS and RESPONSES
+// ============================================
+Route::middleware(['auth'])->group(function () {
+    Route::post('/reviews', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::post('/responses',[App\Http\Controllers\ResponseController::class, 'store'])->name('responses.store');
+});
+
+// ============================================
 // NOTIFICATIONS (extensão)
 // ============================================
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.readAll');
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');   
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
 // ============================================

@@ -30,7 +30,7 @@
 
         <div class="flex overflow-x-auto gap-4 pb-2">
             @foreach ($spaces as $space)
-                <div class="shrink-0 max-w-80">
+                <div class="shrink-0 w-64">
                     @include('spaces.partials.space-card', ['space' => $space])
                 </div>
             @endforeach

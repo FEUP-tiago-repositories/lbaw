@@ -13,7 +13,7 @@ class SpaceManagementController extends Controller
      */
     public function index()
     {
-        $spaces = Space::with(['user_owner.user', 'sportType'])
+        $spaces = Space::with(['owner.user', 'sportType'])
             ->orderBy('id', 'asc')
             ->get();
 
@@ -29,7 +29,7 @@ class SpaceManagementController extends Controller
 
         return view('admin.spaces.show', compact('space'));
     }
-    
+
     /**
      * Remove the specified space.
      */

@@ -55,9 +55,12 @@ class FavoriteController extends Controller
     public function index()
     {
         $customer = Auth::user()->customer;
+        if (! $customer) {
+            abort(403, 'Only Customers can view favorite spaces!');
+        }
         $favoritedSpaces = $customer->favoritedSpaces()->get();
 
-        return response()->json($favoritedSpaces);
+        return view('users.favorites', compact('favoritedSpaces'));
     }
 
     /**

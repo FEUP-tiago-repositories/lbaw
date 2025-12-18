@@ -41,52 +41,72 @@
                 </div>
             </div>
         </div>
-        <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+
+        <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" text-xl>
             @csrf
             @method('PATCH')
+            <div class="flex gap-4">
+                {{-- First Name --}}
+                <div class="w-1/2">
+                    <label class="block text-gray-700 font-medium mb-1">First Name</label>
+                    <input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}"
+                           required minlength="2" maxlength="15"
+                           pattern="[A-Za-z]+"
+                           title="First name can only contain letters."
+                           class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                {{-- Surname --}}
+                <div class="w-1/2">
+                    <label class="block text-gray-700 font-medium mb-1">Surname</label>
+                    <input type="text" name="surname" value="{{ old('surname', $user->surname) }}"
+                           required minlength="2" maxlength="15"
+                           pattern="[A-Za-z]+"
+                           title="Surname can only contain letters."
+                           class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
             {{-- Username --}}
             <div>
                 <label class="block text-gray-700 font-medium mb-1">Username</label>
                 <input type="text" name="user_name" value="{{ old('user_name', $user->user_name) }}"
-                    required minlength="3" maxlength="20"
-                    pattern="[A-Za-z0-9_]+"
-                    title="Username can only contain letters, numbers, and underscores."
-                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                       required minlength="3" maxlength="20"
+                       pattern="[A-Za-z0-9_]+"
+                       title="Username can only contain letters, numbers, and underscores."
+                       class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             {{-- Email --}}
             <div>
                 <label class="block text-gray-700 font-medium mb-1">Email</label>
                 <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                    required maxlength="255"
-                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                       required maxlength="255"
+                       class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             {{-- Phone --}}
             <div>
                 <label class="block text-gray-700 font-medium mb-1">Phone</label>
                 <input type="text" name="phone_no" value="{{ old('phone_no', $user->phone_no) }}"
-                    required pattern="[0-9]{9}" maxlength="9"
-                    title="Phone number must be exactly 9 digits."
-                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                       required pattern="[0-9]{9}" maxlength="9"
+                       title="Phone number must be exactly 9 digits."
+                       class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             {{-- Birth Date --}}
             <div>
                 <label class="block text-gray-700 font-medium mb-1">Birth Date</label>
                 <input type="date" name="birth_date" value="{{ old('birth_date', $user->birth_date) }}"
-                    max="{{ date('Y-m-d', strtotime('-18 years')) }}"
-                    title="You must be at least 18 years old."
-                    required
-                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                       max="{{ date('Y-m-d', strtotime('-18 years')) }}"
+                       title="You must be at least 18 years old."
+                       required
+                       class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             {{-- Profile Picture --}}
             <div>
                 <label class="block text-gray-700 font-medium mb-1">Profile Picture</label>
                 <div class="flex items-center gap-4">
-                    <img src="{{ $user->profile_pic_url ?? 'https://via.placeholder.com/120' }}"
-                         class="w-20 h-20 rounded-full object-cover border shadow">
                     <input type="file" name="profile_pic_url"
                            class="block w-full text-gray-700">
                 </div>

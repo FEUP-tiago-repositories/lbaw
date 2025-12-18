@@ -54,6 +54,8 @@ class UserManagementController
         }
 
          $user = User::create([
+            'first_name' => $request->first_name,
+            'surname' => $request->surname,
             'user_name' => $request->user_name,
             'email' => $request->email,
             'phone_no' => $request->phone_no,
@@ -101,6 +103,8 @@ class UserManagementController
         $user = User::findOrFail($id);
 
         $request->validate([
+            'first_name' => 'required|string|max:250',
+            'surname' => 'required|string|max:250',
             'user_name' => 'required|string',
             'email' => 'required|email|unique:user,email,' . $id,
             'phone_no' => 'required|string|unique:user,phone_no,' . $id,

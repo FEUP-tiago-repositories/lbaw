@@ -20,6 +20,8 @@ $do$ LANGUAGE plpgsql;
 
 CREATE Table "user" (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    first_name VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
     user_name VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     phone_no VARCHAR(15) NOT NULL UNIQUE,
@@ -229,12 +231,22 @@ CREATE TABLE favorited (
     PRIMARY KEY (space_id, customer_id)
 );
 
+CREATE TABLE password_resets (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id INT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    expires_at TIMESTAMP NOT NULL
+);
+
+
 -- =======================================================================================
 -- DATA POPULATION (around 1950 lines of code, scroll down to see indexes and triggers)
 -- =======================================================================================
 
-INSERT INTO
-    "user" (
+    INSERT INTO "user" (
+        first_name,
+        surname,
         user_name,
         email,
         phone_no,
@@ -245,204 +257,244 @@ INSERT INTO
         profile_pic_url
     )
 VALUES (
-        'Cade Le',
+        'Cade',
+        'Le',
+        'cade_le',
         'dolor.nulla@protonmail.couk',
         '954529117',
         FALSE,
         FALSE,
         'PDF81OMZ4CZ',
         '1960-01-23',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Miriam Hoover',
+        'Miriam',
+        'Hoover',
+        'miriam_hoover',
         'nibh.quisque.nonummy@hotmail.edu',
         '962922371',
         FALSE,
         TRUE,
         'NXV25EBT2MC',
         '1989-04-05',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Lysandra Wise',
+        'Lysandra',
+        'Wise',
+        'lysandra_wise',
         'ullamcorper@aol.org',
         '931042084',
         FALSE,
         TRUE,
         'HIC92UVB1RM',
         '1963-08-24',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Alfreda Curtis',
+        'Alfreda',
+        'Curtis',
+        'alfreda_curtis',
         'sed@aol.net',
         '972456831',
         FALSE,
         TRUE,
         'QIR00JTE7MK',
         '2001-12-10',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Constance Yates',
+        'Constance',
+        'Yates',
+        'constance_yates',
         'interdum@protonmail.ca',
         '989628425',
         TRUE,
         TRUE,
         'YHP48KYD7QH',
         '1965-05-27',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Nita Jennings',
+        'Nita',
+        'Jennings',
+        'nita_jennings',
         'auctor.ullamcorper.nisl@icloud.edu',
         '973066023',
         FALSE,
         FALSE,
         'XJC87JZZ1PJ',
         '1986-02-05',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
-        'Lucy Schroeder',
+        'Lucy',
+        'Schroeder',
+        'lucy_schroeder',
         'quisque.tincidunt@hotmail.couk',
         '979822651',
         TRUE,
         FALSE,
         'URS83TKB1JK',
         '1990-12-28',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Seth David',
+        'Seth',
+        'David',
+        'seth_david',
         'mauris.magna@protonmail.ca',
         '963088105',
         TRUE,
         FALSE,
         'RBP99EEH9HY',
         '1971-09-09',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Felicia Hubbard',
+        'Felicia',
+        'Hubbard',
+        'felicia_hubbard',
         'et.magnis@outlook.edu',
         '903518505',
         FALSE,
         FALSE,
         'YNY29HYN4EF',
         '1953-08-31',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Kamal Burnett',
+        'Kamal',
+        'Burnett',
+        'kamal_burnett',
         'convallis@yahoo.couk',
         '930572268',
         FALSE,
         FALSE,
         'JQD86QMT1PV',
         '1979-12-24',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Murphy Cunningham',
+        'Murphy',
+        'Cunningham',
+        'murphy_cunningham',
         'mauris.sapien.cursus@hotmail.org',
         '975166436',
         FALSE,
         TRUE,
         'BDK84KFB0BM',
         '2006-10-12',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Peter Haynes',
+        'Peter',
+        'Haynes',
+        'peter_haynes',
         'tortor.at.risus@protonmail.edu',
         '912031257',
         FALSE,
         FALSE,
         'TXL28IPE7HU',
         '1952-12-19',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Xaviera Williams',
+        'Xaviera',
+        'Williams',
+        'xaviera_williams',
         'eget@google.net',
         '986863406',
         TRUE,
         TRUE,
         'JGX59DHI7EX',
         '1975-02-26',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
-        'Tatiana Trujillo',
+        'Tatiana',
+        'Trujillo',
+        'tatiana_trujillo',
         'curabitur@aol.ca',
         '931704357',
         FALSE,
         FALSE,
         'PPX44LRY9TW',
         '1987-06-28',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
-        'Gage Ramos',
+        'Gage',
+        'Ramos',
+        'gage_ramos',
         'congue@outlook.org',
         '995219633',
         TRUE,
         FALSE,
         'EKV03QXK6BT',
         '1961-03-18',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Cynthia Barnett',
+        'Cynthia',
+        'Barnett',
+        'cynthia_barnett',
         'dictum.sapien.aenean@protonmail.edu',
         '998339655',
         TRUE,
         FALSE,
         'RBR82JEP2WS',
         '1998-06-24',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
-        'Imani Wilkinson',
+        'Imani',
+        'Wilkinson',
+        'imani_wilkinson',
         'lorem.eu@yahoo.edu',
         '940636822',
         TRUE,
         TRUE,
         'CLM27NIQ8IO',
         '1959-07-29',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'    
     ),
     (
-        'Ebony Hill',
+        'Ebony',
+        'Hill',
+        'ebony_hill',
         'nulla@outlook.ca',
         '973648036',
         TRUE,
         FALSE,
         'AFA68UOX0FY',
         '1973-05-12',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Jasper Briggs',
+        'Jasper',
+        'Briggs',
+        'jasper_briggs',
         'sem.ut@protonmail.net',
         '917847326',
         TRUE,
         FALSE,
         'TUP96PDI4DM',
         '1966-08-28',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Ulric Vasquez',
+        'Ulric',
+        'Vasquez',
+        'ulric_vasquez',
         'amet@aol.ca',
         '923223688',
         FALSE,
         TRUE,
         'TDN80GTU5DJ',
         '2002-02-09',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     );
 
 INSERT INTO

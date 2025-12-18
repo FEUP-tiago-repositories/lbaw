@@ -22,6 +22,28 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
+                    {{-- First Name --}}
+                        <div>
+                            <label class="block font-medium text-gray-700 mb-1">First Name</label>
+                            <input type="text" name="first_name"
+                                value="{{ old('first_name') }}"
+                                required minlength="2" maxlength="15"
+                                pattern="[A-Za-z]+"
+                                title="First name can only contain letters."
+                                class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                    {{-- Surname --}}
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-1">Surname</label>
+                        <input type="text" name="surname"
+                            value="{{ old('surname') }}"
+                            required minlength="2" maxlength="15"
+                            pattern="[A-Za-z]+"
+                            title="Surname can only contain letters."
+                            class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
                     {{-- Username --}}
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Username</label>
@@ -114,7 +136,7 @@
                     <input type="password" name="password_confirmation"
                         required minlength="6"
                         class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Confirm your password"
+                        placeholder="Confirm your password">
                 </div>
 
                 <button

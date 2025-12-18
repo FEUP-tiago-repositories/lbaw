@@ -53,4 +53,35 @@ class Space extends Model
     {
         return $this->hasOne(Media::class, 'space_id')->where('is_cover', true);
     }
+
+    // **
+    // Get all booking associated with a space
+    //  */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'space_id');
+    }
+
+    /**
+     * Get all reviews associated with a space
+     */
+    public function reviews()
+    {
+        return $this->hasManyThrough(
+            Review::class, // the final model
+            Booking::class, // the model it needs to come trough
+            'space_id',
+            'booking_id',
+            'id',
+            'id'
+        );
+    }
+
+    /**
+     * Get all schedules for this space
+     */
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'space_id');
+    }
 }

@@ -60,7 +60,7 @@ making a booking --}}
                 @endauth
             </div>
             <div class="flex">
-                <div class="flex-[2]">
+                <div class="flex-2">
                     <div class="text-xl">
                         {{-- -Address flex --}}
                         <div class="flex items-center justify-start gap-2 mb-1">
@@ -134,7 +134,7 @@ making a booking --}}
                         <div class="flex-1">
                             <div class="flex border-b-2 border-gray-200 pb-2.5">
                                 <h2 id="about-tab"
-                                    class="text-xl font-medium border-r-2 pr-2.5 text-emerald-800 cursor-pointer transition-colors">
+                                    class="text-xl font-medium pr-2.5 text-emerald-800 cursor-pointer transition-colors">
                                     About</h2>
                                 <h2 id="reviews-tab"
                                     class="text-xl font-medium pl-2.5 hover:text-emerald-800 cursor-pointer transition-colors">
@@ -145,10 +145,101 @@ making a booking --}}
                                 <p class="text-base">{{ $space->description }}</p>
                             </div>
 
-                            {{-- Review Content --}}
+                            {{-- Reviews Content --}}
                             <div id="reviews-content" class="mt-3.5 hidden"> {{-- Will initially be hidden --}}
-                                <p class="text-base">Reviews section coming soon...</p>
-                                {{-- Will add later --}}
+                                @if($reviews->isNotEmpty())
+                                    {{-- Include general reviews info --}}
+                                    @include('reviews.partials.general-reviews-info',[
+                                        'averageRating' => $averageRating,
+                                        'avgEnvironment' => $avgEnvironment,
+                                        'avgEquipment' => $avgEquipment,
+                                        'avgService' => $avgService,
+                                        'totalReviews' => $totalReviews
+                                    ])
+
+                                    {{-- Write Review button & Form (should only appear for customers, that reserved the space) --}}
+                                    @auth
+                                        @if (auth()->user()->customer)
+                                            @php
+                                                // need to check if the customer has a past reservation for this space
+                                                $eligibleBooking = auth()->user()->customer->bookings()->where('space_id',$space->id)->where('is_cancelled',false)->whereHas('schedule',function($q){
+                                                    $q->where('start_time', '<',now());
+                                                })->whereDoesntHave('review')->first();
+                                            @endphp
+
+                                            @if($eligibleBooking)
+                                                <div class="my-6">
+                                                    {{-- Write Review Button --}}
+                                                    <div id="write-review-btn-container" class="flex justify-center">
+                                                        <button onclick="showReviewForm()" class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md hover:shadow-lg">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                            </svg>
+                                                            <p class="cursor-default">Write a Review</p>
+                                                        </button>
+                                                    </div>
+
+                                                    {{-- Review Form (hidden by default) --}}
+                                                    <div id="review-form-container" class="hidden">
+                                                        @include('reviews.review-form',['space'=>$space,'bookingId' => $eligibleBooking->id])
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endauth
+                                    {{-- Review List --}}
+                                    <div class="space-y-4 mt-6">
+                                        @foreach ( $reviews as $review )
+                                            @include('reviews.partials.review-card',['review' => $review])
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="text-center py-12">
+                                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                        </svg>
+                                        <p class="text-gray-500 text-lg">No reviews yet</p>
+                                        @auth
+                                            @if (auth()->user()->customer)
+                                                @php
+                                                    // need to check if the customer has a past reservation for this space
+                                                    $eligibleBooking = auth()->user()->customer->bookings()->where('space_id',$space->id)->where('is_cancelled',false)->whereHas('schedule',function($q){
+                                                        $q->where('start_time', '<',now());
+                                                    })->whereDoesntHave('review')->first();
+                                                @endphp
+                                                
+                                                @if ($eligibleBooking)
+                                                    <p class="text-gray-400 text-sm mt-2 mb-4">Be the first to review this space!</p>
+                                                    
+                                                    <div id="write-first-review-btn">
+                                                        {{-- Review Button --}}
+                                                        <button onclick="showReviewForm()" class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md hover:shadow-lg">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                            </svg>
+                                                            <p class="cursor-default">Write the First Review</p>
+                                                        </button>
+                                                    </div>
+
+                                                    <div id="review-form-container" class="hidden mt-6 max-w-3xl mx-auto">
+                                                        @include('reviews.review-form',['space'=>$space,'bookingId' => $eligibleBooking->id])
+                                                    </div>
+                                                @else
+                                                    <p class="text-gray-400 text-sm mt-2">Book this space to leave a review!</p>
+                                                @endif
+                                            @else
+                                                <p class="text-gray-400 text-sm mt-2">Be the first to book and review this space!</p>
+                                            @endif
+                                        @else
+                                            <p class="text-gray-400 text-sm mt-2">
+                                                <a href="{{ route('login') }}" class="text-emerald-600 hover:text-emerald-700 font-medium">
+                                                    Sign in to book and review this space!
+                                                </a>
+                                            </p>
+                                        @endauth
+                                    </div>
+                                    @endif
                             </div>
                         </div>
                     </div>
@@ -179,7 +270,7 @@ making a booking --}}
     </div>
                         @auth
                             @if(auth()->user()->customer)
-                                        <div class="flex-[1]">
+                                        <div class="flex-1">
                                             @include('bookings.partials.calendar-widget', ['space' => $space])
                                 </div>
                             @endif
@@ -193,4 +284,5 @@ making a booking --}}
 @push('scripts')
     <script src="{{ asset('js/spaces.show.js') }}"></script>
     <script src="{{ asset('js/booking.js') }}"></script>
+    <script src="{{ asset('js/review.js') }}"></script>
 @endpush

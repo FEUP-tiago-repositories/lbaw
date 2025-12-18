@@ -193,6 +193,6 @@ making a booking --}}
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/spaces.show.js') }}"></script>
+    <script src="{{ asset('js/business-owner.js') }}"></script>
     <script src="{{ asset('js/booking.js') }}"></script>
 @endpush

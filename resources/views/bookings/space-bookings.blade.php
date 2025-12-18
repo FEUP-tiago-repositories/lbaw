@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-[1600px] mx-auto">
+            <!-- Breadcrumb -->
             <div class="flex items-center gap-2 mb-6 text-lg">
                 <a href="{{ route('home') }}" class="text-emerald-600 hover:text-emerald-400">
                     <img alt="Home Page" src="/images/home-icon.svg" height="18" width="18">
@@ -22,17 +23,15 @@
                 <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
-                <p>
-                    Reservations for {{ $space->title }}
-                </p>
+                <p>Reservations for {{ $space->title }}</p>
             </div>
-            <!-- Header com informação do espaço -->
-            <div class="flex items-center justify-between mb-2">
+            
+            <!-- Page Header -->
+            <div class="flex items-center justify-between mb-6">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900">Reservations for {{ $space->title }}</h1>
                     <p class="text-gray-600 mt-2">{{ $space->address }}</p>
                 </div>
-                <!-- View Toggle -->
                 <div class="flex space-x-2">
                     <a href="{{ route('spaces.show', $space->id) }}"
                        class="bg-emerald-800 text-white px-8 py-2 rounded-lg hover:text-black hover:bg-emerald-200 font-medium transition">
@@ -41,7 +40,7 @@
                 </div>
             </div>
 
-            @if($futureReservations->isEmpty() && $pastReservations->isEmpty() && $cancelledReservations->isEmpty())
+            @if(!$hasAnyBookings)
                 <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
                     <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -50,40 +49,37 @@
                 </div>
             @else
                 <!-- View Toggle Buttons -->
-                <div class="flex gap-2 my-4">
+                <div class="flex gap-2 mb-6">
                     <button id="btn-list-view" onclick="switchView('list')"
-                            class="inline-flex items-center view-btn px-4 py-2 rounded-lg font-medium transition bg-emerald-200 text-black hover:bg-emerald-400">
+                            class="inline-flex items-center view-btn px-4 py-2 rounded-lg font-medium transition bg-gray-200 text-gray-700 hover:bg-gray-400">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
-                        List
+                        List View
                     </button>
                     <button id="btn-calendar-view" onclick="switchView('calendar')"
-                            class="inline-flex items-center view-btn px-4 py-2 rounded-lg font-medium transition bg-gray-200 text-gray-700 hover:bg-gray-400">
+                            class="inline-flex items-center view-btn px-4 py-2 rounded-lg font-medium transition bg-emerald-200 text-black hover:bg-emerald-400">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
-                        Calendar
+                        Calendar View
                     </button>
                 </div>
+
                 <!-- List View -->
-                <div id="list-view">
-                    <!-- Tabs -->
+                <div id="list-view" class="hidden">
                     <div class="mb-6">
                         <div class="border-b border-gray-200">
                             <nav class="flex gap-8">
-                                <button onclick="showTab('future')"
-                                        id="tab-future"
+                                <button onclick="showTab('future')" id="tab-future"
                                         class="tab-button border-b-2 border-emerald-800 text-emerald-800 py-2 px-1 text-center font-medium text-sm">
                                     Future ({{ $futureReservations->count() }})
                                 </button>
-                                <button onclick="showTab('past')"
-                                        id="tab-past"
+                                <button onclick="showTab('past')" id="tab-past"
                                         class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-2 px-1 text-center font-medium text-sm">
                                     Past ({{ $pastReservations->count() }})
                                 </button>
-                                <button onclick="showTab('cancelled')"
-                                        id="tab-cancelled"
+                                <button onclick="showTab('cancelled')" id="tab-cancelled"
                                         class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-2 px-1 text-center font-medium text-sm">
                                     Cancelled ({{ $cancelledReservations->count() }})
                                 </button>
@@ -91,7 +87,6 @@
                         </div>
                     </div>
 
-                    <!-- Future Reservations -->
                     <div id="content-future" class="tab-content">
                         @if($futureReservations->isEmpty())
                             <p class="text-gray-500 text-center py-8">No future reservations</p>
@@ -104,7 +99,6 @@
                         @endif
                     </div>
 
-                    <!-- Past Reservations -->
                     <div id="content-past" class="tab-content hidden">
                         @if($pastReservations->isEmpty())
                             <p class="text-gray-500 text-center py-8">No past reservations</p>
@@ -117,7 +111,6 @@
                         @endif
                     </div>
 
-                    <!-- Cancelled Reservations -->
                     <div id="content-cancelled" class="tab-content hidden">
                         @if($cancelledReservations->isEmpty())
                             <p class="text-gray-500 text-center py-8">No cancelled reservations</p>
@@ -132,139 +125,203 @@
                 </div>
 
                 <!-- Calendar View -->
-                <div id="calendar-view" class="hidden">
-                    <!-- Calendar Header -->
+                <div id="calendar-view">
+                    <!-- Week Filter Navigation -->
                     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <button id="prev-month" class="p-2 hover:bg-gray-100 rounded-lg transition">
-                                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center justify-between">
+                            <button onclick="changeWeek(-1)" class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                 </svg>
+                                last week
                             </button>
-                            <h2 id="calendar-month-year" class="text-2xl font-bold text-gray-900"></h2>
-                            <button id="next-month" class="p-2 hover:bg-gray-100 rounded-lg transition">
-                                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            
+                            <div class="flex items-center gap-4">
+                                <!-- Day Selector -->
+                                <select id="day-select" onchange="goToDate(this.value)" 
+                                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                                    @for($i = 1; $i <= 31; $i++)
+                                        <option value="{{ $i }}" {{ $i == \Carbon\Carbon::parse($selectedDate)->day ? 'selected' : '' }}>
+                                            {{ $i }}
+                                        </option>
+                                    @endfor
+                                </select>
+
+                                <!-- Month Selector -->
+                                <select id="month-select" onchange="updateDateFromSelectors()" 
+                                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                                    @foreach(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $index => $month)
+                                        <option value="{{ $index + 1 }}" {{ ($index + 1) == \Carbon\Carbon::parse($selectedDate)->month ? 'selected' : '' }}>
+                                            {{ $month }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <!-- Year Selector -->
+                                <select id="year-select" onchange="updateDateFromSelectors()" 
+                                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                                    @for($year = 2024; $year <= 2026; $year++)
+                                        <option value="{{ $year }}" {{ $year == \Carbon\Carbon::parse($selectedDate)->year ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
+                            
+                            <button onclick="changeWeek(1)" class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition flex items-center gap-2">
+                                next week
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </button>
                         </div>
 
-                        <!-- Calendar Grid -->
-                        <div class="grid grid-cols-7 gap-2">
-                            <!-- Day Headers -->
-                            <div class="text-center font-semibold text-gray-700 py-2">Sun</div>
-                            <div class="text-center font-semibold text-gray-700 py-2">Mon</div>
-                            <div class="text-center font-semibold text-gray-700 py-2">Tue</div>
-                            <div class="text-center font-semibold text-gray-700 py-2">Wed</div>
-                            <div class="text-center font-semibold text-gray-700 py-2">Thu</div>
-                            <div class="text-center font-semibold text-gray-700 py-2">Fri</div>
-                            <div class="text-center font-semibold text-gray-700 py-2">Sat</div>
-
-                            <!-- Calendar Days (42 cells for 6 weeks) -->
-                            @for ($i = 0; $i < 42; $i++)
-                                <div class="calendar-day-cell aspect-square border border-gray-200 rounded-lg p-2 hover:bg-gray-50 transition cursor-pointer relative hidden"
-                                     data-day-index="{{ $i }}">
-                                    <div class="calendar-day-number text-sm font-medium text-gray-900"></div>
-                                    <div class="calendar-day-indicator mt-1 flex flex-wrap gap-1"></div>
-                                </div>
-                            @endfor
+                        <!-- Week Days -->
+                        <div class="grid grid-cols-7 gap-2 mt-6">
+                            @php
+                                $weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                                $currentDayOfWeek = \Carbon\Carbon::parse($selectedDate)->dayOfWeekIso - 1;
+                            @endphp
+                            @foreach($weekDays as $index => $day)
+                                <button onclick="goToDayOfWeek({{ $index }})" 
+                                        class="text-center py-2 rounded-lg font-semibold transition
+                                               {{ $index == $currentDayOfWeek ? 'bg-emerald-600 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+                                    {{ $day }}
+                                </button>
+                            @endforeach
                         </div>
                     </div>
 
-                    <!-- Bookings for Selected Day -->
-                    <div id="selected-day-bookings" class="hidden">
-                        <h3 id="selected-day-title" class="text-xl font-bold text-gray-900 mb-4"></h3>
-                        <div id="selected-day-bookings-list" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                            <!-- Bookings will be populated here by JavaScript -->
-                        </div>
-                    </div>
-
-                    <!-- Hidden booking list templates for calendar -->
-                    <div class="hidden">
-                        @foreach($futureReservations->merge($pastReservations)->merge($cancelledReservations) as $booking)
-                            <div class="booking-card-template"
-                                 data-booking-id="{{ $booking->id }}"
-                                 data-booking-date="{{ \Carbon\Carbon::parse($booking->schedule->start_time)->format('Y-m-d') }}"
-                                 data-booking-status="{{ $booking->is_cancelled ? 'cancelled' : ($booking->isFuture() ? 'future' : 'past') }}">
-                                @include('bookings.partials.booking-space-card', ['booking' => $booking])
+                    <!-- Split Layout: Timeline (1/3) + Details Panel (2/3) -->
+                    <div class="grid grid-cols-3 gap-6">
+                        <!-- Timeline Column (1/3) -->
+                        <div class="col-span-1 bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="p-4 border-b border-gray-200 bg-gray-50">
+                                <h3 class="font-semibold text-gray-900">
+                                    {{ \Carbon\Carbon::parse($selectedDate)->format('l, F j') }}
+                                </h3>
                             </div>
+                            <div class="overflow-y-auto" style="max-height: 800px;">
+                                @if($timeline->isEmpty())
+                                    <div class="p-8 text-center">
+                                        <p class="text-gray-500">No time slots for this day</p>
+                                    </div>
+                                @else
+                                    @foreach($timeline as $slot)
+                                        @php
+                                            $percentage = $slot['occupancy_percentage'];
+                                            if ($percentage >= 90) {
+                                                $bgColor = 'bg-red-50 border-red-300 hover:bg-red-100';
+                                                $textColor = 'text-red-800';
+                                                $dotColor = 'bg-red-500';
+                                            } elseif ($percentage >= 70) {
+                                                $bgColor = 'bg-yellow-50 border-yellow-300 hover:bg-yellow-100';
+                                                $textColor = 'text-yellow-800';
+                                                $dotColor = 'bg-yellow-500';
+                                            } else {
+                                                $bgColor = 'bg-green-50 border-green-300 hover:bg-green-100';
+                                                $textColor = 'text-green-800';
+                                                $dotColor = 'bg-green-500';
+                                            }
+                                        @endphp
+                                        <button onclick="showSlotDetails({{ $slot['schedule']->id }})" 
+                                                data-slot-id="{{ $slot['schedule']->id }}"
+                                                class="slot-button w-full text-left p-3 border-b border-l-4 {{ $bgColor }} transition cursor-pointer">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-2 h-2 rounded-full {{ $dotColor }}"></div>
+                                                    <span class="font-semibold {{ $textColor }}">{{ $slot['time'] }}</span>
+                                                </div>
+                                                <div class="text-xs {{ $textColor }} font-medium">
+                                                    {{ $slot['used_capacity'] }}/{{ $slot['total_capacity'] }}
+                                                </div>
+                                            </div>
+                                            @if($slot['has_bookings'])
+                                                <div class="mt-1 text-xs text-gray-600">
+                                                    {{ $slot['bookings']->count() }} {{ $slot['bookings']->count() === 1 ? 'booking' : 'bookings' }}
+                                                </div>
+                                            @endif
+                                        </button>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Details Panel (2/3) -->
+                        <div class="col-span-2 bg-white rounded-lg shadow-md overflow-hidden">
+                            <div id="details-panel" class="h-full">
+                                <div class="flex items-center justify-center h-full text-gray-400 p-12">
+                                    <div class="text-center">
+                                        <svg class="w-24 h-24 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+                                        </svg>
+                                        <p class="text-lg font-medium text-gray-500">Select a time slot to view details</p>
+                                        <p class="text-sm text-gray-400 mt-2">Click on any time slot in the timeline</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden booking cards data -->
+                    <div class="hidden">
+                        @foreach($timeline as $slot)
+                            @if($slot['has_bookings'])
+                                <div id="slot-data-{{ $slot['schedule']->id }}" class="slot-data">
+                                    <div class="p-6">
+                                        <div class="mb-4">
+                                            <h3 class="text-2xl font-bold text-gray-900">{{ $slot['time'] }}</h3>
+                                            <p class="text-gray-600">{{ $slot['schedule']->duration }} minutes</p>
+                                        </div>
+                                        
+                                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-gray-700 font-medium">Capacity</span>
+                                                <span class="text-lg font-bold">{{ $slot['used_capacity'] }}/{{ $slot['total_capacity'] }} persons</span>
+                                            </div>
+                                            <div class="mt-2 w-full bg-gray-200 rounded-full h-3">
+                                                <div class="h-3 rounded-full transition-all duration-300
+                                                    @if($slot['occupancy_percentage'] >= 90) bg-red-500
+                                                    @elseif($slot['occupancy_percentage'] >= 70) bg-yellow-500
+                                                    @else bg-green-500 @endif" 
+                                                     style="width: {{ min($slot['occupancy_percentage'], 100) }}%"></div>
+                                            </div>
+                                            <div class="mt-2 text-sm text-gray-600">
+                                                {{ $slot['available_capacity'] }} spots available
+                                            </div>
+                                        </div>
+
+                                        <h4 class="font-semibold text-gray-900 mb-4">Bookings ({{ $slot['bookings']->count() }})</h4>
+                                        <div class="space-y-4">
+                                            @foreach($slot['bookings'] as $booking)
+                                                @include('bookings.partials.booking-space-card', ['booking' => $booking])
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div id="slot-data-{{ $slot['schedule']->id }}" class="slot-data">
+                                    <div class="flex items-center justify-center h-full text-gray-400 p-12">
+                                        <div class="text-center">
+                                            <svg class="w-24 h-24 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <p class="text-lg font-medium text-gray-500">No bookings for {{ $slot['time'] }}</p>
+                                            <p class="text-sm text-gray-400 mt-2">{{ $slot['total_capacity'] }} spots available</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
-
-                <!-- Hidden data for JavaScript -->
-                <script type="application/json" id="bookings-data">
-                    [
-                    @foreach($futureReservations->merge($pastReservations)->merge($cancelledReservations) as $booking)
-                        {"id": {{ $booking->id }},
-                        "date": "{{ \Carbon\Carbon::parse($booking->schedule->start_time)->format('Y-m-d') }}",
-                        "time": "{{ \Carbon\Carbon::parse($booking->schedule->start_time)->format('H:i') }}",
-                        "customer": "{{ $booking->customer->user->name }}",
-                        "status": "{{ $booking->is_cancelled ? 'cancelled' : ($booking->isFuture() ? 'future' : 'past') }}",
-                        "duration": {{ $booking->total_duration }},
-                        "persons": {{ $booking->number_of_persons }}
-                        }{{ !$loop->last ? ',' : '' }}
-                    @endforeach
-                    ]
-                </script>
             @endif
         </div>
     </div>
     @include('bookings.modals.cancel-modal')
-    <script>
-        function showTab(tabName) {
-            // Hide all content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-            });
-
-            // Remove active styling from all tabs
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('border-emerald-800', 'text-emerald-800');
-                button.classList.add('border-transparent', 'text-gray-500');
-            });
-
-            // Show selected content
-            document.getElementById('content-' + tabName).classList.remove('hidden');
-
-            // Add active styling to selected tab
-            const activeTab = document.getElementById('tab-' + tabName);
-            activeTab.classList.remove('border-transparent', 'text-gray-500');
-            activeTab.classList.add('border-emerald-800', 'text-emerald-800');
-        }
-
-        // View switching function
-        function switchView(view) {
-            const listView = document.getElementById('list-view');
-            const calendarView = document.getElementById('calendar-view');
-            const btnList = document.getElementById('btn-list-view');
-            const btnCalendar = document.getElementById('btn-calendar-view');
-
-            if (view === 'list') {
-                listView.classList.remove('hidden');
-                calendarView.classList.add('hidden');
-                btnList.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-400');
-                btnList.classList.add('bg-emerald-200', 'text-black', 'hover:bg-emerald-400');
-                btnCalendar.classList.remove('bg-emerald-200', 'text-black', 'hover:bg-emerald-400');
-                btnCalendar.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-400');
-            } else {
-                listView.classList.add('hidden');
-                calendarView.classList.remove('hidden');
-                btnList.classList.remove('bg-emerald-200', 'text-black', 'hover:bg-emerald-400');
-                btnList.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-400');
-                btnCalendar.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-400');
-                btnCalendar.classList.add('bg-emerald-200', 'text-black', 'hover:bg-emerald-400');
-
-                // Initialize calendar when switching to it
-                if (typeof initializeCalendar === 'function') {
-                    initializeCalendar();
-                }
-            }
-        }
-    </script>
 @endsection
 
 @push('scripts')
     <script src="{{ asset('js/booking.js') }}"></script>
-    <script src="{{ asset('js/calendar.js') }}"></script>
+    <script src="{{ asset('js/enhanced-calendar.js') }}"></script>
 @endpush

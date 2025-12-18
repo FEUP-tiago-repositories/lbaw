@@ -53,5 +53,11 @@ class User extends Authenticable
             'id'                 
         );
     }
+
+    public function ban()
+    {
+        return $this->hasOne(Ban::class);
+    }
+
     
 } 

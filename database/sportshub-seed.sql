@@ -218,7 +218,7 @@ CREATE TABLE media (
 CREATE TABLE favorited (
     space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     customer_id INT NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
-    is_favorite BOOLEAN NOT NULL DEFAULT FALSE,
+    --is_favorite BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (space_id, customer_id)
 );
 
@@ -2423,25 +2423,25 @@ VALUES (
 INSERT INTO
     favorited (
         space_id,
-        customer_id,
-        is_favorite
+        customer_id
+        --is_favorite
     )
-VALUES (1, 1, TRUE),
-    (2, 1, TRUE),
-    (3, 2, TRUE),
-    (4, 2, FALSE),
-    (5, 3, TRUE),
-    (6, 3, TRUE),
-    (7, 4, FALSE),
-    (8, 4, TRUE),
-    (9, 5, TRUE),
-    (10, 5, TRUE),
-    (1, 6, TRUE),
-    (5, 6, TRUE),
-    (3, 7, TRUE),
-    (6, 7, FALSE),
-    (8, 8, TRUE),
-    (10, 8, TRUE);
+VALUES (1, 1),
+    (2, 1),
+    (3, 2),
+    (4, 2),
+    (5, 3),
+    (6, 3),
+    (7, 4),
+    (8, 4),
+    (9, 5),
+    (10, 5),
+    (1, 6),
+    (5, 6),
+    (3, 7),
+    (6, 7),
+    (8, 8),
+    (10, 8);
 
 -- =========================
 -- PERFORMANCE INDICES

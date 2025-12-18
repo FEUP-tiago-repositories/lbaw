@@ -84,4 +84,9 @@ class Space extends Model
     {
         return $this->hasMany(Schedule::class, 'space_id');
     }
+
+    public function favoritedByCustomers()
+    {
+        return $this->belongsToMany(Customer::class, 'favorited', 'space_id', 'customer_id');
+    }
 }

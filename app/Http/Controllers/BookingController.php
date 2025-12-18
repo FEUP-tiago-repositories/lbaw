@@ -342,8 +342,23 @@ class BookingController extends Controller
             abort(403, 'You do not own this space.');
         }
 
-        // Get selected date (default: today)
-        $selectedDate = $request->input('date', Carbon::today()->format('Y-m-d'));
+        // Get selected date with validation
+        $selectedDateParam = $request->input('date', Carbon::today()->format('Y-m-d'));
+        
+        // Validate date format (must be YYYY-MM-DD)
+        try {
+            // If date is invalid or incomplete, default to today
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $selectedDateParam)) {
+                $selectedDate = Carbon::today()->format('Y-m-d');
+            } else {
+                $date = Carbon::parse($selectedDateParam);
+                $selectedDate = $date->format('Y-m-d');
+            }
+        } catch (\Exception $e) {
+            // If parsing fails, use today
+            $selectedDate = Carbon::today()->format('Y-m-d');
+        }
+        
         $date = Carbon::parse($selectedDate);
 
         // Calculate week range for week filter

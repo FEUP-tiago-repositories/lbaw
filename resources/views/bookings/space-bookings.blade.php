@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
-        <div class="max-w-[1600px] mx-auto">
+        <div class="max-w-6xl mx-auto">
             <!-- Breadcrumb -->
             <div class="flex items-center gap-2 mb-6 text-lg">
                 <a href="{{ route('home') }}" class="text-emerald-600 hover:text-emerald-400">
@@ -138,7 +138,7 @@
                             
                             <div class="flex items-center gap-4">
                                 <!-- Day Selector -->
-                                <select id="day-select" onchange="goToDate(this.value)" 
+                                <select id="day-select" onchange="updateDateFromSelectors()" 
                                         class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                                     @for($i = 1; $i <= 31; $i++)
                                         <option value="{{ $i }}" {{ $i == \Carbon\Carbon::parse($selectedDate)->day ? 'selected' : '' }}>
@@ -323,5 +323,6 @@
 
 @push('scripts')
     <script src="{{ asset('js/booking.js') }}"></script>
-    <script src="{{ asset('js/enhanced-calendar.js') }}"></script>
+    <script src="{{ asset('js/business-owner.js') }}"></script>
+    <script src="{{ asset('js/calendar.js') }}"></script>
 @endpush

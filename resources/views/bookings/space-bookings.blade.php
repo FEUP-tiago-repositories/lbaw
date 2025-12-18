@@ -294,7 +294,7 @@
                                         <h4 class="font-semibold text-gray-900 mb-4">Bookings ({{ $slot['bookings']->count() }})</h4>
                                         <div class="space-y-4">
                                             @foreach($slot['bookings'] as $booking)
-                                                @include('bookings.partials.booking-space-card', ['booking' => $booking])
+                                                @include('bookings.partials.booking-calendar-space-card', ['booking' => $booking])
                                             @endforeach
                                         </div>
                                     </div>

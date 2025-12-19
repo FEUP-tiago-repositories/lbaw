@@ -62,4 +62,8 @@ class Booking extends Model
         parent::boot();
 
     }
+
+    public function review(){
+        return $this->hasOne(Review::class,'booking_id');
+    }
 }

@@ -2,7 +2,7 @@
 -- SCHEMA CONFIGURATION
 -- =========================
 
-show search_path;
+--show search_path;
 
 DO $do$
 DECLARE
@@ -766,7 +766,8 @@ INSERT INTO
     admin (email, password)
 VALUES (
         'admin1@example.com',
-        'hashedpassword1'
+        -- We temporarily use a dummy hash or plain text here; your PHP will re-hash it later
+        '$2y$12$nKbLD2XSG7iJ5/TXhSQFF.1qMyOTzLxD6fjQ7m/meBD.CJMKpgL4G'
     ),
     (
         'admin2@example.com',

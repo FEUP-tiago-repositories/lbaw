@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\BusinessOwner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Ban;
 
 
 class UserManagementController
@@ -155,4 +156,40 @@ class UserManagementController
 
         return redirect()->route('admin.users.index');
     }
+
+    public function ban(Request $request, string $id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->is_banned) {
+            return back()->with('error', 'User is already banned.');
+        }
+        
+        $user->update([
+            'is_banned' => true,
+        ]);
+
+        $request->validate([
+            'motive' => 'required|string|max:255',
+        ]);
+        
+        Ban::create([
+            'user_id'   => $user->id,
+            'admin_id'  => auth('admin')->id(),
+            'motive'    => $request->motive,
+            'time_stamp'=> now(),
+        ]);
+
+        return back()->with('success', 'User banned successfully.');
+    }
+
+    public function unban($id)
+    {
+        $user = User::findOrFail($id);
+        $user->ban?->delete();
+        $user->update(['is_banned' => false]);
+    
+        return back()->with('success', 'User unbanned successfully.');
+    }
+    
+    
 }

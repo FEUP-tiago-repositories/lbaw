@@ -28,11 +28,6 @@ use Illuminate\Support\Facades\Route;
 // M01: HOME & STATIC PAGES (R101-R105)
 // ============================================
 
-$middleware = [];
-if (! app()->environment('local')) {
-    $middleware = ['auth', 'admin']; // login + admin só em produção
-}
-
 Route::get('/', [HomeController::class, 'index'])->name('home');                           // R101
 Route::get('/about-us', [StaticController::class, 'about'])->name('about');                // R102
 Route::get('/faq', [StaticController::class, 'faq'])->name('faq');                        // R103
@@ -131,10 +126,20 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
+
+// ============================================
+// ADMIN AUTHENTICATION (Guest routes)
+// ============================================
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('/login',[AdminController::class,'showLoginForm'])->name('login');
+    Route::post('/login', [AdminController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+});
+
 // ============================================
 // M05: ADMIN ROUTES (R501-R518)
 // ============================================
-Route::middleware($middleware)->prefix('admin')->name('admin.')->group(function () {
+Route::middleware([\App\Http\Middleware\CheckAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');                 // R501
 
     // Users Management (R502-R509)

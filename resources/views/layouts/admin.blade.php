@@ -14,6 +14,7 @@
         <a href="{{ route('admin.dashboard') }}" class="hover:text-emerald-400">Dashboard</a>
         <a href="{{ route('admin.users.index') }}" class="ml-6 hover:text-emerald-400">Users</a>
         <a href="{{ route('admin.spaces.index') }}" class="ml-6 hover:text-emerald-400">Spaces</a>
+        <a href="{{ route('admin.reviews.index') }}" class="ml-6 hover:text-emerald-400">Reviews</a>
     </nav>
 
     <main>

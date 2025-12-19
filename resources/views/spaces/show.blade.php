@@ -33,19 +33,20 @@ making a booking --}}
                             $isFavorited = auth()->user()->customer->favoritedSpaces->contains($space->id);
                         @endphp
                         <button
-                                id="favorite-btn"
-                                data-space-id="{{ $space->id }}"
-                                class="transition-transform hover:scale-110 hover:bg-gray-200 rounded-full p-2 focus:outline-none"
-                                aria-label="Toggle favorite">
-                            <svg class="w-8 h-8 {{ $isFavorited ? 'fill-red-500 stroke-red-500' : 'fill-none stroke-gray-400' }}"
-                                 stroke-width="2"
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            id="favorite-btn"
+                            data-space-id="{{ $space->id }}"
+                            class="transition-transform hover:scale-110 hover:bg-gray-200 rounded-full p-2 focus:outline-none"
+                            aria-label="Toggle favorite">
+                            <svg class="w-8 h-8 {{ $isFavorited ? 'fill-red-500 stroke-red-500' : 'fill-none stroke-gray-400' }}" 
+                            stroke-width="2" 
+                            viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" 
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
                         </button>
                     @endcan
                 </div>
+
                 {{-- Only show Delete and Edit Buttons if the user is the owner of that space --}}
                 @auth
                     @if(auth()->user()->businessOwner && auth()->user()->businessOwner->id === $space->owner_id)
@@ -307,4 +308,5 @@ making a booking --}}
     <script src="{{ asset('js/business-owner.js') }}"></script>
     <script src="{{ asset('js/booking.js') }}"></script>
     <script src="{{ asset('js/review.js') }}"></script>
+    <script src="{{ asset('js/favoriteToggle.js') }}"></script>
 @endpush

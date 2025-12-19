@@ -21,12 +21,21 @@ class Space extends Model
         'is_closed',
         'phone_no',
         'email',
+        'opening_time',
+        'closing_time',
+        'duration',
         'num_favorites',
         'num_reviews',
         'current_environment_rating',
         'current_equipment_rating',
         'current_service_rating',
         'current_total_rating',
+    ];
+
+    protected $casts = [
+        'opening_time' => 'string',
+        'closing_time' => 'string',
+        'duration' => 'integer',
     ];
 
     protected $primaryKey = 'id';

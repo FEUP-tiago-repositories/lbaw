@@ -15,7 +15,25 @@ class CheckBusinessOwner
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! auth()->check() || ! auth()->user()->businessOwner) {
+        if (! auth()->check()) {
+            // Check if it's an API request
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthenticated. Please log in.'
+                ], 401);
+            }
+            abort(401, 'Unauthenticated');
+        }
+
+        if (! auth()->user()->businessOwner) {
+            // Check if it's an API request
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Only business owners can access this resource.'
+                ], 403);
+            }
             abort(403, 'Only business owners can access this resource!');
         }
 

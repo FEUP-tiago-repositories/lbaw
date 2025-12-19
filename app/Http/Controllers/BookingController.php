@@ -87,7 +87,7 @@ class BookingController extends Controller
                 $space_id,
                 $validated['duration'],
                 $validated['number_of_persons'],
-                $schedule->duration
+                $schedule->space->duration
             );
 
             $payment = Payment::create([
@@ -191,7 +191,7 @@ class BookingController extends Controller
                 $space_id,
                 $validated['duration'],
                 $validated['number_of_persons'],
-                $newSchedule->duration
+                $newSchedule->space->duration
             );
 
             $oldPrice = $booking->payment->value;
@@ -375,14 +375,14 @@ class BookingController extends Controller
         $pastReservations = $allBookings->filter(fn($b) => $b->isPast() && !$b->is_cancelled);
         $cancelledReservations = $allBookings->filter(fn($b) => $b->is_cancelled);
 
-        // Get all schedules for the selected day (30 min intervals)
+        // Get all schedules for the selected day
         $daySchedules = Schedule::where('space_id', $space_id)
             ->whereDate('start_time', $date->format('Y-m-d'))
             ->orderBy('start_time')
             ->get();
 
-        // Build complete timeline with 30-minute slots
-        $timeline = $this->buildDayTimeline($date, $space_id, $daySchedules);
+        // Build complete timeline based on space duration
+        $timeline = $this->buildDayTimeline($date, $space, $daySchedules);
 
         $hasAnyBookings = $allBookings->isNotEmpty();
 
@@ -400,48 +400,80 @@ class BookingController extends Controller
     }
 
     /**
-     * Build complete timeline with all 30-minute slots for a day
+     * Build complete timeline with slots based on space duration
+     * Shows gray slots (0/0 capacity) for time slots without schedules
      */
-    private function buildDayTimeline($date, $space_id, $schedules)
+    private function buildDayTimeline($date, $space, $schedules)
     {
         $timeline = [];
 
-        // Generate all possible 30-min slots from 00:00 to 23:30
-        for ($hour = 0; $hour < 24; $hour++) {
-            for ($minute = 0; $minute < 60; $minute += 30) {
-                $slotTime = Carbon::parse($date)->setTime($hour, $minute, 0);
-                $slotKey = $slotTime->format('H:i');
+        // Parse opening and closing times (defaults if not set)
+        $openingTime = $space->opening_time ?? '08:00:00';
+        $closingTime = $space->closing_time ?? '22:00:00';
+        $slotDuration = $space->duration ?? 30; // Duration in minutes from space
 
-                // Find schedule for this slot
-                $schedule = $schedules->first(function($s) use ($slotTime) {
-                    return Carbon::parse($s->start_time)->format('H:i') === $slotTime->format('H:i');
-                });
+        // Parse times to get hour and minute
+        list($openHour, $openMinute) = explode(':', $openingTime);
+        list($closeHour, $closeMinute) = explode(':', $closingTime);
 
-                if ($schedule) {
-                    // Get bookings for this schedule
-                    $bookings = Booking::where('schedule_id', $schedule->id)
-                        ->with(['customer.user'])
-                        ->get();
+        $openHour = (int)$openHour;
+        $openMinute = (int)$openMinute;
+        $closeHour = (int)$closeHour;
+        $closeMinute = (int)$closeMinute;
 
-                    $activeBookings = $bookings->where('is_cancelled', false);
-                    $usedCapacity = $activeBookings->sum('number_of_persons');
+        // Generate all slots from opening to closing time based on space duration
+        $currentTime = Carbon::parse($date)->setTime($openHour, $openMinute, 0);
+        $endTime = Carbon::parse($date)->setTime($closeHour, $closeMinute, 0);
 
-                    // max_capacity is remaining, so total = used + remaining
-                    $totalCapacity = $usedCapacity + $schedule->max_capacity;
-                    $occupancyPercentage = $totalCapacity > 0 ? ($usedCapacity / $totalCapacity) * 100 : 0;
+        while ($currentTime < $endTime) {
+            $slotKey = $currentTime->format('H:i');
 
-                    $timeline[] = [
-                        'time' => $slotKey,
-                        'schedule' => $schedule,
-                        'bookings' => $bookings,
-                        'used_capacity' => $usedCapacity,
-                        'available_capacity' => $schedule->max_capacity,
-                        'total_capacity' => $totalCapacity,
-                        'occupancy_percentage' => $occupancyPercentage,
-                        'has_bookings' => $bookings->isNotEmpty()
-                    ];
-                }
+            // Find schedule for this slot
+            $schedule = $schedules->first(function($s) use ($currentTime) {
+                return Carbon::parse($s->start_time)->format('H:i') === $currentTime->format('H:i');
+            });
+
+            if ($schedule) {
+                // Slot with schedule - show actual bookings and capacity
+                $bookings = Booking::where('schedule_id', $schedule->id)
+                    ->with(['customer.user'])
+                    ->get();
+
+                $activeBookings = $bookings->where('is_cancelled', false);
+                $usedCapacity = $activeBookings->sum('number_of_persons');
+
+                // max_capacity is remaining, so total = used + remaining
+                $totalCapacity = $usedCapacity + $schedule->max_capacity;
+                $occupancyPercentage = $totalCapacity > 0 ? ($usedCapacity / $totalCapacity) * 100 : 0;
+
+                $timeline[] = [
+                    'time' => $slotKey,
+                    'schedule' => $schedule,
+                    'bookings' => $bookings,
+                    'used_capacity' => $usedCapacity,
+                    'available_capacity' => $schedule->max_capacity,
+                    'total_capacity' => $totalCapacity,
+                    'occupancy_percentage' => $occupancyPercentage,
+                    'has_bookings' => $bookings->isNotEmpty(),
+                    'has_schedule' => true
+                ];
+            } else {
+                // Slot without schedule - show gray slot with 0/0 capacity
+                $timeline[] = [
+                    'time' => $slotKey,
+                    'schedule' => null,
+                    'bookings' => collect([]),
+                    'used_capacity' => 0,
+                    'available_capacity' => 0,
+                    'total_capacity' => 0,
+                    'occupancy_percentage' => 0,
+                    'has_bookings' => false,
+                    'has_schedule' => false
+                ];
             }
+
+            // Move to next slot based on space duration
+            $currentTime->addMinutes($slotDuration);
         }
 
         return collect($timeline);

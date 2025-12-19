@@ -141,14 +141,10 @@
                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
                                     Create New Space
                                 </a>
-                                <a href="{{ route('home') }}"
-                                class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition ">
-                                    Manage Schedules
-                                </a>
 
                                 <a href="{{ route('spaces.bookings.select') }}"
                                 class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
-                                    Manage Reservations
+                                    Manage Reservations and Schedules
                                 </a>
                                 <a href="{{ route('notifications.index') }}"
                                 class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">

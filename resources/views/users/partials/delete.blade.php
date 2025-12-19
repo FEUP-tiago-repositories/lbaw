@@ -1,5 +1,5 @@
 <div id="deleteModal" 
-     class="hidden fixed backdrop-blur-sm inset-0 flex items-center justify-center z-50">
+     class="hidden fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
 
     <div class="bg-white p-8 rounded-2xl shadow-xl w-96 text-center text-xl">
 

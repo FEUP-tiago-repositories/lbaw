@@ -1,6 +1,7 @@
 {{-- -Page dedicated to Showing the full page of a Space, including Editing and Deleting a space (If a BO) and if user
 making a booking --}}
 @extends('layouts.app')
+@include('spaces.partials.delete')
 @section('title', $space->title . ' - Sports Hub')
 @section('content')
     <main class="container mx-auto max-w-6xl p-8">
@@ -31,20 +32,20 @@ making a booking --}}
                     @if(auth()->user()->businessOwner && auth()->user()->businessOwner->id === $space->owner_id)
                         {{-- -Delete and Edit buttons --}}
                         <div class="flex items-center gap-2.5">
-                            {{-- Delete Button --}}
-                            <form action="{{ route('spaces.destroy', $space->id) }}" method="POST" class="inline-block"
-                                onsubmit="return confirm('Are you sure you want to delete this space?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
+                        {{-- Delete Button --}}
+                        <form action="{{ route('spaces.destroy', $space->id) }}" method="POST" class="inline-block" id="delete-form-{{ $space->id }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" 
+                                    onclick="openDeleteModal(event, {{ $space->id }})"
                                     class="inline-flex items-center px-6 py-2.5 bg-red-600 text-white text-base font-medium rounded-lg hover:bg-red-700 transition-colors shadow-sm hover:shadow-md">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                    Delete
-                                </button>
-                            </form>
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Delete
+                            </button>
+                        </form>
 
                             {{-- Edit Button --}}
                             <button type="button" onclick="window.location.href='{{ route('spaces.edit', $space->id) }}'"

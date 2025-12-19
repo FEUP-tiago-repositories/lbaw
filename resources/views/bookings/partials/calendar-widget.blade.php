@@ -10,7 +10,7 @@
 
     <!-- Header -->
     <div class="p-6 border-b-2 border-gray-200 bg-gray-100 rounded-t-2xl text-center">
-        <h2 class="text-[1.7rem] font-bold text-black">
+        <h2 class="text-2xl font-bold text-black">
             {{ $mode === 'edit' ? 'Edit Reservation' : 'Book Space' }}
         </h2>
     </div>

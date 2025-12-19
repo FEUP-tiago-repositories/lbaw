@@ -36,6 +36,8 @@ class RegisterController extends Controller
     {
         // Validate registration input.
         $request->validate([
+            'first_name' => 'required|string|max:250',
+            'surname' => 'required|string|max:250',
             'user_name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:user',
             'password' => 'required|min:8|confirmed',
@@ -45,14 +47,28 @@ class RegisterController extends Controller
             'role' => 'required|in:customer,business_owner',
         ]);
 
+        // Handle profile picture upload
+        $profilePicPath = null;
+
+        if ($request->hasFile('profile_pic_url')) {
+
+            $file = $request->file('profile_pic_url');
+            $profilePicName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path('images/uploads/profiles'), $profilePicName);
+            $profilePicPath = 'images/uploads/profiles/' . $profilePicName;
+        }
+
         // Create the new user.
         $user = User::create([
+            'first_name' => $request->first_name,
+            'surname' => $request->surname,
             'user_name' => $request->user_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone_no' => $request->phone_no,
             'birth_date' => $request->birth_date,
-            'profile_pic_url' => $request->profile_pic_url,
+            'profile_pic_url' => $profilePicPath,
         ]);
 
         if ($request->role === 'customer') {

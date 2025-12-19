@@ -4,7 +4,7 @@ if (favoriteBtn) {
     favoriteBtn.addEventListener('click', async function() {
         const spaceId = this.dataset.spaceId;
         const heartSvg = this.querySelector('svg');
-        
+
         try {
             const response = await fetch(`/spaces/${spaceId}/favorite`, {
                 method: 'POST',
@@ -13,9 +13,9 @@ if (favoriteBtn) {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (response.ok) {
                 // Toggle heart appearance
                 if (data.is_favorite) {

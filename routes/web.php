@@ -11,6 +11,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Auth\RecoverController;
+use App\Http\Controllers\ResponseController;
+
 // Admin Controllers
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
@@ -48,6 +51,12 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/sign-up', 'showRegistrationForm')->name('register');                      // R203
     Route::post('/sign-up', 'register');                                                   // R204
+});
+
+Route::controller(RecoverController::class)->group(function () {
+    Route::get('/password/reset/{token}', 'showResetForm')->name('password.reset');
+    Route::post('/password/reset', 'resetPassword')->name('password.update');
+    Route::post('/sign-in/recover', 'sendRecoveryEmail');
 });
 
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth'); // R207
@@ -99,6 +108,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{user_id}/my_reservations', [BookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
     Route::get('/bookings/payment-success', fn () => view('bookings.modals.payment-success'))->name('bookings.payment.success');
+    // Business Owner - Manage Reservations
+    Route::get('/manage-reservations', [BookingController::class, 'selectSpace'])->name('spaces.bookings.select');
+    Route::get('/spaces/{space}/bookings', [BookingController::class, 'spaceBookings'])->name('spaces.bookings');
 });
 
 // ============================================
@@ -114,6 +126,9 @@ Route::middleware(['auth'])->group(function () {
 // ============================================
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.readAll');
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
 // ============================================

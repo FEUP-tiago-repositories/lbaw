@@ -20,7 +20,6 @@ class SpacePolicy
         // Only customers can favorite spaces
         return $user->customer !== null;
     }
-
     /**
      * Determine whether the user can view the model.
      */

@@ -147,7 +147,7 @@
                                     Manage Reservations and Schedules
                                 </a>
                                 <a href="{{ route('notifications.index') }}"
-                                class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                                class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
                                     Notifications
 
                                     @if($unreadCount > 0)

@@ -5,17 +5,20 @@
     {{-- -Main section --}}
     <div class="container mx-auto p-8 max-w-[1350px]">
         {{-- Flex for Main tile and Add Space button! --}}
-        <div class="flex justify-between">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
             <h1 class="text-3xl font-bold mb-8">Take a look at our Sports Spaces!</h1>
-            @auth
-                @if(auth()->user()->businessOwner)
-                    {{-- Add space button --}}
-                    <div
-                        class="px-6 py-3 bg-emerald-800 text-white rounded-lg transition font-medium hover:bg-emerald-200 cursor-pointer mb-3.5">
-                        <a class="text-white" href="{{ route('spaces.create') }}">+ Create a Space</a>
-                    </div>
-                @endif
-            @endauth
+            <div class="flex items-center gap-3">
+                @auth
+                    @if(auth()->user()->businessOwner)
+                        {{-- Add space button --}}
+                        <div
+                            class="px-6 py-3 bg-emerald-800 text-white rounded-lg transition font-medium hover:bg-emerald-200 cursor-pointer mb-3.5">
+                            <a class="text-white" href="{{ route('spaces.create') }}">+ Create a Space</a>
+                        </div>
+                    @endif
+                @endauth
+                @include('spaces.partials.filters')
+            </div>
         </div>
         <div class="flex gap-4">
             {{-- -This section will be used for the Spaces Grid --}}

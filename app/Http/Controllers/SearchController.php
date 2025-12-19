@@ -10,14 +10,57 @@ class SearchController
 {
     public function search(Request $request)
     {
-        $query = $request->input('q');
 
-        $exactSpaces = Space::where('title', $query)->orWhere('address', $query)->get();
+        $query = Space::query();
+        
+        if ($request->filled('sport_type')) {
+            $query->whereHas('sportType', function($q) use ($request) {
+                $q->where('id', $request->input('sport_type'));
+            });
+        }
 
-        $partialSpaces = Space::where('title', 'ILIKE', "%{$query}%")->orwhere('address', 'ILIKE', "%{$query}%")->get();
+        if ($request->filled('date_from') || $request->filled('date_to') || $request->filled('capacity')) {
+            
+            $query->whereHas('schedules', function ($q) use ($request) {
+                
+                if ($request->filled('date_from')) {
+                    $q->where('start_time', '>=', $request->input('date_from') . ' 00:00:00');
+                }
 
-        $spaces = $exactSpaces->merge($partialSpaces)->unique('id');
+                if ($request->filled('date_to')) {
+                    $q->where('start_time', '<=', $request->input('date_to') . ' 23:59:59');
+                }
 
-        return view('spaces.index', compact('spaces', 'query'));
+                if ($request->filled('capacity')) {
+                    $q->where('max_capacity', '>=', $request->input('capacity'));
+                }
+            });
+        }
+
+        if($request->filled('q')){
+            
+            $terms = preg_split('/\s+/', trim($request->q));
+
+            $query->where(function ($campos) use ($terms) {
+
+                foreach ($terms as $term) {
+                    $campos->where(function ($camposSpace) use ($term) {
+
+                        $camposSpace->where('title', 'ILIKE', "%{$term}%")
+                        ->orWhere('address', 'ILIKE', "%{$term}%")
+                        
+                        ->orWhereHas('sportType', function ($stype) use ($term) {
+                            $stype->where('name', 'ILIKE', "%{$term}%");
+                        });
+                    });
+                }
+            });
+        }
+        
+        $spaces = $query->get(); 
+
+        $sports = SportType::all();
+
+        return view('spaces.index', ['spaces' => $spaces, 'sports'  => $sports, 'query' => $request->input('q'), 'filters' => $request->all() ]);
     }
 }

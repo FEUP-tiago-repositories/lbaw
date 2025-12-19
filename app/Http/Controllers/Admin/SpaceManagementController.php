@@ -2,63 +2,43 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Space;
 use Illuminate\Http\Request;
 
-class SpaceManagementController
+class SpaceManagementController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of spaces.
      */
     public function index()
     {
-        //
+        $spaces = Space::with(['owner.user', 'sportType'])
+            ->orderBy('id', 'asc')
+            ->get();
+
+        return view('admin.spaces.index', compact('spaces'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Display the specified space.
      */
     public function show(string $id)
     {
-        //
+        $space = Space::with(['owner.user', 'sportType'])->findOrFail($id);
+
+        return view('admin.spaces.show', compact('space'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Remove the specified space.
      */
     public function destroy(string $id)
     {
-        //
+        $space = Space::findOrFail($id);
+        $space->delete();
+
+        return redirect()->route('admin.spaces.index')
+            ->with('success', 'Space deleted successfully.');
     }
 }

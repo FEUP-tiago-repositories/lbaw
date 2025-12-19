@@ -2,7 +2,7 @@
 -- SCHEMA CONFIGURATION
 -- =========================
 
-show search_path;
+--show search_path;
 
 DO $do$
 DECLARE

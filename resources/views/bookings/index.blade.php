@@ -63,7 +63,7 @@
                         </button>
 
                         <!-- Container com Scroll Horizontal -->
-                        <div id="future-scroll-container" class="flex overflow-x-auto gap-6 pb-4 scroll-smooth scrollbar-hide"
+                        <div id="future-scroll-container" class="flex overflow-x-auto gap-4 pb-4 scroll-smooth scrollbar-hide"
                              style="-ms-overflow-style: none; scrollbar-width: none;">
                             @foreach($futureReservations as $booking)
                                 @include('bookings.partials.booking-user-card', ['booking' => $booking])
@@ -86,10 +86,34 @@
         @if($pastReservations->isNotEmpty())
                 <section>
                     <h2 class="text-2xl font-semibold mb-4">Past Reservations</h2>
-                    <div class="flex overflow-x-auto gap-6 pb-4">
-                        @foreach($pastReservations as $booking)
-                            @include('bookings.partials.booking-user-card', ['booking' => $booking])
-                        @endforeach
+                    <div class="relative">
+                        <!-- Gradiente Esquerdo -->
+                        <div id="past-gradient-left" class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-100 to-transparent z-10 pointer-events-none opacity-0 transition-opacity duration-300"></div>
+
+                        <!-- Seta Esquerda -->
+                        <button id="past-scroll-left" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition opacity-0 pointer-events-none">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Container com Scroll Horizontal -->
+                        <div id="past-scroll-container" class="flex overflow-x-auto gap-4 pb-4 scroll-smooth scrollbar-hide"
+                             style="-ms-overflow-style: none; scrollbar-width: none;">
+                            @foreach($pastReservations as $booking)
+                                @include('bookings.partials.booking-user-card', ['booking' => $booking])
+                            @endforeach
+                        </div>
+
+                        <!-- Gradiente Direito -->
+                        <div id="past-gradient-right" class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-100 to-transparent z-10 pointer-events-none transition-opacity duration-300"></div>
+
+                        <!-- Seta Direita -->
+                        <button id="past-scroll-right" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
                     </div>
                 </section>
             @endif
@@ -97,10 +121,34 @@
             @if($cancelledReservations->isNotEmpty())
                 <section>
                     <h2 class="text-2xl font-semibold mb-4">Cancelled Reservations</h2>
-                    <div class="flex overflow-x-auto gap-6 pb-4">
-                        @foreach($cancelledReservations as $booking)
-                            @include('bookings.partials.booking-user-card', ['booking' => $booking])
-                        @endforeach
+                    <div class="relative">
+                        <!-- Gradiente Esquerdo -->
+                        <div id="cancelled-gradient-left" class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-100 to-transparent z-10 pointer-events-none opacity-0 transition-opacity duration-300"></div>
+
+                        <!-- Seta Esquerda -->
+                        <button id="cancelled-scroll-left" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition opacity-0 pointer-events-none">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Container com Scroll Horizontal -->
+                        <div id="cancelled-scroll-container" class="flex overflow-x-auto gap-4 pb-4 scroll-smooth scrollbar-hide"
+                             style="-ms-overflow-style: none; scrollbar-width: none;">
+                            @foreach($cancelledReservations as $booking)
+                                @include('bookings.partials.booking-user-card', ['booking' => $booking])
+                            @endforeach
+                        </div>
+
+                        <!-- Gradiente Direito -->
+                        <div id="cancelled-gradient-right" class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-100 to-transparent z-10 pointer-events-none transition-opacity duration-300"></div>
+
+                        <!-- Seta Direita -->
+                        <button id="cancelled-scroll-right" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
                     </div>
                 </section>
             @endif

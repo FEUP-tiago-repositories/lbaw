@@ -17,6 +17,7 @@ use App\Models\NewReservationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class BookingController extends Controller
@@ -62,91 +63,133 @@ class BookingController extends Controller
 
     public function store(Request $request, $space_id, $schedule_id)
     {
-        $validated = $request->validate([
-            'customer_id' => 'required|integer|exists:customer,id',
-            'duration' => 'required|integer|min:15',
-            'number_of_persons' => 'required|integer|min:1',
-            'payment_provider_ref' => 'required|string|in:' . implode(',', Payment::PAYMENT_PROVIDERS)
-        ]);
-
-        DB::beginTransaction();
-
         try {
-            $schedule = Schedule::findOrFail($schedule_id);
-            $result = ScheduleController::getAffectedSchedules(
-                $schedule,
-                $validated['duration'],
-                $validated['number_of_persons']
-            );
-
-            if (!$result['success']) {
-                return response()->json(['error' => $result['message']], 400);
-            }
-
-            $totalPrice = $this->calculatePrice(
-                $space_id,
-                $validated['duration'],
-                $validated['number_of_persons'],
-                $schedule->space->duration
-            );
-
-            $payment = Payment::create([
-                'value' => $totalPrice,
-                'payment_provider_ref' => $validated['payment_provider_ref'],
-                'is_accepted' => false,
-            ]);
-
-            $booking = Booking::create([
-                'customer_id' => $validated['customer_id'],
-                'schedule_id' => $schedule_id,
+            Log::info('Booking creation started', [
                 'space_id' => $space_id,
-                'total_duration' => $validated['duration'],
-                'number_of_persons' => $validated['number_of_persons'],
-                'payment_id' => $payment->id,
-                'booking_created_at' => now(),
-                'is_cancelled' => false,
+                'schedule_id' => $schedule_id,
+                'request_data' => $request->all()
             ]);
 
-            // Reservar capacidade
-            ScheduleController::reserveCapacity($result['schedules'], $validated['number_of_persons']);
+            $validated = $request->validate([
+                'customer_id' => 'required|integer|exists:customer,id',
+                'duration' => 'required|integer|min:15',
+                'number_of_persons' => 'required|integer|min:1',
+                'payment_provider_ref' => 'required|string|in:' . implode(',', Payment::PAYMENT_PROVIDERS)
+            ]);
 
-            $space = Space::findOrFail($space_id);
-            $ownerUserId = null;
+            Log::info('Validation passed', $validated);
 
-            if (!empty($space->owner_id)) {
-                $businessOwner = BusinessOwner::find($space->owner_id);
-                if ($businessOwner) {
-                    $ownerUserId = $businessOwner->user_id;
+            DB::beginTransaction();
+
+            try {
+                $schedule = Schedule::findOrFail($schedule_id);
+                Log::info('Schedule found', ['schedule' => $schedule->toArray()]);
+
+                $result = ScheduleController::getAffectedSchedules(
+                    $schedule,
+                    $validated['duration'],
+                    $validated['number_of_persons']
+                );
+
+                Log::info('Affected schedules result', $result);
+
+                if (!$result['success']) {
+                    Log::warning('Insufficient capacity', $result);
+                    return response()->json(['error' => $result['message']], 400);
                 }
-            }
 
-            if ($ownerUserId && $ownerUserId != Auth::id()) {
+                $totalPrice = $this->calculatePrice(
+                    $space_id,
+                    $validated['duration'],
+                    $validated['number_of_persons'],
+                    $schedule->space->duration
+                );
 
-                $ownerNotif = Notification::create([
-                    'user_id' => $ownerUserId,
-                    'content' => "You received a new reservation",
-                    'is_read' => false,
-                    'time_stamp' => now(),
+                Log::info('Price calculated', ['total_price' => $totalPrice]);
+
+                $payment = Payment::create([
+                    'value' => $totalPrice,
+                    'payment_provider_ref' => $validated['payment_provider_ref'],
+                    'is_accepted' => false,
                 ]);
 
-                NewReservationNotification::create([
-                    'notification_id' => $ownerNotif->id,
-                    'booking_id' => $booking->id
+                Log::info('Payment created', ['payment_id' => $payment->id]);
+
+                $booking = Booking::create([
+                    'customer_id' => $validated['customer_id'],
+                    'schedule_id' => $schedule_id,
+                    'space_id' => $space_id,
+                    'total_duration' => $validated['duration'],
+                    'number_of_persons' => $validated['number_of_persons'],
+                    'payment_id' => $payment->id,
+                    'booking_created_at' => now(),
+                    'is_cancelled' => false,
                 ]);
 
-                event(new NotificationSent($ownerNotif));
+                Log::info('Booking created', ['booking_id' => $booking->id]);
+
+                // Reservar capacidade
+                ScheduleController::reserveCapacity($result['schedules'], $validated['number_of_persons']);
+
+                Log::info('Capacity reserved');
+
+                $space = Space::findOrFail($space_id);
+                $ownerUserId = null;
+
+                if (!empty($space->owner_id)) {
+                    $businessOwner = BusinessOwner::find($space->owner_id);
+                    if ($businessOwner) {
+                        $ownerUserId = $businessOwner->user_id;
+                    }
+                }
+
+                if ($ownerUserId && $ownerUserId != Auth::id()) {
+
+                    $ownerNotif = Notification::create([
+                        'user_id' => $ownerUserId,
+                        'content' => "You received a new reservation",
+                        'is_read' => false,
+                        'time_stamp' => now(),
+                    ]);
+
+                    NewReservationNotification::create([
+                        'notification_id' => $ownerNotif->id,
+                        'booking_id' => $booking->id
+                    ]);
+
+                    event(new NotificationSent($ownerNotif));
+
+                    Log::info('Owner notification sent', ['owner_user_id' => $ownerUserId]);
+                }
+
+                DB::commit();
+
+                Log::info('Transaction committed successfully');
+
+                return response()->json([
+                    'success' => true,
+                    'booking_id' => $booking->id,
+                    'payment' => ['id' => $payment->id, 'value' => $payment->value]
+                ], 201);
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Transaction error', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                throw $e;
             }
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'booking_id' => $booking->id,
-                'payment' => ['id' => $payment->id, 'value' => $payment->value]
-            ], 201);
-
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error', ['errors' => $e->errors()]);
+            return response()->json(['error' => 'Validation failed', 'details' => $e->errors()], 422);
         } catch (\Exception $e) {
-            DB::rollBack();
+            Log::error('Booking creation failed', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return response()->json(['error' => 'Failed to create booking: ' . $e->getMessage()], 500);
         }
     }
@@ -231,6 +274,10 @@ class BookingController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Booking update failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return response()->json(['error' => 'Failed to update booking: ' . $e->getMessage()], 500);
         }
     }
@@ -283,6 +330,10 @@ class BookingController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Booking cancellation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return response()->json([
                 'success' => false,
                 'error' => 'Failed to cancel booking: ' . $e->getMessage()
@@ -344,7 +395,7 @@ class BookingController extends Controller
 
         // Get selected date with validation
         $selectedDateParam = $request->input('date', Carbon::today()->format('Y-m-d'));
-        
+
         // Validate date format (must be YYYY-MM-DD)
         try {
             // If date is invalid or incomplete, default to today
@@ -358,7 +409,7 @@ class BookingController extends Controller
             // If parsing fails, use today
             $selectedDate = Carbon::today()->format('Y-m-d');
         }
-        
+
         $date = Carbon::parse($selectedDate);
 
         // Calculate week range for week filter

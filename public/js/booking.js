@@ -182,13 +182,24 @@ async function loadAvailableTimes(date) {
     timeGrid.innerHTML = '<div class="col-span-full text-center py-4 text-gray-500">Loading...</div>';
 
     try {
-        const response = await fetch(`/api/space/${state.spaceId}/schedule?date=${dateStr}`);
+        const response = await fetch('/api/space/' + state.spaceId + '/schedule?date=' + dateStr, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error('HTTP error! status: ' + response.status);
         }
 
         const times = await response.json();
+
+        // The API returns a direct array of schedules
+        if (!Array.isArray(times)) {
+            console.error('Expected array but got:', times);
+            throw new Error('Invalid response format');
+        }
+
         timeGrid.innerHTML = '';
 
         if (times.length === 0) {
@@ -196,14 +207,15 @@ async function loadAvailableTimes(date) {
             return;
         }
 
-        times.forEach(schedule => {
+        times.forEach(function(schedule) {
             const timeBtn = document.createElement('button');
             timeBtn.type = 'button';
-            timeBtn.className = `px-3 py-2 border border-gray-300 rounded-lg hover:border-2 hover:border-emerald-600 hover:bg-emerald-100 transition ${
-                state.scheduleId === schedule.id ? 'border-2 border-emerald-600 bg-emerald-100 font-semibold' : ''
-            }`;
+            timeBtn.className = 'px-3 py-2 border border-gray-300 rounded-lg hover:border-2 hover:border-emerald-600 hover:bg-emerald-100 transition ' +
+                (state.scheduleId === schedule.id ? 'border-2 border-emerald-600 bg-emerald-100 font-semibold' : '');
             timeBtn.textContent = schedule.start_time;
-            timeBtn.onclick = () => selectTime(schedule.id, schedule.start_time);
+            timeBtn.onclick = function() {
+                selectTime(schedule.id, schedule.start_time);
+            };
             timeGrid.appendChild(timeBtn);
         });
     } catch (error) {
@@ -216,7 +228,7 @@ function selectTime(scheduleId, time) {
     state.scheduleId = scheduleId;
     state.time = time;
 
-    document.querySelectorAll('#timeGrid button').forEach(btn => {
+    document.querySelectorAll('#timeGrid button').forEach(function(btn) {
         btn.classList.remove('border-2','border-emerald-600', 'bg-emerald-100', 'font-semibold');
     });
     event.target.classList.add('border-2','border-emerald-600', 'bg-emerald-100', 'font-semibold');
@@ -268,7 +280,7 @@ function updatePersons() {
 }
 
 // ============================================
-// CRIAR/ATUALIZAR RESERVA
+// CRIAR/ATUALIZAR RESERVA - VAI DIRETO PARA PAGAMENTO
 // ============================================
 async function createBooking() {
     if (!state.selectedDate || !state.scheduleId) {
@@ -284,75 +296,23 @@ async function createBooking() {
         return;
     }
 
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    // Save booking details to state for later creation after payment
+    state.customerId = parseInt(customerId);
 
-    try {
-        let response, data;
+    // For now, we'll simulate calculating the price and go directly to payment
+    // In a real system, you'd call an API endpoint to calculate the price first
+    const estimatedPrice = calculateEstimatedPrice();
 
-        if (isEditMode) {
-            response = await fetch(
-                `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings/${state.bookingId}`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify({
-                        new_schedule_id: state.scheduleId,
-                        duration: state.duration,
-                        number_of_persons: state.persons,
-                        payment_provider_ref: 'Credit/Debit Card'
-                    })
-                }
-            );
-        } else {
-            const requestData = {
-                customer_id: parseInt(customerId),
-                duration: state.duration,
-                number_of_persons: state.persons,
-                payment_provider_ref: 'Credit/Debit Card'
-            };
+    openPaymentModal(estimatedPrice);
+}
 
-            console.log('📤 Sending POST request:', {
-                url: `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings`,
-                data: requestData
-            });
-            response = await fetch(
-                `/api/space/${state.spaceId}/schedule/${state.scheduleId}/bookings`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify({
-                        customer_id: parseInt(customerId),
-                        duration: parseInt(state.duration),
-                        number_of_persons: parseInt(state.persons),
-                        payment_provider_ref: 'Credit/Debit Card'
-                    })
-                }
-            );
-        }
-
-        data = await response.json();
-
-        if (data.success) {
-            state.bookingId = data.booking_id;
-            state.payment = data.payment || { value: data.additional_payment || 0 };
-            openPaymentModal(data.payment?.value || data.additional_payment);
-        } else {
-            alert(data.error || 'Failed to process booking');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
-    }
+// Calculate estimated price on frontend (should match backend calculation)
+function calculateEstimatedPrice() {
+    // This is a simplified calculation - adjust according to your business logic
+    const basePricePerSlot = 10; // Example: 10€ per 30min slot
+    const slots = Math.ceil(state.duration / 30);
+    const basePrice = basePricePerSlot * slots * state.persons;
+    return basePrice;
 }
 
 // ============================================
@@ -361,7 +321,7 @@ async function createBooking() {
 function selectPaymentMethod(method) {
     selectedPaymentMethod = method;
 
-    document.querySelectorAll('.payment-method').forEach(btn => {
+    document.querySelectorAll('.payment-method').forEach(function(btn) {
         btn.classList.remove('border-emerald-600', 'bg-emerald-50');
     });
 
@@ -385,7 +345,7 @@ function openPaymentModal(amount) {
     document.getElementById('paymentModal').classList.remove('hidden');
 
     selectedPaymentMethod = null;
-    document.querySelectorAll('.payment-method').forEach(btn => {
+    document.querySelectorAll('.payment-method').forEach(function(btn) {
         btn.classList.remove('border-emerald-600', 'bg-emerald-50');
     });
     document.getElementById('cardForm').classList.add('hidden');
@@ -423,8 +383,60 @@ async function processPayment() {
         return;
     }
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    window.location.href = '/bookings/payment-success';
+    // Simulate payment processing
+    const confirmBtn = event.target;
+    const originalText = confirmBtn.textContent;
+    confirmBtn.textContent = 'Processing...';
+    confirmBtn.disabled = true;
+
+    try {
+        // Simulate payment delay
+        await new Promise(function(resolve) {
+            setTimeout(resolve, 1000);
+        });
+
+        // Payment successful - now create the booking
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+        const response = await fetch(
+            '/api/space/' + state.spaceId + '/schedule/' + state.scheduleId + '/bookings',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    customer_id: state.customerId,
+                    duration: parseInt(state.duration),
+                    number_of_persons: parseInt(state.persons),
+                    payment_provider_ref: selectedPaymentMethod === 'card' ? 'Credit/Debit Card' :
+                        selectedPaymentMethod === 'mbway' ? 'MBWay' : 'PayPal'
+                })
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || errorData.message || 'Failed to create booking');
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Success! Redirect to success page
+            window.location.href = '/bookings/payment-success';
+        } else {
+            throw new Error(data.error || 'Failed to create booking');
+        }
+    } catch (error) {
+        console.error('Payment error:', error);
+        alert('Payment failed: ' + error.message);
+        confirmBtn.textContent = originalText;
+        confirmBtn.disabled = false;
+    }
 }
 
 // ============================================
@@ -433,7 +445,7 @@ async function processPayment() {
 function openCancelModalFromData(button) {
     const bookingId = button.dataset.bookingId;
     const spaceName = button.dataset.spaceName;
-    const customerName = button.dataset.customerName;
+    const customerName = button.dataset.customerName || null; // Optional
     const date = button.dataset.date;
     const time = button.dataset.time;
     const duration = button.dataset.duration;
@@ -452,14 +464,47 @@ function openCancelModal(bookingId, spaceName, customerName, date, time, duratio
         return;
     }
 
-    document.getElementById('cancelSpaceName').textContent = spaceName;
-    document.getElementById('cancelCustomerName').textContent = customerName;
-    document.getElementById('cancelDate').textContent = date;
-    document.getElementById('cancelTime').textContent = time + ', (' + duration + ' min)';
-    document.getElementById('cancelAmount').textContent = amount.toFixed(2) + '€';
-    document.getElementById('cancelBookingId').value = bookingId;
-    document.getElementById('cancelSpaceId').value = spaceId;
-    document.getElementById('cancelScheduleId').value = scheduleId;
+    // Required elements that should always exist
+    const requiredElements = {
+        cancelSpaceName: document.getElementById('cancelSpaceName'),
+        cancelDate: document.getElementById('cancelDate'),
+        cancelTime: document.getElementById('cancelTime'),
+        cancelAmount: document.getElementById('cancelAmount'),
+        cancelBookingId: document.getElementById('cancelBookingId'),
+        cancelSpaceId: document.getElementById('cancelSpaceId'),
+        cancelScheduleId: document.getElementById('cancelScheduleId')
+    };
+
+    // Check if any required element is missing
+    for (const key in requiredElements) {
+        if (!requiredElements[key]) {
+            console.error('Missing required modal element:', key);
+            return;
+        }
+    }
+
+    // Set required values
+    requiredElements.cancelSpaceName.textContent = spaceName || 'N/A';
+    requiredElements.cancelDate.textContent = date || 'N/A';
+    requiredElements.cancelTime.textContent = time + ', (' + duration + ' min)';
+    requiredElements.cancelAmount.textContent = (amount || 0).toFixed(2) + '€';
+    requiredElements.cancelBookingId.value = bookingId;
+    requiredElements.cancelSpaceId.value = spaceId;
+    requiredElements.cancelScheduleId.value = scheduleId;
+
+    // Optional element (only for business owners viewing customer bookings)
+    const cancelCustomerName = document.getElementById('cancelCustomerName');
+    if (cancelCustomerName) {
+        if (customerName) {
+            cancelCustomerName.textContent = customerName;
+        } else {
+            // Hide the customer row if no customer name provided
+            const customerRow = cancelCustomerName.closest('.flex');
+            if (customerRow) {
+                customerRow.style.display = 'none';
+            }
+        }
+    }
 
     modal.classList.remove('hidden');
 }
@@ -490,7 +535,7 @@ async function confirmCancel() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
     try {
-        const url = `/api/space/${spaceId}/schedule/${scheduleId}/bookings/${bookingId}/cancel`;
+        const url = '/api/space/' + spaceId + '/schedule/' + scheduleId + '/bookings/' + bookingId + '/cancel';
 
         const response = await fetch(url, {
             method: 'PATCH',
@@ -518,4 +563,5 @@ async function confirmCancel() {
         alert('An error occurred while cancelling the booking. Please try again.');
         confirmBtn.textContent = originalText;
         confirmBtn.disabled = false;
-    }}
+    }
+}

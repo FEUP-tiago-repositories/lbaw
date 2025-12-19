@@ -9,7 +9,10 @@ let state = {
     duration: 30,
     persons: 1,
     bookingId: null,
-    payment: null
+    payment: null,
+    customerId: null,
+    userId: null,  // User ID for redirects
+    scheduleDuration: 30
 };
 
 let isEditMode = false;
@@ -27,6 +30,18 @@ document.addEventListener('DOMContentLoaded', function() {
     state.spaceId = widget.dataset.spaceId;
     const mode = widget.dataset.mode;
 
+    // Get user ID from meta tag
+    const userIdMeta = document.querySelector('meta[name="user-id"]');
+    if (userIdMeta) {
+        state.userId = parseInt(userIdMeta.content);
+    }
+
+    // Get customer ID from meta tag
+    const customerIdMeta = document.querySelector('meta[name="customer-id"]');
+    if (customerIdMeta) {
+        state.customerId = parseInt(customerIdMeta.content);
+    }
+
     if (mode === 'edit' && window.editMode && window.bookingData) {
         isEditMode = true;
         originalBookingData = window.bookingData;
@@ -35,7 +50,23 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         initCalendar();
     }
+
+    // Fetch space duration for price calculations
+    fetchSpaceDuration();
 });
+
+async function fetchSpaceDuration() {
+    try {
+        const response = await fetch('/api/space/' + state.spaceId + '/details');
+        if (response.ok) {
+            const data = await response.json();
+            state.scheduleDuration = data.duration || 30;
+        }
+    } catch (error) {
+        console.warn('Could not fetch space duration, using default 30min');
+        state.scheduleDuration = 30;
+    }
+}
 
 // ============================================
 // MODO DE EDIÇÃO
@@ -194,7 +225,6 @@ async function loadAvailableTimes(date) {
 
         const times = await response.json();
 
-        // The API returns a direct array of schedules
         if (!Array.isArray(times)) {
             console.error('Expected array but got:', times);
             throw new Error('Invalid response format');
@@ -280,7 +310,17 @@ function updatePersons() {
 }
 
 // ============================================
-// CRIAR/ATUALIZAR RESERVA - VAI DIRETO PARA PAGAMENTO
+// CALCULAR PREÇO CORRETO
+// ============================================
+function calculatePrice(duration, persons, scheduleDuration = 30) {
+    const slotsNeeded = Math.ceil(duration / scheduleDuration);
+    const pricePerSlot = 10;
+    const totalPrice = slotsNeeded * persons * pricePerSlot;
+    return totalPrice;
+}
+
+// ============================================
+// CRIAR/ATUALIZAR RESERVA
 // ============================================
 async function createBooking() {
     if (!state.selectedDate || !state.scheduleId) {
@@ -288,31 +328,136 @@ async function createBooking() {
         return;
     }
 
-    const customerId = document.querySelector('meta[name="customer-id"]')?.content;
+    // Ensure we have customer ID and user ID
+    if (!state.customerId) {
+        const customerIdMeta = document.querySelector('meta[name="customer-id"]');
+        if (customerIdMeta) {
+            state.customerId = parseInt(customerIdMeta.content);
+        }
+    }
 
-    if (!customerId) {
+    if (!state.userId) {
+        const userIdMeta = document.querySelector('meta[name="user-id"]');
+        if (userIdMeta) {
+            state.userId = parseInt(userIdMeta.content);
+        }
+    }
+
+    if (!state.customerId || !state.userId) {
         alert('Please login to continue');
         window.location.href = '/sign-in';
         return;
     }
 
-    // Save booking details to state for later creation after payment
-    state.customerId = parseInt(customerId);
-
-    // For now, we'll simulate calculating the price and go directly to payment
-    // In a real system, you'd call an API endpoint to calculate the price first
-    const estimatedPrice = calculateEstimatedPrice();
-
-    openPaymentModal(estimatedPrice);
+    if (isEditMode) {
+        await handleEditBooking();
+    } else {
+        await handleNewBooking();
+    }
 }
 
-// Calculate estimated price on frontend (should match backend calculation)
-function calculateEstimatedPrice() {
-    // This is a simplified calculation - adjust according to your business logic
-    const basePricePerSlot = 10; // Example: 10€ per 30min slot
-    const slots = Math.ceil(state.duration / 30);
-    const basePrice = basePricePerSlot * slots * state.persons;
-    return basePrice;
+async function handleNewBooking() {
+    const newPrice = calculatePrice(state.duration, state.persons, state.scheduleDuration);
+    openPaymentModal(newPrice, null, null);
+}
+
+async function handleEditBooking() {
+    const oldPrice = calculatePrice(
+        originalBookingData.duration,
+        originalBookingData.persons,
+        state.scheduleDuration
+    );
+
+    const newPrice = calculatePrice(
+        state.duration,
+        state.persons,
+        state.scheduleDuration
+    );
+
+    const priceDifference = newPrice - oldPrice;
+
+    console.log('💰 Price comparison:', {
+        oldPrice,
+        newPrice,
+        difference: priceDifference
+    });
+
+    if (priceDifference > 0) {
+        openPaymentModal(priceDifference, oldPrice, newPrice);
+    } else if (priceDifference < 0) {
+        openRefundModal(oldPrice, newPrice, Math.abs(priceDifference));
+    } else {
+        await updateBookingDirectly();
+    }
+}
+
+async function updateBookingDirectly() {
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+        const response = await fetch(
+            '/api/space/' + state.spaceId + '/schedule/' + state.scheduleId + '/bookings/' + state.bookingId,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    new_schedule_id: state.scheduleId,
+                    duration: state.duration,
+                    number_of_persons: state.persons,
+                    payment_provider_ref: 'Credit/Debit Card'
+                })
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to update booking');
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Booking updated successfully!');
+            window.location.href = '/users/' + state.userId + '/my_reservations';
+        }
+    } catch (error) {
+        console.error('Update error:', error);
+        alert('Failed to update booking: ' + error.message);
+    }
+}
+
+// ============================================
+// MODAL DE REEMBOLSO
+// ============================================
+function openRefundModal(oldPrice, newPrice, refundAmount) {
+    const modal = document.getElementById('refundModal');
+    if (!modal) {
+        console.error('Refund modal not found');
+        return;
+    }
+
+    document.getElementById('refundOldPrice').textContent = oldPrice.toFixed(2);
+    document.getElementById('refundNewPrice').textContent = newPrice.toFixed(2);
+    document.getElementById('refundAmount').textContent = refundAmount.toFixed(2);
+
+    modal.classList.remove('hidden');
+}
+
+function closeRefundModal() {
+    const modal = document.getElementById('refundModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+async function confirmRefund() {
+    closeRefundModal();
+    await updateBookingDirectly();
 }
 
 // ============================================
@@ -340,9 +485,36 @@ function selectPaymentMethod(method) {
     }
 }
 
-function openPaymentModal(amount) {
-    document.getElementById('paymentAmount').textContent = '€' + amount.toFixed(2);
-    document.getElementById('paymentModal').classList.remove('hidden');
+function openPaymentModal(amount, oldPrice = null, newPrice = null) {
+    const modal = document.getElementById('paymentModal');
+    const amountElement = document.getElementById('paymentAmount');
+    const detailsElement = document.getElementById('paymentDetails');
+
+    if (oldPrice !== null && newPrice !== null) {
+        amountElement.textContent = '€' + amount.toFixed(2);
+        detailsElement.innerHTML = `
+            <div class="text-sm text-gray-600 space-y-1">
+                <div class="flex justify-between">
+                    <span>Original price:</span>
+                    <span>€${oldPrice.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>New price:</span>
+                    <span>€${newPrice.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between font-semibold text-emerald-600 border-t pt-1">
+                    <span>Additional payment:</span>
+                    <span>€${amount.toFixed(2)}</span>
+                </div>
+            </div>
+        `;
+        detailsElement.classList.remove('hidden');
+    } else {
+        amountElement.textContent = '€' + amount.toFixed(2);
+        detailsElement.classList.add('hidden');
+    }
+
+    modal.classList.remove('hidden');
 
     selectedPaymentMethod = null;
     document.querySelectorAll('.payment-method').forEach(function(btn) {
@@ -383,53 +555,86 @@ async function processPayment() {
         return;
     }
 
-    // Simulate payment processing
     const confirmBtn = event.target;
     const originalText = confirmBtn.textContent;
     confirmBtn.textContent = 'Processing...';
     confirmBtn.disabled = true;
 
     try {
-        // Simulate payment delay
         await new Promise(function(resolve) {
             setTimeout(resolve, 1000);
         });
 
-        // Payment successful - now create the booking
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-        const response = await fetch(
-            '/api/space/' + state.spaceId + '/schedule/' + state.scheduleId + '/bookings',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({
-                    customer_id: state.customerId,
-                    duration: parseInt(state.duration),
-                    number_of_persons: parseInt(state.persons),
-                    payment_provider_ref: selectedPaymentMethod === 'card' ? 'Credit/Debit Card' :
-                        selectedPaymentMethod === 'mbway' ? 'MBWay' : 'PayPal'
-                })
-            }
-        );
+        let paymentProviderRef;
+        if (selectedPaymentMethod === 'card') {
+            paymentProviderRef = 'Credit/Debit Card';
+        } else if (selectedPaymentMethod === 'mbway') {
+            paymentProviderRef = 'MB Way';
+        } else if (selectedPaymentMethod === 'paypal') {
+            paymentProviderRef = 'Paypal';
+        }
+
+        let response;
+
+        if (isEditMode) {
+            response = await fetch(
+                '/api/space/' + state.spaceId + '/schedule/' + state.scheduleId + '/bookings/' + state.bookingId,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        new_schedule_id: state.scheduleId,
+                        duration: state.duration,
+                        number_of_persons: state.persons,
+                        payment_provider_ref: paymentProviderRef
+                    })
+                }
+            );
+        } else {
+            response = await fetch(
+                '/api/space/' + state.spaceId + '/schedule/' + state.scheduleId + '/bookings',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        customer_id: state.customerId,
+                        duration: state.duration,
+                        number_of_persons: state.persons,
+                        payment_provider_ref: paymentProviderRef
+                    })
+                }
+            );
+        }
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || errorData.message || 'Failed to create booking');
+
+            if (errorData.details) {
+                const errorMessages = Object.values(errorData.details).flat().join('\n');
+                throw new Error('Validation errors:\n' + errorMessages);
+            }
+
+            throw new Error(errorData.error || errorData.message || 'Operation failed');
         }
 
         const data = await response.json();
 
         if (data.success) {
-            // Success! Redirect to success page
             window.location.href = '/bookings/payment-success';
         } else {
-            throw new Error(data.error || 'Failed to create booking');
+            throw new Error(data.error || 'Operation failed');
         }
     } catch (error) {
         console.error('Payment error:', error);
@@ -445,7 +650,7 @@ async function processPayment() {
 function openCancelModalFromData(button) {
     const bookingId = button.dataset.bookingId;
     const spaceName = button.dataset.spaceName;
-    const customerName = button.dataset.customerName || null; // Optional
+    const customerName = button.dataset.customerName || null;
     const date = button.dataset.date;
     const time = button.dataset.time;
     const duration = button.dataset.duration;
@@ -464,7 +669,6 @@ function openCancelModal(bookingId, spaceName, customerName, date, time, duratio
         return;
     }
 
-    // Required elements that should always exist
     const requiredElements = {
         cancelSpaceName: document.getElementById('cancelSpaceName'),
         cancelDate: document.getElementById('cancelDate'),
@@ -475,7 +679,6 @@ function openCancelModal(bookingId, spaceName, customerName, date, time, duratio
         cancelScheduleId: document.getElementById('cancelScheduleId')
     };
 
-    // Check if any required element is missing
     for (const key in requiredElements) {
         if (!requiredElements[key]) {
             console.error('Missing required modal element:', key);
@@ -483,7 +686,6 @@ function openCancelModal(bookingId, spaceName, customerName, date, time, duratio
         }
     }
 
-    // Set required values
     requiredElements.cancelSpaceName.textContent = spaceName || 'N/A';
     requiredElements.cancelDate.textContent = date || 'N/A';
     requiredElements.cancelTime.textContent = time + ', (' + duration + ' min)';
@@ -492,13 +694,11 @@ function openCancelModal(bookingId, spaceName, customerName, date, time, duratio
     requiredElements.cancelSpaceId.value = spaceId;
     requiredElements.cancelScheduleId.value = scheduleId;
 
-    // Optional element (only for business owners viewing customer bookings)
     const cancelCustomerName = document.getElementById('cancelCustomerName');
     if (cancelCustomerName) {
         if (customerName) {
             cancelCustomerName.textContent = customerName;
         } else {
-            // Hide the customer row if no customer name provided
             const customerRow = cancelCustomerName.closest('.flex');
             if (customerRow) {
                 customerRow.style.display = 'none';

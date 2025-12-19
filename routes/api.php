@@ -11,6 +11,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SpaceController;
 
 // ============================================
 // API ROUTES
@@ -18,6 +19,10 @@ use App\Http\Controllers\NotificationController;
 // Note: All routes here need 'web' middleware for session-based auth
 
 Route::middleware(['web'])->group(function () {
+    // ============================================
+    // M03: SPACE DETAILS API
+    // ============================================
+    Route::get('/space/{space_id}/details', [SpaceController::class, 'getDetails']);
     // ============================================
     // M04: REVIEWS API (R401-R404)
     // ============================================

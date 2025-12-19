@@ -96,8 +96,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
 
     // Favorites (R307-R308)
-    Route::post('/spaces/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
-    Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
+    Route::post('/spaces/{space}/favorite', [\App\Http\Controllers\FavoriteController::class, 'toggle'])->name('spaces.favorite');     // R307
+    Route::get('/favorites',[\App\Http\Controllers\FavoriteController::class,'index'])->name('favorites.index');
+    // Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
 });
 
 // ============================================
@@ -117,7 +118,7 @@ Route::middleware(['auth'])->group(function () {
 // ============================================
 Route::middleware(['auth'])->group(function () {
     Route::post('/reviews', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
-    Route::post('/responses',[App\Http\Controllers\ResponseController::class, 'store'])->name('responses.store');
+    Route::post('/responses', [App\Http\Controllers\ResponseController::class, 'store'])->name('responses.store');
 });
 
 // ============================================

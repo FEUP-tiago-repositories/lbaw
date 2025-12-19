@@ -26,4 +26,8 @@ class Customer extends Model
     public function reviews(){
         return $this->hasMany(Review::class, 'customer_id');
     }
+    public function favoritedSpaces()
+    {
+        return $this->belongsToMany(Space::class, 'favorited', 'customer_id', 'space_id');
+    }
 }

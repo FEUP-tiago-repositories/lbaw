@@ -164,4 +164,27 @@ class SpaceController extends Controller
 
         return redirect()->route('spaces.index')->with('success', 'Space deleted successfully!');
     }
+
+    /**
+     * Get space details for API (used for price calculation)
+     * GET /api/space/{space_id}/details
+     */
+    public function getDetails($space_id)
+    {
+        try {
+            $space = Space::findOrFail($space_id);
+
+            return response()->json([
+                'id' => $space->id,
+                'title' => $space->title,
+                'duration' => $space->duration ?? 30,  // Default to 30 if not set
+                'opening_time' => $space->opening_time,
+                'closing_time' => $space->closing_time
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Space not found'
+            ], 404);
+        }
+    }
 }

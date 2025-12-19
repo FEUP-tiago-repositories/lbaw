@@ -13,39 +13,211 @@ use Carbon\Carbon;
 class ScheduleController extends Controller
 {
     /**
-     * Get all schedules for a space (existing method)
+     * Get available schedules for a space on a specific date
+     * Used by booking widget to show available time slots
+     * GET /api/space/{space_id}/schedule?date=YYYY-MM-DD
      */
-    public function index($space_id)
+    public function index(Request $request, $space_id)
     {
-        try {
-            $space = Space::find($space_id);
+        $validated = $request->validate([
+            'date' => 'required|date'
+        ]);
 
-            if (!$space) {
-                return response()->json([
+        $schedules = Schedule::where('space_id', $space_id)
+            ->whereDate('start_time', $validated['date'])
+            ->where('max_capacity', '>', 0)
+            ->orderBy('start_time')
+            ->get()
+            ->map(fn($schedule) => [
+                'id' => $schedule->id,
+                'start_time' => $schedule->start_time->format('H:i'),
+                'available_capacity' => $schedule->max_capacity
+            ]);
+
+        return response()->json($schedules);
+    }
+
+    /**
+     * Get consecutive schedules for a booking duration
+     * Static helper method used by BookingController
+     *
+     * NOTE: Duration is stored in Space, not in individual Schedules
+     */
+    public static function getAffectedSchedules(Schedule $initialSchedule, int $duration, int $persons): array
+    {
+        Log::info('getAffectedSchedules called', [
+            'initial_schedule_id' => $initialSchedule->id,
+            'requested_duration' => $duration,
+            'persons' => $persons
+        ]);
+
+        // Get space to access duration
+        $space = $initialSchedule->space;
+        if (!$space) {
+            Log::error('Schedule has no associated space', ['schedule_id' => $initialSchedule->id]);
+            return [
+                'success' => false,
+                'message' => 'Schedule configuration error: no space found'
+            ];
+        }
+
+        $slotDuration = $space->duration;
+
+        // Safety check: space duration must be positive
+        if (!isset($slotDuration) || $slotDuration <= 0) {
+            Log::error('Space has invalid duration', [
+                'space_id' => $space->id,
+                'space_duration' => $slotDuration
+            ]);
+            return [
+                'success' => false,
+                'message' => 'Space configuration error: invalid slot duration'
+            ];
+        }
+
+        // Safety check: requested duration must be positive
+        if ($duration <= 0) {
+            Log::error('Invalid requested duration', ['duration' => $duration]);
+            return [
+                'success' => false,
+                'message' => 'Invalid booking duration'
+            ];
+        }
+
+        Log::info('Using space slot duration', [
+            'space_id' => $space->id,
+            'slot_duration' => $slotDuration
+        ]);
+
+        $schedules = [];
+        $current = $initialSchedule;
+        $remaining = $duration;
+        $iterations = 0;
+        $maxIterations = 100; // Safety limit to prevent infinite loops
+
+        // Verificar capacidade inicial
+        if (!$current->hasAvailableCapacity($persons)) {
+            Log::warning('Insufficient initial capacity', [
+                'schedule_id' => $current->id,
+                'available' => $current->max_capacity,
+                'required' => $persons
+            ]);
+            return [
+                'success' => false,
+                'message' => 'Insufficient capacity for the selected time slot'
+            ];
+        }
+
+        $schedules[] = $current;
+        $remaining -= $slotDuration;
+
+        Log::info('First schedule added', [
+            'schedule_id' => $current->id,
+            'slot_duration' => $slotDuration,
+            'remaining' => $remaining
+        ]);
+
+        // Buscar horários consecutivos
+        while ($remaining > 0) {
+            $iterations++;
+
+            // Safety check: prevent infinite loop
+            if ($iterations > $maxIterations) {
+                Log::error('Maximum iterations exceeded in getAffectedSchedules', [
+                    'iterations' => $iterations,
+                    'remaining' => $remaining,
+                    'schedules_found' => count($schedules)
+                ]);
+                return [
                     'success' => false,
-                    'message' => 'Space not found'
-                ], 404);
+                    'message' => 'Unable to find consecutive time slots (too many iterations)'
+                ];
             }
 
-            $schedules = Schedule::where('space_id', $space_id)
-                ->orderBy('start_time')
-                ->get();
+            $nextTime = $current->start_time->copy()->addMinutes($slotDuration);
 
-            return response()->json([
-                'success' => true,
-                'schedules' => $schedules
+            Log::info('Looking for next schedule', [
+                'iteration' => $iterations,
+                'current_schedule_id' => $current->id,
+                'current_end_time' => $current->start_time->copy()->addMinutes($slotDuration)->format('H:i'),
+                'next_time_looking_for' => $nextTime->format('H:i'),
+                'remaining' => $remaining
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in ScheduleController@index: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while fetching schedules'
-            ], 500);
+
+            $next = Schedule::where('space_id', $current->space_id)
+                ->where('start_time', $nextTime)
+                ->first();
+
+            if (!$next) {
+                Log::warning('No consecutive schedule found', [
+                    'looking_for_time' => $nextTime->format('Y-m-d H:i:s'),
+                    'space_id' => $current->space_id
+                ]);
+                return [
+                    'success' => false,
+                    'message' => 'No consecutive time slots available for this duration'
+                ];
+            }
+
+            if (!$next->hasAvailableCapacity($persons)) {
+                Log::warning('Next schedule has insufficient capacity', [
+                    'schedule_id' => $next->id,
+                    'available' => $next->max_capacity,
+                    'required' => $persons
+                ]);
+                return [
+                    'success' => false,
+                    'message' => 'Insufficient capacity in consecutive time slots'
+                ];
+            }
+
+            $schedules[] = $next;
+            $remaining -= $slotDuration;
+            $current = $next;
+
+            Log::info('Schedule added to chain', [
+                'schedule_id' => $next->id,
+                'slot_duration' => $slotDuration,
+                'remaining' => $remaining,
+                'total_schedules' => count($schedules)
+            ]);
+        }
+
+        Log::info('getAffectedSchedules successful', [
+            'total_schedules' => count($schedules),
+            'iterations' => $iterations
+        ]);
+
+        return ['success' => true, 'schedules' => $schedules];
+    }
+
+    /**
+     * Reserve capacity in multiple schedules
+     */
+    public static function reserveCapacity(array $schedules, int $persons): void
+    {
+        foreach ($schedules as $schedule) {
+            $schedule->reserveCapacity($persons);
         }
     }
 
     /**
-     * Get schedule details (new method for modal)
+     * Restore capacity in multiple schedules
+     */
+    public static function restoreCapacity(array $schedules, int $persons): void
+    {
+        foreach ($schedules as $schedule) {
+            $schedule->restoreCapacity($persons);
+        }
+    }
+
+    // ============================================
+    // BUSINESS OWNER METHODS (for schedule modal)
+    // ============================================
+
+    /**
+     * Get schedule details (for edit modal)
+     * GET /api/schedules/{id}
      */
     public function show($id)
     {
@@ -105,30 +277,14 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Create a new schedule
+     * Store a new schedule (for owners)
+     * POST /api/space/{space_id}/schedule
      */
-    public function store(Request $request, $space_id = null)
+    public function store(Request $request, $space_id)
     {
         try {
-            // Get space_id from route parameter or request body
-            $spaceId = $space_id ?? $request->space_id;
-
-            $validator = Validator::make(array_merge($request->all(), ['space_id' => $spaceId]), [
-                'space_id' => 'required|exists:space,id',
-                'date' => 'required|date|after_or_equal:today',
-                'time' => 'required',
-                'max_capacity' => 'required|integer|min:1'
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $validator->errors()->first()
-                ], 422);
-            }
-
             // Check if user owns this space
-            $space = Space::find($spaceId);
+            $space = Space::find($space_id);
             if (!$space) {
                 return response()->json([
                     'success' => false,
@@ -150,11 +306,24 @@ class ScheduleController extends Controller
                 ], 403);
             }
 
+            $validator = Validator::make($request->all(), [
+                'date' => 'required|date|after_or_equal:today',
+                'time' => 'required',
+                'max_capacity' => 'required|integer|min:1'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first()
+                ], 422);
+            }
+
             // Combine date and time
             $startTime = Carbon::parse($request->date . ' ' . $request->time);
 
             // Check if schedule already exists for this time
-            $existingSchedule = Schedule::where('space_id', $spaceId)
+            $existingSchedule = Schedule::where('space_id', $space_id)
                 ->where('start_time', $startTime)
                 ->first();
 
@@ -165,9 +334,9 @@ class ScheduleController extends Controller
                 ], 422);
             }
 
-            // Create schedule
+            // Create schedule (duration is in space, not in schedule)
             $schedule = Schedule::create([
-                'space_id' => $spaceId,
+                'space_id' => $space_id,
                 'start_time' => $startTime,
                 'max_capacity' => $request->max_capacity
             ]);
@@ -176,7 +345,7 @@ class ScheduleController extends Controller
                 'success' => true,
                 'message' => 'Schedule created successfully',
                 'schedule' => $schedule
-            ]);
+            ], 201);
         } catch (\Exception $e) {
             Log::error('Error in ScheduleController@store: ' . $e->getMessage());
             return response()->json([
@@ -187,7 +356,8 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Update an existing schedule
+     * Update schedule
+     * PUT /api/schedules/{id} OR PATCH /api/space/{space_id}/schedule/{schedule_id}
      */
     public function update(Request $request, $space_id_or_id, $schedule_id = null)
     {
@@ -262,7 +432,7 @@ class ScheduleController extends Controller
                 ], 422);
             }
 
-            // Update schedule
+            // Update schedule (duration is in space, not in schedule)
             $schedule->update([
                 'start_time' => $startTime,
                 'max_capacity' => $request->max_capacity
@@ -283,7 +453,8 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Delete a schedule
+     * Delete schedule
+     * DELETE /api/schedules/{id} OR DELETE /api/space/{space_id}/schedule/{schedule_id}
      */
     public function destroy($space_id_or_id, $schedule_id = null)
     {

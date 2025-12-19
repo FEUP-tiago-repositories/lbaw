@@ -7,9 +7,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @auth
+        <meta name="user-id" content="{{ Auth::id() }}">
         @if(Auth::user()->customer)
             <meta name="customer-id" content="{{ Auth::user()->customer->id }}">
-            <script>console.log('Customer ID from meta:', {{ Auth::user()->customer->id }});</script>
+            <script>console.log('User ID:', {{ Auth::id() }}, 'Customer ID:', {{ Auth::user()->customer->id }});</script>
         @else
             <script>console.error('User has no customer!');</script>
         @endif

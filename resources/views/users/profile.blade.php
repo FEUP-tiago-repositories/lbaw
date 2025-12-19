@@ -20,8 +20,8 @@
                     {{-- Header --}}
                     <div class="flex items-center gap-8">
                         <img src="{{ $user->profile_pic_url ? asset($user->profile_pic_url) : 'https://via.placeholder.com/120' }}"
-                        class="w-20 h-20 rounded-full object-cover border-gray-200 shadow">
-                            <div class="space-y-1">
+                            class="w-20 h-20 rounded-full object-cover border-gray-200 shadow">
+                        <div class="space-y-1">
                             <h1 class="text-4xl font-bold text-gray-900">
                                 {{ $user->first_name }} {{ $user->surname }}
                             </h1>
@@ -79,22 +79,22 @@
 
                     <hr class="my-8">
 
-                     {{-- Buttons --}}
+                    {{-- Buttons --}}
                     <div class="flex gap-4">
                         <a href="{{ route('users.edit', $user->id) }}"
-                           class="px-6 py-3 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center font-medium ">
+                            class="px-6 py-3 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center font-medium ">
                             Edit Profile
                         </a>
 
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
+                            <button
+                                class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
                                 Log Out
                             </button>
                         </form>
 
-                        <button
-                            onclick="openDeleteModal()"
+                        <button onclick="openDeleteModal()"
                             class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-300 hover:text-black transition shadow text-center font-medium">
                             Delete Account
                         </button>
@@ -107,29 +107,34 @@
                         <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg">
                             <div class="flex flex-col gap-3">
                                 <a href="{{ route('bookings.index', ['user_id' => auth()->id()]) }}"
-                                   class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
+                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium">
                                     My Reservations
                                 </a>
 
                                 <a href="{{ route('notifications.index') }}"
-                                class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium group">
+                                    class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium group">
 
                                     Notifications
 
                                     @if($unreadCount > 0)
-                                        <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
+                                        <span
+                                            class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
                                             {{ $unreadCount }}
                                         </span>
                                     @endif
                                 </a>
-                                <a href="{{ route('favorites.index') }}"
-                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium flex items-center justify-center gap-3">
-                                    <svg class="w-6 h-6 fill-current" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                    <span>My Favorites</span>
-                                </a>
+                                @auth
+                                    @if(auth()->user()->customer)
+                                        <a href="{{ route('favorites.index') }}"
+                                            class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center text-[19px] font-medium flex items-center justify-center gap-3">
+                                            <svg class="w-6 h-6 fill-current" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                            <span>My Favorites</span>
+                                        </a>
+                                    @endif
+                                @endauth
                             </div>
                         </div>
 
@@ -138,20 +143,21 @@
                         <div class="bg-white border-2 border-emerald-200 rounded-xl p-6 shadow-lg text-center font-medium">
                             <div class="flex flex-col gap-3">
                                 <a href="{{ route('spaces.create') }}"
-                                   class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
                                     Create New Space
                                 </a>
 
                                 <a href="{{ route('spaces.bookings.select') }}"
-                                class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
                                     Manage Reservations and Schedules
                                 </a>
                                 <a href="{{ route('notifications.index') }}"
-                                class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                                    class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
                                     Notifications
 
                                     @if($unreadCount > 0)
-                                        <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
+                                        <span
+                                            class="absolute -top-2 -right-2 inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-white bg-red-600 border-2 border-white rounded-full z-10">
                                             {{ $unreadCount }}
                                         </span>
                                     @endif

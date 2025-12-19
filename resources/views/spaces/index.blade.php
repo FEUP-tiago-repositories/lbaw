@@ -6,8 +6,8 @@
     <div class="container mx-auto p-8 max-w-[1350px]">
         {{-- Flex for Main tile and Add Space button! --}}
         <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h1 class="text-3xl font-bold mb-8">Take a look at our Sports Spaces!</h1>
-            <div class="flex items-center gap-3">
+            <h1 class="text-3xl font-bold">Take a look at our Sports Spaces!</h1>
+            <div class="flex align- items-center gap-3">
                 @auth
                     @if(auth()->user()->businessOwner)
                         {{-- Add space button --}}

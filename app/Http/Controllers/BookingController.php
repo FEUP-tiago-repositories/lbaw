@@ -265,7 +265,7 @@ class BookingController extends Controller
 
             $notification = Notification::create([
                 'user_id' => $booking->customer->user_id,
-                'content' => 'Your reservation has been successfully cancelled.',
+                'content' => 'Your reservation has been cancelled.',
                 'is_read' => false,
                 'time_stamp' => now(),
             ]);

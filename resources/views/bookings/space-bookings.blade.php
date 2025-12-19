@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
-        <div class="max-w-[1600px] mx-auto">
+        <div class="max-w-6xl mx-auto">
             <!-- Breadcrumb -->
             <div class="flex items-center gap-2 mb-6 text-lg">
                 <a href="{{ route('home') }}" class="text-emerald-600 hover:text-emerald-400">
@@ -12,7 +12,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
                 <a href="{{ route('users.show', Auth::id()) }}" class="text-emerald-600 hover:text-emerald-400">
-                    Profile of {{ Auth::user()->user_name }}
+                    Profile of {{ Auth::user()->first_name }} {{ Auth::user()->surname }}
                 </a>
                 <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -138,7 +138,7 @@
                             
                             <div class="flex items-center gap-4">
                                 <!-- Day Selector -->
-                                <select id="day-select" onchange="goToDate(this.value)" 
+                                <select id="day-select" onchange="updateDateFromSelectors()" 
                                         class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                                     @for($i = 1; $i <= 31; $i++)
                                         <option value="{{ $i }}" {{ $i == \Carbon\Carbon::parse($selectedDate)->day ? 'selected' : '' }}>
@@ -294,7 +294,7 @@
                                         <h4 class="font-semibold text-gray-900 mb-4">Bookings ({{ $slot['bookings']->count() }})</h4>
                                         <div class="space-y-4">
                                             @foreach($slot['bookings'] as $booking)
-                                                @include('bookings.partials.booking-space-card', ['booking' => $booking])
+                                                @include('bookings.partials.booking-calendar-space-card', ['booking' => $booking])
                                             @endforeach
                                         </div>
                                     </div>
@@ -323,5 +323,6 @@
 
 @push('scripts')
     <script src="{{ asset('js/booking.js') }}"></script>
-    <script src="{{ asset('js/enhanced-calendar.js') }}"></script>
+    <script src="{{ asset('js/business-owner.js') }}"></script>
+    <script src="{{ asset('js/calendar.js') }}"></script>
 @endpush

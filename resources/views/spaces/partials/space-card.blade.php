@@ -1,6 +1,6 @@
 {{-- filepath: resources/views/spaces/partials/space-card.blade.php --}}
 <a href="{{ route('spaces.show', $space->id) }}">
-    <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full w-[250px] hover:shadow-lg transition-shadow duration-300">
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full w-[240px] hover:shadow-lg transition-shadow duration-300">
         <!-- Image -->
         <div class="h-40 overflow-hidden bg-gray-200 shrink-0">
             @include('partials.space-image', ['space' => $space])
@@ -8,9 +8,23 @@
 
         <!-- Content -->
         <div class="p-4 flex flex-col grow">
-            <h3 class="font-semibold text-lg mb-2">
-                {{ $space->title }}
-            </h3>
+            <div class="flex items-start justify-between mb-2">
+                <h3 class="font-semibold text-lg">
+                    {{ $space->title }}
+                </h3>
+                @php
+                    $averageRating = ($space->current_environment_rating +
+                                     $space->current_equipment_rating +
+                                     $space->current_service_rating) / 3;
+                @endphp
+
+                <div class="flex items-center gap-1 bg-yellow-100 px-2 py-1 rounded-lg">
+                    <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <span class="text-sm font-bold text-gray-800">{{ number_format($averageRating, 1) }}</span>
+                </div>
+            </div>
 
             <!-- Details -->
             <div class="space-y-2 text-sm mb-4 grow">
@@ -31,22 +45,6 @@
                         {{ $space->sportType->name }}
                     </div>
                 @endif
-
-                <div class="flex items-center text-gray-700">
-                    <svg class="w-4 h-4 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    {{ $space->email }}
-                </div>
-
-                <div class="flex items-center text-gray-700">
-                    <svg class="w-4 h-4 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    {{ $space->phone_no }}
-                </div>
 
                 <div class="text-gray-600 line-clamp-2">
                     {{ $space->description }}

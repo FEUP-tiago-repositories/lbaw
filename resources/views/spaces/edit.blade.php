@@ -3,7 +3,29 @@
 
 @section('content')
 <div class="container mx-auto px-8 py-8 max-w-4xl bg-white rounded-2xl shadow my-3.5">
-    <h1 class="text-3xl font-bold mb-6">Edit Space: {{ $space->title }}</h1>
+    <div class = "flex justify-between items-center mb-2">
+        <h1 class="text-3xl font-bold mb-6">Edit Space: {{ $space->title }}</h1>
+
+        <button type="button" onclick="toggleModal()" 
+            class="w-12 h-12 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center hover:bg-emerald-500 transition shadow-lg">
+            ?
+        </button>
+    </div>
+
+    <div id="helpModal" class="fixed inset-0 bg-transparent bg-opacity-60 flex items-center justify-center z-50 hidden backdrop-blur-sm transition-opacity duration-300">
+            
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-3xl w-full min-h-[500px] relative transform transition-all scale-100 mx-4">
+            <div class="text-gray-600 text-center mb-8 leading-relaxed">
+                @include('partials.help.edit_space')
+            </div>
+
+            <div class="flex justify-center">
+                <button onclick="toggleModal()" class="px-8 py-3 bg-red-600 text-white rounded-full font-semibold shadow-lg hover:bg-red-700 hover:shadow-xl transition transform hover:-translate-y-0.5">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     {{-- Display errors --}}
     @if ($errors->any())
@@ -22,7 +44,7 @@
         @method('PATCH')
 
         {{-- Title --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="title" class="block text-lg font-medium mb-2">Title *</label>
             <input type="text" name="title" id="title" value="{{ old('title', $space->title) }}"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -31,7 +53,7 @@
         </div>
 
         {{-- Sport Type --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="sport_type_id" class="block text-lg font-medium mb-2">Sport Type *</label>
             <select name="sport_type_id" id="sport_type_id"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -46,7 +68,7 @@
         </div>
 
         {{-- Address --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="address" class="block text-lg font-medium mb-2">Address *</label>
             <input type="text" name="address" id="address" value="{{ old('address', $space->address) }}"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -54,7 +76,7 @@
         </div>
 
         {{-- Description --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="description" class="block text-lg font-medium mb-2">Description *</label>
             <textarea name="description" id="description"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -63,7 +85,7 @@
         </div>
 
         {{-- Phone Number --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="phone_no" class="block text-lg font-medium mb-2">Phone Number *</label>
             <input type="tel" name="phone_no" id="phone_no" value="{{ old('phone_no', $space->phone_no) }}"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -72,7 +94,7 @@
         </div>
 
         {{-- Email --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="email" class="block text-lg font-medium mb-2">Email *</label>
             <input type="email" name="email" id="email" value="{{ old('email', $space->email) }}"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -80,7 +102,7 @@
         </div>
 
         {{-- Is Closed Status --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label class="flex items-center">
                 <input type="checkbox" 
                        name="is_closed" 
@@ -94,7 +116,7 @@
         </div>
 
         {{-- Action Buttons --}}
-        <div class="flex gap-4 mt-8">
+        <div class="flex gap-4 mt-6">
             <button type="submit" 
                     class="px-6 py-3 bg-green-700 text-white rounded-lg transition font-medium hover:bg-green-400 cursor-pointer">
                 Save Changes

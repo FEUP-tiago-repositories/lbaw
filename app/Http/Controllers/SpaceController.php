@@ -18,7 +18,9 @@ class SpaceController extends Controller
         // fetch all spaces into the index view
         $spaces = Space::with(['sportType', 'media'])->orderBy('id', 'desc')->get(); // we will only need this info in the Space Card
 
-        return view('spaces.index', compact('spaces'));
+        $sports = \App\Models\SportType::all();
+
+        return view('spaces.index', compact('spaces', 'sports'));
     }
 
     /**
@@ -75,9 +77,30 @@ class SpaceController extends Controller
     public function show(Space $space)
     {
         // used for the route /space/{space}
-        $space->load(['sportType', 'media', 'owner.user', 'coverImage']);
+        $space->load(['sportType', 'media', 'owner.user', 'coverImage'/*, 'bookings.review.customer.user'/* 'bookings.review.responses' */]);
 
-        return view('spaces.show', compact('space'));
+        // Get all reviews for this space
+        $reviews = $space->reviews()
+            ->with(['customer.user'/* 'responses.businessOwner.user' */,'booking'])
+            ->orderBy('time_stamp', 'desc')
+            ->get();
+
+        // calculate ratings
+        $totalReviews = $reviews->count();
+
+        if ($totalReviews > 0) {
+            $avgEnvironment = $reviews->avg('environment_rating');
+            $avgEquipment = $reviews->avg('equipment_rating');
+            $avgService = $reviews->avg('service_rating');
+            $averageRating = ($avgEnvironment + $avgEquipment + $avgService) / 3;
+        } else {
+            $avgEnvironment = 0;
+            $avgEquipment = 0;
+            $avgService = 0;
+            $averageRating = 0;
+        }
+
+        return view('spaces.show', compact('space', 'reviews', 'averageRating', 'avgEnvironment', 'avgEquipment', 'avgService', 'totalReviews'));
     }
 
     /**

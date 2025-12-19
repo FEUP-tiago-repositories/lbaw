@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@include('auth.partials.recover')
 @section('content')
 <div class="flex justify-center items-center min-h-screen py-10">
 
@@ -13,13 +13,14 @@
             </div>
         @endif
 
-        <form action="{{ route('login') }}" method="POST" class="text-xl">
+        <form action="{{ route('login') }}" method="POST" class="text-lg">
             @csrf
 
             <div class="mb-5">
                 <label class="block font-medium text-gray-700 mb-1">Email</label>
                 <input type="email" name="email"
                     class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="example@gmail.com"
                     required>
             </div>
 
@@ -27,6 +28,7 @@
                 <label class="block font-medium text-gray-700 mb-1">Password</label>
                 <input type="password" name="password"
                     class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Minimum 6 characters"
                     required>
             </div>
 
@@ -38,6 +40,10 @@
             <p class="text-center mt-4 text-gray-600">
                 Don't have an account?
                 <a href="{{ route('register') }}" class="text-emerald-800 hover:underline font-medium">Create one</a>
+            </p>
+            <p class="text-center mt-4 text-gray-600">
+                Forgot your Password?
+                <a href="#" onclick="openRecoverModal()" class="text-emerald-800 hover:underline font-medium">Recover it here</a>
             </p>
         </form>
     </div>

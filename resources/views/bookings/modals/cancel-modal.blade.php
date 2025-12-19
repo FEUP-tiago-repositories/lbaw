@@ -1,6 +1,6 @@
 <!-- Modal de Cancelamento -->
 <div id="cancelModal" class="hidden fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 p-6">
         <h2 class="text-xl font-bold text-center">Are you sure you want to cancel this reservation?</h2>
         <p class="text-base mb-4 text-center">This action cannot be undone.</p>
 
@@ -10,6 +10,18 @@
                     <span class="text-gray-600">Space:</span>
                     <span id="cancelSpaceName" class="font-semibold"></span>
                 </div>
+                @if(auth()->user()->businessOwner)
+                    <div class="flex justify-between">
+                        <div class="flex items-center text-gray-600">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            <span class="text-gray-600">Customer</span>
+                        </div>
+                        <span id="cancelCustomerName" class="font-semibold"></span>
+                    </div>
+                @endif
                 <div class="flex justify-between">
                     <div class="flex items-center text-gray-600">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

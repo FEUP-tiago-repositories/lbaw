@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Review;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ReviewPolicy
 {
@@ -29,7 +28,8 @@ class ReviewPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        // only customers can create reviews
+        return $user->customer !== null;
     }
 
     /**
@@ -45,7 +45,9 @@ class ReviewPolicy
      */
     public function delete(User $user, Review $review): bool
     {
-        return false;
+        // review author or admin can delete
+        return ($user->customer && $user->customer->id === $review->customer_id) 
+            || $user->is_admin;
     }
 
     /**
@@ -61,6 +63,36 @@ class ReviewPolicy
      */
     public function forceDelete(User $user, Review $review): bool
     {
-        return false;
+        return $user->is_admin;
+    }
+
+    public function createForBooking(User $user, $bookingId): bool
+    {
+        // must be a customer
+        if (! $user->customer) {
+            return false;
+        }
+
+        $booking = \App\Models\Booking::find($bookingId);
+        if (! $booking) {
+            return false;
+        }
+
+        // must own the booking
+        if ($booking->customer_id !== $user->customer->id) {
+            return false;
+        }
+
+        // booking must not be cancelled
+        if ($booking->is_cancelled) {
+            return false;
+        }
+
+        // must not already have a review
+        if ($booking->review) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -20,6 +20,8 @@ $do$ LANGUAGE plpgsql;
 
 CREATE Table "user" (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    first_name VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
     user_name VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     phone_no VARCHAR(15) NOT NULL UNIQUE,
@@ -104,25 +106,25 @@ CREATE TABLE ban (
 
 CREATE TABLE schedule (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    space_id INT NOT NULL REFERENCES space(id),
+    space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
     start_time TIMESTAMP NOT NULL, --must be a future TIMESTAMP
     duration INT NOT NULL CHECK (duration > 0),
-    max_capacity INT NOT NULL CHECK (max_capacity > 0)
+    max_capacity INT NOT NULL CHECK (max_capacity >= 0)
 );
 
 CREATE TABLE payment (
-     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-     value FLOAT NOT NULL CHECK (value > 0),
-     is_discounted BOOLEAN NOT NULL DEFAULT FALSE,
-     is_accepted BOOLEAN NOT NULL DEFAULT FALSE,
-     payment_provider_ref VARCHAR(100) NOT NULL CHECK (
-         payment_provider_ref IN (
-              'Credit/Debit Card',
-              'MB Way',
-              'Paypal'
-             )
-         ),
-     time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    value FLOAT NOT NULL CHECK (value > 0),
+    is_discounted BOOLEAN NOT NULL DEFAULT FALSE,
+    is_accepted BOOLEAN NOT NULL DEFAULT FALSE,
+    payment_provider_ref VARCHAR(100) NOT NULL CHECK (
+        payment_provider_ref IN (
+            'Credit/Debit Card',
+            'MB Way',
+            'Paypal'
+        )
+    ),
+    time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE booking (
@@ -133,7 +135,7 @@ CREATE TABLE booking (
     booking_created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
     number_of_persons INT NOT NULL DEFAULT 1,
-    total_duration INT NOT NULL DEFAULT 60,
+    total_duration INT NOT NULL DEFAULT 30,
     payment_id INT REFERENCES payment (id) ON DELETE SET NULL
 );
 
@@ -174,7 +176,8 @@ CREATE TABLE notification (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id INT NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
     time_stamp TIMESTAMP NOT NULL DEFAULT NOW(),
-    is_read BOOLEAN NOT NULL DEFAULT FALSE
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    content TEXT NOT NULL
 );
 
 CREATE TABLE response_notification (
@@ -207,6 +210,12 @@ CREATE TABLE booking_reminder_notification (
     booking_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE -- Links to booking table
 );
 
+CREATE TABLE new_reservation_notifications (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    notification_id INT NOT NULL REFERENCES notification (id) ON DELETE CASCADE, -- Links to notification table
+    booking_id INT NOT NULL REFERENCES booking (id) ON DELETE CASCADE -- Links to booking table
+);
+
 CREATE TABLE media (
     id INT GENERATED ALWAYS AS IDENTITY,
     space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
@@ -222,12 +231,22 @@ CREATE TABLE favorited (
     PRIMARY KEY (space_id, customer_id)
 );
 
+CREATE TABLE password_resets (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id INT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    expires_at TIMESTAMP NOT NULL
+);
+
+
 -- =======================================================================================
 -- DATA POPULATION (around 1950 lines of code, scroll down to see indexes and triggers)
 -- =======================================================================================
 
-INSERT INTO
-    "user" (
+    INSERT INTO "user" (
+        first_name,
+        surname,
         user_name,
         email,
         phone_no,
@@ -238,204 +257,244 @@ INSERT INTO
         profile_pic_url
     )
 VALUES (
-        'Cade Le',
+        'Cade',
+        'Le',
+        'cade_le',
         'dolor.nulla@protonmail.couk',
         '954529117',
         FALSE,
         FALSE,
         'PDF81OMZ4CZ',
         '1960-01-23',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Miriam Hoover',
+        'Miriam',
+        'Hoover',
+        'miriam_hoover',
         'nibh.quisque.nonummy@hotmail.edu',
         '962922371',
         FALSE,
         TRUE,
         'NXV25EBT2MC',
         '1989-04-05',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Lysandra Wise',
+        'Lysandra',
+        'Wise',
+        'lysandra_wise',
         'ullamcorper@aol.org',
         '931042084',
         FALSE,
         TRUE,
         'HIC92UVB1RM',
         '1963-08-24',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Alfreda Curtis',
+        'Alfreda',
+        'Curtis',
+        'alfreda_curtis',
         'sed@aol.net',
         '972456831',
         FALSE,
         TRUE,
         'QIR00JTE7MK',
         '2001-12-10',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Constance Yates',
+        'Constance',
+        'Yates',
+        'constance_yates',
         'interdum@protonmail.ca',
         '989628425',
         TRUE,
         TRUE,
         'YHP48KYD7QH',
         '1965-05-27',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Nita Jennings',
+        'Nita',
+        'Jennings',
+        'nita_jennings',
         'auctor.ullamcorper.nisl@icloud.edu',
         '973066023',
         FALSE,
         FALSE,
         'XJC87JZZ1PJ',
         '1986-02-05',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
-        'Lucy Schroeder',
+        'Lucy',
+        'Schroeder',
+        'lucy_schroeder',
         'quisque.tincidunt@hotmail.couk',
         '979822651',
         TRUE,
         FALSE,
         'URS83TKB1JK',
         '1990-12-28',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Seth David',
+        'Seth',
+        'David',
+        'seth_david',
         'mauris.magna@protonmail.ca',
         '963088105',
         TRUE,
         FALSE,
         'RBP99EEH9HY',
         '1971-09-09',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Felicia Hubbard',
+        'Felicia',
+        'Hubbard',
+        'felicia_hubbard',
         'et.magnis@outlook.edu',
         '903518505',
         FALSE,
         FALSE,
         'YNY29HYN4EF',
         '1953-08-31',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Kamal Burnett',
+        'Kamal',
+        'Burnett',
+        'kamal_burnett',
         'convallis@yahoo.couk',
         '930572268',
         FALSE,
         FALSE,
         'JQD86QMT1PV',
         '1979-12-24',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Murphy Cunningham',
+        'Murphy',
+        'Cunningham',
+        'murphy_cunningham',
         'mauris.sapien.cursus@hotmail.org',
         '975166436',
         FALSE,
         TRUE,
         'BDK84KFB0BM',
         '2006-10-12',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'
     ),
     (
-        'Peter Haynes',
+        'Peter',
+        'Haynes',
+        'peter_haynes',
         'tortor.at.risus@protonmail.edu',
         '912031257',
         FALSE,
         FALSE,
         'TXL28IPE7HU',
         '1952-12-19',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Xaviera Williams',
+        'Xaviera',
+        'Williams',
+        'xaviera_williams',
         'eget@google.net',
         '986863406',
         TRUE,
         TRUE,
         'JGX59DHI7EX',
         '1975-02-26',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
-        'Tatiana Trujillo',
+        'Tatiana',
+        'Trujillo',
+        'tatiana_trujillo',
         'curabitur@aol.ca',
         '931704357',
         FALSE,
         FALSE,
         'PPX44LRY9TW',
         '1987-06-28',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
-        'Gage Ramos',
+        'Gage',
+        'Ramos',
+        'gage_ramos',
         'congue@outlook.org',
         '995219633',
         TRUE,
         FALSE,
         'EKV03QXK6BT',
         '1961-03-18',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Cynthia Barnett',
+        'Cynthia',
+        'Barnett',
+        'cynthia_barnett',
         'dictum.sapien.aenean@protonmail.edu',
         '998339655',
         TRUE,
         FALSE,
         'RBR82JEP2WS',
         '1998-06-24',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     ),
     (
-        'Imani Wilkinson',
+        'Imani',
+        'Wilkinson',
+        'imani_wilkinson',
         'lorem.eu@yahoo.edu',
         '940636822',
         TRUE,
         TRUE,
         'CLM27NIQ8IO',
         '1959-07-29',
-        'https://activehub/uploads/picture.png'
+        'images/profile.jpg'    
     ),
     (
-        'Ebony Hill',
+        'Ebony',
+        'Hill',
+        'ebony_hill',
         'nulla@outlook.ca',
         '973648036',
         TRUE,
         FALSE,
         'AFA68UOX0FY',
         '1973-05-12',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Jasper Briggs',
+        'Jasper',
+        'Briggs',
+        'jasper_briggs',
         'sem.ut@protonmail.net',
         '917847326',
         TRUE,
         FALSE,
         'TUP96PDI4DM',
         '1966-08-28',
-        'https://activehub/uploads/profile.png'
+        'images/profile.jpg'
     ),
     (
-        'Ulric Vasquez',
+        'Ulric',
+        'Vasquez',
+        'ulric_vasquez',
         'amet@aol.ca',
         '923223688',
         FALSE,
         TRUE,
         'TDN80GTU5DJ',
         '2002-02-09',
-        'https://activehub/uploads/picture.jpeg'
+        'images/profile.jpg'
     );
 
 INSERT INTO
@@ -751,181 +810,181 @@ VALUES
     -- Space 1: Football field (10 schedules)
     (
         1,
-        '2025-12-01 18:00:00',
+        '2026-02-01 18:00:00',
         90,
         14
     ),
     (
         1,
-        '2025-12-02 19:00:00',
+        '2026-02-02 19:00:00',
         90,
         14
     ),
     (
         1,
-        '2025-12-03 20:00:00',
+        '2026-02-03 20:00:00',
         120,
         14
     ),
     (
         1,
-        '2025-12-04 18:30:00',
+        '2026-02-04 18:30:00',
         90,
         14
     ),
     (
         1,
-        '2025-12-05 17:00:00',
+        '2026-02-05 17:00:00',
         90,
         14
     ),
     (
         1,
-        '2025-12-06 19:30:00',
+        '2026-02-06 19:30:00',
         120,
         14
     ),
     (
         1,
-        '2025-12-07 18:00:00',
+        '2026-02-07 18:00:00',
         90,
         14
     ),
     (
         1,
-        '2025-12-08 20:00:00',
+        '2026-02-08 20:00:00',
         90,
         14
     ),
     (
         1,
-        '2025-12-09 17:30:00',
+        '2026-02-09 17:30:00',
         90,
         14
     ),
     (
         1,
-        '2025-12-10 19:00:00',
+        '2026-02-10 19:00:00',
         120,
         14
     ),
     (
         2,
-        '2025-12-02 17:30:00',
+        '2026-02-02 17:30:00',
         60,
         4
     ),
     (
         2,
-        '2025-12-05 19:00:00',
+        '2026-02-05 19:00:00',
         60,
         4
     ),
     (
         3,
-        '2025-12-01 08:00:00',
+        '2026-02-01 08:00:00',
         90,
         20
     ),
     (
         3,
-        '2025-12-02 18:00:00',
+        '2026-02-02 18:00:00',
         120,
         25
     ),
     (
         4,
-        '2025-12-07 10:00:00',
+        '2026-02-07 10:00:00',
         180,
         30
     ),
     (
         4,
-        '2025-12-10 14:00:00',
+        '2026-02-10 14:00:00',
         120,
         25
     ),
     (
         5,
-        '2025-12-06 16:00:00',
+        '2026-02-06 16:00:00',
         90,
         10
     ),
     (
         5,
-        '2025-12-09 18:30:00',
+        '2026-02-09 18:30:00',
         90,
         12
     ),
     (
         6,
-        '2025-12-08 09:00:00',
+        '2026-02-08 09:00:00',
         240,
         20
     ),
     (
         6,
-        '2025-12-15 13:30:00',
+        '2026-02-15 13:30:00',
         240,
         18
     ),
     (
         7,
-        '2025-12-03 19:00:00',
+        '2026-02-03 19:00:00',
         60,
         8
     ),
     (
         7,
-        '2025-12-04 20:30:00',
+        '2026-02-04 20:30:00',
         60,
         8
     ),
     (
         8,
-        '2025-12-02 07:30:00',
+        '2026-02-02 07:30:00',
         90,
         30
     ),
     (
         8,
-        '2025-12-06 15:00:00',
+        '2026-02-06 15:00:00',
         90,
         25
     ),
     (
         9,
-        '2025-12-05 18:00:00',
+        '2026-02-05 18:00:00',
         120,
         15
     ),
     (
         9,
-        '2025-12-08 10:00:00',
+        '2026-02-08 10:00:00',
         150,
         12
     ),
     (
         10,
-        '2025-12-09 19:30:00',
+        '2026-02-09 19:30:00',
         90,
         22
     ),
     (
         10,
-        '2025-12-11 21:00:00',
+        '2026-02-11 21:00:00',
         90,
         20
     ),
     (
         11,
-        '2025-12-10 07:00:00',
+        '2026-02-10 07:00:00',
         60,
         40
     ),
     (
         11,
-        '2025-12-12 18:00:00',
+        '2026-02-12 18:00:00',
         60,
         35
     ),
@@ -933,61 +992,61 @@ VALUES
 -- Space 2: Badminton Court (10 schedules)
 (
     2,
-    '2025-12-01 17:30:00',
+    '2026-02-01 17:30:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-02 18:30:00',
+    '2026-02-02 18:30:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-03 19:00:00',
+    '2026-02-03 19:00:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-04 17:00:00',
+    '2026-02-04 17:00:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-05 19:00:00',
+    '2026-02-05 19:00:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-06 18:00:00',
+    '2026-02-06 18:00:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-07 17:30:00',
+    '2026-02-07 17:30:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-08 19:30:00',
+    '2026-02-08 19:30:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-09 18:00:00',
+    '2026-02-09 18:00:00',
     60,
     4
 ),
 (
     2,
-    '2025-12-10 17:00:00',
+    '2026-02-10 17:00:00',
     60,
     4
 ),
@@ -995,61 +1054,61 @@ VALUES
 -- Space 3: Iron Gym (10 schedules)
 (
     3,
-    '2025-12-01 08:00:00',
+    '2026-02-01 08:00:00',
     90,
     20
 ),
 (
     3,
-    '2025-12-02 09:00:00',
+    '2026-02-02 09:00:00',
     120,
     25
 ),
 (
     3,
-    '2025-12-03 18:00:00',
+    '2026-02-03 18:00:00',
     90,
     20
 ),
 (
     3,
-    '2025-12-04 07:30:00',
+    '2026-02-04 07:30:00',
     90,
     20
 ),
 (
     3,
-    '2025-12-05 19:00:00',
+    '2026-02-05 19:00:00',
     120,
     25
 ),
 (
     3,
-    '2025-12-06 08:00:00',
+    '2026-02-06 08:00:00',
     90,
     20
 ),
 (
     3,
-    '2025-12-07 10:00:00',
+    '2026-02-07 10:00:00',
     90,
     20
 ),
 (
     3,
-    '2025-12-08 18:30:00',
+    '2026-02-08 18:30:00',
     120,
     25
 ),
 (
     3,
-    '2025-12-09 07:00:00',
+    '2026-02-09 07:00:00',
     90,
     20
 ),
 (
     3,
-    '2025-12-10 19:30:00',
+    '2026-02-10 19:30:00',
     90,
     20
 ),
@@ -1057,61 +1116,61 @@ VALUES
 -- Space 4: Gaia Biking Park (10 schedules)
 (
     4,
-    '2025-12-01 10:00:00',
+    '2026-02-01 10:00:00',
     180,
     30
 ),
 (
     4,
-    '2025-12-02 14:00:00',
+    '2026-02-02 14:00:00',
     120,
     25
 ),
 (
     4,
-    '2025-12-03 09:00:00',
+    '2026-02-03 09:00:00',
     180,
     30
 ),
 (
     4,
-    '2025-12-04 15:00:00',
+    '2026-02-04 15:00:00',
     120,
     25
 ),
 (
     4,
-    '2025-12-05 10:30:00',
+    '2026-02-05 10:30:00',
     180,
     30
 ),
 (
     4,
-    '2025-12-06 13:00:00',
+    '2026-02-06 13:00:00',
     180,
     30
 ),
 (
     4,
-    '2025-12-07 10:00:00',
+    '2026-02-07 10:00:00',
     120,
     25
 ),
 (
     4,
-    '2025-12-08 14:30:00',
+    '2026-02-08 14:30:00',
     180,
     30
 ),
 (
     4,
-    '2025-12-09 09:30:00',
+    '2026-02-09 09:30:00',
     120,
     25
 ),
 (
     4,
-    '2025-12-10 14:00:00',
+    '2026-02-10 14:00:00',
     180,
     30
 ),
@@ -1119,61 +1178,61 @@ VALUES
 -- Space 5: Downtown Basketball Court (10 schedules)
 (
     5,
-    '2025-12-01 16:00:00',
+    '2026-02-01 16:00:00',
     90,
     10
 ),
 (
     5,
-    '2025-12-02 18:30:00',
+    '2026-02-02 18:30:00',
     90,
     12
 ),
 (
     5,
-    '2025-12-03 17:00:00',
+    '2026-02-03 17:00:00',
     90,
     10
 ),
 (
     5,
-    '2025-12-04 19:00:00',
+    '2026-02-04 19:00:00',
     90,
     12
 ),
 (
     5,
-    '2025-12-05 16:30:00',
+    '2026-02-05 16:30:00',
     90,
     10
 ),
 (
     5,
-    '2025-12-06 18:00:00',
+    '2026-02-06 18:00:00',
     90,
     12
 ),
 (
     5,
-    '2025-12-07 17:30:00',
+    '2026-02-07 17:30:00',
     90,
     10
 ),
 (
     5,
-    '2025-12-08 19:30:00',
+    '2026-02-08 19:30:00',
     90,
     12
 ),
 (
     5,
-    '2025-12-09 16:00:00',
+    '2026-02-09 16:00:00',
     90,
     10
 ),
 (
     5,
-    '2025-12-10 18:30:00',
+    '2026-02-10 18:30:00',
     90,
     12
 ),
@@ -1181,61 +1240,61 @@ VALUES
 -- Space 6: Golf Club Foz (10 schedules)
 (
     6,
-    '2025-12-01 09:00:00',
+    '2026-02-01 09:00:00',
     240,
     20
 ),
 (
     6,
-    '2025-12-02 13:30:00',
+    '2026-02-02 13:30:00',
     240,
     18
 ),
 (
     6,
-    '2025-12-03 08:30:00',
+    '2026-02-03 08:30:00',
     240,
     20
 ),
 (
     6,
-    '2025-12-04 14:00:00',
+    '2026-02-04 14:00:00',
     240,
     18
 ),
 (
     6,
-    '2025-12-05 09:30:00',
+    '2026-02-05 09:30:00',
     240,
     20
 ),
 (
     6,
-    '2025-12-06 13:00:00',
+    '2026-02-06 13:00:00',
     240,
     18
 ),
 (
     6,
-    '2025-12-07 08:00:00',
+    '2026-02-07 08:00:00',
     240,
     20
 ),
 (
     6,
-    '2025-12-08 14:30:00',
+    '2026-02-08 14:30:00',
     240,
     18
 ),
 (
     6,
-    '2025-12-09 09:00:00',
+    '2026-02-09 09:00:00',
     240,
     20
 ),
 (
     6,
-    '2025-12-10 13:30:00',
+    '2026-02-10 13:30:00',
     240,
     18
 ),
@@ -1243,61 +1302,61 @@ VALUES
 -- Space 7: Padel Arena Porto (10 schedules)
 (
     7,
-    '2025-12-01 19:00:00',
+    '2026-02-01 19:00:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-02 20:30:00',
+    '2026-02-02 20:30:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-03 18:30:00',
+    '2026-02-03 18:30:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-04 19:30:00',
+    '2026-02-04 19:30:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-05 20:00:00',
+    '2026-02-05 20:00:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-06 18:00:00',
+    '2026-02-06 18:00:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-07 19:00:00',
+    '2026-02-07 19:00:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-08 20:30:00',
+    '2026-02-08 20:30:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-09 18:30:00',
+    '2026-02-09 18:30:00',
     60,
     8
 ),
 (
     7,
-    '2025-12-10 19:30:00',
+    '2026-02-10 19:30:00',
     60,
     8
 ),
@@ -1305,61 +1364,61 @@ VALUES
 -- Space 8: Indoor Swimming Complex (10 schedules)
 (
     8,
-    '2025-12-01 07:30:00',
+    '2026-02-01 07:30:00',
     90,
     30
 ),
 (
     8,
-    '2025-12-02 15:00:00',
+    '2026-02-02 15:00:00',
     90,
     25
 ),
 (
     8,
-    '2025-12-03 08:00:00',
+    '2026-02-03 08:00:00',
     90,
     30
 ),
 (
     8,
-    '2025-12-04 16:00:00',
+    '2026-02-04 16:00:00',
     90,
     25
 ),
 (
     8,
-    '2025-12-05 07:00:00',
+    '2026-02-05 07:00:00',
     90,
     30
 ),
 (
     8,
-    '2025-12-06 15:30:00',
+    '2026-02-06 15:30:00',
     90,
     25
 ),
 (
     8,
-    '2025-12-07 08:30:00',
+    '2026-02-07 08:30:00',
     90,
     30
 ),
 (
     8,
-    '2025-12-08 14:30:00',
+    '2026-02-08 14:30:00',
     90,
     25
 ),
 (
     8,
-    '2025-12-09 07:30:00',
+    '2026-02-09 07:30:00',
     90,
     30
 ),
 (
     8,
-    '2025-12-10 15:00:00',
+    '2026-02-10 15:00:00',
     90,
     25
 ),
@@ -1367,61 +1426,61 @@ VALUES
 -- Space 9: Climbing Zone Campanhã (10 schedules)
 (
     9,
-    '2025-12-01 18:00:00',
+    '2026-02-01 18:00:00',
     120,
     15
 ),
 (
     9,
-    '2025-12-02 10:00:00',
+    '2026-02-02 10:00:00',
     150,
     12
 ),
 (
     9,
-    '2025-12-03 19:00:00',
+    '2026-02-03 19:00:00',
     120,
     15
 ),
 (
     9,
-    '2025-12-04 11:00:00',
+    '2026-02-04 11:00:00',
     150,
     12
 ),
 (
     9,
-    '2025-12-05 18:30:00',
+    '2026-02-05 18:30:00',
     120,
     15
 ),
 (
     9,
-    '2025-12-06 10:30:00',
+    '2026-02-06 10:30:00',
     150,
     12
 ),
 (
     9,
-    '2025-12-07 19:30:00',
+    '2026-02-07 19:30:00',
     120,
     15
 ),
 (
     9,
-    '2025-12-08 09:30:00',
+    '2026-02-08 09:30:00',
     150,
     12
 ),
 (
     9,
-    '2025-12-09 18:00:00',
+    '2026-02-09 18:00:00',
     120,
     15
 ),
 (
     9,
-    '2025-12-10 10:00:00',
+    '2026-02-10 10:00:00',
     150,
     12
 ),
@@ -1429,548 +1488,546 @@ VALUES
 -- Space 10: Hockey Arena Norte (10 schedules)
 (
     10,
-    '2025-12-01 19:30:00',
+    '2026-02-01 19:30:00',
     90,
     22
 ),
 (
     10,
-    '2025-12-02 21:00:00',
+    '2026-02-02 21:00:00',
     90,
     20
 ),
 (
     10,
-    '2025-12-03 20:00:00',
+    '2026-02-03 20:00:00',
     90,
     22
 ),
 (
     10,
-    '2025-12-04 19:00:00',
+    '2026-02-04 19:00:00',
     90,
     20
 ),
 (
     10,
-    '2025-12-05 20:30:00',
+    '2026-02-05 20:30:00',
     90,
     22
 ),
 (
     10,
-    '2025-12-06 21:30:00',
+    '2026-02-06 21:30:00',
     90,
     20
 ),
 (
     10,
-    '2025-12-07 19:30:00',
+    '2026-02-07 19:30:00',
     90,
     22
 ),
 (
     10,
-    '2025-12-08 20:00:00',
+    '2026-02-08 20:00:00',
     90,
     20
 ),
 (
     10,
-    '2025-12-09 21:00:00',
+    '2026-02-09 21:00:00',
     90,
     22
 ),
 (
     10,
-    '2025-12-10 19:30:00',
+    '2026-02-10 19:30:00',
     90,
     20
 ),
 
 -- Space 11: Riverside Running Track (10 schedules)
-    (
-        11,
-        '2025-12-01 07:00:00',
-        60,
-        40
-    ),
-    (
-        11,
-        '2025-12-02 18:00:00',
-        60,
-        35
-    ),
-    (
-        11,
-        '2025-12-03 06:30:00',
-        60,
-        40
-    ),
-    (
-        11,
-        '2025-12-04 17:30:00',
-        60,
-        35
-    ),
-    (
-        11,
-        '2025-12-05 07:30:00',
-        60,
-        40
-    ),
-    (
-        11,
-        '2025-12-06 18:30:00',
-        60,
-        35
-    ),
-    (
-        11,
-        '2025-12-07 07:00:00',
-        60,
-        40
-    ),
-    (
-        11,
-        '2025-12-08 17:00:00',
-        60,
-        35
-    ),
-    (
-        11,
-        '2025-12-09 06:30:00',
-        60,
-        40
-    ),
-    (
-        11,
-        '2025-12-10 18:00:00',
-        60,
-        35
-    ),
-    (
-        3,
-        '2025-11-10 17:30:00',
-        90,
-        20
-    ),
-    (
-        2,
-        '2025-11-01 17:30:00',
-        60,
-        4
-    ),
-    (
-        1,
-        '2025-12-03 15:00:00',
-        30,
-        14
-    ),
-    (
-        1,
-        '2025-12-03 15:30:00',
-        30,
-        14
-    ),
-    (
-        1,
-        '2025-12-03 16:00:00',
-        30,
-        14
-    ),
-    (
-        1,
-        '2025-12-03 16:30:00',
-        30,
-        14
-    ),
-    (
-        1,
-        '2025-12-03 17:00:00',
-        30,
-        14
-    ),
-    (
-        1,
-        '2025-12-03 17:30:00',
-        30,
-        14
-    ),
-    (
-        1,
-        '2025-12-03 18:00:00',
-        30,
-        1
-    ),
-    (
-        1,
-        '2025-12-03 18:30:00',
-        30,
-        14
-    ),
-    (
-        1,
-        '2025-12-03 19:00:00',
-        30,
-        14
-    ),
-    (
-        1,
-        '2025-12-03 19:30:00',
-        30,
-        14
-    );
+(
+    11,
+    '2026-02-01 07:00:00',
+    60,
+    40
+),
+(
+    11,
+    '2026-02-02 18:00:00',
+    60,
+    35
+),
+(
+    11,
+    '2026-02-03 06:30:00',
+    60,
+    40
+),
+(
+    11,
+    '2026-02-04 17:30:00',
+    60,
+    35
+),
+(
+    11,
+    '2026-02-05 07:30:00',
+    60,
+    40
+),
+(
+    11,
+    '2026-02-06 18:30:00',
+    60,
+    35
+),
+(
+    11,
+    '2026-02-07 07:00:00',
+    60,
+    40
+),
+(
+    11,
+    '2026-02-08 17:00:00',
+    60,
+    35
+),
+(
+    11,
+    '2026-02-09 06:30:00',
+    60,
+    40
+),
+(
+    11,
+    '2026-02-10 18:00:00',
+    60,
+    35
+),
+(
+    3,
+    '2026-01-10 17:30:00',
+    90,
+    20
+),
+(
+    2,
+    '2026-01-01 17:30:00',
+    60,
+    4
+),
+(
+    1,
+    '2026-02-03 15:00:00',
+    30,
+    14
+),
+(
+    1,
+    '2026-02-03 15:30:00',
+    30,
+    14
+),
+(
+    1,
+    '2026-02-03 16:00:00',
+    30,
+    14
+),
+(
+    1,
+    '2026-02-03 16:30:00',
+    30,
+    14
+),
+(
+    1,
+    '2026-02-03 17:00:00',
+    30,
+    14
+),
+(
+    1,
+    '2026-02-03 17:30:00',
+    30,
+    14
+),
+(
+    1,
+    '2026-02-03 18:00:00',
+    30,
+    1
+),
+(
+    1,
+    '2026-02-03 18:30:00',
+    30,
+    14
+),
+(
+    1,
+    '2026-02-03 19:00:00',
+    30,
+    14
+),
+(
+    1,
+    '2026-02-03 19:30:00',
+    30,
+    14
+);
 
 INSERT INTO
     payment (
-    value,
-    is_discounted,
-    is_accepted,
-    payment_provider_ref,
-    time_stamp
-)
+        value,
+        is_discounted,
+        is_accepted,
+        payment_provider_ref,
+        time_stamp
+    )
 VALUES (
-           25.50,
-           TRUE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-01 14:30:00'
-       ),
-       (
-           28.00,
-           FALSE,
-           TRUE,
-           'MB Way',
-           '2025-11-02 10:05:00'
-       ),
-       (
-           12.00,
-           TRUE,
-           TRUE,
-           'MB Way',
-           '2025-11-02 11:05:00'
-       ),
-       (
-           18.90,
-           TRUE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-04 09:25:00'
-       ),
-       (
-           21.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-04 12:20:00'
-       ),
-       (
-           30.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-05 08:10:00'
-       ),
-       (
-           10.00,
-           TRUE,
-           TRUE,
-           'Paypal',
-           '2025-11-06 13:50:00'
-       ),
-       (
-           10.00,
-           TRUE,
-           FALSE,
-           'MB Way',
-           '2025-11-07 14:40:00'
-       ),
-       (
-           45.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-07 18:10:00'
-       ),
-       (
-           20.00,
-           TRUE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-08 10:15:00'
-       ),
-       (
-           15.00,
-           TRUE,
-           FALSE,
-           'Paypal',
-           '2025-11-08 15:35:00'
-       ),
-       (
-           18.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-09 17:10:00'
-       ),
-       (
-           25.00,
-           FALSE,
-           TRUE,
-           'MB Way',
-           '2025-11-09 18:20:00'
-       ),
-       (
-           12.00,
-           FALSE,
-           FALSE,
-           'Paypal',
-           '2025-11-03 15:35:00'
-       ),
-       (
-           20.00,
-           FALSE,
-           FALSE,
-           'Credit/Debit Card',
-           '2025-11-05 16:15:00'
-       ),
-       (
-           15.00,
-           TRUE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-08 10:05:00'
-       ),
-       (
-           22.50,
-           FALSE,
-           TRUE,
-           'MB Way',
-           '2025-11-09 17:05:00'
-       ),
-       (
-           18.00,
-           TRUE,
-           TRUE,
-           'Paypal',
-           '2025-11-09 18:20:00'
-       ),
-       (
-           20.00,
-           FALSE,
-           TRUE,
-           'Credit/Debit Card',
-           '2025-11-01 14:40:00'
-       ),
-       (
-           17.50,
-           TRUE,
-           TRUE,
-           'MB Way',
-           '2025-11-01 14:20:00'
-       ),
-       (
-           17.50,
-           TRUE,
-           TRUE,
-           'MB Way',
-           '2025-11-01 14:20:00'
-       );
+        25.50,
+        TRUE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-01 14:30:00'
+    ),
+    (
+        28.00,
+        FALSE,
+        TRUE,
+        'MB Way',
+        '2026-01-02 10:05:00'
+    ),
+    (
+        12.00,
+        TRUE,
+        TRUE,
+        'MB Way',
+        '2026-01-02 11:05:00'
+    ),
+    (
+        18.90,
+        TRUE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-04 09:25:00'
+    ),
+    (
+        21.00,
+        FALSE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-04 12:20:00'
+    ),
+    (
+        30.00,
+        FALSE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-05 08:10:00'
+    ),
+    (
+        10.00,
+        TRUE,
+        TRUE,
+        'Paypal',
+        '2026-01-06 13:50:00'
+    ),
+    (
+        10.00,
+        TRUE,
+        FALSE,
+        'MB Way',
+        '2026-01-07 14:40:00'
+    ),
+    (
+        45.00,
+        FALSE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-07 18:10:00'
+    ),
+    (
+        20.00,
+        TRUE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-08 10:15:00'
+    ),
+    (
+        15.00,
+        TRUE,
+        FALSE,
+        'Paypal',
+        '2026-01-08 15:35:00'
+    ),
+    (
+        18.00,
+        FALSE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-09 17:10:00'
+    ),
+    (
+        25.00,
+        FALSE,
+        TRUE,
+        'MB Way',
+        '2026-01-09 18:20:00'
+    ),
+    (
+        12.00,
+        FALSE,
+        FALSE,
+        'Paypal',
+        '2026-01-03 15:35:00'
+    ),
+    (
+        20.00,
+        FALSE,
+        FALSE,
+        'Credit/Debit Card',
+        '2026-01-05 16:15:00'
+    ),
+    (
+        15.00,
+        TRUE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-08 10:05:00'
+    ),
+    (
+        22.50,
+        FALSE,
+        TRUE,
+        'MB Way',
+        '2026-01-09 17:05:00'
+    ),
+    (
+        18.00,
+        TRUE,
+        TRUE,
+        'Paypal',
+        '2026-01-09 18:20:00'
+    ),
+    (
+        20.00,
+        FALSE,
+        TRUE,
+        'Credit/Debit Card',
+        '2026-01-01 14:40:00'
+    ),
+    (
+        17.50,
+        TRUE,
+        TRUE,
+        'MB Way',
+        '2026-01-01 14:20:00'
+    ),
+    (
+        17.50,
+        TRUE,
+        TRUE,
+        'MB Way',
+        '2026-01-01 14:20:00'
+    );
 
 INSERT INTO
     booking (
-    space_id,
-    customer_id,
-    schedule_id,
-    booking_created_at,
-    is_cancelled,
-    number_of_persons,
-    total_duration,
-    payment_id
-)
+        space_id,
+        customer_id,
+        schedule_id,
+        booking_created_at,
+        is_cancelled,
+        number_of_persons,
+        total_duration,
+        payment_id
+    )
 VALUES (
-           1,
-           1,
-           1,
-           '2025-11-01 14:25:00',
-           FALSE,
-            2,
-            30,
+        1,
+        1,
+        1,
+        '2026-01-01 14:25:00',
+        FALSE,
+        2,
+        30,
         1
-       ),
-       (
-           1,
-           2,
-           2,
-           '2025-11-02 10:00:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        1,
+        2,
+        2,
+        '2026-01-02 10:00:00',
+        FALSE,
+        2,
+        30,
         2
-       ),
-       (
-           2,
-           3,
-           3,
-           '2025-11-02 11:00:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        2,
+        3,
+        3,
+        '2026-01-02 11:00:00',
+        FALSE,
+        2,
+        30,
         3
-       ),
-       (
-           2,
-           4,
-           4,
-           '2025-11-03 15:30:00',
-           TRUE,
-           2,
-           30,
+    ),
+    (
+        2,
+        4,
+        4,
+        '2026-01-03 15:30:00',
+        TRUE,
+        2,
+        30,
         14
-       ),
-       (
-           3,
-           5,
-           5,
-           '2025-11-04 09:20:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        3,
+        5,
+        5,
+        '2026-01-04 09:20:00',
+        FALSE,
+        2,
+        30,
         4
-       ),
-       (
-           3,
-           6,
-           6,
-           '2025-11-04 12:10:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        3,
+        6,
+        6,
+        '2026-01-04 12:10:00',
+        FALSE,
+        2,
+        30,
         5
-       ),
-       (
-           4,
-           7,
-           7,
-           '2025-11-05 08:00:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        4,
+        7,
+        7,
+        '2026-01-05 08:00:00',
+        FALSE,
+        2,
+        30,
         10
-       ),
-       (
-           4,
-           8,
-           8,
-           '2025-11-05 16:10:00',
-           TRUE,
-           2,
-           30,
+    ),
+    (
+        4,
+        8,
+        8,
+        '2026-01-05 16:10:00',
+        TRUE,
+        2,
+        30,
         11
-       ),
-       (
-           5,
-           9,
-           9,
-           '2025-11-06 13:45:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        5,
+        9,
+        9,
+        '2026-01-06 13:45:00',
+        FALSE,
+        2,
+        30,
         7
-       ),
-       (
-           5,
-           10,
-           10,
-           '2025-11-07 14:30:00',
-           FALSE,
-           2,
-           8,
+    ),
+    (
+        5,
+        10,
+        10,
+        '2026-01-07 14:30:00',
+        FALSE,
+        2,
+        8,
         16
-       ),
-       (
-           6,
-           11,
-           11,
-           '2025-11-07 18:00:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        6,
+        11,
+        11,
+        '2026-01-07 18:00:00',
+        FALSE,
+        2,
+        30,
         16
-       ),
-       (
-           7,
-           12,
-           12,
-           '2025-11-08 10:00:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        7,
+        12,
+        12,
+        '2026-01-08 10:00:00',
+        FALSE,
+        2,
+        30,
         16
-       ),
-       (
-           8,
-           13,
-           13,
-           '2025-11-08 15:30:00',
-           TRUE,
-           2,
-           30,
+    ),
+    (
+        8,
+        13,
+        13,
+        '2026-01-08 15:30:00',
+        TRUE,
+        2,
+        30,
         16
-
-       ),
-       (
-           9,
-           14,
-           14,
-           '2025-11-09 17:00:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        9,
+        14,
+        14,
+        '2026-01-09 17:00:00',
+        FALSE,
+        2,
+        30,
         16
-
-       ),
-       (
-           10,
-           15,
-           15,
-           '2025-11-09 18:15:00',
-           FALSE,
-           2,
-           30,
-            18
-       ),
-       (
-           2,
-           1,
-           132,
-           '2025-11-01 14:35:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        10,
+        15,
+        15,
+        '2026-01-09 18:15:00',
+        FALSE,
+        2,
+        30,
+        18
+    ),
+    (
+        2,
+        1,
+        132,
+        '2026-01-01 14:35:00',
+        FALSE,
+        2,
+        30,
         19
-       ),
-       (
-           3,
-           1,
-           131,
-           '2025-11-01 14:15:00',
-           FALSE,
-           2,
-           30,
+    ),
+    (
+        3,
+        1,
+        131,
+        '2026-01-01 14:15:00',
+        FALSE,
+        2,
+        30,
         20
-       ),
-       (
-           4,
-           1,
-           56,
-           '2025-11-01 14:15:00',
-           TRUE,
-           2,
-           29,
+    ),
+    (
+        4,
+        1,
+        56,
+        '2026-01-01 14:15:00',
+        TRUE,
+        2,
+        29,
         21
-       );
+    );
 
 INSERT INTO
     review (
@@ -1985,7 +2042,7 @@ INSERT INTO
 VALUES (
         1,
         1,
-        '2025-12-02 20:00:00',
+        '2026-02-02 20:00:00',
         'Great football pitch and lighting, perfect for 7v7 games!',
         5,
         4,
@@ -1994,7 +2051,7 @@ VALUES (
     (
         2,
         2,
-        '2025-12-03 21:10:00',
+        '2026-02-03 21:10:00',
         'Nice field but locker rooms could be cleaner.',
         4,
         4,
@@ -2003,7 +2060,7 @@ VALUES (
     (
         3,
         3,
-        '2025-12-03 19:30:00',
+        '2026-02-03 19:30:00',
         'Loved the indoor court. Great surface and friendly staff.',
         5,
         5,
@@ -2012,7 +2069,7 @@ VALUES (
     (
         5,
         5,
-        '2025-12-04 10:45:00',
+        '2026-02-04 10:45:00',
         'Good gym atmosphere, though some machines need maintenance.',
         4,
         3,
@@ -2021,7 +2078,7 @@ VALUES (
     (
         6,
         6,
-        '2025-12-04 20:00:00',
+        '2026-02-04 20:00:00',
         'Top-notch trainers and well-equipped gym!',
         5,
         5,
@@ -2030,7 +2087,7 @@ VALUES (
     (
         7,
         7,
-        '2025-12-05 13:15:00',
+        '2026-02-05 13:15:00',
         'Beautiful biking trails, great for weekend rides.',
         5,
         4,
@@ -2039,7 +2096,7 @@ VALUES (
     (
         9,
         9,
-        '2025-12-06 18:30:00',
+        '2026-02-06 18:30:00',
         'Court was clean and the hoops were in great condition.',
         5,
         4,
@@ -2048,7 +2105,7 @@ VALUES (
     (
         10,
         10,
-        '2025-12-07 20:10:00',
+        '2026-02-07 20:10:00',
         'Good basketball space, but too crowded at times.',
         4,
         4,
@@ -2057,7 +2114,7 @@ VALUES (
     (
         11,
         11,
-        '2025-12-08 14:00:00',
+        '2026-02-08 14:00:00',
         'Peaceful golf course with an amazing sea view.',
         5,
         5,
@@ -2066,7 +2123,7 @@ VALUES (
     (
         12,
         7,
-        '2025-12-09 11:20:00',
+        '2026-02-09 11:20:00',
         'Padel courts were excellent, café service a bit slow.',
         4,
         5,
@@ -2075,7 +2132,7 @@ VALUES (
     (
         14,
         9,
-        '2025-12-09 19:45:00',
+        '2026-02-09 19:45:00',
         'Fun climbing walls and friendly instructors.',
         5,
         4,
@@ -2084,7 +2141,7 @@ VALUES (
     (
         15,
         10,
-        '2025-12-10 22:00:00',
+        '2026-02-10 22:00:00',
         'Nice hockey arena, though changing rooms need upgrades.',
         4,
         3,
@@ -2102,37 +2159,37 @@ VALUES (
         3,
         1,
         'Thanks for the feedback! We''re glad you enjoyed your match and hope to see you again soon.',
-        '2025-12-03 10:15:00'
+        '2026-02-03 10:15:00'
     ),
     (
         1,
         4,
         'Appreciate your comment. We''re scheduling maintenance on those machines next week.',
-        '2025-12-04 12:00:00'
+        '2026-02-04 12:00:00'
     ),
     (
         5,
         6,
         'Happy to hear you liked the trails! We''re adding new routes next season.',
-        '2025-12-05 16:45:00'
+        '2026-02-05 16:45:00'
     ),
     (
         3,
         7,
         'Thanks for visiting! We''ll work on improving the lighting for evening games.',
-        '2025-12-06 20:30:00'
+        '2026-02-06 20:30:00'
     ),
     (
         3,
         10,
         'We''re happy you liked the courts! Sorry for the café wait — we''re hiring more staff.',
-        '2025-12-09 13:10:00'
+        '2026-02-09 13:10:00'
     ),
     (
         3,
         12,
         'Thank you for your feedback! We''ll renovate the locker rooms early next year.',
-        '2025-12-11 09:40:00'
+        '2026-02-11 09:40:00'
     );
 
 INSERT INTO
@@ -2145,136 +2202,58 @@ INSERT INTO
 VALUES (
         1,
         15.0,
-        '2025-11-25 00:00:00',
-        '2025-12-10 23:59:00'
+        '2026-01-25 00:00:00',
+        '2026-02-10 23:59:00'
     ),
     (
         3,
         10.0,
-        '2025-11-20 00:00:00',
-        '2025-12-05 23:59:00'
+        '2026-01-20 00:00:00',
+        '2026-02-05 23:59:00'
     ),
     (
         5,
         20.0,
-        '2025-12-01 00:00:00',
-        '2025-12-07 23:59:00'
+        '2026-02-01 00:00:00',
+        '2026-02-07 23:59:00'
     ),
     (
         7,
         25.0,
-        '2025-12-03 00:00:00',
-        '2025-12-20 23:59:00'
+        '2026-02-03 00:00:00',
+        '2026-02-20 23:59:00'
     ),
     (
         8,
         30.0,
-        '2025-11-29 00:00:00',
-        '2025-12-15 23:59:00'
+        '2026-01-29 00:00:00',
+        '2026-02-15 23:59:00'
     );
 
-INSERT INTO
-    notification (user_id, time_stamp, is_read)
-VALUES (
-        2,
-        '2025-11-01 14:35:00',
-        TRUE
-    ),
-    (
-        3,
-        '2025-11-02 10:10:00',
-        TRUE
-    ),
-    (
-        4,
-        '2025-11-02 19:45:00',
-        TRUE
-    ),
-    (
-        5,
-        '2025-11-03 15:40:00',
-        TRUE
-    ),
-    (
-        8,
-        '2025-11-04 09:30:00',
-        TRUE
-    ),
-    (
-        9,
-        '2025-11-04 12:25:00',
-        TRUE
-    ),
-    (
-        10,
-        '2025-11-05 08:15:00',
-        TRUE
-    ),
-    (
-        12,
-        '2025-11-05 16:20:00',
-        TRUE
-    ),
-    (
-        13,
-        '2025-11-06 13:55:00',
-        TRUE
-    ),
-    (
-        15,
-        '2025-11-07 14:45:00',
-        TRUE
-    ),
-    (
-        16,
-        '2025-11-07 18:10:00',
-        TRUE
-    ),
-    (
-        17,
-        '2025-11-08 10:20:00',
-        TRUE
-    ),
-    (
-        18,
-        '2025-11-08 15:40:00',
-        TRUE
-    ),
-    (
-        19,
-        '2025-11-09 17:15:00',
-        TRUE
-    ),
-    (
-        20,
-        '2025-11-09 18:25:00',
-        TRUE
-    ),
-    (
-        3,
-        '2025-12-03 21:30:00',
-        FALSE
-    ),
-    (
-        9,
-        '2025-12-04 20:10:00',
-        FALSE
-    ),
-    (
-        10,
-        '2025-12-05 13:20:00',
-        FALSE
-    ),
-    (
-        19,
-        '2025-12-09 20:00:00',
-        FALSE
-    ),
-    (
-        20,
-        '2025-12-10 22:10:00',
-        FALSE
-    );
+INSERT INTO notification (user_id, time_stamp, is_read, content)
+VALUES
+    (2, '2025-11-01 14:35:00', TRUE, 'Your reservation has been confirmed.'),
+    (3, '2025-11-02 10:10:00', TRUE, 'The reservation was cancelled by the host.'),
+    (4, '2025-11-02 19:45:00', TRUE, 'You have a reservation tomorrow at 8 PM.'),
+    (5, '2025-11-03 15:40:00', TRUE, 'Payment received successfully.'),
+    (8, '2025-11-04 09:30:00', TRUE, 'Welcome to our platform!'),
+    (9, '2025-11-04 12:25:00', TRUE, 'New reservation awaiting approval.'),
+    (10, '2025-11-05 08:15:00', TRUE, 'Don’ t forget to leave a review.'),
+    (12, '2025-11-05 16:20:00', TRUE, 'Your reservation has been confirmed.'),
+    (13, '2025-11-06 13:55:00', TRUE, 'Your cancellation request has been accepted.'),
+    (15, '2025-11-07 14:45:00', TRUE, 'We have updated our terms of service.'),
+    (16, '2025-11-07 18:10:00', TRUE, 'Reservation confirmed for 2 people.'),
+    (17, '2025-11-08 10:20:00', TRUE, 'Your reservation starts in 1 hour.'),
+    (18, '2025-11-08 15:40:00', TRUE, 'The host has accepted your request.'),
+    (19, '2025-11-09 17:15:00', TRUE, 'You have received a new discount coupon!'),
+    (20, '2025-11-09 18:25:00', TRUE, 'Reservation completed. Thank you!'),
+
+    (3, '2025-12-03 21:30:00', FALSE, 'Your subscription will expire soon.'),
+    (9, '2025-12-04 20:10:00', FALSE, 'You have received a new message from the host.'),
+    (10, '2025-12-05 13:20:00', FALSE, 'Please confirm your attendance for reservation .'),
+    (19, '2025-12-09 20:00:00', FALSE, 'A schedule change has been requested.'),
+    (20, '2025-12-10 22:10:00', FALSE, 'System maintenance is scheduled.');
+
 
 INSERT INTO
     review_notification (notification_id, review_id)

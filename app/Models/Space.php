@@ -53,4 +53,9 @@ class Space extends Model
     {
         return $this->hasOne(Media::class, 'space_id')->where('is_cover', true);
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'space_id');
+    }
 }

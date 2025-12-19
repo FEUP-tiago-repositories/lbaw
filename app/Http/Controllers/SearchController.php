@@ -19,6 +19,24 @@ class SearchController
             });
         }
 
+        if ($request->filled('date_from') || $request->filled('date_to') || $request->filled('capacity')) {
+            
+            $query->whereHas('schedules', function ($q) use ($request) {
+                
+                if ($request->filled('date_from')) {
+                    $q->where('start_time', '>=', $request->input('date_from') . ' 00:00:00');
+                }
+
+                if ($request->filled('date_to')) {
+                    $q->where('start_time', '<=', $request->input('date_to') . ' 23:59:59');
+                }
+
+                if ($request->filled('capacity')) {
+                    $q->where('max_capacity', '>=', $request->input('capacity'));
+                }
+            });
+        }
+
         if($request->filled('q')){
             
             $terms = preg_split('/\s+/', trim($request->q));

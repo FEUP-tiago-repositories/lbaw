@@ -25,6 +25,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
+    <script src="{{ asset('js/search.js') }}"></script>
     {{-- CSS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -42,6 +43,7 @@
 
     {{-- JavaScript --}}
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 
 </html>

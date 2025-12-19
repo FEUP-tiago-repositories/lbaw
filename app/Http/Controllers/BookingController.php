@@ -39,9 +39,24 @@ class BookingController extends Controller
             ->orderBy('booking_created_at', 'desc')
             ->get();
 
-        $futureReservations = $bookings->filter(fn($b) => $b->isFuture() && !$b->is_cancelled);
-        $pastReservations = $bookings->filter(fn($b) => $b->isPast() && !$b->is_cancelled);
-        $cancelledReservations = $bookings->filter(fn($b) => $b->is_cancelled);
+        // Sort by schedule start_time descending (most recent first)
+        $futureReservations = $bookings
+            ->filter(fn($b) => $b->isFuture() && !$b->is_cancelled)
+            ->sortBy(function($booking) {
+                return $booking->schedule->start_time;
+            });
+
+        $pastReservations = $bookings
+            ->filter(fn($b) => $b->isPast() && !$b->is_cancelled)
+            ->sortBy(function($booking) {
+                return $booking->schedule->start_time;
+            });
+
+        $cancelledReservations = $bookings
+            ->filter(fn($b) => $b->is_cancelled)
+            ->sortBy(function($booking) {
+                return $booking->schedule->start_time;
+            });
 
         return view('bookings.index', compact('futureReservations', 'pastReservations', 'cancelledReservations'));
     }
@@ -422,9 +437,24 @@ class BookingController extends Controller
             ->orderBy('booking_created_at', 'desc')
             ->get();
 
-        $futureReservations = $allBookings->filter(fn($b) => $b->isFuture() && !$b->is_cancelled);
-        $pastReservations = $allBookings->filter(fn($b) => $b->isPast() && !$b->is_cancelled);
-        $cancelledReservations = $allBookings->filter(fn($b) => $b->is_cancelled);
+        // Sort by schedule start_time descending (most recent first)
+        $futureReservations = $allBookings
+            ->filter(fn($b) => $b->isFuture() && !$b->is_cancelled)
+            ->sortBy(function($booking) {
+                return $booking->schedule->start_time;
+            });
+
+        $pastReservations = $allBookings
+            ->filter(fn($b) => $b->isPast() && !$b->is_cancelled)
+            ->sortBy(function($booking) {
+                return $booking->schedule->start_time;
+            });
+
+        $cancelledReservations = $allBookings
+            ->filter(fn($b) => $b->is_cancelled)
+            ->sortBy(function($booking) {
+                return $booking->schedule->start_time;
+            });
 
         // Get all schedules for the selected day
         $daySchedules = Schedule::where('space_id', $space_id)

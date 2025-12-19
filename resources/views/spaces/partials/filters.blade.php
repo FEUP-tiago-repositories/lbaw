@@ -95,7 +95,7 @@
                         x-data="{
                             step: {{ is_numeric(request('capacity')) ? request('capacity') : 0 }},
                             get leftPosition() { return this.step * 10 },
-                            get labelText() { return this.step + ' pessoas' }
+                            get labelText() { return this.step + ' people' }
                         }"
                         class="pb-4 px-2"
                     >
@@ -204,6 +204,28 @@
                                        value="{{ request('date_to') }}"
                                        class="w-full border border-gray-300 rounded-lg
                                               px-3 py-2 text-gray-700 focus:ring-emerald-500">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-6">
+                            <div class="flex flex-col">
+                                <label class="text-xs font-bold text-gray-500 mb-1 uppercase">
+                                    From Time
+                                </label>
+                                <input type="time" name="time_from"
+                                    value="{{ request('time_from') }}"
+                                    class="w-full border border-gray-300 rounded-lg
+                                            px-3 py-2 text-gray-700 focus:ring-emerald-500">
+                            </div>
+
+                            <div class="flex flex-col">
+                                <label class="text-xs font-bold text-gray-500 mb-1 uppercase">
+                                    To Time
+                                </label>
+                                <input type="time" name="time_to"
+                                    value="{{ request('time_to') }}"
+                                    class="w-full border border-gray-300 rounded-lg
+                                            px-3 py-2 text-gray-700 focus:ring-emerald-500">
                             </div>
                         </div>
                     </div>

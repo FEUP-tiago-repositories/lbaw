@@ -1,4 +1,4 @@
-<div class="mb-8 flex justify-between items-center" x-data="{ openFilters: false }">
+<div class="flex justify-between items-center" x-data="{ openFilters: false }">
 
     <button
         @click="openFilters = true"

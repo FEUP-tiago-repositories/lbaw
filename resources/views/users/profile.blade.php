@@ -153,18 +153,6 @@
                                         </span>
                                     @endif
                                 </a>
-                                @auth
-                                    @if(auth()->user()->customer)
-                                        <a href="{{ route('favorites.index') }}"
-                                            class="px-4 py-2 bg-emerald-900 text-white rounded-xl hover:bg-emerald-200 hover:text-black transition shadow text-center font-medium flex items-center justify-center gap-3">
-                                            <svg class="w-6 h-6 fill-current" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                            </svg>
-                                            <span>My Favorites</span>
-                                        </a>
-                                    @endif
-                                @endauth
                             </div>
                         </div>
 
@@ -260,7 +248,7 @@
                         </svg>
                         <p class="text-xl text-gray-600 mb-2">No favorite spaces yet</p>
                         <p class="text-gray-500 mb-4">Start exploring and add your favorite spaces!</p>
-                        <a href="{{ route('spaces.index') }}" class="inline-block bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition">
+                        <a href="{{ route('spaces.index') }}" class="inline-block bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition">
                             Explore Spaces
                         </a>
                     </div>

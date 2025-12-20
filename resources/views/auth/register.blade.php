@@ -14,7 +14,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data" class="text-lg">
+            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data" class="">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {{-- First Name --}}

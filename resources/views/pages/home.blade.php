@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- Mapa com todos os espaços --}}
-    <div class="container mx-auto bg-emerald-900 rounded-2xl shadow-xl py-4 px-8 mt-6 max-w-6xl">
+    <div class="container mx-auto bg-emerald-800 rounded-3xl shadow-xl py-2 px-2 mt-6 max-w-6xl">
         <h2 class="text-2xl flex items-center font-bold text-white p-2 mb-4">
             <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

@@ -84,14 +84,21 @@ class UserController extends Controller
         if (auth()->id() !== $user->id) {
             abort(403, 'Unauthorized access.');
         }
-        
+
+        // Carrega spaces para Business Owner
         $user = User::with('spaces')->find($id);
+
+        // Carrega favoritos para Customer
+        $favoritedSpaces = null;
+        if ($user->customer) {
+            $favoritedSpaces = $user->customer->favoritedSpaces()->get();
+        }
 
         $unreadCount = Notification::where('user_id', $user->id)
         ->where('is_read', false)
         ->count();
         
-        return view('users.profile', compact('user', 'unreadCount'));
+        return view('users.profile', compact('user', 'unreadCount', 'favoritedSpaces'));
     }
 
     /**

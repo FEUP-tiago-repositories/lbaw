@@ -10,3 +10,16 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+[id$="-scroll-left"],
+[id$="-scroll-right"] {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+[id$="-gradient-left"],
+[id$="-gradient-right"] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}

@@ -1,10 +1,96 @@
 // Schedule Management JavaScript
-// Wrap in IIFE to avoid global scope pollution but expose needed functions
+
 (function() {
     'use strict';
 
     let currentScheduleId = null;
     let isEditMode = false;
+
+    /**
+     * Toggle recurrence fields
+     */
+    window.toggleRecurrence = function() {
+        const isRecurring = document.getElementById('is_recurring').checked;
+        const endDateContainer = document.getElementById('end_date_container');
+        const endDateInput = document.getElementById('schedule_end_date');
+
+        if (isRecurring) {
+            endDateContainer.classList.remove('hidden');
+            endDateInput.required = true;
+        } else {
+            endDateContainer.classList.add('hidden');
+            endDateInput.required = false;
+            endDateInput.value = '';
+        }
+
+        updateSummary();
+    };
+
+    /**
+     * Toggle all day fields
+     */
+    window.toggleAllDay = function() {
+        const allDay = document.getElementById('all_day').checked;
+        const timeContainer = document.getElementById('time_container');
+        const timeSelect = document.getElementById('schedule_time');
+        const allDayInfo = document.getElementById('all_day_info');
+
+        if (allDay) {
+            timeContainer.classList.add('hidden');
+            timeSelect.required = false;
+            allDayInfo.classList.remove('hidden');
+        } else {
+            timeContainer.classList.remove('hidden');
+            timeSelect.required = true;
+            allDayInfo.classList.add('hidden');
+        }
+
+        updateSummary();
+    };
+
+    /**
+     * Update summary box
+     */
+    function updateSummary() {
+        const startDate = document.getElementById('schedule_date').value;
+        const endDate = document.getElementById('schedule_end_date').value;
+        const isRecurring = document.getElementById('is_recurring').checked;
+        const allDay = document.getElementById('all_day').checked;
+        const time = document.getElementById('schedule_time').value;
+        const summaryDiv = document.getElementById('schedule_summary');
+        const summaryText = document.getElementById('summary_text');
+
+        if (!startDate) {
+            summaryDiv.classList.add('hidden');
+            return;
+        }
+
+        let summary = '';
+
+        if (allDay && isRecurring && endDate) {
+            summary = `Creating <strong>all time slots</strong> for <strong>every day</strong> from ${formatDate(startDate)} to ${formatDate(endDate)}`;
+        } else if (allDay) {
+            summary = `Creating <strong>all time slots</strong> for ${formatDate(startDate)}`;
+        } else if (isRecurring && endDate && time) {
+            summary = `Creating schedules at <strong>${time}</strong> for every day from ${formatDate(startDate)} to ${formatDate(endDate)}`;
+        } else if (time) {
+            summary = `Creating schedule at <strong>${time}</strong> on ${formatDate(startDate)}`;
+        } else {
+            summaryDiv.classList.add('hidden');
+            return;
+        }
+
+        summaryText.innerHTML = summary;
+        summaryDiv.classList.remove('hidden');
+    }
+
+    /**
+     * Format date for display
+     */
+    function formatDate(dateString) {
+        const date = new Date(dateString + 'T00:00:00');
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
 
     /**
      * Open modal to create a new schedule
@@ -16,6 +102,12 @@
         // Reset form
         document.getElementById('scheduleForm').reset();
         document.getElementById('schedule_id').value = '';
+
+        // Reset checkboxes
+        document.getElementById('is_recurring').checked = false;
+        document.getElementById('all_day').checked = false;
+        toggleRecurrence();
+        toggleAllDay();
 
         // Set default date to selected date
         if (window.spaceData && window.spaceData.selectedDate) {
@@ -35,6 +127,9 @@
 
         // Show modal
         document.getElementById('scheduleModal').classList.remove('hidden');
+
+        // Update summary
+        updateSummary();
     };
 
     /**
@@ -42,13 +137,16 @@
      */
     window.editSchedule = function(scheduleId, event) {
         if (event) {
-            event.stopPropagation(); // Prevent slot click event
+            event.stopPropagation();
         }
 
         isEditMode = true;
         currentScheduleId = scheduleId;
 
-        // Fetch schedule data
+        // Disable recurring options in edit mode
+        document.getElementById('is_recurring').disabled = true;
+        document.getElementById('all_day').disabled = true;
+
         fetch('/api/schedules/' + scheduleId, {
             headers: {
                 'Accept': 'application/json',
@@ -102,6 +200,10 @@
         document.getElementById('scheduleModal').classList.add('hidden');
         currentScheduleId = null;
         isEditMode = false;
+
+        // Re-enable recurring options
+        document.getElementById('is_recurring').disabled = false;
+        document.getElementById('all_day').disabled = false;
     };
 
     /**
@@ -218,6 +320,11 @@
         var form = document.getElementById('scheduleForm');
         if (!form) return;
 
+        // Add event listeners for real-time summary updates
+        document.getElementById('schedule_date').addEventListener('change', updateSummary);
+        document.getElementById('schedule_end_date').addEventListener('change', updateSummary);
+        document.getElementById('schedule_time').addEventListener('change', updateSummary);
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -235,11 +342,16 @@
 
             // Get form data
             var formData = new FormData(this);
+
+            // Build data object with new fields
             var data = {
                 space_id: formData.get('space_id'),
                 date: formData.get('date'),
                 time: formData.get('time'),
-                max_capacity: formData.get('max_capacity')
+                max_capacity: formData.get('max_capacity'),
+                is_recurring: document.getElementById('is_recurring').checked,
+                end_date: formData.get('end_date'),
+                all_day: document.getElementById('all_day').checked
             };
 
             // Determine endpoint and method
@@ -272,6 +384,7 @@
                     } else {
                         // Show error message
                         showError(data.message || 'Failed to save schedule');
+
                         // Re-enable button
                         submitBtn.disabled = false;
                         submitText.classList.remove('hidden');
@@ -281,6 +394,7 @@
                 .catch(function(error) {
                     console.error('Error saving schedule:', error);
                     showError(error.message || 'Failed to save schedule. Please try again.');
+
                     // Re-enable button
                     submitBtn.disabled = false;
                     submitText.classList.remove('hidden');
@@ -295,4 +409,5 @@
     } else {
         initializeForm();
     }
+
 })();

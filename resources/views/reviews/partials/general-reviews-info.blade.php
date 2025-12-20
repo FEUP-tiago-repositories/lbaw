@@ -1,8 +1,8 @@
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 px-10 py-4">
     {{-- Overall Rating Display --}}
-    <div class="flex items-start gap-6">
+    <div class="flex items-center gap-6">
         {{-- Left side: Rating number, stars, review count --}}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center align-middle">
             <p class="text-5xl font-bold text-gray-900">
                 {{ number_format($averageRating, 1) }}
             </p>

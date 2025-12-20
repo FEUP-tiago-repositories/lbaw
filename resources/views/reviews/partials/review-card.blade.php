@@ -21,9 +21,9 @@
             </div>
 
             {{-- User name and overall rating --}}
-            <div>
-                <p class="font-semibold text-gray-900 text-lg">{{ $review->customer->user->user_name}}</p>
-                <div class="flex items-center gap-2 mt-1">
+            <div class="items-center">
+                <p class="font-semibold text-gray-900">{{ $review->customer->user->user_name}}</p>
+                <div class="flex items-center mt-1">
                     @php
                         $overallRating = ($review->environment_rating + $review->equipment_rating + $review->service_rating) / 3;
                     @endphp
@@ -44,10 +44,10 @@
     </div>
 
     {{-- Category Ratings (Env, Equipment and Service) --}}
-    <div class="flex items-center justify-around mb-4 py-4 bg-gray-200 rounded-lg shadow-sm">
+    <div class="flex items-center justify-around mb-4 py-2 bg-gray-200 rounded-lg shadow-sm ">
         {{-- Environment rating --}}
-        <div class="text-center">
-            <p class="text-sm text-gray-600 mb-2">Environment</p>
+        <div class="flex-1 text-center">
+            <p class="text-sm text-gray-600 mb-1">Environment</p>
             <div class="flex items-center justify-center gap-1">
                 <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -58,10 +58,10 @@
         </div>
 
         {{-- Divider --}}
-        <div class="h-12 border-l border-gray-300"></div>
+        <div class="h-12 border-l border-gray-400"></div>
 
         {{-- Equipment rating --}}
-        <div class="text-center">
+        <div class="flex-1 text-center">
             <p class="text-sm text-gray-600 mb-2">Equipment</p>
             <div class="flex items-center justify-center gap-1">
                 <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
@@ -73,10 +73,10 @@
         </div>
 
         {{-- Divider --}}
-        <div class="h-12 border-l border-gray-300"></div>
+        <div class="h-12 border-l border-gray-400"></div>
 
         {{-- Service Rating --}}
-        <div class="text-center">
+        <div class="flex-1 text-center">
             <p class="text-sm text-gray-600 mb-2">Service</p>
             <div class="flex items-center justify-center gap-1">
                 <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">

@@ -23,7 +23,7 @@
     </div>
 
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <h1 class="text-4xl font-bold text-gray-900">My Notifications</h1>
+        <h1 class="text-3xl font-bold text-gray-900">My Notifications</h1>
         
         @if($notifications->where('is_read', false)->count() > 0)
             <form action="{{ route('notifications.readAll') }}" method="POST">

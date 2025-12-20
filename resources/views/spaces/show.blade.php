@@ -32,12 +32,11 @@ making a booking --}}
                                          $space->current_equipment_rating +
                                          $space->current_service_rating) / 3;
                     @endphp
-
                     <div class="flex items-center gap-1 bg-yellow-100 px-2 py-1 rounded-lg ml-auto">
                         <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 24 24">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                         </svg>
-                        <span class="text-md font-bold text-gray-800">{{ number_format($averageRating, 1) }} ({{ $space-> num_reviews}} reviews) </span>
+                        <span class="text-sm font-bold text-gray-800">{{ number_format($averageRating, 1) }} ({{ $space-> num_reviews}} reviews) </span>
                     </div>
                     @can('favorite',$space)
                         @php
@@ -283,8 +282,8 @@ making a booking --}}
                     </div>
                     {{-- Map Section --}}
                     <div>
-                        <h3 class="text-2xl font-bold mt-4 mb-1">Location: </h3>
-                        <div class="flex text-lg items-center justify-start gap-2 mb-2">
+                        <h3 class="text-xl font-bold mt-4 mb-1">Location: </h3>
+                        <div class="flex items-center justify-start gap-2 mb-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />

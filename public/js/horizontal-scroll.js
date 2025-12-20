@@ -11,11 +11,10 @@ function initHorizontalScroll(containerId) {
     }
 
     // Encontra os elementos relacionados baseado no ID
-    const baseId = containerId.replace('-scroll-container', ''); // ✅ CORRIGIDO: era '-container'
-
+    const baseId = containerId.replace('-scroll-container', '');
     const gradientLeft = document.getElementById(`${baseId}-gradient-left`);
     const gradientRight = document.getElementById(`${baseId}-gradient-right`);
-    const btnScrollLeft = document.getElementById(`${baseId}-scroll-left`); // ✅ Renomeado para evitar conflito
+    const btnScrollLeft = document.getElementById(`${baseId}-scroll-left`);
     const btnScrollRight = document.getElementById(`${baseId}-scroll-right`);
 
     // Função para atualizar visibilidade dos gradientes e setas
@@ -24,32 +23,43 @@ function initHorizontalScroll(containerId) {
         const scrollWidth = container.scrollWidth;
         const clientWidth = container.clientWidth;
 
-        // Verifica se pode fazer scroll
+        // Verifica se há overflow (conteúdo maior que o container)
+        const hasOverflow = scrollWidth > clientWidth;
+
+        // DEBUG: Descomenta para ver os valores
+        console.log(`[${containerId}]`, {
+            scrollWidth,
+            clientWidth,
+            hasOverflow,
+            diff: scrollWidth - clientWidth
+        });
+
+        // Verifica se pode fazer scroll para cada lado
         const canScrollLeft = scrollLeft > 0;
         const canScrollRight = scrollLeft < (scrollWidth - clientWidth - 1);
 
         // Atualiza gradiente e seta esquerda
         if (gradientLeft) {
-            gradientLeft.style.opacity = canScrollLeft ? '1' : '0';
+            gradientLeft.style.opacity = (hasOverflow && canScrollLeft) ? '1' : '0';
         }
         if (btnScrollLeft) {
-            btnScrollLeft.style.opacity = canScrollLeft ? '1' : '0';
-            btnScrollLeft.style.pointerEvents = canScrollLeft ? 'auto' : 'none';
+            btnScrollLeft.style.opacity = (hasOverflow && canScrollLeft) ? '1' : '0';
+            btnScrollLeft.style.pointerEvents = (hasOverflow && canScrollLeft) ? 'auto' : 'none';
         }
 
         // Atualiza gradiente e seta direita
         if (gradientRight) {
-            gradientRight.style.opacity = canScrollRight ? '1' : '0';
+            gradientRight.style.opacity = (hasOverflow && canScrollRight) ? '1' : '0';
         }
         if (btnScrollRight) {
-            btnScrollRight.style.opacity = canScrollRight ? '1' : '0';
-            btnScrollRight.style.pointerEvents = canScrollRight ? 'auto' : 'none';
+            btnScrollRight.style.opacity = (hasOverflow && canScrollRight) ? '1' : '0';
+            btnScrollRight.style.pointerEvents = (hasOverflow && canScrollRight) ? 'auto' : 'none';
         }
     }
 
     // Função para scroll suave
     function smoothScroll(direction) {
-        const scrollAmount = 400; // Ajustável: quantos pixels scrollar
+        const scrollAmount = 400;
         const newPosition = container.scrollLeft + (direction === 'right' ? scrollAmount : -scrollAmount);
 
         container.scrollTo({
@@ -76,13 +86,41 @@ function initHorizontalScroll(containerId) {
     // Atualiza no redimensionamento da janela
     window.addEventListener('resize', updateScrollIndicators);
 
-    // Inicializa
-    updateScrollIndicators();
+    // Aguarda imagens carregarem
+    const images = container.querySelectorAll('img');
+    let loadedImages = 0;
+
+    if (images.length > 0) {
+        images.forEach(img => {
+            if (img.complete) {
+                loadedImages++;
+            } else {
+                img.addEventListener('load', () => {
+                    loadedImages++;
+                    if (loadedImages === images.length) {
+                        updateScrollIndicators();
+                    }
+                });
+            }
+        });
+
+        // Se todas as imagens já estão carregadas
+        if (loadedImages === images.length) {
+            updateScrollIndicators();
+        }
+    } else {
+        // Sem imagens, atualiza imediatamente
+        updateScrollIndicators();
+    }
+
+    // Backup: força atualização após 500ms
+    setTimeout(() => {
+        updateScrollIndicators();
+    }, 500);
 }
 
 // Auto-inicializa todos os containers de scroll na página
 document.addEventListener('DOMContentLoaded', function() {
-    // Procura por todos os elementos com IDs que terminam em '-scroll-container'
     const scrollContainers = document.querySelectorAll('[id$="-scroll-container"]');
 
     scrollContainers.forEach(container => {

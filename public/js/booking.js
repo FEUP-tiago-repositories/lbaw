@@ -178,7 +178,7 @@ function renderCalendar() {
         const isPast = date < today;
         const isSelected = state.selectedDate && date.toDateString() === state.selectedDate.toDateString();
 
-        dayDiv.className = `py-2 rounded-lg border border-gray-200 transition ${
+        dayDiv.className = `py-2 rounded-xl border border-gray-200 transition ${
             isPast
                 ? 'text-gray-300 line-through cursor-not-allowed'
                 : isSelected
@@ -240,7 +240,7 @@ async function loadAvailableTimes(date) {
         times.forEach(function(schedule) {
             const timeBtn = document.createElement('button');
             timeBtn.type = 'button';
-            timeBtn.className = 'px-3 py-2 border border-gray-300 rounded-lg hover:border-2 hover:border-emerald-600 hover:bg-emerald-100 transition ' +
+            timeBtn.className = 'px-2 py-1 border border-gray-200 rounded-lg hover:border-2 hover:border-emerald-600 hover:bg-emerald-100 transition ' +
                 (state.scheduleId === schedule.id ? 'border-2 border-emerald-600 bg-emerald-100 font-semibold' : '');
             timeBtn.textContent = schedule.start_time;
             timeBtn.onclick = function() {

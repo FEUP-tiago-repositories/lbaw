@@ -1,4 +1,4 @@
-<div class="text-left space-y-4 font-sans">
+<div class="text-left space-y-4 font-sans overflow-x-auto">
     
     <h2 class="text-xl font-bold text-gray-900 border-b pb-2">
         How to manage your reservations?
@@ -9,22 +9,22 @@
     </p>
 
     <ul class="space-y-3 text-gray-700">
-        <li class="flex gap-3">
+        <li class="gap-3">
             <span class="font-bold text-gray-900 shrink-0">Upcoming:</span>
             <span>Your scheduled games. You can view details or cancel the reservation if your plans change.</span>
         </li>
         
-        <li class="flex gap-3">
+        <li class="gap-3">
             <span class="font-bold text-gray-900 shrink-0">Write a Review:</span>
             <span>For <strong>Past Reservations</strong>, click the gray button to rate the facility and share your experience.</span>
         </li>
         
-        <li class="flex gap-3">
+        <li class="gap-3">
             <span class="font-bold text-gray-900 shrink-0">Repeat Reservation:</span>
             <span >Liked a venue? Click the green <strong>"Repeat reservation"</strong> button to quickly book the same space again.</span>
         </li>
         
-        <li class="flex gap-3">
+        <li class="gap-3">
             <span class="font-bold text-gray-900 shrink-0">Cancelled:</span>
             <span>Bookings marked with a red/pink tag were cancelled but remain in your history for reference.</span>
         </li>

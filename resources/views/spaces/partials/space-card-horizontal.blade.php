@@ -1,5 +1,5 @@
 {{-- filepath: resources/views/spaces/partials/space-card.blade.php --}}
-<div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-row hover:shadow-lg transition-shadow duration-300">
+<div class="bg-white rounded-3xl shadow-md overflow-hidden flex flex-row hover:shadow-lg transition-shadow duration-300">
     <!-- Image -->
     <div class="w-2/5 overflow-hidden bg-gray-200 shrink-0">
         @include('partials.space-image', ['space' => $space])

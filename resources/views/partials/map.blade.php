@@ -63,7 +63,7 @@
     }
 @endphp
 
-<div id="{{ $mapId }}" class="{{ $height }} w-full rounded-xl"></div>
+<div id="{{ $mapId }}" class="{{ $height }} w-full rounded-2xl"></div>
 
 @push('scripts')
     <script>

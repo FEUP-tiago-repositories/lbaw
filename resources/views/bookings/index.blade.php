@@ -45,7 +45,9 @@
         @if($futureReservations->isEmpty() && $pastReservations->isEmpty() && $cancelledReservations->isEmpty())
             <div class="text-center py-16">
                 <p class="text-xl text-gray-600">No reservations found</p>
-                <p class="text-sm text-gray-500 mt-2">Customer ID: {{ request()->user_id ?? 'N/A' }}</p>
+                <a href="{{ route('spaces.index') }}" class="inline-block bg-emerald-600 text-white px-6 py-2 mt-2 rounded-lg hover:bg-emerald-700 transition">
+                    Explore Spaces
+                </a>
             </div>
         @else
             @if($futureReservations->isNotEmpty())

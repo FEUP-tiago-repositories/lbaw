@@ -1,6 +1,6 @@
 <!-- Schedule Modal -->
 <div id="scheduleModal" class="hidden fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-2xl bg-white">
         <div class="flex items-center justify-between mb-4">
             <h3 id="scheduleModalTitle" class="text-lg font-semibold text-gray-900">Add Schedule</h3>
             <button onclick="closeScheduleModal()" class="text-gray-400 hover:text-gray-600">

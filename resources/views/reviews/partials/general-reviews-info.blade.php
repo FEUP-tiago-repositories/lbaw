@@ -1,8 +1,8 @@
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 px-10 py-4">
     {{-- Overall Rating Display --}}
-    <div class="flex items-start gap-6">
+    <div class="flex items-center gap-6">
         {{-- Left side: Rating number, stars, review count --}}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center align-middle">
             <p class="text-5xl font-bold text-gray-900">
                 {{ number_format($averageRating, 1) }}
             </p>
@@ -23,7 +23,7 @@
         {{-- Right side: Category ratings with bars --}}
         <div class="flex-1">
             {{-- Environment Rating --}}
-            <div class="mb-3">
+            <div class="mb-1">
                 <div class="flex items-center justify-between mb-1">
                     <span class="text-sm font-medium text-gray-700">Environment</span>
                     <span class="text-sm font-semibold text-gray-900">{{ number_format($avgEnvironment, 1) }}</span>
@@ -35,7 +35,7 @@
             </div>
 
             {{-- Equipment Rating --}}
-            <div class="mb-3">
+            <div class="mb-1">
                 <div class="flex items-center justify-between mb-1">
                     <span class="text-sm font-medium text-gray-700">Equipment</span>
                     <span class="text-sm font-semibold text-gray-900">{{ number_format($avgEquipment, 1) }}</span>
@@ -47,7 +47,7 @@
             </div>
 
             {{-- Service Rating --}}
-            <div>
+            <div class="mb-1">
                 <div class="flex items-center justify-between mb-1">
                     <span class="text-sm font-medium text-gray-700">Service</span>
                     <span class="text-sm font-semibold text-gray-900">{{ number_format($avgService, 1) }}</span>

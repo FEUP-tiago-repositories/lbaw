@@ -31,6 +31,14 @@ class SearchController
                     $q->where('start_time', '<=', $request->input('date_to') . ' 23:59:59');
                 }
 
+                if ($request->filled('time_from')) {
+                    $q->whereTime('start_time', '>=', $request->input('time_from'));
+                }
+
+                if ($request->filled('time_to')) {
+                    $q->whereTime('start_time', '<=', $request->input('time_to'));
+                }
+
                 if ($request->filled('capacity')) {
                     $q->where('max_capacity', '>=', $request->input('capacity'));
                 }

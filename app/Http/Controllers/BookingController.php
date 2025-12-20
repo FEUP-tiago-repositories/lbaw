@@ -98,6 +98,7 @@ class BookingController extends Controller
 
             try {
                 $schedule = Schedule::findOrFail($schedule_id);
+                $space = Space::findOrFail($space_id);
                 Log::info('Schedule found', ['schedule' => $schedule->toArray()]);
 
                 $result = ScheduleController::getAffectedSchedules(
@@ -146,9 +147,24 @@ class BookingController extends Controller
                 // Reservar capacidade
                 ScheduleController::reserveCapacity($result['schedules'], $validated['number_of_persons']);
 
-                Log::info('Capacity reserved');
+                $customer = Customer::findOrFail($validated['customer_id']);
 
-                $space = Space::findOrFail($space_id);
+                $reservationDate = Carbon::parse($schedule->start_time)->format('d/m/Y \à\s H:i');
+
+                $customerNotif = Notification::create([
+                    'user_id' => $customer->user_id,
+                    'content' => "Reservation Confirmed: {$space->title} - {$reservationDate}",
+                    'is_read' => false,
+                    'time_stamp' => now(),
+                ]);
+
+                BookingConfirmationNotification::create([
+                    'notification_id' => $customerNotif->id,
+                    'booking_id' => $booking->id
+                ]);
+
+                event(new NotificationSent($customerNotif));
+
                 $ownerUserId = null;
 
                 if (!empty($space->owner_id)) {
@@ -162,7 +178,7 @@ class BookingController extends Controller
 
                     $ownerNotif = Notification::create([
                         'user_id' => $ownerUserId,
-                        'content' => "You received a new reservation",
+                        'content' => "New reservation: {$space->title} at {$reservationDate}",
                         'is_read' => false,
                         'time_stamp' => now(),
                     ]);
@@ -300,7 +316,10 @@ class BookingController extends Controller
     public function cancel($space_id, $schedule_id, $booking_id)
     {
         try {
-            $booking = Booking::with(['schedule'])->findOrFail($booking_id);
+            $booking = Booking::with(['schedule', 'customer'])->findOrFail($booking_id);
+            $space = Space::findOrFail($space_id);
+
+            $space = Space::findOrFail($space_id);
 
             if ($booking->is_cancelled) {
                 return response()->json(['error' => 'Booking already cancelled'], 400);
@@ -308,6 +327,17 @@ class BookingController extends Controller
 
             if (!$booking->isFuture()) {
                 return response()->json(['error' => 'Cannot cancel past bookings'], 400);
+            }
+
+            $currentUserId = Auth::id();
+            $customerUserId = $booking->customer->user_id;
+
+            $ownerUserId = null;
+            if ($space->owner_id) {
+                $businessOwner = BusinessOwner::find($space->owner_id);
+                if ($businessOwner) {
+                    $ownerUserId = $businessOwner->user_id;
+                }
             }
 
             DB::beginTransaction();
@@ -325,16 +355,38 @@ class BookingController extends Controller
             $booking->is_cancelled = true;
             $booking->save();
 
-            $notification = Notification::create([
-                'user_id' => $booking->customer->user_id,
-                'content' => 'Your reservation has been cancelled.',
-                'is_read' => false,
-                'time_stamp' => now(),
-            ]);
+            $reservationDate = Carbon::parse($booking->schedule->start_time)->format('d/m/Y \a\t H:i');
 
-            BookingCancellationNotification::create(['notification_id' => $notification->id, 'booking_id' => $booking->id]);
+            if ($currentUserId == $ownerUserId) {
+                
+                $this->sendCancellationNotification(
+                    $ownerUserId, 
+                    "Cancelled by you: {$space->title} - {$reservationDate}", 
+                    $booking->id
+                );
 
-            event(new NotificationSent($notification));
+                $this->sendCancellationNotification(
+                    $customerUserId, 
+                    "Cancelled by Owner: {$space->title} - {$reservationDate}", 
+                    $booking->id
+                );
+            } 
+            elseif ($currentUserId == $customerUserId) {
+
+                $this->sendCancellationNotification(
+                    $customerUserId, 
+                    "Cancelled by you: {$space->title} - {$reservationDate}", 
+                    $booking->id
+                );
+
+                if ($ownerUserId) {
+                    $this->sendCancellationNotification(
+                        $ownerUserId, 
+                        "Cancelled by Customer: {$space->title} - {$reservationDate}", 
+                        $booking->id
+                    );
+                }
+            }
 
             DB::commit();
 
@@ -364,6 +416,23 @@ class BookingController extends Controller
             ->first();
 
         return Payment::calculateValue($duration, $persons, $scheduleDuration, $discount?->percentage);
+    }
+
+    private function sendCancellationNotification($userId, $message, $bookingId)
+    {
+        $notification = Notification::create([
+            'user_id' => $userId,
+            'content' => $message,
+            'is_read' => false,
+            'time_stamp' => now(),
+        ]);
+
+        BookingCancellationNotification::create([
+            'notification_id' => $notification->id, 
+            'booking_id' => $bookingId
+        ]);
+
+        event(new NotificationSent($notification));
     }
 
     public function selectSpace()

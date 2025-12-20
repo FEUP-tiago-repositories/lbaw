@@ -25,9 +25,20 @@ making a booking --}}
             </div>
             {{-- Div that will be used for Buttons to Delete and Edit space --}}
             <div class="flex justify-between">
-                <div class="flex items-center gap-3 mb-6">
-                    <h1 class="text-3xl font-bold">{{ $space->title }}</h1>
+                <div class="flex items-center gap-8 mb-4">
+                    <h1 class="text-3xl font-bold">{{ $space->title}}</h1>
+                    @php
+                        $averageRating = ($space->current_environment_rating +
+                                         $space->current_equipment_rating +
+                                         $space->current_service_rating) / 3;
+                    @endphp
 
+                    <div class="flex items-center gap-1 bg-yellow-100 px-2 py-1 rounded-lg ml-auto">
+                        <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <span class="text-md font-bold text-gray-800">{{ number_format($averageRating, 1) }} ({{ $space-> num_reviews}} reviews) </span>
+                    </div>
                     @can('favorite',$space)
                         @php
                             $isFavorited = auth()->user()->customer->favoritedSpaces->contains($space->id);
@@ -107,33 +118,7 @@ making a booking --}}
                     <p class="font-bold">Sport Type: </p>
                     <p>{{ $space->sportType->name }}</p>
                 </div>
-                {{-- -Email flex --}}
-                <div class="flex items-center justify-start gap-2 mb-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <p class="font-bold">Email: </p>
-                    <p>{{ $space->email }}</p>
-                </div>
-                {{-- -Phone Number flex --}}
-                <div class="flex items-center justify-start gap-2 mb-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    <p class="font-bold">Phone: </p>
-                    <p>{{ $space->phone_no }}</p>
-                </div>
-                {{-- -Owner flex --}}
-                <div class="flex items-center justify-start gap-2 mb-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <p class="font-bold">Owner: </p>
-                    <p>{{ $space->owner->user->first_name }} {{ $space->owner->user->surname }}</p>
-                </div>
+
             </div>
             {{-- Images --}}
             @if($space->media->isNotEmpty())
@@ -154,7 +139,7 @@ making a booking --}}
             <div class="flex">
                 <div class="flex-[5] mr-4">
                     {{-- Section About and Reviews and Calendar --}}
-                    <div class="flex gap-4 mt-6 mb-36">
+                    <div class="flex gap-4 mt-6 mb-24">
                         {{-- Section About and Revies, will have JS behaviour --}}
                         <div class="flex-1">
                             <div class="flex border-b-2 border-gray-200 pb-2.5">
@@ -268,10 +253,37 @@ making a booking --}}
                             </div>
                         </div>
                     </div>
-
+                    <h3 class="text-xl font-bold mt-4 mb-1">About Business Owner: </h3>
+                    {{-- -Owner flex --}}
+                    <div class="flex items-center justify-start gap-2 mb-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <p class="font-semibold">Owner: </p>
+                        <p>{{ $space->owner->user->first_name }} {{ $space->owner->user->surname }}</p>
+                    </div>
+                    {{-- -Email flex --}}
+                    <div class="flex items-center justify-start gap-2 mb-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <p class="font-semibold">Email: </p>
+                        <p>{{ $space->email }}</p>
+                    </div>
+                    {{-- -Phone Number flex --}}
+                    <div class="flex items-center justify-start gap-2 mb-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        <p class="font-semibold">Phone: </p>
+                        <p>{{ $space->phone_no }}</p>
+                    </div>
                     {{-- Map Section --}}
                     <div>
-                        <p class="text-xl font-semibold mb-1">Location: </p>
+                        <h3 class="text-2xl font-bold mt-4 mb-1">Location: </h3>
                         <div class="flex text-lg items-center justify-start gap-2 mb-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

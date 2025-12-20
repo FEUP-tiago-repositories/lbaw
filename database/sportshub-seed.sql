@@ -550,7 +550,7 @@ VALUES
 (
     3,
     5,
-    'Football field near Porto''s downtown',
+    'Football field in Porto''s downtown',
     'Rua das Flores 123, Porto',
     41.1442807,
     -8.6130616,

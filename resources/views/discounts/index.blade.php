@@ -99,56 +99,103 @@
     </div>
 </div>
 
-<div id="discountModal" class="fixed inset-0 bg-transparent bg-opacity-50 hidden z-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
-        
-        <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-            <h3 class="text-lg font-bold text-gray-900" id="modalTitle">Create New Discount</h3>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
-        </div>
+<div id="discountModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    
+    <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity transition-all duration-300"></div>
 
-        <div class="p-6">
-            <form id="discountForm" method="POST" action="{{ route('discounts.store') }}">
-                @csrf
-                <div id="methodField"></div> <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Apply to Space</label>
-                    <select name="space_id" id="inputSpaceId" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500" required>
-                        <option value="">Select a space...</option>
-                        @foreach($Spaces as $id => $title)
-                            <option value="{{ $id }}">{{ $title }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Code <span class="text-xs text-gray-400 font-normal">(Leave empty for auto)</span></label>
-                    <div class="flex gap-2">
-                        <input type="text" name="code" id="inputCode" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 uppercase" placeholder="SUMMER25">
-                        <button type="button" onclick="generateCode()" class="px-3 py-2 bg-gray-100 rounded border text-sm hover:bg-gray-200">Random</button>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            
+            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-gray-100">
+                
+                <div class="bg-white px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <h3 class="text-lg font-semibold text-gray-900" id="modalTitle">Create New Discount</h3>
                     </div>
+                    
+                    <button type="button" onclick="closeModal()" class="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 transition-colors">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Percentage (%)</label>
-                    <input type="number" name="percentage" id="inputPercentage" min="1" max="100" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500">
-                </div>
+                <form id="discountForm" method="POST" action="{{ route('discounts.store') }}" class="p-6 space-y-5">
+                    @csrf
+                    <div id="methodField"></div> 
 
-                <div class="grid grid-cols-2 gap-4 mb-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Start</label>
-                        <input type="datetime-local" name="start_date" id="inputStart" required class="w-full rounded-lg border-gray-300 text-sm">
+                        <label for="inputSpaceId" class="block text-sm font-medium text-gray-700 mb-1">Apply to Space</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M17 21v-8H7v8"/></svg>
+                            </div>
+                            <select name="space_id" id="inputSpaceId" class="block w-full rounded-lg border-gray-300 pl-10 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5" required>
+                                <option value="">Select a space...</option>
+                                @foreach($Spaces as $id => $title)
+                                    <option value="{{ $id }}">{{ $title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">End</label>
-                        <input type="datetime-local" name="end_date" id="inputEnd" required class="w-full rounded-lg border-gray-300 text-sm">
-                    </div>
-                </div>
 
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">Save</button>
-                </div>
-            </form>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="col-span-1 sm:col-span-2"> <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Discount Code 
+                                <span class="text-xs text-gray-400 font-normal ml-1">(Leave empty for auto-generation)</span>
+                            </label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                                </div>
+                                <input type="text" name="code" id="inputCode" class="block w-full rounded-lg border-gray-300 pl-10 pr-20 uppercase placeholder-gray-300 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5" placeholder="SUMMER25">
+                                
+                                <button type="button" onclick="generateCode()" class="absolute inset-y-0 right-0 flex items-center px-3 m-1 rounded-md bg-gray-50 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 text-xs font-medium border border-gray-200 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Percentage</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <input type="number" name="percentage" id="inputPercentage" min="1" max="100" required class="block w-full rounded-lg border-gray-300 pl-10 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5" placeholder="15">
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="hidden sm:block"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <input type="datetime-local" name="start_date" id="inputStart" required class="block w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5 text-gray-600">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                            <div class="relative rounded-md shadow-sm">
+                                <input type="datetime-local" name="end_date" id="inputEnd" required class="block w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5 text-gray-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-gray-50">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2.5 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 shadow-sm transition-all hover:shadow-md flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            Save Discount
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

@@ -12,7 +12,8 @@ let state = {
     payment: null,
     customerId: null,
     userId: null,  // User ID for redirects
-    scheduleDuration: 30
+    scheduleDuration: 30,
+    discountCode: null
 };
 
 let isEditMode = false;
@@ -75,6 +76,7 @@ function initEditMode() {
     const bookingDate = new Date(originalBookingData.date);
     state.selectedDate = bookingDate;
     state.scheduleId = originalBookingData.scheduleId;
+    window.selectedScheduleId = originalBookingData.scheduleId;
     state.time = originalBookingData.time;
     state.duration = originalBookingData.duration;
     state.persons = originalBookingData.persons;
@@ -256,6 +258,7 @@ async function loadAvailableTimes(date) {
 
 function selectTime(scheduleId, time) {
     state.scheduleId = scheduleId;
+    window.selectedScheduleId = scheduleId; 
     state.time = time;
 
     document.querySelectorAll('#timeGrid button').forEach(function(btn) {
@@ -529,6 +532,75 @@ function closePaymentModal() {
     document.getElementById('paymentModal').classList.add('hidden');
 }
 
+window.applyPromoCode = function() {
+    const codeInput = document.getElementById('promoCodeInput');
+    const messageEl = document.getElementById('promoMessage');
+    
+    if (!codeInput || !codeInput.value.trim()) {
+        messageEl.textContent = 'Insert a promotional code.';
+        messageEl.classList.remove('hidden', 'text-green-600');
+        messageEl.classList.add('text-red-600');
+        return;
+    }
+
+    messageEl.classList.add('hidden');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+    fetch("/bookings/check-discount", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            space_id: state.spaceId,
+            schedule_id: state.scheduleId,
+            duration: state.duration,
+            persons: state.persons,
+            code: codeInput.value
+        })
+    })
+    .then(r => r.ok ? r.json() : r.text().then(t => { throw new Error(t) }))
+    .then(data => {
+        messageEl.classList.remove('hidden');
+        if (data.valid) {
+            state.discountCode = codeInput.value; 
+            
+            messageEl.textContent = data.message;
+            messageEl.className = 'text-sm mt-2 text-green-600';
+            
+            const oldPriceEl = document.getElementById('originalPriceDisplay');
+            const newPriceEl = document.getElementById('paymentAmount');
+            
+            if(oldPriceEl) {
+                oldPriceEl.textContent = '€' + parseFloat(data.original_price).toFixed(2);
+                oldPriceEl.classList.remove('hidden');
+            }
+            if(newPriceEl) {
+                newPriceEl.textContent = '€' + parseFloat(data.final_price).toFixed(2);
+                newPriceEl.classList.add('text-green-700');
+            }
+        } else {
+            state.discountCode = null;
+            throw new Error(data.message || 'Invalid code');
+        }
+    })
+    .catch(error => {
+        state.discountCode = null;
+        console.error('Erro:', error);
+        let msg = 'Error applying code.';
+        try { 
+            if(error.message.startsWith('{')) msg = JSON.parse(error.message).message;
+            else msg = error.message;
+        } catch(e) {}
+        
+        messageEl.textContent = msg;
+        messageEl.className = 'text-sm mt-2 text-red-600';
+        messageEl.classList.remove('hidden');
+    });
+};
+
 async function processPayment() {
     if (!selectedPaymentMethod) {
         alert('Please select a payment method');
@@ -612,7 +684,8 @@ async function processPayment() {
                         customer_id: state.customerId,
                         duration: state.duration,
                         number_of_persons: state.persons,
-                        payment_provider_ref: paymentProviderRef
+                        payment_provider_ref: paymentProviderRef,
+                        discount_code: state.discountCode
                     })
                 }
             );

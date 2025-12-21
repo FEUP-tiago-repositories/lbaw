@@ -89,7 +89,8 @@ class BookingController extends Controller
                 'customer_id' => 'required|integer|exists:customer,id',
                 'duration' => 'required|integer|min:15',
                 'number_of_persons' => 'required|integer|min:1',
-                'payment_provider_ref' => 'required|string|in:' . implode(',', Payment::PAYMENT_PROVIDERS)
+                'payment_provider_ref' => 'required|string|in:' . implode(',', Payment::PAYMENT_PROVIDERS),
+                'discount_code' => 'nullable|string|exists:discount,code',
             ]);
 
             Log::info('Validation passed', $validated);
@@ -118,7 +119,8 @@ class BookingController extends Controller
                     $space_id,
                     $validated['duration'],
                     $validated['number_of_persons'],
-                    $schedule->space->duration
+                    $schedule->space->duration,
+                    $request->input('discount_code')
                 );
 
                 Log::info('Price calculated', ['total_price' => $totalPrice]);
@@ -149,7 +151,7 @@ class BookingController extends Controller
 
                 $customer = Customer::findOrFail($validated['customer_id']);
 
-                $reservationDate = Carbon::parse($schedule->start_time)->format('d/m/Y \à\s H:i');
+                $reservationDate = Carbon::parse($schedule->start_time)->format('d/m/Y \a\t H:i');
 
                 $customerNotif = Notification::create([
                     'user_id' => $customer->user_id,
@@ -408,12 +410,17 @@ class BookingController extends Controller
         }
     }
 
-    private function calculatePrice(int $spaceId, int $duration, int $persons, int $scheduleDuration): float
+    private function calculatePrice(int $spaceId, int $duration, int $persons, int $scheduleDuration, ?string $discountCode = null): float
     {
-        $discount = Discount::where('space_id', $spaceId)
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
-            ->first();
+        $discount = null;
+
+        if ($discountCode) {
+            $discount = Discount::where('space_id', $spaceId)
+                ->where('code', $discountCode)
+                ->where('start_date', '<=', now())
+                ->where('end_date', '>=', now())
+                ->first();
+        }
 
         return Payment::calculateValue($duration, $persons, $scheduleDuration, $discount?->percentage);
     }
@@ -627,5 +634,54 @@ class BookingController extends Controller
         }
 
         return collect($timeline);
+    }
+
+    public function checkDiscount(Request $request)
+    {
+        $validated = $request->validate([
+            'space_id'    => 'required|integer',
+            'duration'    => 'required|integer',
+            'persons'     => 'required|integer',
+            'code'        => 'required|string',
+            'schedule_id' => 'required|integer'
+        ]);
+
+        $space = Space::findOrFail($validated['space_id']);
+        
+        $discount = Discount::where('space_id', $space->id)
+            ->where('code', $validated['code'])
+            ->valid()
+            ->first();
+
+        if (!$discount) {
+            return response()->json(['valid' => false, 'message' => 'Invalid code'], 404);
+        }
+
+        $schedule = Schedule::findOrFail($validated['schedule_id']);
+        $baseDuration = $schedule->space->duration;
+
+        $originalPrice = $this->calculatePrice(
+            $space->id,
+            $validated['duration'],
+            $validated['persons'],
+            $baseDuration,
+            null
+        );
+
+        $finalPrice = $this->calculatePrice(
+            $space->id,
+            $validated['duration'],
+            $validated['persons'],
+            $baseDuration,
+            $validated['code']
+        );
+
+        return response()->json([
+            'valid' => true,
+            'original_price' => $originalPrice,
+            'final_price' => $finalPrice,
+            'percentage' => $discount->percentage,
+            'message' => "{$discount->percentage}% discount applied!"
+        ]);
     }
 }

@@ -98,4 +98,8 @@ class Space extends Model
     {
         return $this->belongsToMany(Customer::class, 'favorited', 'space_id', 'customer_id');
     }
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
 }

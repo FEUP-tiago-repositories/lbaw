@@ -151,6 +151,10 @@
                                     class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
                                     Manage Reservations and Schedules
                                 </a>
+                                <a href="{{ route('discounts.index') }}" 
+                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                                    Discounts
+                                </a>
                                 <a href="{{ route('notifications.index') }}"
                                     class="relative px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
                                     Notifications

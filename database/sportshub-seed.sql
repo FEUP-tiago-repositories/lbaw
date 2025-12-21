@@ -169,6 +169,7 @@ CREATE TABLE response (
 CREATE TABLE discount (
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     space_id INT NOT NULL REFERENCES space(id) ON DELETE CASCADE,
+    code VARCHAR(50) UNIQUE DEFAULT NULL,
     percentage FLOAT NOT NULL CHECK (percentage BETWEEN 0 AND 100),
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL CHECK (end_date > start_date)

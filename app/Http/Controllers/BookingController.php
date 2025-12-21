@@ -149,7 +149,7 @@ class BookingController extends Controller
 
                 $customer = Customer::findOrFail($validated['customer_id']);
 
-                $reservationDate = Carbon::parse($schedule->start_time)->format('d/m/Y \à\s H:i');
+                $reservationDate = Carbon::parse($schedule->start_time)->format('d/m/Y \a\t H:i');
 
                 $customerNotif = Notification::create([
                     'user_id' => $customer->user_id,

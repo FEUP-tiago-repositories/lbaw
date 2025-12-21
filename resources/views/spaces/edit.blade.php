@@ -101,6 +101,54 @@
                 required maxlength="150">
         </div>
 
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2">Current Cover Image</h2>
+
+            @if($space->coverImage)
+                <img src="{{ $space->coverImage->media_url }}"
+                    class="w-full h-56 object-cover rounded-xl mb-3">
+            @else
+                <p class="text-gray-500">No cover image</p>
+            @endif
+
+            <label class="block text-lg font-medium mb-2">Replace Cover Image</label>
+            <input type="file" name="cover_image"
+                class="w-full rounded-lg px-4 py-2 bg-gray-200"
+                accept="image/*">
+        </div>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-3">Gallery Images</h2>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                @foreach($space->media->where('is_cover', false) as $image)
+                    <div class="relative group" id="image-{{ $image->id }}">
+                        <img src="{{ $image->media_url }}"
+                            class="w-full h-32 object-cover rounded-lg shadow-sm">
+
+                        {{-- Delete button overlay --}}
+                        <label class="absolute inset-0 backdrop-blur-sm bg-opacity-30 text-white text-bg-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer rounded-lg"
+                          >
+                            <input type="checkbox"
+                                name="delete_images[]"
+                                value="{{ $image->id }}"
+                                class="hidden">
+                            Delete?
+                        </label>
+                    </div>
+                    
+                @endforeach
+            </div>
+            </div>
+        <div class="mb-6">
+            <label class="block text-lg font-medium mb-2">Add More Pictures</label>
+            <input type="file"
+                name="gallery_images[]"
+                multiple
+                accept="image/*"
+                class="w-full rounded-lg px-4 py-2 bg-gray-200">
+        </div>
+
+
         {{-- Is Closed Status --}}
         <div class="mb-4">
             <label class="flex items-center">

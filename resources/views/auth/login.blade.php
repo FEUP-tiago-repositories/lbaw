@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @include('auth.partials.recover')
+@include('auth.partials.appeal')
 @section('content')
 <div class="flex justify-center items-center min-h-[90vh] py-10">
 
@@ -10,6 +11,12 @@
         @if (session('error'))
             <div class="bg-red-100 text-red-700 px-4 py-2 rounded-lg mb-4 text-center text-sm">
                 {{ session('error') }}
+            </div>
+        @endif
+
+        @if (session('deleted'))
+            <div class="bg-red-100 text-red-700 px-4 py-2 rounded-lg mb-4 text-center text-sm">
+                This account has been deleted.
             </div>
         @endif
 
@@ -43,10 +50,18 @@
             </p>
             <p class="text-center text-gray-600">
                 Forgot your Password?
-                <a href="#" onclick="openRecoverModal()" class="text-emerald-800 hover:underline font-medium">Recover it here</a>
+                <a onclick="openRecoverModal()" class="text-emerald-800 hover:underline font-medium">Recover it here</a>
             </p>
         </form>
     </div>
 
 </div>
 @endsection
+
+@if ($errors->appeal->any() || session('banned'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        openAppealModal();
+    });
+</script>
+@endif

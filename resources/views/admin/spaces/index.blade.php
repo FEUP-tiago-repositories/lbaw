@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@include('admin.spaces.partials.delete')
 @section('title', 'Spaces Management')
 
 @section('content')
@@ -84,19 +84,10 @@
                                 </a>
                         </td>
                         <td class="px-4 py-2 rounded">
-                        <form action="{{ route('admin.spaces.destroy', $space->id) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Delete this space?');">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button
-                                        class="px-3 py-1 rounded-lg bg-red-100 text-red-700 font-semibold
-                                               hover:bg-red-200 transition">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
+                        <button onclick="openDeleteModal({{ $space->id }})"
+                                    class="px-3 py-1 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition">
+                                Delete
+                            </button>
                         </td>
 
                     </tr>

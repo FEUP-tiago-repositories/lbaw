@@ -101,6 +101,23 @@
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green- bg-gray-200 shadow-gray-200 shadow"
                     required maxlength="150" placeholder="e.g., space@example.com">
             </div>
+            
+            {{-- Cover Picture --}}
+            <div class="mt-4">
+                <label class="block text-lg font-medium mb-2">Cover Picture *</label>
+                <input type="file" name="cover_image"
+                    class="w-full rounded-lg px-4 py-2 bg-gray-200"
+                    accept="image/*" required>
+            </div>
+
+            {{-- Other Pictures --}}
+            <div class="mt-4">
+                <label class="block text-lg font-medium mb-2">Other Pictures</label>
+                <input type="file" name="gallery_images[]"
+                    class="w-full rounded-lg px-4 py-2 bg-gray-200"
+                    accept="image/*" multiple>
+            </div>
+
 
             {{-- Action Buttons --}}
             <div class="flex gap-4 mt-4 justify-end">

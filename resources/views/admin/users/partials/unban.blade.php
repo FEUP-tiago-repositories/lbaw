@@ -3,12 +3,17 @@
      class="fixed backdrop-blur-sm inset-0 flex items-center justify-center z-50 hidden">
     <div class="bg-white p-8 rounded-2xl shadow-xl w-96 text-center text-xl">
         <h2 class="text-2xl font-bold text-gray-800">Unban User</h2>
+        
         <p class="text-gray-600 mt-2 text-xl">
             Ban Reason:
         </p>
-        
-        {{-- Show the motive --}}
-        <div id="banMotive" class="bg-gray-100 text-gray-800 p-3 rounded-lg my-4 text-sm">
+        <div id="banMotive" class="text-gray-800 p-3 my-4 text-lg">
+        </div>
+
+        <p class="text-gray-600 mt-2 text-xl">
+            User's Appeal:
+        </p>
+        <div id="appeal" class="text-gray-800 p-3 rounded-lg my-4 text-lg max-h-32 overflow-y-auto">
 
         </div>
 
@@ -30,10 +35,11 @@
 </div>
 
 <script>
-    function openUnbanModal(userId,motive) {
+    function openUnbanModal(userId,motive,appeal) {
         const form = document.getElementById('unbanForm');
         form.action = `/admin/users/${userId}/unban`;
         document.getElementById('banMotive').textContent = motive;
+        document.getElementById('appeal').textContent = appeal;
         document.getElementById('unbanModal').classList.remove('hidden');
     }
     

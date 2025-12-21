@@ -1,6 +1,6 @@
 <div id="recoverModal" 
      class="fixed backdrop-blur-sm inset-0 flex items-center justify-center z-50
-            {{ $errors->any() || session('status') ? '' : 'hidden' }}">
+            {{ $errors->recover->any() || session('status') ? '' : 'hidden' }}">
     <div class="bg-white border p-6 rounded-2xl shadow-xl w-96 text-center ">
 
         <h2 class="text-2xl font-bold text-gray-800">Recover Password</h2>

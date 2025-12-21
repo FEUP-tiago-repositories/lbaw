@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@include('admin.reviews.partials.delete')
 @section('title', 'Reviews Management')
 
 @section('content')
@@ -110,18 +110,10 @@
 
                         {{-- Actions --}}
                         <td class="px-4 py-2 rounded">
-                            <form action="{{ route('admin.reviews.destroy', $review->id) }}"
-                                  method="POST"
-                                  onsubmit="return confirm('Delete this review?');">
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    class="px-3 py-1 rounded-lg bg-red-100 text-red-700 font-semibold
-                                           hover:bg-red-200 transition">
-                                    Delete
-                                </button>
-                            </form>
+                            <button onclick="openDeleteModal({{ $review->id }})"
+                                    class="px-3 py-1 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition">
+                                Delete
+                            </button>
                         </td>
 
                     </tr>

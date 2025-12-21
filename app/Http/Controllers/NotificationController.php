@@ -47,4 +47,43 @@ class NotificationController extends Controller
 
         return back()->with('success', 'Notification deleted.');
     }
+
+    public function checkLatest()
+    {
+        if (!auth()->check()) {
+            return response()->json(['id' => null]);
+        }
+
+        $latest = auth()->user()->notifications()
+            ->where('is_read', false) 
+            ->orderBy('time_stamp', 'desc')
+            ->first();
+
+        if ($latest) {
+
+            $style = $latest->style; 
+
+            $colors = [
+                'emerald' => '#10b981',
+                'yellow'  => '#eab308',
+                'blue'    => '#3b82f6',
+                'red'     => '#ef4444',
+            ];
+            $hexColor = $colors[$style['color']] ?? '#6b7280';
+
+            $iconHtml = '<svg xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="' . $style['icon'] . '" />
+                        </svg>';
+
+            return response()->json([
+                'id' => $latest->id,
+                'title' => $style['title'],
+                'content' => $latest->content,
+                'icon_html' => $iconHtml,
+                'color' => $hexColor
+            ]);
+        }
+
+        return response()->json(['id' => null]);
+    }
 }

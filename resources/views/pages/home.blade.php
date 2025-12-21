@@ -65,7 +65,7 @@
                 </svg>
             </button>
         </div>
-        <h2 class = "my-4 text-3xl font-semibold">Looking for a gym after the holidays?</h2>
+        <h2 class = "my-4 text-3xl font-semibold">Looking for a gym after the holiday season?</h2>
         <div class="relative">
             <!-- Gradiente Esquerdo -->
             <div id="gym-gradient-left" class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-100 to-transparent z-10 pointer-events-none opacity-0 transition-opacity duration-300"></div>
@@ -104,6 +104,36 @@
                 </svg>
             </button>
         </div>
+        @if($recommendedSpaces->isNotEmpty())
+            <h2 class="mb-4 text-3xl font-semibold">Recommended based on your reservations</h2>
+
+            <div class="relative">
+                <div id="rec-scroll-container"
+                    class="flex overflow-x-auto gap-2 pb-4 scroll-smooth scrollbar-hide">
+
+                    @foreach($recommendedSpaces as $space)
+                        <div class="shrink-0 w-[240px]">
+                            @include('spaces.partials.space-card', ['space' => $space])
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+        @if($favoriteSpaces->isNotEmpty())
+            <h2 class="mb-4 text-3xl font-semibold">Recommended based on your favorite spaces</h2>
+
+            <div class="relative">
+                <div id="rec-scroll-container"
+                    class="flex overflow-x-auto gap-2 pb-4 scroll-smooth scrollbar-hide">
+
+                    @foreach($favoriteSpaces as $space)
+                        <div class="shrink-0 w-[240px]">
+                            @include('spaces.partials.space-card', ['space' => $space])
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
 

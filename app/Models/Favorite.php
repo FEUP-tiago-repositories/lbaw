@@ -53,4 +53,10 @@ class Favorite extends Model
 
         return $query->delete();
     }
+
+    public function space()
+    {
+        return $this->belongsTo(Space::class);
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,22 @@ class LoginController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+        
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && $user->is_banned) {
+            return back()
+                ->with('banned', true)
+                ->with('ban_motive', $user->ban->motive ?? 'No reason provided.')
+                ->with('user_id', $user->id) 
+                ->with('error', 'Your account has been banned.')
+                ->onlyInput('email');
+        }
+
+        if ($user && $user->is_deleted) {
+            return back()
+                ->with('deleted', true);
+        }
  
         // Attempt to authenticate and log in the user.
         if (Auth::attempt($credentials, $request->filled('remember'))) {

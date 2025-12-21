@@ -4,14 +4,19 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticable
 {
+    use Notifiable;
+
     public $timestamps = false;
 
     protected $table = 'user';
 
     protected $fillable = [
+        'first_name',
+        'surname',
         'user_name',
         'email',
         'phone_no',
@@ -52,6 +57,22 @@ class User extends Authenticable
             'id',                 
             'id'                 
         );
+    }
+
+    public function ban()
+    {
+        return $this->hasOne(Ban::class);
+    }
+
+    public function banAppeal()
+    {
+        return $this->hasOne(BanAppeal::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(\App\Models\Notification::class, 'user_id')
+                    ->orderBy('time_stamp', 'desc');
     }
     
 } 

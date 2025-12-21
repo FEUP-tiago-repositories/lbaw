@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Models\Review;
+use Illuminate\Support\Facades\DB;
 
 class ReviewManagementController
 {
@@ -11,23 +13,10 @@ class ReviewManagementController
      */
     public function index()
     {
-        //
-    }
+        // Load reviews with the reviewer and the associated space/service
+        $reviews = Review::with(['customer.user', 'booking.space'])->orderBy('id', 'asc')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('admin.reviews.index', compact('reviews'));
     }
 
     /**
@@ -35,23 +24,9 @@ class ReviewManagementController
      */
     public function show(string $id)
     {
-        //
-    }
+        $review = Review::with(['user', 'space'])->findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        return view('admin.reviews.show', compact('review'));
     }
 
     /**
@@ -59,6 +34,9 @@ class ReviewManagementController
      */
     public function destroy(string $id)
     {
-        //
+        $review = Review::findOrFail($id);
+        $review->delete();
+
+        return redirect()->route('admin.reviews.index')->with('success', 'Review deleted successfully.');
     }
 }

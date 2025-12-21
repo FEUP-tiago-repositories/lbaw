@@ -341,7 +341,6 @@ making a booking --}}
     </main>
     @include('bookings.modals.payment-modal')
     @include('partials.discounts')
-</div>
 @endsection
 
 @push('scripts')
@@ -349,5 +348,5 @@ making a booking --}}
     <script src="{{ asset('js/booking.js') }}"></script>
     <script src="{{ asset('js/review.js') }}"></script>
     <script src="{{ asset('js/favoriteToggle.js') }}"></script>
-    <script src="{{ asset('js/discount_modal.js') }}"></script>
+    <script src="{{ asset('js/discounts.js') }}"></script>
 @endpush

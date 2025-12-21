@@ -11,8 +11,6 @@
         @if(Auth::user()->customer)
             <meta name="customer-id" content="{{ Auth::user()->customer->id }}">
             <script>console.log('User ID:', {{ Auth::id() }}, 'Customer ID:', {{ Auth::user()->customer->id }});</script>
-        @else
-            <script>console.error('User has no customer!');</script>
         @endif
     @endauth
 

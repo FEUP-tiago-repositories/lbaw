@@ -110,5 +110,4 @@
 
 @push('scripts')
     <script src="{{ asset('js/review.js') }}"></script>
-    <script src="{{ asset('js/review-form.js') }}"></script>
 @endpush

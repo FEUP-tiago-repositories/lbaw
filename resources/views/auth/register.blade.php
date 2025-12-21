@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex justify-center items-center min-h-screen py-10">
+    <div class="flex justify-center items-center min-h-[85vh] py-10">
         <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
             <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Create Account</h2>
             @if ($errors->any())

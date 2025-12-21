@@ -1,4 +1,4 @@
-<nav class="navbar h-20 mx-auto text-lg flex items-center px-56 py-4 justify-between bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out">
+<nav class="navbar h-20 mx-auto text-lg flex items-center px-64 py-4 justify-between bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out">
     <div class="flex items-center gap-6">
         <a href="{{ route('home') }}" class="flex items-center">
             <img src="{{ asset('images/logo2.svg') }}" alt="SportsHub Logo" class="h-9 w-auto">

@@ -12,7 +12,7 @@
                     @if(auth()->user()->businessOwner)
                         {{-- Add space button --}}
                         <div
-                            class="px-6 py-3 bg-emerald-800 text-white rounded-lg transition font-medium hover:bg-emerald-200 cursor-pointer mb-3.5">
+                            class="px-6 py-3 bg-emerald-800 text-white rounded-lg transition font-medium hover:bg-emerald-200 cursor-pointer">
                             <a class="text-white" href="{{ route('spaces.create') }}">+ Create a Space</a>
                         </div>
                     @endif

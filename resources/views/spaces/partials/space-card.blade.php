@@ -3,19 +3,7 @@
     <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full w-[240px] hover:shadow-lg transition-shadow duration-300">
         <!-- Image -->
         <div class="h-40 overflow-hidden bg-gray-200 shrink-0">
-            @php
-                $cover = $space->media->where('is_cover', true)->first();
-            @endphp
-
-            @if($cover)
-                <img src="{{ $cover->media_url }}" 
-                     alt="{{ $space->title }} Cover Image" 
-                     class="w-full h-full object-cover">
-            @else
-                <img src="/images/default_space.jpg" 
-                     alt="Default Space Image" 
-                     class="w-full h-full object-cover">
-            @endif
+            @include('partials.space-image', ['space' => $space])
         </div>
 
         <!-- Content -->

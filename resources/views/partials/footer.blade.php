@@ -3,11 +3,11 @@
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <!-- Left side - Copyright -->
             <div class="text-center md:text-left">
-                <p class="text-sm opacity-90">© 2025 SportsHub. All rights reserved.</p>
+                <p class="opacity-90">© 2025 SportsHub. All rights reserved.</p>
             </div>
 
             <!-- Right side - Links -->
-            <div class="flex flex-wrap justify-center md:justify-end gap-6 text-sm">
+            <div class="flex flex-wrap justify-center md:justify-end gap-6 ">
                 <a href="{{ route('about') }}" class="hover:text-emerald-200 transition">
                     About Us
                 </a>

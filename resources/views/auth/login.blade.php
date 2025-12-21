@@ -2,7 +2,7 @@
 @include('auth.partials.recover')
 @include('auth.partials.appeal')
 @section('content')
-<div class="flex justify-center items-center min-h-[90vh] py-10">
+<div class="flex justify-center items-center min-h-[85vh] py-10">
 
     <div class="bg-white border shadow-xl rounded-2xl p-8 w-full max-w-md">
 

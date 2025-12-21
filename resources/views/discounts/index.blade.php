@@ -2,7 +2,23 @@
 
 @section('content')
 <div class="container mx-auto my-8 max-w-6xl px-4">
-    
+    <div class="flex items-center justify-start gap-2 mb-4 text-lg">
+        <a href="{{ route('home') }}" class="text-emerald-600 hover:text-emerald-400">
+            <img alt="Home Page" src="/images/home-icon.svg" height="18" width="18">
+        </a>
+        <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+        <a href="{{ route('users.show', Auth::id()) }}" class="text-emerald-600 hover:text-emerald-400">
+            Profile of {{ Auth::user()->first_name }} {{ Auth::user()->surname }}
+        </a>
+        <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+        <p>
+            Manage Discounts
+        </p>
+    </div>
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <div>
             <h1 class="text-3xl font-bold text-gray-900">Manage Discounts</h1>
@@ -209,5 +225,5 @@
     };
 </script>
 
-<script src="{{ asset('js/discount_modal.js') }}"></script>
+<script src="{{ asset('js/discounts.js') }}"></script>
 @endsection

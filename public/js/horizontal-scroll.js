@@ -26,14 +26,6 @@ function initHorizontalScroll(containerId) {
         // Verifica se há overflow (conteúdo maior que o container)
         const hasOverflow = scrollWidth > clientWidth;
 
-        // DEBUG: Descomenta para ver os valores
-        console.log(`[${containerId}]`, {
-            scrollWidth,
-            clientWidth,
-            hasOverflow,
-            diff: scrollWidth - clientWidth
-        });
-
         // Verifica se pode fazer scroll para cada lado
         const canScrollLeft = scrollLeft > 0;
         const canScrollRight = scrollLeft < (scrollWidth - clientWidth - 1);

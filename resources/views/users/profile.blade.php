@@ -170,7 +170,11 @@
                                     Manage Reservations and Schedules
                                 </a>
                                 <a href="{{ route('discounts.index') }}" 
-                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                                    class="inline-flex items-center gap-1 justify-center px-4 py-2 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
                                     Discounts
                                 </a>
                                 <a href="{{ route('notifications.index') }}"
@@ -199,7 +203,7 @@
         @if($user->businessOwner && $user->spaces->count() > 0)
             <div class="max-w-5xl mx-auto mb-12">
                 <h2 class="text-2xl font-semibold text-gray-800 mb-4">Your Sports Spaces</h2>
-                <div class="flex overflow-x-auto gap-10 pb-4">
+                <div class="flex overflow-x-auto gap-2 pb-4">
                     @foreach ($user->spaces as $space)
                         <div class="shrink-0 w-64">
                             @include('spaces.partials.space-card', ['space' => $space])
@@ -225,7 +229,7 @@
                         </button>
 
                         <!-- Container com Scroll Horizontal -->
-                        <div id="favorites-scroll-container" class="flex overflow-x-auto gap-6 pb-4 scroll-smooth scrollbar-hide"
+                        <div id="favorites-scroll-container" class="flex overflow-x-auto gap-2 pb-4 scroll-smooth scrollbar-hide"
                              style="-ms-overflow-style: none; scrollbar-width: none;">
                             @foreach($favoritedSpaces as $space)
                                 <div class="shrink-0 w-[250px]">

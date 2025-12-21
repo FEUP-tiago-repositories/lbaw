@@ -7,8 +7,11 @@ function toggleModal() {
     }
 }
 
-document.getElementById('helpModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        toggleModal();
-    }
-});
+const help_modal = document.getElementById("helpModal");
+if (help_modal) {
+    help_modal.addEventListener("click", function (e) {
+        if (e.target === this) {
+            toggleModal();
+        }
+    });
+}

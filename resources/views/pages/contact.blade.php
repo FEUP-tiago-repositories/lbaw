@@ -45,8 +45,8 @@
                         </div>
                         <div>
                             <h3 class="font-semibold text-gray-800 mb-1">Phone</h3>
-                            <a href="tel:+351220408400" class="text-emerald-600 hover:text-emerald-800">
-                                +351 220 408 400
+                            <a href="tel:+351225081400" class="text-emerald-600 hover:text-emerald-800">
+                                +351 225 081 400
                             </a>
                             <p class="text-sm text-gray-500 mt-1">Mon-Fri, 9:00 AM - 6:00 PM (WET)</p>
                         </div>
@@ -215,7 +215,7 @@
                         FG
                     </div>
                     <h3 class="font-semibold text-gray-800">Francisco Gomes</h3>
-                    <p class="text-sm text-gray-600 mb-2">UX Designer</p>
+                    <p class="text-sm text-gray-600 mb-2">Auth Systems</p>
                     <a href="mailto:up202306498@up.pt" class="text-xs text-emerald-600 hover:text-emerald-800">
                         up202306498@up.pt
                     </a>
@@ -226,7 +226,7 @@
                         TY
                     </div>
                     <h3 class="font-semibold text-gray-800">Tiago Yin</h3>
-                    <p class="text-sm text-gray-600 mb-2">Data Architect</p>
+                    <p class="text-sm text-gray-600 mb-2">Search & UX Features</p>
                     <a href="mailto:up202306438@up.pt" class="text-xs text-emerald-600 hover:text-emerald-800">
                         up202306438@up.pt
                     </a>

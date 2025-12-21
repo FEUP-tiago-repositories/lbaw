@@ -63,7 +63,7 @@
                             </svg>
                         </button>
                         <div class="faq-answer hidden mt-3 text-gray-600 leading-relaxed">
-                            You can browse sports facilities, view prices, and check availability without an account. However, to make bookings,
+                            You can browse sports facilities and check availability without an account. However, to make bookings,
                             write reviews, or save favorite spaces, you'll need to create a free account. Registration only takes a minute!
                         </div>
                     </div>
@@ -89,8 +89,7 @@
                             </svg>
                         </button>
                         <div class="faq-answer hidden mt-3 text-gray-600 leading-relaxed">
-                            We're continuously expanding! Currently, we operate primarily in Portugal, with strong presence in Porto, Lisbon,
-                            and Braga. We're working to add more cities and facilities regularly.
+                            We're continuously expanding! Currently, we operate primarily in Portugal, with strong presence in Porto. We're working to add more cities and facilities regularly.
                         </div>
                     </div>
                 </div>
@@ -157,7 +156,7 @@
                         </button>
                         <div class="faq-answer hidden mt-3 text-gray-600 leading-relaxed">
                             Yes! You can cancel or modify your reservations, but only before the reservation start time. Simply go to
-                            "My Reservations" in your profile to make changes. Please note that cancellation policies may vary by facility.
+                            "My Reservations" in your profile to make changes.
                         </div>
                     </div>
 
@@ -170,7 +169,6 @@
                         </button>
                         <div class="faq-answer hidden mt-3 text-gray-600 leading-relaxed">
                             If a facility needs to cancel your reservation, you'll receive an immediate notification and a full refund.
-                            While this is rare, we understand it can be inconvenient, and we'll help you find alternative options if needed.
                         </div>
                     </div>
                 </div>
@@ -197,7 +195,7 @@
                         </button>
                         <div class="faq-answer hidden mt-3 text-gray-600 leading-relaxed">
                             We accept major credit cards (Visa, MasterCard, American Express), debit cards, and various digital payment
-                            methods through our secure payment providers. All transactions are encrypted and secure.
+                            methods through our secure payment providers (as Mb Way and PayPal). All transactions are encrypted and secure.
                         </div>
                     </div>
 
@@ -222,8 +220,7 @@
                             </svg>
                         </button>
                         <div class="faq-answer hidden mt-3 text-gray-600 leading-relaxed">
-                            Payment is processed immediately when you confirm your booking. You'll receive a confirmation email with your
-                            receipt. If the facility declines your reservation, you'll receive an automatic refund.
+                            Payment is processed immediately when you confirm your booking. If the facility declines your reservation, you'll receive an automatic refund.
                         </div>
                     </div>
                 </div>
@@ -303,21 +300,21 @@
                         </button>
                         <div class="faq-answer hidden mt-3 text-gray-600 leading-relaxed">
                             Create a Business Owner account, then use the "Create Space" feature to add your facilities. You'll need to
-                            provide details like location, sports type, capacity, pricing, and photos. Once submitted, you can start
+                            provide details like location, sports type, capacity, opening hours, and photos. Once submitted, you need create schedules and can start
                             receiving bookings immediately!
                         </div>
                     </div>
 
                     <div class="faq-item border-b border-gray-200 pb-4">
                         <button class="faq-question w-full text-left flex justify-between items-center font-semibold text-lg text-gray-800 hover:text-emerald-700">
-                            <span>Can I manage my facility's availability and pricing?</span>
+                            <span>Can I manage my facility's availability and reservations?</span>
                             <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-answer hidden mt-3 text-gray-600 leading-relaxed">
-                            Absolutely! You have full control over schedules, capacity, pricing, and discounts. You can also accept, decline,
-                            or modify customer reservations through your dashboard, and view all bookings in a convenient calendar format.
+                            Absolutely! You have full control over schedules, capacity and discounts. You can also accept, decline,
+                            or modify customer reservations through your dashboard and view all bookings in a convenient calendar format.
                         </div>
                     </div>
 

@@ -22,6 +22,7 @@ use App\Http\Controllers\SpaceController;
 // Auth Controllers
 use App\Http\Controllers\StaticController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BanAppealController;
 use Illuminate\Support\Facades\Route;
 
 // ============================================
@@ -49,12 +50,13 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(RecoverController::class)->group(function () {
-    Route::get('/password/reset/{token}', 'showResetForm')->name('password.reset');
-    Route::post('/password/reset', 'resetPassword')->name('password.update');
+    Route::get('/reset-password/{token}', 'showResetForm')->name('password.reset');
+    Route::post('/reset-password', 'resetPassword')->name('password.update');
     Route::post('/sign-in/recover', 'sendRecoveryEmail');
 });
 
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth'); // R207
+Route::post('/sign-in/appeal',[BanAppealController::class, 'store'])->name('sendAppeal'); 
 
 // ============================================
 // M02: USER PROFILES (R205-R206)
@@ -64,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');       // R205
     Route::patch('/users/{id}', [UserController::class, 'update'])->name('users.update'); // R206
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');  // Form for R206
-    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('/users', [UserController::class, 'destroy'])->name('users.destroy')->middleware('auth');
 });
 
 // ============================================

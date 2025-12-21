@@ -1,6 +1,18 @@
 <a href="{{ route('spaces.bookings', $space->id) }}" class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full w-64 hover:shadow-lg transition-shadow duration-300">
     <div class="h-40 overflow-hidden bg-gray-200 shrink-0">
-        @include('partials.space-image', ['space' => $space])
+            @php
+                $cover = $space->media->where('is_cover', true)->first();
+            @endphp
+
+            @if($cover)
+                <img src="{{ $cover->media_url }}" 
+                     alt="{{ $space->title }} Cover Image" 
+                     class="w-full h-full object-cover">
+            @else
+                <img src="/images/default_space.jpg" 
+                     alt="Default Space Image" 
+                     class="w-full h-full object-cover">
+            @endif
     </div>
     <div class="p-4">
         <h3 class="font-bold text-lg text-gray-900 mb-2">{{ $space->title }}</h3>

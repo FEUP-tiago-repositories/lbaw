@@ -239,6 +239,14 @@ CREATE TABLE password_resets (
     expires_at TIMESTAMP NOT NULL
 );
 
+CREATE TABLE ban_appeal (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id INT NOT NULL REFERENCES "user" (id),
+    ban_id INT NOT NULL REFERENCES ban (id) ON DELETE CASCADE,
+    appeal VARCHAR(200) NOT NULL,
+    time_stamp TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
 
 -- =======================================================================================
 -- DATA POPULATION (around 1950 lines of code, scroll down to see indexes and triggers)
@@ -782,7 +790,7 @@ INSERT INTO
         time_stamp
     )
 VALUES (
-        1,
+        4,
         1,
         'Spamming services',
         '2025-01-05 14:32:52'
@@ -794,7 +802,7 @@ VALUES (
         '2025-02-10 09:45:20'
     ),
     (
-        1,
+        3,
         2,
         'Repeated rule violations',
         '2025-10-01 18:50:01'
@@ -2563,7 +2571,9 @@ BEGIN
 
    UPDATE "user"
    SET is_deleted = TRUE,
-       user_name = 'Deleted user',
+       first_name = 'Deleted',
+       surname = 'User',
+       user_name = 'Deleted_user',
        email = 'deleted_user_' || OLD.id || '@example.com',
        phone_no = 'deleted_user_' || OLD.id,
        password = 'N/A',

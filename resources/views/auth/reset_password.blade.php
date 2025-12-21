@@ -1,4 +1,13 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Admin')</title>
+    <title>{{ config('app.name', 'SportsHub') }}</title>
+    {{-- CSS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+<head>
 @section('content')
 <div class="fixed inset-0 flex items-center justify-center bg-gray-100">
     <div class="bg-white p-8 rounded-2xl shadow-xl w-96 text-center text-xl">

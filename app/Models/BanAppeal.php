@@ -3,14 +3,14 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class Ban extends Model
+class BanAppeal extends Model
 {
-    protected $table = 'ban';
+    protected $table = 'ban_appeal';
     public $timestamps = false;
     protected $fillable = [
         'user_id',
-        'admin_id',
-        'motive',
+        'ban_id',
+        'appeal',
         'time_stamp',
     ];
 
@@ -19,14 +19,8 @@ class Ban extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function admin()
+    public function ban()
     {
-        return $this->belongsTo(User::class, 'admin_id');
+        return $this->belongsTo(Ban::class);
     }
-
-    public function ban_appeal()
-    {
-        return $this->hasOne(BanAppeal::class);
-    }
-    
 }

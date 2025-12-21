@@ -1,6 +1,7 @@
 @extends('layouts.admin') 
 @include('admin.users.partials.ban')
 @include('admin.users.partials.unban')
+@include('admin.users.partials.delete')
 @section('title', 'User Management')
 
 @section('content')
@@ -101,22 +102,16 @@
                         </td>
 
                         <td class="px-4 py-2 rounded">
-                        <form action="{{ route('admin.users.destroy', $user->id) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Delete this user?');">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button
-                                        class="px-3 py-1 rounded-lg bg-red-100 text-red-700 font-semibold
-                                               hover:bg-red-200 transition">
-                                        Delete
-                                    </button>
+                        <button onclick="openDeleteModal({{ $user->id }})"
+                                    class="px-3 py-1 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition">
+                                Delete
+                            </button>
+                        </td>
                                     <td class="px-4 py-2">
                             @if ($user->is_banned)
                                 <button
                                     type="button"
-                                    onclick="openUnbanModal({{ $user->id }}, '{{ $user->ban->motive ?? 'Not Available' }}')"
+                                    onclick="openUnbanModal({{ $user->id }}, '{{ $user->ban->motive ?? 'Not Available' }}','{{ $user->ban->ban_appeal->appeal ?? 'Not Available' }}')"
 
                                     class="px-3 py-1 rounded-lg bg-blue-100 text-blue-700 font-semibold
                                         hover:bg-blue-200 transition">

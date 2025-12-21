@@ -1,20 +1,16 @@
 <div id="deleteModal" 
      class="hidden fixed backdrop-blur-sm inset-0 flex items-center justify-center z-50">
-
     <div class="bg-white p-8 rounded-2xl shadow-xl w-96 text-center text-xl">
-
         <h2 class="text-2xl font-bold text-gray-800">Are you sure?</h2>
         <p class="text-gray-600 mt-2 text-xl">
-            Do you really want to delete your account? This action cannot be undone.
+            Do you really want to delete this user? This action cannot be undone.
         </p>
-
         <div class="mt-6 flex justify-center gap-4">
             <!-- Cancel -->
             <button onclick="closeDeleteModal()"
-                class="px-6 py-3 bg-emerald-900 text-lg text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center font-medium ">
+                    class="px-6 py-3 bg-emerald-900 text-lg text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow text-center font-medium">
                 No
             </button>
-
             <!-- Confirm -->
             <form id="deleteUserForm" action="" method="POST">
                 @csrf
@@ -25,17 +21,16 @@
                 </button>
             </form>
         </div>
-
     </div>
 </div>
 
 <script>
-    function openDeleteModal() {
+    function openDeleteModal(userId) {
         const form = document.getElementById('deleteUserForm');
-        form.action = "{{ route('users.destroy') }}";
+        form.action = `/admin/users/${userId}`;
         document.getElementById('deleteModal').classList.remove('hidden');
     }
-
+    
     function closeDeleteModal() {
         document.getElementById('deleteModal').classList.add('hidden');
     }

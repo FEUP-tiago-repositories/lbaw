@@ -675,7 +675,7 @@ VALUES (
         '22:00:00',
         60,
         30,
-        3,
+        4,
         4,
         4,
         3,
@@ -11680,29 +11680,14 @@ VALUES (
         TRUE
     ),
     (
-        2,
-        '/images/uploads/spaces/2/badminton_boavista_inside.jpg',
-        FALSE
-    ),
-    (
         3,
         '/images/uploads/spaces/3/iron_gym.webp',
         TRUE
     ),
     (
-        3,
-        '/images/uploads/spaces/3/iron_gym_equipment.jpg',
-        FALSE
-    ),
-    (
         4,
         '/images/uploads/spaces/4/biking_park.jpg',
         TRUE
-    ),
-    (
-        4,
-        '/images/uploads/spaces/4/gaia_biking_trail.jpg',
-        FALSE
     ),
     (
         5,

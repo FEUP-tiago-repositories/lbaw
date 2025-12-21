@@ -285,7 +285,7 @@ VALUES (
     'nibh.quisque.nonummy@hotmail.edu',
     '962922371',
     FALSE,
-    TRUE,
+    FALSE,
     'NXV25EBT2MC',
     '1989-04-05',
     'images/profile.jpg'
@@ -344,7 +344,7 @@ VALUES (
     'lucy_schroeder',
     'quisque.tincidunt@hotmail.couk',
     '979822651',
-    TRUE,
+    FALSE,
     FALSE,
     'URS83TKB1JK',
     '1990-12-28',
@@ -3663,13 +3663,13 @@ VALUES
     (3, 10, 'We''re happy you liked the courts! Sorry for the café wait — we''re hiring more staff.', '2026-02-09 13:10:00'),
     (3, 12, 'Thank you for your feedback! We''ll renovate the locker rooms early next year.', '2026-02-11 09:40:00');
 
-INSERT INTO discount (space_id, percentage, start_date, end_date)
+INSERT INTO discount (space_id, code, percentage, start_date, end_date)
 VALUES 
-    (1, 15.0, '2026-01-25 00:00:00', '2026-02-10 23:59:00'),
-    (3, 10.0, '2026-01-20 00:00:00', '2026-02-05 23:59:00'),
-    (5, 20.0, '2026-02-01 00:00:00', '2026-02-07 23:59:00'),
-    (7, 25.0, '2026-02-03 00:00:00', '2026-02-20 23:59:00'),
-    (8, 30.0, '2026-01-29 00:00:00', '2026-02-15 23:59:00');
+    (1, 'PROMO15', 15.0, '2026-01-25 00:00:00', '2026-02-10 23:59:00'),
+    (3, 'DISC10', 10.0, '2026-01-20 00:00:00', '2026-02-05 23:59:00'),
+    (5, 'FLASH20', 20.0, '2026-02-01 00:00:00', '2026-02-07 23:59:00'),
+    (7, 'SPECIAL25', 25.0, '2025-12-03 00:00:00', '2026-02-20 23:59:00'),
+    (8, 'SUPER30', 30.0, '2026-01-29 00:00:00', '2026-02-15 23:59:00');
 
 INSERT INTO notification (user_id, time_stamp, is_read, content)
 VALUES

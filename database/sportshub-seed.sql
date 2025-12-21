@@ -285,7 +285,7 @@ VALUES (
         'nibh.quisque.nonummy@hotmail.edu',
         '962922371',
         FALSE,
-        TRUE,
+        FALSE,
         'NXV25EBT2MC',
         '1989-04-05',
         'images/profile.jpg'
@@ -344,7 +344,7 @@ VALUES (
         'lucy_schroeder',
         'quisque.tincidunt@hotmail.couk',
         '979822651',
-        TRUE,
+        FALSE,
         FALSE,
         'URS83TKB1JK',
         '1990-12-28',
@@ -11578,36 +11578,42 @@ VALUES (
 INSERT INTO
     discount (
         space_id,
+        code,
         percentage,
         start_date,
         end_date
     )
 VALUES (
         1,
+        'PROMO15',
         15.0,
-        '2026-01-25 00:00:00',
+        '2025-01-25 00:00:00',
         '2026-02-10 23:59:00'
     ),
     (
         3,
+        'DISC10',
         10.0,
         '2026-01-20 00:00:00',
         '2026-02-05 23:59:00'
     ),
     (
         5,
+        'FLASH20',
         20.0,
         '2026-02-01 00:00:00',
         '2026-02-07 23:59:00'
     ),
     (
         7,
+        'SPECIAL25',
         25.0,
         '2026-02-03 00:00:00',
         '2026-02-20 23:59:00'
     ),
     (
         8,
+        'SUPER30',
         30.0,
         '2026-01-29 00:00:00',
         '2026-02-15 23:59:00'

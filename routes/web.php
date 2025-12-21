@@ -35,6 +35,7 @@ Route::get('/about-us', [StaticController::class, 'about'])->name('about');     
 Route::get('/faq', [StaticController::class, 'faq'])->name('faq');                        // R103
 Route::get('/terms-of-service', [StaticController::class, 'terms'])->name('terms');        // R104
 Route::get('/contact-us', [StaticController::class, 'contact'])->name('contact');          // R105
+Route::get('/services', [StaticController::class, 'services'])->name('services'); // R106
 
 // ============================================
 // M02: AUTHENTICATION (R201-R207)

@@ -138,6 +138,29 @@ making a booking --}}
                     <p class="text-xl text-red-400 my-4 justify-center items-center font-semibold">No Images Yet</p>
                 </div>
             @endif
+
+            @if($space->discounts && $space->discounts->count() > 0)
+                <div onclick="openDiscountModal()" class="mt-6 cursor-pointer group relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 p-6 shadow-lg transition-transform hover:scale-[1.01]">
+                    <div class="relative z-10 flex items-center justify-between text-white">
+                        <div class="flex items-center gap-4">
+                            <div class="rounded-full bg-white/20 p-3 backdrop-blur-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Discounts Available!</h3>
+                                <p class="text-emerald-50">There are active coupons for this space. Click to view them.</p>
+                            </div>
+                        </div>
+                        <button class="rounded-lg bg-white px-5 py-2.5 font-bold text-emerald-700 shadow-sm transition group-hover:bg-emerald-50">
+                            View Codes
+                        </button>
+                    </div>
+                    <div class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10 blur-xl"></div>
+                    <div class="absolute -bottom-6 left-10 h-32 w-32 rounded-full bg-white/10 blur-xl"></div>
+                </div>
+            @endif
             <div class="flex">
                 <div class="flex-[5] mr-4">
                     {{-- Section About and Reviews and Calendar --}}
@@ -308,7 +331,7 @@ making a booking --}}
                     </div>
                 </div>
                 @if(!Auth::check() or !auth()->user()->businessOwner)
-                    <div class="flex-[3]">
+                    <div class="flex-[3] mt-6">
                         @include('bookings.partials.calendar-widget', ['space' => $space])
                     </div>
                 @endif
@@ -316,6 +339,8 @@ making a booking --}}
         </section>
     </main>
     @include('bookings.modals.payment-modal')
+    @include('partials.discounts')
+</div>
 @endsection
 
 @push('scripts')
@@ -323,4 +348,5 @@ making a booking --}}
     <script src="{{ asset('js/booking.js') }}"></script>
     <script src="{{ asset('js/review.js') }}"></script>
     <script src="{{ asset('js/favoriteToggle.js') }}"></script>
+    <script src="{{ asset('js/discount_modal.js') }}"></script>
 @endpush

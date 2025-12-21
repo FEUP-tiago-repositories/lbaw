@@ -94,10 +94,29 @@
             </div>
 
             <!-- Total -->
-            <div class="mt-6 px-4 py-3 bg-gray-50 rounded-xl text-xl">
+            <div class="mt-6 pt-4 border-t border-gray-200">
+                <label class="block font-medium text-gray-700 mb-2">Promo Code</label>
+                <div class="flex gap-2">
+                    <input type="text" 
+                        id="promoCodeInput" 
+                        placeholder="DISCOUNT20" 
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase">
+                    <button type="button" 
+                            onclick="applyPromoCode()"
+                            class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition">
+                        Apply
+                    </button>
+                </div>
+                <p id="promoMessage" class="text-sm mt-2 hidden"></p>
+            </div>
+
+            <div class="mt-4 p-4 bg-gray-50 rounded-lg text-xl">
                 <div class="flex justify-between items-center">
                     <span class="text-gray-600 font-medium">Total:</span>
-                    <span id="paymentAmount" class="font-bold text-gray-900">€0.00</span>
+                    <div class="text-right">
+                        <span id="originalPriceDisplay" class="block text-sm text-gray-400 line-through hidden">€0.00</span>
+                        <span id="paymentAmount" class="font-bold text-gray-900">€0.00</span>
+                    </div>
                 </div>
             </div>
         </div>

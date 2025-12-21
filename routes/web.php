@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Auth\RecoverController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\DiscountController;
 
 // Admin Controllers
 use App\Http\Controllers\HomeController;
@@ -164,4 +165,12 @@ Route::middleware([\App\Http\Middleware\CheckAdmin::class])->prefix('admin')->na
     Route::get('/reviews', [ReviewManagementController::class, 'index'])->name('reviews.index');     // R516
     Route::get('/reviews/{id}', [ReviewManagementController::class, 'show'])->name('reviews.show');  // R517
     Route::delete('/reviews/{id}', [ReviewManagementController::class, 'destroy'])->name('reviews.destroy'); // R518
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
+    Route::post('/discounts', [DiscountController::class, 'store'])->name('discounts.store');
+    Route::put('/discounts/{discount}', [DiscountController::class, 'update'])->name('discounts.update');
+    Route::delete('/discounts/{discount}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
+    Route::post('/bookings/check-discount', [BookingController::class, 'checkDiscount'])->name('bookings.check-discount');
 });

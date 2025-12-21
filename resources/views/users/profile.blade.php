@@ -169,6 +169,10 @@
                                     class="px-4 py-2 bg-emerald-900 text-white rounded-xl hover:bg-emerald-200 hover:text-black transition shadow">
                                     Manage Reservations and Schedules
                                 </a>
+                                <a href="{{ route('discounts.index') }}" 
+                                    class="px-5 py-2.5 bg-emerald-900 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition shadow">
+                                    Discounts
+                                </a>
                                 <a href="{{ route('notifications.index') }}"
                                     class="relative inline-flex items-center gap-1 justify-center px-4 py-2 bg-emerald-900 text-white rounded-xl hover:bg-emerald-200 hover:text-black transition shadow">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">

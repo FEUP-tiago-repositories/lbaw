@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
@@ -34,9 +33,13 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $authUser, User $user): bool
     {
-        return false;
+        if ($authUser->id !== $user->id) {
+            abort(403, 'You are not allowed to edit the information of this user.');
+        }
+
+        return true;
     }
 
     /**

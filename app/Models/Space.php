@@ -102,4 +102,11 @@ class Space extends Model
     {
         return $this->hasMany(Discount::class);
     }
+    public function activeDiscounts()
+    {
+        $now = now();
+        return $this->hasMany(Discount::class)
+                    ->where('start_date', '<=', $now)
+                    ->where('end_date', '>=', $now);
+    }
 }

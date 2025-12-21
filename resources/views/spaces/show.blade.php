@@ -140,7 +140,7 @@ making a booking --}}
                 </div>
             @endif
 
-            @if($space->discounts && $space->discounts->count() > 0)
+            @if($space->activeDiscounts && $space->activeDiscounts->count() > 0)
                 <div onclick="openDiscountModal()" class="mt-6 cursor-pointer group relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 p-6 shadow-lg transition-transform hover:scale-[1.01]">
                     <div class="relative z-10 flex items-center justify-between text-white">
                         <div class="flex items-center gap-4">

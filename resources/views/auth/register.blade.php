@@ -25,7 +25,8 @@
                                 required minlength="2" maxlength="15"
                                 pattern="[A-Za-z]+"
                                 title="First name can only contain letters."
-                                class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="John">
                         </div>
                     {{-- Surname --}}
                     <div>
@@ -35,7 +36,8 @@
                             required minlength="2" maxlength="15"
                             pattern="[A-Za-z]+"
                             title="Surname can only contain letters."
-                            class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Doe">
                     </div>
                     {{-- Username --}}
                     <div>

@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Notification;
+use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -33,45 +36,44 @@ class UserController extends Controller
     public function store(Request $request)
     {
         // Validate the form data
-    $request->validate([
-        'first_name' => ['required|string|max:250'],
-        'surname' => ['required|string|max:250'],
-        'user_name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'email', 'unique:user,email'],
-        'phone_no' => ['required', 'string'],
-        'birth_date' => ['required', 'date'],
-        'password' => ['required', 'string', 'min:6'],
-        'profile_pic_url' => ['nullable', 'image', 'max:2048'],
-        'account_type' => ['required', 'in:customer,business'],
-    ]);
- 
+        $request->validate([
+            'first_name' => ['required|string|max:250'],
+            'surname' => ['required|string|max:250'],
+            'user_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:user,email'],
+            'phone_no' => ['required', 'string'],
+            'birth_date' => ['required', 'date'],
+            'password' => ['required', 'string', 'min:6'],
+            'profile_pic_url' => ['nullable', 'image', 'max:2048'],
+            'account_type' => ['required', 'in:customer,business'],
+        ]);
 
-    $profileImagePath = null;
+        $profileImagePath = null;
 
-    if ($request->hasFile('profile_pic_url')) {
-        $profileImagePath = $request->file('profile_pic_url')->store(
-            'images/uploads/profiles', 
-            'public'
-        );
-    }
-    
-    $user = User::create([
-        'first_name' => $request->first_name,
-        'surname' => $request->surname,
-        'user_name' => $request->user_name,
-        'email' => $request->email,
-        'phone_no' => $request->phone_no,
-        'birth_date' => $request->birth_date,
-        'password' => Hash::make($request->password), // hash required for login
-        'profile_pic_url' => $profileImagePath,  
-        'is_banned' => false,
-        'is_deleted' => false,
-    ]);
-    
-    Auth::login($user);
+        if ($request->hasFile('profile_pic_url')) {
+            $profileImagePath = $request->file('profile_pic_url')->store(
+                'images/uploads/profiles',
+                'public'
+            );
+        }
 
-    return redirect()->route('users.show', $user->id)
-                     ->with('success', 'Conta criada com sucesso!');
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'surname' => $request->surname,
+            'user_name' => $request->user_name,
+            'email' => $request->email,
+            'phone_no' => $request->phone_no,
+            'birth_date' => $request->birth_date,
+            'password' => Hash::make($request->password), // hash required for login
+            'profile_pic_url' => $profileImagePath,
+            'is_banned' => false,
+            'is_deleted' => false,
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('users.show', $user->id)
+            ->with('success', 'Conta criada com sucesso!');
     }
 
     /**
@@ -95,9 +97,9 @@ class UserController extends Controller
         }
 
         $unreadCount = Notification::where('user_id', $user->id)
-        ->where('is_read', false)
-        ->count();
-        
+            ->where('is_read', false)
+            ->count();
+
         return view('users.profile', compact('user', 'unreadCount', 'favoritedSpaces'));
     }
 
@@ -107,8 +109,10 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
+        $this->authorize('update', $user);
+
         return view('users.edit', compact('user'));
-    }    
+    }
 
     /**
      * Update the specified resource in storage.
@@ -116,6 +120,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
+        $this->authorize('update', $user);
 
         $user->first_name = $request->first_name;
         $user->surname = $request->surname;
@@ -126,9 +131,9 @@ class UserController extends Controller
 
         if ($request->hasFile('profile_pic_url')) {
             $file = $request->file('profile_pic_url');
-            $profilePicName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $profilePicName = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
             $path = $request->file('profile_pic_url')->move(public_path('images/uploads/profiles'), $profilePicName);
-            $profilePicPath = 'images/uploads/profiles/' . $profilePicName;
+            $profilePicPath = 'images/uploads/profiles/'.$profilePicName;
             $user->profile_pic_url = $profilePicPath;
             $user->save();
         }
@@ -148,7 +153,7 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->route('users.show', $user->id)
-                        ->with('success', 'Perfil atualizado com sucesso!');
+            ->with('success', 'Perfil atualizado com sucesso!');
     }
 
     /**

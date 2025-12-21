@@ -1,4 +1,4 @@
-<footer class="bg-emerald-800 text-white mt-auto">
+<footer class="sticky top-[100vh] bg-emerald-800 text-white mt-auto">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <!-- Left side - Copyright -->

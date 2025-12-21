@@ -3,9 +3,20 @@
     <div class="flex items-center gap-6">
         {{-- Left side: Rating number, stars, review count --}}
         <div class="flex flex-col items-center align-middle">
-            <p class="text-5xl font-bold text-gray-900">
-                {{ number_format($averageRating, 1) }}
-            </p>
+            @if ($averageRating <= 3.0)
+                <p class="text-5xl font-bold text-red-400">
+                    {{ number_format($averageRating, 1) }}
+                </p>
+            @elseif ($averageRating > 3.0 && $averageRating <= 4.0)
+                <p class="text-5xl font-bold text-yellow-400">
+                    {{ number_format($averageRating, 1) }}
+                </p>
+            @else
+                <p class="text-5xl font-bold text-emerald-500">
+                    {{ number_format($averageRating, 1) }}
+                </p>
+            @endif
+
             <div class="flex items-center gap-1 mt-2">
                 @for($i = 1; $i <= 5; $i++)
                     <svg class="w-5 h-5 {{ $i <= round($averageRating) ? 'text-yellow-400' : 'text-gray-300' }}"

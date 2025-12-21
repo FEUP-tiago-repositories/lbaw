@@ -33,7 +33,7 @@
                 @endforelse
             </div>
             {{-- Mapa com todos os espaços --}}
-            <div class="flex-[2] sticky top-4 self-start h-[900px] bg-emerald-900 rounded-2xl shadow-xl p-2">
+            <div class="flex-[2] sticky top-4 self-start h-[900px] bg-emerald-800 rounded-3xl shadow-xl p-2">
                 @include('partials.map', [
                     'mapId' => 'homeMap',
                     'spaces' => $spaces,

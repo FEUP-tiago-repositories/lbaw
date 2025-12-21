@@ -279,6 +279,7 @@ class ScheduleController extends Controller
     /**
      * Store a new schedule (for owners)
      * POST /api/space/{space_id}/schedule
+     *
      */
     public function store(Request $request, $space_id)
     {
@@ -306,10 +307,14 @@ class ScheduleController extends Controller
                 ], 403);
             }
 
+            // Validation com campos opcionais
             $validator = Validator::make($request->all(), [
                 'date' => 'required|date|after_or_equal:today',
-                'time' => 'required',
-                'max_capacity' => 'required|integer|min:1'
+                'time' => 'required_if:all_day,false',
+                'max_capacity' => 'required|integer|min:1',
+                'is_recurring' => 'boolean',
+                'end_date' => 'required_if:is_recurring,true|date|after_or_equal:date',
+                'all_day' => 'boolean'
             ]);
 
             if ($validator->fails()) {
@@ -319,41 +324,84 @@ class ScheduleController extends Controller
                 ], 422);
             }
 
-            // Combine date and time
-            $startTime = Carbon::parse($request->date . ' ' . $request->time);
+            $isRecurring = $request->boolean('is_recurring');
+            $allDay = $request->boolean('all_day');
+            $createdCount = 0;
+            $skippedCount = 0;
 
-            // Check if schedule already exists for this time
-            $existingSchedule = Schedule::where('space_id', $space_id)
-                ->where('start_time', $startTime)
-                ->first();
+            // Determinar datas para processar
+            $startDate = Carbon::parse($request->date);
+            $endDate = $isRecurring ? Carbon::parse($request->end_date) : $startDate;
 
-            if ($existingSchedule) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'A schedule already exists for this time slot'
-                ], 422);
+            // Determinar horários para processar
+            $times = [];
+            if ($allDay) {
+                // Gerar todos os time slots do espaço
+                $openingTime = Carbon::parse($space->opening_time);
+                $closingTime = Carbon::parse($space->closing_time);
+                $duration = $space->duration;
+
+                $currentTime = $openingTime->copy();
+                while ($currentTime->lt($closingTime)) {
+                    $times[] = $currentTime->format('H:i');
+                    $currentTime->addMinutes($duration);
+                }
+            } else {
+                $times[] = $request->time;
             }
 
-            // Create schedule (duration is in space, not in schedule)
-            $schedule = Schedule::create([
-                'space_id' => $space_id,
-                'start_time' => $startTime,
-                'max_capacity' => $request->max_capacity
-            ]);
+            // Criar schedules para cada combinação de data + hora
+            $currentDate = $startDate->copy();
+
+            while ($currentDate->lte($endDate)) {
+                foreach ($times as $time) {
+                    $startTime = Carbon::parse($currentDate->format('Y-m-d') . ' ' . $time);
+
+                    // Verificar se já existe
+                    $existingSchedule = Schedule::where('space_id', $space_id)
+                        ->where('start_time', $startTime)
+                        ->first();
+
+                    if ($existingSchedule) {
+                        $skippedCount++;
+                        continue;
+                    }
+
+                    // Criar schedule
+                    Schedule::create([
+                        'space_id' => $space_id,
+                        'start_time' => $startTime,
+                        'max_capacity' => $request->max_capacity
+                    ]);
+
+                    $createdCount++;
+                }
+
+                $currentDate->addDay();
+            }
+
+            // Mensagem de sucesso com detalhes
+            $message = "Successfully created {$createdCount} schedule(s)";
+            if ($skippedCount > 0) {
+                $message .= " ({$skippedCount} skipped because they already exist)";
+            }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Schedule created successfully',
-                'schedule' => $schedule
+                'message' => $message,
+                'created_count' => $createdCount,
+                'skipped_count' => $skippedCount
             ], 201);
+
         } catch (\Exception $e) {
             Log::error('Error in ScheduleController@store: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while creating the schedule'
+                'message' => 'An error occurred while creating the schedule(s)'
             ], 500);
         }
     }
+
 
     /**
      * Update schedule

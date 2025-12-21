@@ -42,7 +42,7 @@
         <form action="{{ route('spaces.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             {{-- Title --}}
-            <div class="mb-4">
+            <div class="mb-2">
                 <label for="title" class="block text-lg font-medium mb-2">Title *</label>
                 <input type="text" name="title" id="title" value="{{ old('title') }}"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
@@ -51,7 +51,7 @@
             </div>
 
             {{-- Sport Type --}}
-            <div class="mb-4">
+            <div class="mb-2">
                 <label for="sport_type_id" class="block text-lg font-medium mb-2">Sport Type *</label>
                 <select name="sport_type_id" id="sport_type_id"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
@@ -67,7 +67,7 @@
             </div>
 
             {{-- Address --}}
-            <div class="mb-4">
+            <div class="mb-2">
                 <label for="address" class="block text-lg font-medium mb-2">Address *</label>
                 <input type="text" name="address" id="address" value="{{ old('address') }}"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
@@ -76,7 +76,7 @@
             </div>
 
             {{-- Description --}}
-            <div class="mb-4">
+            <div class="mb-2">
                 <label for="description" class="block text-lg font-medium mb-2">Description *</label>
                 <textarea name="description" id="description"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
@@ -86,7 +86,7 @@
             </div>
 
             {{-- Phone Number --}}
-            <div class="mb-4">
+            <div class="mb-2">
                 <label for="phone_no" class="block text-lg font-medium mb-2">Phone Number *</label>
                 <input type="tel" name="phone_no" id="phone_no" value="{{ old('phone_no') }}"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
@@ -95,7 +95,7 @@
             </div>
 
             {{-- Email --}}
-            <div class="mb-4">
+            <div class="mb-2">
                 <label for="email" class="block text-lg font-medium mb-2">Email *</label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green- bg-gray-200 shadow-gray-200 shadow"
@@ -103,15 +103,15 @@
             </div>
 
             {{-- Action Buttons --}}
-            <div class="flex gap-4 mt-6">
-                <button type="submit"
-                    class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-medium cursor-pointer hover:shadow">
-                    Create Space
-                </button>
-                <a href="{{ route('spaces.index') }}"
-                    class="px-6 py-3 bg-white text-back rounded-lg hover:bg-gray-100 transition font-medium border-2 border-black hover:shadow">
+            <div class="flex gap-4 mt-4 justify-end">
+                <a href="{{  url()->previous() }}"
+                   class="px-6 py-2 bg-white text-back rounded-lg hover:bg-gray-100 transition font-medium border-2 border-black hover:shadow">
                     Cancel
                 </a>
+                <button type="submit"
+                    class="px-6 py-2 bg-emerald-800 text-white rounded-lg hover:bg-emerald-200 hover:text-black transition font-medium cursor-pointer hover:shadow">
+                    Create Space
+                </button>
             </div>
         </form>
     </div>

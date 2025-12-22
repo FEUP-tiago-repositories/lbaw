@@ -47,7 +47,7 @@
 
 #### HTML Validation Report
 
-Home Page: [Html Validation](HTML_Checker.pdf)
+Home Page: [PDF RESULTS](HTML_Checker.pdf)
 
 #### CSS Validation Report
 

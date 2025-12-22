@@ -22,26 +22,26 @@
             <h1 class="text-2xl font-bold mb-6">Create New User</h1>
 
             <div class="mb-4">
-                <label class="block font-semibold mb-1" for="user_name">Username</label>
-                <input type="text" name="user_name"
+                <label for="username" class="block font-semibold mb-1" for="user_name">Username</label>
+                <input id="username" type="text" name="user_name"
                        class="w-full border-gray-300 p-3 rounded-xl shadow-sm" required>
             </div>
 
             <div class="mb-4">
-                <label class="block font-semibold mb-1" for="email">Email</label>
-                <input type="email" name="email"
+                <label for="email" class="block font-semibold mb-1" for="email">Email</label>
+                <input id="email" type="email" name="email"
                        class="w-full border-gray-300 p-3 rounded-xl shadow-sm" required>
             </div>
 
             <div class="mb-4">
-                <label class="block font-semibold mb-1" for="phone_no">Phone</label>
-                <input type="text" name="phone_no"
+                <label for="phone" lass="block font-semibold mb-1" for="phone_no">Phone</label>
+                <input id="phone" type="text" name="phone_no"
                        class="w-full border-gray-300 p-3 rounded-xl shadow-sm">
             </div>
 
             <div class="mb-4">
-                <label class="block font-semibold mb-1" for="birth_date">Birth Date</label>
-                <input type="date" name="birth_date"
+                <label for="bday" class="block font-semibold mb-1" for="birth_date">Birth Date</label>
+                <input id="bday" type="date" name="birth_date"
                        class="w-full border-gray-300 p-3 rounded-xl shadow-sm">
             </div>
 
@@ -51,13 +51,13 @@
 
                 <div class="flex items-center gap-6">
 
-                    <label class="flex items-center gap-2">
-                        <input type="radio" name="account_type" value="customer" required {{ old('account_type') == 'customer' ? 'checked' : '' }}>
+                    <label for="rolec" class="flex items-center gap-2">
+                        <input id="rolec" type="radio" name="account_type" value="customer" required {{ old('account_type') == 'customer' ? 'checked' : '' }}>
                         <span>Customer</span>
                     </label>
 
-                    <label class="flex items-center gap-2">
-                        <input type="radio" name="account_type" value="business_owner" required {{ old('account_type') == 'business_owner' ? 'checked' : '' }}>
+                    <label for="rolebo" class="flex items-center gap-2">
+                        <input id="rolebo"type="radio" name="account_type" value="business_owner" required {{ old('account_type') == 'business_owner' ? 'checked' : '' }}>
                         <span>Business Owner</span>
                     </label>
 
@@ -68,14 +68,14 @@
             </div>
 
             <div class="mb-4">
-                <label class="block font-semibold mb-1">Profile Picture (optional)</label>
-                <input type="file" name="profile_pic_url"
+                <label for="pic" class="block font-semibold mb-1">Profile Picture (optional)</label>
+                <input id="pic" type="file" name="profile_pic_url"
                     class="w-full border-gray-300 rounded-xl p-3 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             <div class="mb-4">
-                <label class="block font-semibold mb-1" for="password">Password</label>
-                <input type="password" name="password"
+                <label for="password" class="block font-semibold mb-1" for="password">Password</label>
+                <input id="password" type="password" name="password"
                        class="w-full border-gray-300 p-3 rounded-xl shadow-sm" required>
             </div>
 

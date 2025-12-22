@@ -7,7 +7,8 @@
 
         {{-- Header --}}
         <div class="relative flex items-center gap-8">
-            <img src="{{ $user->profile_pic_url ?? 'https://via.placeholder.com/120' }}"
+            <img src="{{ asset($user->profile_pic_url) ?? asset('images/profile.jpg') }}"
+                alt="profile picture"
                 class="w-28 h-28 rounded-full object-cover border-2 border-gray-200 shadow-sm">
 
             <div>

@@ -24,16 +24,16 @@
             @csrf
 
             <div class="mb-4">
-                <label class="block font-medium text-gray-700 mb-1">Email</label>
-                <input type="email" name="email"
+                <label for="email" class="block font-medium text-gray-700 mb-1">Email</label>
+                <input id="email" type="email" name="email"
                     class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     placeholder="example@gmail.com"
                     required>
             </div>
 
             <div class="mb-4">
-                <label class="block font-medium text-gray-700 mb-1">Password</label>
-                <input type="password" name="password"
+                <label for="password" class="block font-medium text-gray-700 mb-1">Password</label>
+                <input id="password" type="password" name="password"
                     class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Minimum 6 characters"
                     required>

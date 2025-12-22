@@ -90,6 +90,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 @foreach($space->media as $media)
                     <img src="{{ $media->media_url }}"
+                         alt="space image"
                          class="w-full h-40 object-cover rounded-lg border">
                 @endforeach
             </div>

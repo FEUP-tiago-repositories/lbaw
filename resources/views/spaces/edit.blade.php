@@ -106,6 +106,8 @@
 
             @if($space->coverImage)
                 <img src="{{ $space->coverImage->media_url }}"
+                    id="coverPreview"
+                    alt="space cover image"
                     class="w-full h-56 object-cover rounded-xl mb-3">
             @else
                 <p class="text-gray-500">No cover image</p>
@@ -113,6 +115,7 @@
 
             <label class="block text-lg font-medium mb-2">Replace Cover Image</label>
             <input type="file" name="cover_image"
+                data-preview="coverPreview"
                 class="w-full rounded-lg px-4 py-2 bg-gray-200"
                 accept="image/*">
         </div>
@@ -123,6 +126,7 @@
                 @foreach($space->media->where('is_cover', false) as $image)
                     <div class="relative group" id="image-{{ $image->id }}">
                         <img src="{{ $image->media_url }}"
+                            alt="space gallery image"
                             class="w-full h-32 object-cover rounded-lg shadow-sm">
 
                         {{-- Delete button overlay --}}
@@ -131,6 +135,7 @@
                             <input type="checkbox"
                                 name="delete_images[]"
                                 value="{{ $image->id }}"
+                                data-delete-target="image-{{ $image->id }}"
                                 class="hidden">
                             Delete?
                         </label>
@@ -145,7 +150,16 @@
                 name="gallery_images[]"
                 multiple
                 accept="image/*"
+                data-gallery-preview="newGalleryPreview"
                 class="w-full rounded-lg px-4 py-2 bg-gray-200">
+
+            {{-- image preview --}}
+            <div class="mt-4">
+                <div
+                    id="newGalleryPreview"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                </div>
+            </div>
         </div>
 
 
@@ -177,3 +191,5 @@
     </form>
 </div>
 @endsection
+<script src="{{ asset('js/image-preview.js') }}"></script>
+<script src="{{ asset('js/gallery-images.js') }}"></script>

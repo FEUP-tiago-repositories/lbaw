@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin')</title>
-    <title>{{ config('app.name', 'SportsHub') }}</title>
-    {{-- CSS --}}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-<head>
+    <title>Reset Password</title>
+</head>
 @section('content')
 <div class="fixed inset-0 flex items-center justify-center bg-gray-100">
     <div class="bg-white p-8 rounded-2xl shadow-xl w-96 text-center text-xl">
@@ -29,12 +25,12 @@
         <form method="POST" action="{{ route('password.update') }}">
             @csrf
             <input type="hidden" name="token" value="{{ $token }}">
-
-            <input type="password" name="password" placeholder="New password"
+            <label for="password" class="block text-gray-700 text-sm font-medium mb-1">New Password</label>
+            <input type="password" name="password" placeholder="New password" is="password"
                    required
                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm mb-4">
-
-            <input type="password" name="password_confirmation" placeholder="Confirm new password"
+            <label for="password_confirmation" class="block text-gray-700 text-sm font-medium mb-1">Confirm New Password</label>
+            <input type="password" name="password_confirmation" placeholder="Confirm new password" id="password_confirmation"
                    required
                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm mb-4">
 

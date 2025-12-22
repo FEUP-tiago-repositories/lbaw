@@ -107,8 +107,20 @@
             <div>
                 <label class="block text-gray-700 font-medium mb-1">Profile Picture</label>
                 <div class="flex items-center gap-4">
-                    <input type="file" name="profile_pic_url"
-                           class="block w-full text-gray-700">
+                    <img
+                        id="profilePreview"
+                        src="{{ $user->profile_pic_url ? asset($user->profile_pic_url) : asset('images/profile.jpg') }}"
+                        alt="Profile preview"
+                        class="w-20 h-20 rounded-full object-cover border-gray-200 shadow">
+                    
+
+                    <input
+                        type="file"
+                        name="profile_pic_url"
+                        accept="image/png,image/jpeg,image/jpg,image/gif"
+
+                        class="block w-full text-gray-700"
+                        data-preview="profilePreview">
                 </div>
             </div>
             <hr class="my-6">
@@ -127,3 +139,4 @@
     </div>
 </div>
 @endsection
+<script src="{{ asset('js/image-preview.js') }}"></script>

@@ -19,7 +19,8 @@
 
                     {{-- Header --}}
                     <div class="flex items-center gap-8">
-                        <img src="{{ $user->profile_pic_url ? asset($user->profile_pic_url) : 'https://via.placeholder.com/120' }}"
+                        <img src="{{ $user->profile_pic_url ? asset($user->profile_pic_url) : asset('images/profile.jpg') }}"
+                            alt="profile picture"
                             class="w-20 h-20 rounded-full object-cover border-gray-200 shadow">
                         <div class="space-y-2">
                             <h1 class="text-4xl font-bold text-gray-900">

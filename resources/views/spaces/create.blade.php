@@ -103,9 +103,16 @@
             </div>
             
             {{-- Cover Picture --}}
+            <label class="block text-lg font-medium mb-2">Cover Picture</label>
             <div class="mt-4">
-                <label class="block text-lg font-medium mb-2">Cover Picture *</label>
+                <div
+                    id="CoverPreview"
+                    >
+                </div>
+            </div>
+            <div class="mt-4">
                 <input type="file" name="cover_image"
+                    data-gallery-preview="CoverPreview"
                     class="w-full rounded-lg px-4 py-2 bg-gray-200"
                     accept="image/*" required>
             </div>
@@ -115,7 +122,15 @@
                 <label class="block text-lg font-medium mb-2">Other Pictures</label>
                 <input type="file" name="gallery_images[]"
                     class="w-full rounded-lg px-4 py-2 bg-gray-200"
+                    data-gallery-preview="GalleryPreview"
                     accept="image/*" multiple>
+            </div>
+            {{-- image preview --}}
+            <div class="mt-4">
+                <div
+                    id="GalleryPreview"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                </div>
             </div>
 
 
@@ -133,3 +148,4 @@
         </form>
     </div>
 @endsection
+<script src="{{ asset('js/gallery-images.js') }}"></script>

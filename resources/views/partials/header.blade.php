@@ -1,9 +1,11 @@
-<nav class="navbar h-20 mx-auto text-lg flex items-center px-20 py-4 justify-between bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out">
-    <div>
-        <a href="{{ route('home') }}"
-            class="hover:text-emerald-400">Home</a>
-        <a href="{{ route('spaces.index') }}"
-            class="ml-6 hover:text-emerald-400">Sports Spaces</a>
+<nav class="navbar h-20 mx-auto text-lg flex items-center px-64 py-4 justify-between bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out">
+    <div class="flex items-center gap-6">
+        <a href="{{ route('home') }}" class="flex items-center">
+            <img src="{{ asset('images/logo2.svg') }}" alt="SportsHub Logo" class="h-9 w-auto">
+        </a>
+        <div class="flex items-center gap-6">
+            <a href="{{ route('spaces.index') }}" class="ml-6 hover:text-emerald-400">Sports Spaces</a>
+        </div>
     </div>
 
     {{-- Input de search --}}
@@ -17,7 +19,7 @@
         </div>
         <button type="submit" class="bg-emerald-800 font-medium text-white py-2 px-5 rounded-xl hover:bg-emerald-200 hover:text-black">Search</button>
     </form>
-    
+
     <div class="flex items-center gap-4">
         @auth {{-- -If user is authenticated --}}
             <a href="{{ route('users.show', Auth::id()) }}" class="hover:text-emerald-400">
@@ -40,9 +42,19 @@
 
             </a>
             <a href="{{ route('logout') }}"
-                class="ml-6 hover:text-emerald-400"
+                class="ml-2 hover:text-emerald-400 inline-flex items-center gap-1"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 Logout
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="22" height="22" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <!-- porta -->
+                    <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/>
+                    <!-- seta de saída -->
+                    <path d="M14 12h7"/>
+                    <path d="M18 8l3 4-3 4"/>
+                </svg>
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf

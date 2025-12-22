@@ -1,11 +1,22 @@
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 px-10 py-4">
     {{-- Overall Rating Display --}}
-    <div class="flex items-start gap-6">
+    <div class="flex items-center gap-6">
         {{-- Left side: Rating number, stars, review count --}}
-        <div class="flex flex-col items-center">
-            <p class="text-5xl font-bold text-gray-900">
-                {{ number_format($averageRating, 1) }}
-            </p>
+        <div class="flex flex-col items-center align-middle">
+            @if ($averageRating <= 3.0)
+                <p class="text-5xl font-bold text-red-400">
+                    {{ number_format($averageRating, 1) }}
+                </p>
+            @elseif ($averageRating > 3.0 && $averageRating <= 4.0)
+                <p class="text-5xl font-bold text-yellow-400">
+                    {{ number_format($averageRating, 1) }}
+                </p>
+            @else
+                <p class="text-5xl font-bold text-emerald-500">
+                    {{ number_format($averageRating, 1) }}
+                </p>
+            @endif
+
             <div class="flex items-center gap-1 mt-2">
                 @for($i = 1; $i <= 5; $i++)
                     <svg class="w-5 h-5 {{ $i <= round($averageRating) ? 'text-yellow-400' : 'text-gray-300' }}"
@@ -23,7 +34,7 @@
         {{-- Right side: Category ratings with bars --}}
         <div class="flex-1">
             {{-- Environment Rating --}}
-            <div class="mb-3">
+            <div class="mb-1">
                 <div class="flex items-center justify-between mb-1">
                     <span class="text-sm font-medium text-gray-700">Environment</span>
                     <span class="text-sm font-semibold text-gray-900">{{ number_format($avgEnvironment, 1) }}</span>
@@ -35,7 +46,7 @@
             </div>
 
             {{-- Equipment Rating --}}
-            <div class="mb-3">
+            <div class="mb-1">
                 <div class="flex items-center justify-between mb-1">
                     <span class="text-sm font-medium text-gray-700">Equipment</span>
                     <span class="text-sm font-semibold text-gray-900">{{ number_format($avgEquipment, 1) }}</span>
@@ -47,7 +58,7 @@
             </div>
 
             {{-- Service Rating --}}
-            <div>
+            <div class="mb-1">
                 <div class="flex items-center justify-between mb-1">
                     <span class="text-sm font-medium text-gray-700">Service</span>
                     <span class="text-sm font-semibold text-gray-900">{{ number_format($avgService, 1) }}</span>

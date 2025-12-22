@@ -12,7 +12,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
                 <a href="{{ route('users.show', Auth::id()) }}" class="text-emerald-600 hover:text-emerald-400">
-                    Profile of {{ Auth::user()->user_name }}
+                    Profile of {{ Auth::user()->first_name }} {{ Auth::user()->surname }}
                 </a>
                 <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -25,7 +25,7 @@
                 </svg>
                 <p>Reservations for {{ $space->title }}</p>
             </div>
-            
+
             <!-- Page Header -->
             <div class="flex items-center justify-between mb-6">
                 <div>
@@ -63,6 +63,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
                         Calendar View
+                    </button>
+
+                    <!-- Add Schedule Button -->
+                    <button onclick="openScheduleModal()"
+                            class="inline-flex items-center px-4 py-2 rounded-lg font-medium transition bg-emerald-600 text-white hover:bg-emerald-700 ml-auto">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Add Schedule
                     </button>
                 </div>
 
@@ -135,10 +144,10 @@
                                 </svg>
                                 last week
                             </button>
-                            
+
                             <div class="flex items-center gap-4">
                                 <!-- Day Selector -->
-                                <select id="day-select" onchange="updateDateFromSelectors()" 
+                                <select id="day-select" onchange="updateDateFromSelectors()"
                                         class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                                     @for($i = 1; $i <= 31; $i++)
                                         <option value="{{ $i }}" {{ $i == \Carbon\Carbon::parse($selectedDate)->day ? 'selected' : '' }}>
@@ -148,7 +157,7 @@
                                 </select>
 
                                 <!-- Month Selector -->
-                                <select id="month-select" onchange="updateDateFromSelectors()" 
+                                <select id="month-select" onchange="updateDateFromSelectors()"
                                         class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                                     @foreach(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $index => $month)
                                         <option value="{{ $index + 1 }}" {{ ($index + 1) == \Carbon\Carbon::parse($selectedDate)->month ? 'selected' : '' }}>
@@ -158,7 +167,7 @@
                                 </select>
 
                                 <!-- Year Selector -->
-                                <select id="year-select" onchange="updateDateFromSelectors()" 
+                                <select id="year-select" onchange="updateDateFromSelectors()"
                                         class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                                     @for($year = 2024; $year <= 2026; $year++)
                                         <option value="{{ $year }}" {{ $year == \Carbon\Carbon::parse($selectedDate)->year ? 'selected' : '' }}>
@@ -166,8 +175,17 @@
                                         </option>
                                     @endfor
                                 </select>
+
+                                <!-- Today Button -->
+                                <button onclick="goToToday()"
+                                        class="px-4 py-2 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded-lg font-medium transition flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Today
+                                </button>
                             </div>
-                            
+
                             <button onclick="changeWeek(1)" class="px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition flex items-center gap-2">
                                 next week
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,7 +201,7 @@
                                 $currentDayOfWeek = \Carbon\Carbon::parse($selectedDate)->dayOfWeekIso - 1;
                             @endphp
                             @foreach($weekDays as $index => $day)
-                                <button onclick="goToDayOfWeek({{ $index }})" 
+                                <button onclick="goToDayOfWeek({{ $index }})"
                                         class="text-center py-2 rounded-lg font-semibold transition
                                                {{ $index == $currentDayOfWeek ? 'bg-emerald-600 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
                                     {{ $day }}
@@ -207,41 +225,83 @@
                                         <p class="text-gray-500">No time slots for this day</p>
                                     </div>
                                 @else
-                                    @foreach($timeline as $slot)
+                                    @foreach($timeline as $index => $slot)
                                         @php
-                                            $percentage = $slot['occupancy_percentage'];
-                                            if ($percentage >= 90) {
-                                                $bgColor = 'bg-red-50 border-red-300 hover:bg-red-100';
-                                                $textColor = 'text-red-800';
-                                                $dotColor = 'bg-red-500';
-                                            } elseif ($percentage >= 70) {
-                                                $bgColor = 'bg-yellow-50 border-yellow-300 hover:bg-yellow-100';
-                                                $textColor = 'text-yellow-800';
-                                                $dotColor = 'bg-yellow-500';
+                                            // Check if slot has a schedule
+                                            if (!$slot['has_schedule']) {
+                                                // Gray slot without schedule
+                                                $bgColor = 'bg-gray-100 border-gray-300 hover:bg-gray-200';
+                                                $textColor = 'text-gray-500';
+                                                $dotColor = 'bg-gray-400';
                                             } else {
-                                                $bgColor = 'bg-green-50 border-green-300 hover:bg-green-100';
-                                                $textColor = 'text-green-800';
-                                                $dotColor = 'bg-green-500';
+                                                // Slot with schedule - color by occupancy
+                                                $percentage = $slot['occupancy_percentage'];
+                                                if ($percentage >= 90) {
+                                                    $bgColor = 'bg-red-50 border-red-300 hover:bg-red-100';
+                                                    $textColor = 'text-red-800';
+                                                    $dotColor = 'bg-red-500';
+                                                } elseif ($percentage >= 70) {
+                                                    $bgColor = 'bg-yellow-50 border-yellow-300 hover:bg-yellow-100';
+                                                    $textColor = 'text-yellow-800';
+                                                    $dotColor = 'bg-yellow-500';
+                                                } else {
+                                                    $bgColor = 'bg-green-50 border-green-300 hover:bg-green-100';
+                                                    $textColor = 'text-green-800';
+                                                    $dotColor = 'bg-green-500';
+                                                }
                                             }
                                         @endphp
-                                        <button onclick="showSlotDetails({{ $slot['schedule']->id }})" 
-                                                data-slot-id="{{ $slot['schedule']->id }}"
-                                                class="slot-button w-full text-left p-3 border-b border-l-4 {{ $bgColor }} transition cursor-pointer">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="w-2 h-2 rounded-full {{ $dotColor }}"></div>
-                                                    <span class="font-semibold {{ $textColor }}">{{ $slot['time'] }}</span>
-                                                </div>
-                                                <div class="text-xs {{ $textColor }} font-medium">
-                                                    {{ $slot['used_capacity'] }}/{{ $slot['total_capacity'] }}
-                                                </div>
+
+                                        @if($slot['has_schedule'])
+                                            <div class="flex items-center group">
+                                                <!-- Edit Button -->
+                                                <button onclick="editSchedule({{ $slot['schedule']->id }}, event)"
+                                                        class="px-2 py-3 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition opacity-0 group-hover:opacity-100"
+                                                        title="Edit schedule">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                </button>
+
+                                                <!-- Slot Button -->
+                                                <button onclick="showSlotDetails({{ $slot['schedule']->id }})"
+                                                        data-slot-id="{{ $slot['schedule']->id }}"
+                                                        class="slot-button flex-1 text-left p-3 border-b border-l-4 {{ $bgColor }} transition cursor-pointer">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center gap-3">
+                                                            <div class="w-2 h-2 rounded-full {{ $dotColor }}"></div>
+                                                            <span class="font-semibold {{ $textColor }}">{{ $slot['time'] }}</span>
+                                                        </div>
+                                                        <div class="text-xs {{ $textColor }} font-medium">
+                                                            {{ $slot['used_capacity'] }}/{{ $slot['total_capacity'] }}
+                                                        </div>
+                                                    </div>
+                                                    @if($slot['has_bookings'])
+                                                        <div class="mt-1 text-xs text-gray-600">
+                                                            {{ $slot['bookings']->count() }} {{ $slot['bookings']->count() === 1 ? 'booking' : 'bookings' }}
+                                                        </div>
+                                                    @endif
+                                                </button>
                                             </div>
-                                            @if($slot['has_bookings'])
-                                                <div class="mt-1 text-xs text-gray-600">
-                                                    {{ $slot['bookings']->count() }} {{ $slot['bookings']->count() === 1 ? 'booking' : 'bookings' }}
+                                        @else
+                                            <!-- Gray slot without schedule -->
+                                            <button onclick="showSlotDetails('no-schedule-{{ $index }}')"
+                                                    data-slot-id="no-schedule-{{ $index }}"
+                                                    class="slot-button w-full text-left p-3 border-b border-l-4 {{ $bgColor }} transition cursor-pointer">
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex items-center gap-3">
+                                                        <div class="w-2 h-2 rounded-full {{ $dotColor }}"></div>
+                                                        <span class="font-semibold {{ $textColor }}">{{ $slot['time'] }}</span>
+                                                    </div>
+                                                    <div class="text-xs {{ $textColor }} font-medium">
+                                                        0/0
+                                                    </div>
                                                 </div>
-                                            @endif
-                                        </button>
+                                                <div class="mt-1 text-xs text-gray-500">
+                                                    No schedule
+                                                </div>
+                                            </button>
+                                        @endif
                                     @endforeach
                                 @endif
                             </div>
@@ -265,49 +325,64 @@
 
                     <!-- Hidden booking cards data -->
                     <div class="hidden">
-                        @foreach($timeline as $slot)
-                            @if($slot['has_bookings'])
-                                <div id="slot-data-{{ $slot['schedule']->id }}" class="slot-data">
-                                    <div class="p-6">
-                                        <div class="mb-4">
-                                            <h3 class="text-2xl font-bold text-gray-900">{{ $slot['time'] }}</h3>
-                                            <p class="text-gray-600">{{ $slot['schedule']->duration }} minutes</p>
-                                        </div>
-                                        
-                                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-gray-700 font-medium">Capacity</span>
-                                                <span class="text-lg font-bold">{{ $slot['used_capacity'] }}/{{ $slot['total_capacity'] }} persons</span>
+                        @foreach($timeline as $index => $slot)
+                            @if($slot['has_schedule'])
+                                @if($slot['has_bookings'])
+                                    <div id="slot-data-{{ $slot['schedule']->id }}" class="slot-data">
+                                        <div class="p-6">
+                                            <div class="mb-4">
+                                                <h3 class="text-2xl font-bold text-gray-900">{{ $slot['time'] }}</h3>
+                                                <p class="text-gray-600">Schedule ID: {{ $slot['schedule']->id }}</p>
                                             </div>
-                                            <div class="mt-2 w-full bg-gray-200 rounded-full h-3">
-                                                <div class="h-3 rounded-full transition-all duration-300
-                                                    @if($slot['occupancy_percentage'] >= 90) bg-red-500
-                                                    @elseif($slot['occupancy_percentage'] >= 70) bg-yellow-500
-                                                    @else bg-green-500 @endif" 
-                                                     style="width: {{ min($slot['occupancy_percentage'], 100) }}%"></div>
-                                            </div>
-                                            <div class="mt-2 text-sm text-gray-600">
-                                                {{ $slot['available_capacity'] }} spots available
-                                            </div>
-                                        </div>
 
-                                        <h4 class="font-semibold text-gray-900 mb-4">Bookings ({{ $slot['bookings']->count() }})</h4>
-                                        <div class="space-y-4">
-                                            @foreach($slot['bookings'] as $booking)
-                                                @include('bookings.partials.booking-calendar-space-card', ['booking' => $booking])
-                                            @endforeach
+                                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-gray-700 font-medium">Capacity</span>
+                                                    <span class="text-lg font-bold">{{ $slot['used_capacity'] }}/{{ $slot['total_capacity'] }} persons</span>
+                                                </div>
+                                                <div class="mt-2 w-full bg-gray-200 rounded-full h-3">
+                                                    <div class="h-3 rounded-full transition-all duration-300
+                                                        @if($slot['occupancy_percentage'] >= 90) bg-red-500
+                                                        @elseif($slot['occupancy_percentage'] >= 70) bg-yellow-500
+                                                        @else bg-green-500 @endif"
+                                                         style="width: {{ min($slot['occupancy_percentage'], 100) }}%"></div>
+                                                </div>
+                                                <div class="mt-2 text-sm text-gray-600">
+                                                    {{ $slot['available_capacity'] }} spots available
+                                                </div>
+                                            </div>
+
+                                            <h4 class="font-semibold text-gray-900 mb-4">Bookings ({{ $slot['bookings']->count() }})</h4>
+                                            <div class="space-y-4">
+                                                @foreach($slot['bookings'] as $booking)
+                                                    @include('bookings.partials.booking-calendar-space-card', ['booking' => $booking])
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div id="slot-data-{{ $slot['schedule']->id }}" class="slot-data">
+                                        <div class="flex items-center justify-center h-full text-gray-400 p-12">
+                                            <div class="text-center">
+                                                <svg class="w-24 h-24 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                </svg>
+                                                <p class="text-lg font-medium text-gray-500">No bookings for {{ $slot['time'] }}</p>
+                                                <p class="text-sm text-gray-400 mt-2">{{ $slot['total_capacity'] }} spots available</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             @else
-                                <div id="slot-data-{{ $slot['schedule']->id }}" class="slot-data">
+                                <!-- No schedule slot -->
+                                <div id="slot-data-no-schedule-{{ $index }}" class="slot-data">
                                     <div class="flex items-center justify-center h-full text-gray-400 p-12">
                                         <div class="text-center">
                                             <svg class="w-24 h-24 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
-                                            <p class="text-lg font-medium text-gray-500">No bookings for {{ $slot['time'] }}</p>
-                                            <p class="text-sm text-gray-400 mt-2">{{ $slot['total_capacity'] }} spots available</p>
+                                            <p class="text-lg font-medium text-gray-500">No schedule for {{ $slot['time'] }}</p>
+                                            <p class="text-sm text-gray-400 mt-2">This time slot is not available for booking</p>
                                         </div>
                                     </div>
                                 </div>
@@ -318,11 +393,35 @@
             @endif
         </div>
     </div>
+
     @include('bookings.modals.cancel-modal')
+    @include('bookings.modals.schedule-modal')
 @endsection
 
 @push('scripts')
+    <script>
+        // Pass space data to JavaScript - BEFORE loading other scripts
+        window.spaceData = {
+            id: {{ $space->id }},
+            opening_time: '{{ $space->opening_time }}',
+            closing_time: '{{ $space->closing_time }}',
+            duration: {{ $space->duration }},
+            selectedDate: '{{ $selectedDate }}'
+        };
+
+        // Go to today function
+        function goToToday() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+
+            const formattedDate = year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+            window.location.href = '{{ route("spaces.bookings", $space->id) }}?date=' + formattedDate;
+        }
+    </script>
     <script src="{{ asset('js/booking.js') }}"></script>
     <script src="{{ asset('js/business-owner.js') }}"></script>
     <script src="{{ asset('js/calendar.js') }}"></script>
+    <script src="{{ asset('js/schedule-management.js') }}"></script>
 @endpush

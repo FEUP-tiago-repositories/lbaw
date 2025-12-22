@@ -59,6 +59,16 @@ class User extends Authenticable
         );
     }
 
+    public function ban()
+    {
+        return $this->hasOne(Ban::class);
+    }
+
+    public function banAppeal()
+    {
+        return $this->hasOne(BanAppeal::class);
+    }
+
     public function notifications()
     {
         return $this->hasMany(\App\Models\Notification::class, 'user_id')

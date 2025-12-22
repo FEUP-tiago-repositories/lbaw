@@ -40,5 +40,19 @@ class DatabaseSeeder extends Seeder
                 $user->save();
             }
         });
+
+        // insert admin with proper hash
+        DB::table('admin')->updateOrInsert(
+            ['email' => 'admin1@example.com'],
+            ['password' => Hash::make('admin123')]
+        );
+
+        // insert admin with proper hash
+        DB::table('admin')->updateOrInsert(
+            ['email' => 'admin2@example.com'],
+            ['password' => Hash::make('admin456')]
+        );
+
+        $this->command?->info('Admin users created: admin1@example.com / admin2@example.com');
     }
 }

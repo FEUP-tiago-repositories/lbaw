@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="container mx-auto px-8 py-8 max-w-4xl bg-white rounded-2xl shadow my-3.5">
-    <div class = "flex justify-between items-center mb-6">
+    <div class = "flex justify-between items-center mb-2">
         <h1 class="text-3xl font-bold mb-6">Edit Space: {{ $space->title }}</h1>
 
         <button type="button" onclick="toggleModal()" 
@@ -44,7 +44,7 @@
         @method('PATCH')
 
         {{-- Title --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="title" class="block text-lg font-medium mb-2">Title *</label>
             <input type="text" name="title" id="title" value="{{ old('title', $space->title) }}"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -53,7 +53,7 @@
         </div>
 
         {{-- Sport Type --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="sport_type_id" class="block text-lg font-medium mb-2">Sport Type *</label>
             <select name="sport_type_id" id="sport_type_id"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -68,7 +68,7 @@
         </div>
 
         {{-- Address --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="address" class="block text-lg font-medium mb-2">Address *</label>
             <input type="text" name="address" id="address" value="{{ old('address', $space->address) }}"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -76,7 +76,7 @@
         </div>
 
         {{-- Description --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="description" class="block text-lg font-medium mb-2">Description *</label>
             <textarea name="description" id="description"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -85,7 +85,7 @@
         </div>
 
         {{-- Phone Number --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="phone_no" class="block text-lg font-medium mb-2">Phone Number *</label>
             <input type="tel" name="phone_no" id="phone_no" value="{{ old('phone_no', $space->phone_no) }}"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
@@ -94,15 +94,63 @@
         </div>
 
         {{-- Email --}}
-        <div class="mb-6">
+        <div class="mb-4">
             <label for="email" class="block text-lg font-medium mb-2">Email *</label>
             <input type="email" name="email" id="email" value="{{ old('email', $space->email) }}"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-300"
                 required maxlength="150">
         </div>
 
-        {{-- Is Closed Status --}}
         <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2">Current Cover Image</h2>
+
+            @if($space->coverImage)
+                <img src="{{ $space->coverImage->media_url }}"
+                    class="w-full h-56 object-cover rounded-xl mb-3">
+            @else
+                <p class="text-gray-500">No cover image</p>
+            @endif
+
+            <label class="block text-lg font-medium mb-2">Replace Cover Image</label>
+            <input type="file" name="cover_image"
+                class="w-full rounded-lg px-4 py-2 bg-gray-200"
+                accept="image/*">
+        </div>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-3">Gallery Images</h2>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                @foreach($space->media->where('is_cover', false) as $image)
+                    <div class="relative group" id="image-{{ $image->id }}">
+                        <img src="{{ $image->media_url }}"
+                            class="w-full h-32 object-cover rounded-lg shadow-sm">
+
+                        {{-- Delete button overlay --}}
+                        <label class="absolute inset-0 backdrop-blur-sm bg-opacity-30 text-white text-bg-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer rounded-lg"
+                          >
+                            <input type="checkbox"
+                                name="delete_images[]"
+                                value="{{ $image->id }}"
+                                class="hidden">
+                            Delete?
+                        </label>
+                    </div>
+                    
+                @endforeach
+            </div>
+            </div>
+        <div class="mb-6">
+            <label class="block text-lg font-medium mb-2">Add More Pictures</label>
+            <input type="file"
+                name="gallery_images[]"
+                multiple
+                accept="image/*"
+                class="w-full rounded-lg px-4 py-2 bg-gray-200">
+        </div>
+
+
+        {{-- Is Closed Status --}}
+        <div class="mb-4">
             <label class="flex items-center">
                 <input type="checkbox" 
                        name="is_closed" 
@@ -116,7 +164,7 @@
         </div>
 
         {{-- Action Buttons --}}
-        <div class="flex gap-4 mt-8">
+        <div class="flex gap-4 mt-6">
             <button type="submit" 
                     class="px-6 py-3 bg-green-700 text-white rounded-lg transition font-medium hover:bg-green-400 cursor-pointer">
                 Save Changes

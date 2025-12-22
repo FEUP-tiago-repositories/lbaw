@@ -9,7 +9,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
         <a href="{{ route('users.show', Auth::id()) }}" class="text-emerald-600 hover:text-emerald-400">
-            Profile of {{ Auth::user()->user_name }}
+            Profile of {{ Auth::user()->first_name }} {{ Auth::user()->surname }}
         </a>
         <svg class="w-5 h-5 pt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -18,9 +18,9 @@
             Edit Profile
         </p>
     </div>
-    <div class="bg-white shadow-lg rounded-2xl p-10">
-        <div class = "flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-900 mb-6">Edit Profile</h1>
+    <div class="bg-white shadow-lg rounded-2xl p-8">
+        <div class = "flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-900">Edit Profile</h1>
 
             <button type="button" onclick="toggleModal()"
                     class="w-12 h-12 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center hover:bg-emerald-500 transition shadow-lg">
@@ -35,14 +35,14 @@
                 </div>
 
                 <div class="flex justify-center">
-                    <button onclick="toggleModal()" class="px-8 py-3 bg-red-600 text-white rounded-full font-semibold shadow-lg hover:bg-red-700 hover:shadow-xl transition transform hover:-translate-y-0.5">
+                    <button onclick="toggleModal()" class="px-8 py-3 bg-red-600 text-white rounded-2xl font-semibold shadow-lg hover:bg-red-700 hover:shadow-xl transition transform hover:-translate-y-0.5">
                         Close
                     </button>
                 </div>
             </div>
         </div>
 
-        <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" text-xl>
+        <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @method('PATCH')
             <div class="flex gap-4">
@@ -53,7 +53,7 @@
                            required minlength="2" maxlength="15"
                            pattern="[A-Za-z]+"
                            title="First name can only contain letters."
-                           class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                           class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
                 {{-- Surname --}}
@@ -63,7 +63,7 @@
                            required minlength="2" maxlength="15"
                            pattern="[A-Za-z]+"
                            title="Surname can only contain letters."
-                           class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                           class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 </div>
             </div>
             {{-- Username --}}
@@ -73,7 +73,7 @@
                        required minlength="3" maxlength="20"
                        pattern="[A-Za-z0-9_]+"
                        title="Username can only contain letters, numbers, and underscores."
-                       class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             {{-- Email --}}
@@ -81,7 +81,7 @@
                 <label class="block text-gray-700 font-medium mb-1">Email</label>
                 <input type="email" name="email" value="{{ old('email', $user->email) }}"
                        required maxlength="255"
-                       class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             {{-- Phone --}}
@@ -90,7 +90,7 @@
                 <input type="text" name="phone_no" value="{{ old('phone_no', $user->phone_no) }}"
                        required pattern="[0-9]{9}" maxlength="9"
                        title="Phone number must be exactly 9 digits."
-                       class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             {{-- Birth Date --}}
@@ -100,7 +100,7 @@
                        max="{{ date('Y-m-d', strtotime('-18 years')) }}"
                        title="You must be at least 18 years old."
                        required
-                       class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             {{-- Profile Picture --}}
@@ -115,11 +115,11 @@
             {{-- Save Button --}}
             <div class="flex justify-end gap-4">
                 <a href="{{ route('users.show', $user->id) }}"
-                   class="px-5 py-3 bg-emerald-200 text-black rounded-xl hover:bg-emerald-100 transition">
+                   class="px-5 py-2 bg-emerald-200 text-black rounded-2xl hover:bg-emerald-100 transition">
                     Cancel
                 </a>
                 <button type="submit"
-                        class="px-6 py-3 bg-emerald-800 text-white hover:bg-emerald-200 hover:text-black rounded-xl hover:bg-blue-700 transition shadow-md">
+                        class="px-6 py-2 bg-emerald-800 text-white hover:bg-emerald-200 hover:text-black rounded-2xl hover:bg-blue-700 transition shadow-md">
                     Save Changes
                 </button>
             </div>

@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Auth\RecoverController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\DiscountController;
 
 // Admin Controllers
 use App\Http\Controllers\HomeController;
@@ -22,22 +23,19 @@ use App\Http\Controllers\SpaceController;
 // Auth Controllers
 use App\Http\Controllers\StaticController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BanAppealController;
 use Illuminate\Support\Facades\Route;
 
 // ============================================
 // M01: HOME & STATIC PAGES (R101-R105)
 // ============================================
 
-$middleware = [];
-if (! app()->environment('local')) {
-    $middleware = ['auth', 'admin']; // login + admin só em produção
-}
-
 Route::get('/', [HomeController::class, 'index'])->name('home');                           // R101
 Route::get('/about-us', [StaticController::class, 'about'])->name('about');                // R102
 Route::get('/faq', [StaticController::class, 'faq'])->name('faq');                        // R103
 Route::get('/terms-of-service', [StaticController::class, 'terms'])->name('terms');        // R104
 Route::get('/contact-us', [StaticController::class, 'contact'])->name('contact');          // R105
+Route::get('/services', [StaticController::class, 'services'])->name('services'); // R106
 
 // ============================================
 // M02: AUTHENTICATION (R201-R207)
@@ -54,12 +52,13 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(RecoverController::class)->group(function () {
-    Route::get('/password/reset/{token}', 'showResetForm')->name('password.reset');
-    Route::post('/password/reset', 'resetPassword')->name('password.update');
+    Route::get('/reset-password/{token}', 'showResetForm')->name('password.reset');
+    Route::post('/reset-password', 'resetPassword')->name('password.update');
     Route::post('/sign-in/recover', 'sendRecoveryEmail');
 });
 
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth'); // R207
+Route::post('/sign-in/appeal',[BanAppealController::class, 'store'])->name('sendAppeal'); 
 
 // ============================================
 // M02: USER PROFILES (R205-R206)
@@ -69,7 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');       // R205
     Route::patch('/users/{id}', [UserController::class, 'update'])->name('users.update'); // R206
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');  // Form for R206
-    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('/users', [UserController::class, 'destroy'])->name('users.destroy')->middleware('auth');
 });
 
 // ============================================
@@ -96,8 +95,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy'); // R306
 
     // Favorites (R307-R308)
-    Route::post('/spaces/{space_id}/favorite', [SpaceController::class, 'favorite'])->name('spaces.favorite');     // R307
-    Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
+    Route::post('/spaces/{space}/favorite', [\App\Http\Controllers\FavoriteController::class, 'toggle'])->name('spaces.favorite');     // R307
+    Route::get('/favorites',[\App\Http\Controllers\FavoriteController::class,'index'])->name('favorites.index');
+    // Route::patch('/spaces/{space_id}/favorite', [SpaceController::class, 'unfavorite'])->name('spaces.unfavorite'); // R308
 });
 
 // ============================================
@@ -117,7 +117,7 @@ Route::middleware(['auth'])->group(function () {
 // ============================================
 Route::middleware(['auth'])->group(function () {
     Route::post('/reviews', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
-    Route::post('/responses',[App\Http\Controllers\ResponseController::class, 'store'])->name('responses.store');
+    Route::post('/responses', [App\Http\Controllers\ResponseController::class, 'store'])->name('responses.store');
 });
 
 // ============================================
@@ -130,10 +130,22 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
+ Route::get('/notifications/check', [NotificationController::class, 'checkLatest']);
+
+
+// ============================================
+// ADMIN AUTHENTICATION (Guest routes)
+// ============================================
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('/login',[AdminController::class,'showLoginForm'])->name('login');
+    Route::post('/login', [AdminController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+});
+
 // ============================================
 // M05: ADMIN ROUTES (R501-R518)
 // ============================================
-Route::middleware($middleware)->prefix('admin')->name('admin.')->group(function () {
+Route::middleware([\App\Http\Middleware\CheckAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');                 // R501
 
     // Users Management (R502-R509)
@@ -158,4 +170,12 @@ Route::middleware($middleware)->prefix('admin')->name('admin.')->group(function 
     Route::get('/reviews', [ReviewManagementController::class, 'index'])->name('reviews.index');     // R516
     Route::get('/reviews/{id}', [ReviewManagementController::class, 'show'])->name('reviews.show');  // R517
     Route::delete('/reviews/{id}', [ReviewManagementController::class, 'destroy'])->name('reviews.destroy'); // R518
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
+    Route::post('/discounts', [DiscountController::class, 'store'])->name('discounts.store');
+    Route::put('/discounts/{discount}', [DiscountController::class, 'update'])->name('discounts.update');
+    Route::delete('/discounts/{discount}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
+    Route::post('/bookings/check-discount', [BookingController::class, 'checkDiscount'])->name('bookings.check-discount');
 });

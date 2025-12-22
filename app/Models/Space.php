@@ -21,12 +21,21 @@ class Space extends Model
         'is_closed',
         'phone_no',
         'email',
+        'opening_time',
+        'closing_time',
+        'duration',
         'num_favorites',
         'num_reviews',
         'current_environment_rating',
         'current_equipment_rating',
         'current_service_rating',
         'current_total_rating',
+    ];
+
+    protected $casts = [
+        'opening_time' => 'string',
+        'closing_time' => 'string',
+        'duration' => 'integer',
     ];
 
     protected $primaryKey = 'id';
@@ -83,5 +92,21 @@ class Space extends Model
     public function schedules()
     {
         return $this->hasMany(Schedule::class, 'space_id');
+    }
+
+    public function favoritedByCustomers()
+    {
+        return $this->belongsToMany(Customer::class, 'favorited', 'space_id', 'customer_id');
+    }
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
+    public function activeDiscounts()
+    {
+        $now = now();
+        return $this->hasMany(Discount::class)
+                    ->where('start_date', '<=', $now)
+                    ->where('end_date', '>=', $now);
     }
 }

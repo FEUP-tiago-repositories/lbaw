@@ -48,5 +48,5 @@
 
 @push('scripts')
     <script src="{{ asset('js/response.js') }}"></script>
-    <script src="{{ asset('js/review-form.js') }}"></script>
+    <script src="{{ asset('js/review.js') }}"></script>
 @endpush

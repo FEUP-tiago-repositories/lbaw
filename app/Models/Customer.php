@@ -19,11 +19,17 @@ class Customer extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function bookings(){
+    public function bookings()
+    {
         return $this->hasMany(Booking::class, 'customer_id');
     }
 
-    public function reviews(){
+    public function reviews()
+    {
         return $this->hasMany(Review::class, 'customer_id');
+    }
+    public function favoritedSpaces()
+    {
+        return $this->belongsToMany(Space::class, 'favorited', 'customer_id', 'space_id');
     }
 }

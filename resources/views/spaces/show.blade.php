@@ -1,6 +1,14 @@
 {{-- -Page dedicated to Showing the full page of a Space, including Editing and Deleting a space (If a BO) and if user
 making a booking --}}
 @extends('layouts.app')
+@push('head')
+    <meta property="og:title" content="Sport Spaces - Sports Hub">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('images/logo.svg') }}">
+@endpush
+
+
 @include('spaces.partials.delete')
 @section('title', $space->title . ' - Sports Hub')
 @section('content')

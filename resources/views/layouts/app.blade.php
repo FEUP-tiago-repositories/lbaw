@@ -48,6 +48,7 @@
 
     {{-- JavaScript --}}
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/menu.js') }}" defer></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="{{ asset('js/contextual_help.js') }}" defer></script>
     <script src="{{ asset('js/notifications.js') }}"></script>

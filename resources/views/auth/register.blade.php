@@ -83,14 +83,14 @@
 
                     {{-- Username --}}
                     <div>
-                        <label for="username" class="block font-medium text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
-                        <input id="username" type="text" name="user_name"
-                               value="{{ old('user_name') }}"
-                               required minlength="3" maxlength="20"
-                               pattern="[A-Za-z0-9_]+"
-                               title="Username can only contain letters, numbers, and underscores."
-                               class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="User123">
+                        <label class="block font-medium text-gray-700 mb-1">Username</label>
+                        <input type="text" name="user_name"
+                            value="{{ old('user_name') }}"
+                            required minlength="3" maxlength="20"
+                            pattern="[A-Za-z0-9_]+"
+                            title="Username can only contain letters, numbers, and underscores."
+                            class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="User123">
                     </div>
 
                     {{-- Email --}}
@@ -116,13 +116,13 @@
 
                     {{-- Birth Date --}}
                     <div>
-                        <label for="bday" class="block font-medium text-gray-700 mb-1">Birth Date <span class="text-red-500">*</span></label>
-                        <input id="bday" type="date" name="birth_date"
-                               value="{{ old('birth_date') }}"
-                               required
-                               max="{{ \Carbon\Carbon::now()->subYears(18)->format('Y-m-d') }}"
-                               title="You must be at least 18 years old."
-                               class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <label class="block font-medium text-gray-700 mb-1">Birth Date</label>
+                        <input type="date" name="birth_date"
+                            value="{{ old('birth_date') }}"
+                            required
+                            max="{{ \Carbon\Carbon::now()->subYears(18)->format('Y-m-d') }}"
+                            title="You must be at least 18 years old."
+                            class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
 
@@ -143,25 +143,19 @@
                     <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
                     @enderror
                 </div>
-                <label for="pic" class="block font-medium text-gray-700 mb-1">Profile Picture (optional)</label>
-                <div class="flex items-center gap-4">
-                <img
-                        id="profilePreview"
-                        src="{{ asset('images/profile.jpg') }}"
-                        alt="Profile preview"
-                        class="w-16 h-16 rounded-full object-cover border-gray-200 shadow">
-                    
-                    <input id="pic" type="file" name="profile_pic_url"
-                        accept="image/png,image/jpeg,image/jpg,image/gif"
-                        data-preview="profilePreview"
+
+
+                <div class="mt-4">
+                    <label class="block font-medium text-gray-700 mb-1">Profile Picture (optional)</label>
+                    <input type="file" name="profile_pic_url"
                         class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
                 {{-- Password --}}
                 <div class="mt-4">
-                    <label for="pass" class="block font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
+                    <label for="register-password" class="block font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <input id="pass" type="password" name="password" id="register-password"
+                        <input type="password" name="password" id="register-password"
                                required minlength="6"
                                class="w-full border-gray-300 rounded-xl px-4 py-2 pr-12 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                placeholder="Minimum 6 characters">
@@ -174,9 +168,9 @@
 
                 {{-- Confirm Password --}}
                 <div class="mt-4">
-                    <label for="passconf" class="block font-medium text-gray-700 mb-1">Confirm Password <span class="text-red-500">*</span></label>
+                    <label for="register-password-confirm" class="block font-medium text-gray-700 mb-1">Confirm Password <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <input id="passconf" type="password" name="password_confirmation" id="register-password-confirm"
+                        <input type="password" name="password_confirmation" id="register-password-confirm"
                                required minlength="6"
                                class="w-full border-gray-300 rounded-xl px-4 py-2 pr-12 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                placeholder="Confirm your password">

@@ -65,9 +65,9 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="password" class="block font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
+                    <label for="login-password" class="block font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <input id="password" type="password" name="password" id="login-password"
+                        <input type="password" name="password" id="login-password"
                                class="w-full border-gray-300 rounded-xl px-4 py-2 pr-12 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                placeholder="Minimum 6 characters"
                                required>

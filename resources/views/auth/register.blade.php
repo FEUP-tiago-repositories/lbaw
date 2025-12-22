@@ -59,8 +59,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {{-- First Name --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">First Name <span class="text-red-500">*</span></label>
-                        <input type="text" name="first_name"
+                        <label for="first_name" class="block font-medium text-gray-700 mb-1">First Name <span class="text-red-500">*</span></label>
+                        <input id="first_name" type="text" name="first_name"
                                value="{{ old('first_name') }}"
                                required minlength="2" maxlength="15"
                                pattern="[A-Za-z]+"
@@ -71,8 +71,8 @@
 
                     {{-- Surname --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Surname <span class="text-red-500">*</span></label>
-                        <input type="text" name="surname"
+                        <label for="surname" class="block font-medium text-gray-700 mb-1">Surname <span class="text-red-500">*</span></label>
+                        <input id="surname" type="text" name="surname"
                                value="{{ old('surname') }}"
                                required minlength="2" maxlength="15"
                                pattern="[A-Za-z]+"
@@ -83,8 +83,8 @@
 
                     {{-- Username --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
-                        <input type="text" name="user_name"
+                        <label for="username" class="block font-medium text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
+                        <input id="username" type="text" name="user_name"
                                value="{{ old('user_name') }}"
                                required minlength="3" maxlength="20"
                                pattern="[A-Za-z0-9_]+"
@@ -95,8 +95,8 @@
 
                     {{-- Email --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
-                        <input type="email" name="email"
+                        <label for="email" class="block font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+                        <input id="email" type="email" name="email"
                                value="{{ old('email') }}"
                                required maxlength="255"
                                class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -105,8 +105,8 @@
 
                     {{-- Phone --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
-                        <input type="text" name="phone_no"
+                        <label for="phone" class="block font-medium text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
+                        <input id="phone" type="text" name="phone_no"
                                value="{{ old('phone_number') }}"
                                required pattern="[0-9]{9}" maxlength="9"
                                title="Phone number must be exactly 9 digits."
@@ -116,8 +116,8 @@
 
                     {{-- Birth Date --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Birth Date <span class="text-red-500">*</span></label>
-                        <input type="date" name="birth_date"
+                        <label for="bday" class="block font-medium text-gray-700 mb-1">Birth Date <span class="text-red-500">*</span></label>
+                        <input id="bday" type="date" name="birth_date"
                                value="{{ old('birth_date') }}"
                                required
                                max="{{ \Carbon\Carbon::now()->subYears(18)->format('Y-m-d') }}"
@@ -130,12 +130,12 @@
                 <div class="mt-4">
                     <label class="block font-medium text-gray-700 mb-2">Account Type <span class="text-red-500">*</span></label>
                     <div class="flex items-center gap-6">
-                        <label class="inline-flex items-center gap-4 py-2">
-                            <input type="radio" name="role" value="customer" required {{ old('role') == 'customer' ? 'checked' : '' }}>
+                        <label for="rolec" class="inline-flex items-center gap-4 py-2">
+                            <input id="rolec" type="radio" name="role" value="customer" required {{ old('role') == 'customer' ? 'checked' : '' }}>
                             <span>Customer</span>
                         </label>
-                        <label class="inline-flex items-center gap-4 py-2">
-                            <input type="radio" name="role" value="business_owner" required {{ old('role') == 'business_owner' ? 'checked' : '' }}>
+                        <label for="rolebo" class="inline-flex items-center gap-4 py-2">
+                            <input id="rolebo" type="radio" name="role" value="business_owner" required {{ old('role') == 'business_owner' ? 'checked' : '' }}>
                             <span>Business Owner</span>
                         </label>
                     </div>
@@ -143,18 +143,25 @@
                     <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
                     @enderror
                 </div>
-
-                <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-1">Profile Picture (optional)</label>
-                    <input type="file" name="profile_pic_url"
-                           class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
+                <label for="pic" class="block font-medium text-gray-700 mb-1">Profile Picture (optional)</label>
+                <div class="flex items-center gap-4">
+                <img
+                        id="profilePreview"
+                        src="{{ asset('images/profile.jpg') }}"
+                        alt="Profile preview"
+                        class="w-16 h-16 rounded-full object-cover border-gray-200 shadow">
+                    
+                    <input id="pic" type="file" name="profile_pic_url"
+                        accept="image/png,image/jpeg,image/jpg,image/gif"
+                        data-preview="profilePreview"
+                        class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
                 {{-- Password --}}
                 <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
+                    <label for="pass" class="block font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <input type="password" name="password" id="register-password"
+                        <input id="pass" type="password" name="password" id="register-password"
                                required minlength="6"
                                class="w-full border-gray-300 rounded-xl px-4 py-2 pr-12 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                placeholder="Minimum 6 characters">
@@ -167,9 +174,9 @@
 
                 {{-- Confirm Password --}}
                 <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-1">Confirm Password <span class="text-red-500">*</span></label>
+                    <label for="passconf" class="block font-medium text-gray-700 mb-1">Confirm Password <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <input type="password" name="password_confirmation" id="register-password-confirm"
+                        <input id="passconf" type="password" name="password_confirmation" id="register-password-confirm"
                                required minlength="6"
                                class="w-full border-gray-300 rounded-xl px-4 py-2 pr-12 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                placeholder="Confirm your password">
@@ -197,3 +204,4 @@
     {{-- Include OAuth JavaScript --}}
     <script src="{{ asset('js/oauth.js') }}"></script>
 @endsection
+<script src="{{ asset('js/image-preview.js') }}"></script>

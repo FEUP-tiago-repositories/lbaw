@@ -22,8 +22,8 @@
                     {{ session('status') }}
                 </div>
             @endif
-
-            <input type="email" name="email" placeholder="Your email"
+            <label for="email" class="block text-gray-700 text-sm font-medium mb-1">Your email:</label>
+            <input type="email" name="email" placeholder="Your email" id="email"
                    value="{{ old('email') }}"
                    required
                    class="w-full border-gray-300 rounded-xl p-3 shadow-sm mt-4">

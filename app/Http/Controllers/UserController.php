@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BusinessOwner;
+use App\Models\Customer;
 use App\Models\Notification;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -37,25 +40,27 @@ class UserController extends Controller
     {
         // Validate the form data
         $request->validate([
-            'first_name' => ['required|string|max:250'],
-            'surname' => ['required|string|max:250'],
-            'user_name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string','min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
+            'surname' => ['required', 'string','min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
+            'user_name' => ['required', 'string','min:2', 'max:255', 'unique:user,user_name', 'regex:/^[A-Za-z0-9_]+$/'],
             'email' => ['required', 'email', 'unique:user,email'],
-            'phone_no' => ['required', 'string'],
+            'phone_no' => ['required', 'string','regex:/^[0-9]+$/'],
             'birth_date' => ['required', 'date'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
             'profile_pic_url' => ['nullable', 'image', 'max:2048'],
-            'account_type' => ['required', 'in:customer,business'],
+            'role' => ['required_without:account_type', 'in:customer,business_owner'],
+            'account_type' => ['required_without:role', 'in:customer,business_owner'],
         ]);
 
         $profileImagePath = null;
-
         if ($request->hasFile('profile_pic_url')) {
-            $profileImagePath = $request->file('profile_pic_url')->store(
-                'images/uploads/profiles',
-                'public'
-            );
+            $file = $request->file('profile_pic_url');
+            $profilePicName = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('images/uploads/profiles'), $profilePicName);
+            $profileImagePath = 'images/uploads/profiles/'.$profilePicName;
         }
+
+        $role = $request->input('role') ?? $request->input('account_type');
 
         $user = User::create([
             'first_name' => $request->first_name,
@@ -69,6 +74,12 @@ class UserController extends Controller
             'is_banned' => false,
             'is_deleted' => false,
         ]);
+
+        if ($role === 'customer') {
+            Customer::create(['user_id' => $user->id]);
+        } else {
+            BusinessOwner::create(['user_id' => $user->id]);
+        }
 
         Auth::login($user);
 
@@ -122,34 +133,36 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $this->authorize('update', $user);
 
-        $user->first_name = $request->first_name;
-        $user->surname = $request->surname;
-        $user->user_name = $request->user_name;
-        $user->email = $request->email;
-        $user->phone_no = $request->phone_no;
-        $user->birth_date = $request->birth_date;
+        $validated = $request->validate([
+            'first_name' => ['required', 'string', 'min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
+            'surname' => ['required', 'string', 'min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
+            'user_name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:20',
+                'regex:/^[A-Za-z0-9_]+$/',
+                Rule::unique('user', 'user_name')->ignore($user->id),
+            ],
+            'email' => ['required', 'email', 'max:255', Rule::unique('user', 'email')->ignore($user->id)],
+            'phone_no' => ['required', 'regex:/^[0-9]+$/'],
+            'birth_date' => ['required', 'date', 'before_or_equal:'.Carbon::now()->subYears(18)->toDateString()],
+            'profile_pic_url' => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        $user->first_name = $validated['first_name'];
+        $user->surname = $validated['surname'];
+        $user->user_name = $validated['user_name'];
+        $user->email = $validated['email'];
+        $user->phone_no = $validated['phone_no'];
+        $user->birth_date = $validated['birth_date'];
 
         if ($request->hasFile('profile_pic_url')) {
             $file = $request->file('profile_pic_url');
             $profilePicName = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
-            $path = $request->file('profile_pic_url')->move(public_path('images/uploads/profiles'), $profilePicName);
-            $profilePicPath = 'images/uploads/profiles/'.$profilePicName;
-            $user->profile_pic_url = $profilePicPath;
-            $user->save();
+            $file->move(public_path('images/uploads/profiles'), $profilePicName);
+            $user->profile_pic_url = 'images/uploads/profiles/'.$profilePicName;
         }
-
-        if ($request->account_type === 'customer') {
-            DB::table('customer')->insert([
-                'user_id' => $user->id,
-            ]);
-        } else {
-            DB::table('business_owner')->insert([
-                'user_id' => $user->id,
-            ]);
-        }
-
-        Auth::login($user);
-
         $user->save();
 
         return redirect()->route('users.show', $user->id)

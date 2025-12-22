@@ -1,4 +1,4 @@
-<nav class="navbar h-20 mx-auto text-lg flex items-center px-4 md:px-8 xl:px-32 2xl:px-64 py-4 justify-between bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out">
+<nav class="navbar h-20 mx-auto text-lg flex items-center px-4 md:px-8 xl:px-32 2xl:px-64 py-4 justify-between bg-white shadow-md text-emerald-800 font-semibold transition-colors duration-300 ease-in-out sticky top-0 z-[1002]">
     <div class="flex items-center gap-6">
         <a href="{{ route('home') }}" class="flex items-center">
             <img src="{{ asset('images/logo2.svg') }}" alt="SportsHub Logo" class="h-9 w-auto">
@@ -68,7 +68,7 @@
 </nav>
 
 {{-- Mobile menu --}}
-<div id="navMenu" class="fixed top-20 right-0 w-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden z-[1001]">
+<div id="navMenu" class="fixed top-20 right-0 w-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden z-[1001] max-h-[calc(100vh-5rem)] overflow-y-auto">
     <div class="flex flex-col p-6 gap-4">
         {{-- Search mobile --}}
         <form action="{{ route('spaces.search') }}" method="GET" class="flex flex-col gap-2 md:hidden">

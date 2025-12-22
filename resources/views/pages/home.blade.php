@@ -142,5 +142,4 @@
 
 @push('scripts')
     <script src="{{ asset('js/horizontal-scroll.js') }}"></script>
-    <script src="{{ asset('js/menu.js') }}"></script>
 @endpush

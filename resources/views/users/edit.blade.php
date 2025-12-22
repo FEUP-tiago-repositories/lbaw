@@ -48,7 +48,7 @@
             <div class="flex gap-4">
                 {{-- First Name --}}
                 <div class="w-1/2">
-                    <label class="block text-gray-700 font-medium mb-1">First Name</label>
+                    <label class="block text-gray-700 font-medium mb-1">First Name <span class="text-red-500">*</span></label>
                     <input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}"
                            required minlength="2" maxlength="15"
                            pattern="[A-Za-z]+"
@@ -58,7 +58,7 @@
 
                 {{-- Surname --}}
                 <div class="w-1/2">
-                    <label class="block text-gray-700 font-medium mb-1">Surname</label>
+                    <label class="block text-gray-700 font-medium mb-1">Surname <span class="text-red-500">*</span></label>
                     <input type="text" name="surname" value="{{ old('surname', $user->surname) }}"
                            required minlength="2" maxlength="15"
                            pattern="[A-Za-z]+"
@@ -68,7 +68,7 @@
             </div>
             {{-- Username --}}
             <div>
-                <label class="block text-gray-700 font-medium mb-1">Username</label>
+                <label class="block text-gray-700 font-medium mb-1">Username <span class="text-red-500">*</span></label>
                 <input type="text" name="user_name" value="{{ old('user_name', $user->user_name) }}"
                        required minlength="3" maxlength="20"
                        pattern="[A-Za-z0-9_]+"
@@ -78,7 +78,7 @@
 
             {{-- Email --}}
             <div>
-                <label class="block text-gray-700 font-medium mb-1">Email</label>
+                <label class="block text-gray-700 font-medium mb-1">Email <span class="text-red-500">*</span></label>
                 <input type="email" name="email" value="{{ old('email', $user->email) }}"
                        required maxlength="255"
                        class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
@@ -86,7 +86,7 @@
 
             {{-- Phone --}}
             <div>
-                <label class="block text-gray-700 font-medium mb-1">Phone</label>
+                <label class="block text-gray-700 font-medium mb-1">Phone <span class="text-red-500">*</span></label>
                 <input type="text" name="phone_no" value="{{ old('phone_no', $user->phone_no) }}"
                        required pattern="[0-9]{9}" maxlength="9"
                        title="Phone number must be exactly 9 digits."
@@ -95,7 +95,7 @@
 
             {{-- Birth Date --}}
             <div>
-                <label class="block text-gray-700 font-medium mb-1">Birth Date</label>
+                <label class="block text-gray-700 font-medium mb-1">Birth Date <span class="text-red-500">*</span></label>
                 <input type="date" name="birth_date" value="{{ old('birth_date', $user->birth_date) }}"
                        max="{{ date('Y-m-d', strtotime('-18 years')) }}"
                        title="You must be at least 18 years old."

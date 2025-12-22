@@ -9,9 +9,10 @@ making a booking --}}
 @endpush
 
 
-@include('spaces.partials.delete')
+
 @section('title', $space->title . ' - Sports Hub')
 @section('content')
+@include('spaces.partials.delete')
     <main class="container mx-auto max-w-6xl p-8">
         {{-- -Info Section --}}
         <section>

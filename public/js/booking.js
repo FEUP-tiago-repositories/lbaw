@@ -50,11 +50,66 @@ document.addEventListener('DOMContentLoaded', function() {
         initEditMode();
     } else {
         initCalendar();
+        // Auto-selecionar hoje e carregar schedules
+        autoSelectToday();
     }
 
     // Fetch space duration for price calculations
     fetchSpaceDuration();
+
+    // Event listeners para botões com IDs
+    setupEventListeners();
 });
+
+function setupEventListeners() {
+    // Botões de duração
+    const decrementDurationBtn = document.getElementById('decrementDurationBtn');
+    const incrementDurationBtn = document.getElementById('incrementDurationBtn');
+    const durationInput = document.getElementById('durationInput');
+
+    if (decrementDurationBtn) {
+        decrementDurationBtn.addEventListener('click', decrementDuration);
+    }
+    if (incrementDurationBtn) {
+        incrementDurationBtn.addEventListener('click', incrementDuration);
+    }
+    if (durationInput) {
+        durationInput.addEventListener('change', updateDurationValue);
+    }
+
+    // Botões de pessoas
+    const decrementPersonsBtn = document.getElementById('decrementPersonsBtn');
+    const incrementPersonsBtn = document.getElementById('incrementPersonsBtn');
+    const personsInput = document.getElementById('personsInput');
+
+    if (decrementPersonsBtn) {
+        decrementPersonsBtn.addEventListener('click', decrementPersons);
+    }
+    if (incrementPersonsBtn) {
+        incrementPersonsBtn.addEventListener('click', incrementPersons);
+    }
+    if (personsInput) {
+        personsInput.addEventListener('change', updatePersonsValue);
+    }
+
+    // Botão Continue (apenas em modo create)
+    const continueToPeopleBtn = document.getElementById('continueToPeopleBtn');
+    if (continueToPeopleBtn) {
+        continueToPeopleBtn.addEventListener('click', function() {
+            updateDurationValue();
+            // Ocultar o botão Continue ao avançar
+            continueToPeopleBtn.classList.add('hidden');
+            showSection('persons-section');
+            showSection('confirm-section');
+        });
+    }
+
+    // Botão Confirm
+    const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+    if (confirmBookingBtn) {
+        confirmBookingBtn.addEventListener('click', createBooking);
+    }
+}
 
 async function fetchSpaceDuration() {
     try {
@@ -67,6 +122,19 @@ async function fetchSpaceDuration() {
         console.warn('Could not fetch space duration, using default 30min');
         state.scheduleDuration = 30;
     }
+}
+
+// ============================================
+// AUTO-SELECIONAR HOJE
+// ============================================
+function autoSelectToday() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Selecionar hoje automaticamente
+    setTimeout(() => {
+        selectDate(today);
+    }, 100);
 }
 
 // ============================================
@@ -114,6 +182,14 @@ function resetFromSection(sectionId) {
 
     for (let i = startIndex; i < sections.length; i++) {
         hideSection(sections[i]);
+    }
+
+    // Se resetar de duration ou antes, mostrar o botão Continue novamente
+    if (startIndex <= sections.indexOf('duration-section')) {
+        const continueToPeopleBtn = document.getElementById('continueToPeopleBtn');
+        if (continueToPeopleBtn && !isEditMode) {
+            continueToPeopleBtn.classList.remove('hidden');
+        }
     }
 }
 
@@ -258,7 +334,7 @@ async function loadAvailableTimes(date) {
 
 function selectTime(scheduleId, time) {
     state.scheduleId = scheduleId;
-    window.selectedScheduleId = scheduleId; 
+    window.selectedScheduleId = scheduleId;
     state.time = time;
 
     document.querySelectorAll('#timeGrid button').forEach(function(btn) {
@@ -267,6 +343,12 @@ function selectTime(scheduleId, time) {
     event.target.classList.add('border-2','border-emerald-600', 'bg-emerald-100', 'font-semibold');
 
     showSection('duration-section');
+
+    // Mostrar o botão Continue ao selecionar um novo horário (modo create)
+    const continueToPeopleBtn = document.getElementById('continueToPeopleBtn');
+    if (continueToPeopleBtn && !isEditMode) {
+        continueToPeopleBtn.classList.remove('hidden');
+    }
 }
 
 // ============================================
@@ -277,19 +359,23 @@ function decrementDuration() {
     const value = parseInt(input.value);
     if (value > parseInt(input.min)) {
         input.value = value - parseInt(input.step);
-        updateDuration();
+        updateDurationValue();
     }
 }
 
 function incrementDuration() {
     const input = document.getElementById('durationInput');
     input.value = parseInt(input.value) + parseInt(input.step);
-    updateDuration();
+    updateDurationValue();
 }
 
-function updateDuration() {
+function updateDurationValue() {
     state.duration = parseInt(document.getElementById('durationInput').value);
-    showSection('persons-section');
+    // Em modo edit, avançar automaticamente
+    if (isEditMode) {
+        showSection('persons-section');
+        showSection('confirm-section');
+    }
 }
 
 function decrementPersons() {
@@ -297,17 +383,17 @@ function decrementPersons() {
     const value = parseInt(input.value);
     if (value > 1) {
         input.value = value - 1;
-        updatePersons();
+        updatePersonsValue();
     }
 }
 
 function incrementPersons() {
     const input = document.getElementById('personsInput');
     input.value = parseInt(input.value) + 1;
-    updatePersons();
+    updatePersonsValue();
 }
 
-function updatePersons() {
+function updatePersonsValue() {
     state.persons = parseInt(document.getElementById('personsInput').value);
     showSection('confirm-section');
 }
@@ -535,7 +621,7 @@ function closePaymentModal() {
 window.applyPromoCode = function() {
     const codeInput = document.getElementById('promoCodeInput');
     const messageEl = document.getElementById('promoMessage');
-    
+
     if (!codeInput || !codeInput.value.trim()) {
         messageEl.textContent = 'Insert a promotional code.';
         messageEl.classList.remove('hidden', 'text-green-600');
@@ -561,44 +647,44 @@ window.applyPromoCode = function() {
             code: codeInput.value
         })
     })
-    .then(r => r.ok ? r.json() : r.text().then(t => { throw new Error(t) }))
-    .then(data => {
-        messageEl.classList.remove('hidden');
-        if (data.valid) {
-            state.discountCode = codeInput.value; 
-            
-            messageEl.textContent = data.message;
-            messageEl.className = 'text-sm mt-2 text-green-600';
-            
-            const oldPriceEl = document.getElementById('originalPriceDisplay');
-            const newPriceEl = document.getElementById('paymentAmount');
-            
-            if(oldPriceEl) {
-                oldPriceEl.textContent = '€' + parseFloat(data.original_price).toFixed(2);
-                oldPriceEl.classList.remove('hidden');
+        .then(r => r.ok ? r.json() : r.text().then(t => { throw new Error(t) }))
+        .then(data => {
+            messageEl.classList.remove('hidden');
+            if (data.valid) {
+                state.discountCode = codeInput.value;
+
+                messageEl.textContent = data.message;
+                messageEl.className = 'text-sm mt-2 text-green-600';
+
+                const oldPriceEl = document.getElementById('originalPriceDisplay');
+                const newPriceEl = document.getElementById('paymentAmount');
+
+                if(oldPriceEl) {
+                    oldPriceEl.textContent = '€' + parseFloat(data.original_price).toFixed(2);
+                    oldPriceEl.classList.remove('hidden');
+                }
+                if(newPriceEl) {
+                    newPriceEl.textContent = '€' + parseFloat(data.final_price).toFixed(2);
+                    newPriceEl.classList.add('text-green-700');
+                }
+            } else {
+                state.discountCode = null;
+                throw new Error(data.message || 'Invalid code');
             }
-            if(newPriceEl) {
-                newPriceEl.textContent = '€' + parseFloat(data.final_price).toFixed(2);
-                newPriceEl.classList.add('text-green-700');
-            }
-        } else {
+        })
+        .catch(error => {
             state.discountCode = null;
-            throw new Error(data.message || 'Invalid code');
-        }
-    })
-    .catch(error => {
-        state.discountCode = null;
-        console.error('Erro:', error);
-        let msg = 'Error applying code.';
-        try { 
-            if(error.message.startsWith('{')) msg = JSON.parse(error.message).message;
-            else msg = error.message;
-        } catch(e) {}
-        
-        messageEl.textContent = msg;
-        messageEl.className = 'text-sm mt-2 text-red-600';
-        messageEl.classList.remove('hidden');
-    });
+            console.error('Erro:', error);
+            let msg = 'Error applying code.';
+            try {
+                if(error.message.startsWith('{')) msg = JSON.parse(error.message).message;
+                else msg = error.message;
+            } catch(e) {}
+
+            messageEl.textContent = msg;
+            messageEl.className = 'text-sm mt-2 text-red-600';
+            messageEl.classList.remove('hidden');
+        });
 };
 
 async function processPayment() {

@@ -33,7 +33,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.login.submit') }}" method="POST" class="text-xl">
+                <form action="{{ route('admin.login.submit') }}" method="POST" class="text-lg">
                     @csrf
 
                     <div class="mb-5">

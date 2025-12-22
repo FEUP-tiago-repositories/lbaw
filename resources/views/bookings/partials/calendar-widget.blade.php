@@ -46,7 +46,7 @@
     <div id="duration-section" class="hidden p-4 text-lg border-t border-gray-200">
         <h3 class="font-semibold text-black mb-3">Duration:</h3>
         <div class="flex items-center justify-center gap-3">
-            <button type="button" onclick="decrementDuration()" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-red-200 rounded-xl transition">
+            <button type="button" id="decrementDurationBtn" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-red-200 rounded-xl transition">
                 <span class="font-bold">-</span>
             </button>
             <input type="number"
@@ -54,29 +54,37 @@
                    value="30"
                    min="15"
                    step="15"
-                   onchange="updateDuration()"
                    class="w-20 text-center border border-gray-200 rounded-xl pl-3 py-1 font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
             <span class="text-base text-gray-600">min.</span>
-            <button type="button" onclick="incrementDuration()" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-blue-200 rounded-xl transition">
+            <button type="button" id="incrementDurationBtn" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-blue-200 rounded-xl transition">
                 <span class="font-bold">+</span>
             </button>
         </div>
+        <!-- Continue Button (apenas em modo create) -->
+        @if($mode === 'create')
+            <div class="mt-4">
+                <button type="button"
+                        id="continueToPeopleBtn"
+                        class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-semibold py-2 rounded-xl transition shadow-sm">
+                    Continue
+                </button>
+            </div>
+        @endif
     </div>
 
     <!-- Number of Persons Section (Mostra após definir duração) -->
     <div id="persons-section" class="hidden p-4 border-t text-lg font-bold border-gray-200">
         <h3 class="font-semibold mb-3">Number of persons:</h3>
         <div class="flex items-center justify-center gap-3">
-            <button type="button" onclick="decrementPersons()" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-red-200 rounded-xl transition">
+            <button type="button" id="decrementPersonsBtn" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-red-200 rounded-xl transition">
                 <span>-</span>
             </button>
             <input type="number"
                    id="personsInput"
                    value="1"
                    min="1"
-                   onchange="updatePersons()"
                    class="w-20 text-center border border-gray-200 rounded-xl pl-3 py-1 font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
-            <button type="button" onclick="incrementPersons()" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-blue-200 rounded-xl transition">
+            <button type="button" id="incrementPersonsBtn" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-blue-200 rounded-xl transition">
                 <span>+</span>
             </button>
         </div>
@@ -85,7 +93,7 @@
     <!-- Confirm Button (Mostra após preencher tudo) -->
     <div id="confirm-section" class="hidden p-4 border-t border-gray-200">
         <button type="button"
-                onclick="createBooking()"
+                id="confirmBookingBtn"
                 class="text-lg w-full bg-emerald-800 hover:bg-emerald-200 text-white hover:text-black font-semibold py-2 rounded-2xl transition shadow-sm">
             {{ $mode === 'edit' ? 'Update and pay' : 'Confirm and pay' }}
         </button>

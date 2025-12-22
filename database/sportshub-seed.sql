@@ -27,11 +27,13 @@ CREATE Table "user" (
     phone_no VARCHAR(15) NOT NULL UNIQUE,
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     is_banned BOOLEAN NOT NULL DEFAULT FALSE,
-    password VARCHAR(100) NOT NULL, --will be hashed
+    password VARCHAR(100), --will be hashed and maybe is NULL for oauth
     birth_date DATE NOT NULL CHECK (
         birth_date <= NOW() - INTERVAL '18 years'
     ), --Must be 18+ years old
-    profile_pic_url VARCHAR(255)
+    profile_pic_url VARCHAR(255),
+    google_id VARCHAR(255) DEFAULT NULL UNIQUE,
+    facebook_id VARCHAR(255) DEFAULT NULL UNIQUE
 );
 
 CREATE TABLE business_owner (
@@ -11909,6 +11911,9 @@ CREATE INDEX booking_history ON booking USING btree (customer_id);
 
 CREATE INDEX space_sport_type ON space USING btree (sport_type_id);
 
+CREATE INDEX user_google_id ON "user" USING btree(google_id) WHERE google_id IS NOT NULL;
+CREATE INDEX user_facebook_id ON "user" USING btree(facebook_id) WHERE facebook_id IS NOT NULL;
+
 -- =========================
 -- FULL-TEXT SEARCH INDEX
 -- =========================
@@ -12023,7 +12028,9 @@ BEGIN
        phone_no = 'deleted_user_' || OLD.id,
        password = 'N/A',
        birth_date = '0001-01-01',
-       profile_pic_url = 'N/A'
+       profile_pic_url = 'N/A',
+       google_id = NULL,
+       facebook_id = NULL
    WHERE id = OLD.id;
 
    RETURN NULL;
@@ -12101,6 +12108,22 @@ CREATE TRIGGER space_closure_anonymize
     FOR EACH ROW
     WHEN (NEW.is_closed = TRUE AND OLD.is_closed = FALSE)
 EXECUTE FUNCTION anonymize_closed_space();
+
+-- Validar que utilizador tem password OU OAuth ID
+CREATE FUNCTION validate_user_auth() RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.password IS NULL AND NEW.google_id IS NULL AND NEW.facebook_id IS NULL THEN
+        RAISE EXCEPTION 'Utilizador deve ter password ou OAuth ID (Google/Facebook)';
+END IF;
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER validate_user_auth_trigger
+    BEFORE INSERT OR UPDATE ON "user"
+                         FOR EACH ROW
+                         EXECUTE FUNCTION validate_user_auth();
+
 
 -- =========================
 -- POST-SEED BACKFILL

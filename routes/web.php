@@ -25,6 +25,8 @@ use App\Http\Controllers\StaticController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BanAppealController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\FacebookController;
 
 // ============================================
 // M01: HOME & STATIC PAGES (R101-R105)
@@ -58,7 +60,19 @@ Route::controller(RecoverController::class)->group(function () {
 });
 
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout')->middleware('auth'); // R207
-Route::post('/sign-in/appeal',[BanAppealController::class, 'store'])->name('sendAppeal'); 
+Route::post('/sign-in/appeal',[BanAppealController::class, 'store'])->name('sendAppeal');
+
+// Google OAuth Routes
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirect')->name('google-auth');
+    Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
+});
+
+// Facebook OAuth Routes
+Route::controller(FacebookController::class)->group(function () {
+    Route::get('auth/facebook', 'redirect')->name('facebook-auth');
+    Route::get('auth/facebook/call-back', 'callbackFacebook')->name('facebook-call-back');
+});
 
 // ============================================
 // M02: USER PROFILES (R205-R206)

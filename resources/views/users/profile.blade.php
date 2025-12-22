@@ -229,7 +229,8 @@
                         </button>
 
                         <!-- Container com Scroll Horizontal -->
-                        <div id="favorites-scroll-container" class="flex overflow-x-auto gap-2 pb-4 scroll-smooth scrollbar-hide"
+                        <div id="favorites-scroll-container" class="flex overflow-x-auto gap-2composer require laravel/socialite
+ pb-4 scroll-smooth scrollbar-hide"
                              style="-ms-overflow-style: none; scrollbar-width: none;">
                             @foreach($favoritedSpaces as $space)
                                 <div class="shrink-0 w-[250px]">

@@ -45,10 +45,7 @@
 
 ### 6. HTML & CSS Validation
 
-> Provide HTML and CSS validation results for the central page of your product (e.g., auction page, event page, product page). Use the following tools and upload the reports as PDFs to the group’s repository and link them here.
->
-> HTML: https://validator.w3.org/nu/\
-> CSS: https://jigsaw.w3.org/css-validator/
+[Html Validation](HTML_Checker.pdf)
 
 ### 7. Revisions to the Project
 

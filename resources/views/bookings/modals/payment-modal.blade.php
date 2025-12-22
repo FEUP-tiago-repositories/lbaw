@@ -135,7 +135,7 @@
                            placeholder="DISCOUNT20"
                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase">
                     <button type="button"
-                            onclick="applyPromoCode()"
+                            onclick="redeemPromoCode()"
                             class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition">
                         Apply
                     </button>

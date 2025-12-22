@@ -6,7 +6,7 @@
         {{-- Will uncomment this once we have the logic to upload an image --}}
 
         {{-- @if($space->media && $space->media->isNotEmpty())
-        <img src="{{ asset('images/sportsplace.jpg') }}" class="w-full h-full object-cover">
+        <img src="{{ asset('images/sportsplace.jpg') }}" class="w-full h-full object-cover" alt="favorite space picture">
         <!-- <img src="{{ $space->coverImage->media_url }}" alt="{{ $space->title }}" class="w-full h-full object-cover"> -->
         @else
         <div class="w-full h-full flex items-center justify-center">

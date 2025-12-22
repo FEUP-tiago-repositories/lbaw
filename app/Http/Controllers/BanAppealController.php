@@ -13,9 +13,8 @@ class BanAppealController extends Controller
     $request->validate([
         'appeal' => 'required|string',
         'user_id' => 'required|exists:user,id',
-    ], [], [], 'appeal');
+    ]);
 
-    // Get user ID from session (stored during failed login)
     $userId = $request->user_id;
 
     if (!$userId) {

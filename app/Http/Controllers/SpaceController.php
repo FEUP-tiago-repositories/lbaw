@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Media;
 use App\Models\Space;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\Media;
 
 class SpaceController extends Controller
 {
@@ -31,7 +31,7 @@ class SpaceController extends Controller
     public function create()
     {
 
-        if (! auth()->user()->businessOwner()) {
+        if (! auth()->user()->businessOwner) {
             abort(403, 'Only business owners can create a space!');
         }
         // Get all SportTypes for the drop down menu
@@ -59,10 +59,11 @@ class SpaceController extends Controller
             'title' => 'required|string|max:100',
             'address' => 'required|string|max:150',
             'description' => 'required|string|max:300',
-            'phone_no' => 'required|string|max:15',
+            'phone_no' => ['required', 'string', 'max:15', 'regex:/^[0-9]{9,15}$/'],
             'email' => 'required|email|max:150',
             'cover_image' => 'nullable|image|max:2048',
-            'gallery_images.*' => 'nullable|image|max:2048',
+            'gallery_images' => 'nullable|array|max:10',
+            'gallery_images.*' => 'image|max:2048',
         ]);
 
         $validatedData['owner_id'] = auth()->user()->businessOwner->id;
@@ -77,12 +78,12 @@ class SpaceController extends Controller
         if ($request->hasFile('cover_image')) {
 
             $cover = $request->file('cover_image');
-            if (!file_exists($destination)) {
+            if (! file_exists($destination)) {
                 mkdir($destination, 0755, true);
             }
-            $coverName = 'cover_' . Str::uuid() . '.' . $cover->getClientOriginalExtension();
+            $coverName = 'cover_'.Str::uuid().'.'.$cover->getClientOriginalExtension();
             $cover->move($destination, $coverName);
-        
+
             Media::create([
                 'space_id' => $space->id,
                 'media_url' => "/{$basePath}/{$coverName}",
@@ -92,19 +93,20 @@ class SpaceController extends Controller
 
         if ($request->hasFile('gallery_images')) {
             foreach ($request->file('gallery_images') as $image) {
-        
-                $imageName = 'img_' . Str::uuid() . '.' . $image->getClientOriginalExtension();
-        
+
+                $imageName = 'img_'.Str::uuid().'.'.$image->getClientOriginalExtension();
+
                 // SAME logic as cover
                 $image->move($destination, $imageName);
-        
+
                 Media::create([
                     'space_id' => $space->id,
                     'media_url' => "/{$basePath}/{$imageName}",
                     'is_cover' => false,
                 ]);
-            }      
+            }
         }
+
         // Redirect to newly created space's show page!
         return redirect()->route('spaces.show', $space)->with('success', 'Space created successfully!');
     }
@@ -115,11 +117,11 @@ class SpaceController extends Controller
     public function show(Space $space)
     {
         // used for the route /space/{space}
-        $space->load(['sportType', 'media', 'owner.user', 'coverImage'/*, 'bookings.review.customer.user'/* 'bookings.review.responses' */]);
+        $space->load(['sportType', 'media', 'owner.user', 'coverImage'/* , 'bookings.review.customer.user'/* 'bookings.review.responses' */]);
 
         // Get all reviews for this space
         $reviews = $space->reviews()
-            ->with(['customer.user'/* 'responses.businessOwner.user' */,'booking'])
+            ->with(['customer.user'/* 'responses.businessOwner.user' */, 'booking'])
             ->orderBy('time_stamp', 'desc')
             ->get();
 
@@ -175,13 +177,14 @@ class SpaceController extends Controller
             'sport_type_id' => 'required|exists:sport_type,id',
             'address' => 'required|string|max:150',
             'description' => 'required|string|max:300',
-            'phone_no' => 'required|string|max:15',
+            'phone_no' => ['required', 'string', 'max:15', 'regex:/^[0-9]{9,15}$/'],
             'email' => 'required|email|max:150',
             'is_closed' => 'nullable|boolean',
             'cover_image' => 'nullable|image|max:2048',
-            'gallery_images' => 'nullable|array',
+            'gallery_images' => 'nullable|array|max:10',
             'gallery_images.*' => 'image|max:2048',
             'delete_images' => 'nullable|array',
+            'delete_images.*' => 'integer|exists:media,id',
         ]);
 
         $validatedData['is_closed'] = $request->has('is_closed');
@@ -190,36 +193,36 @@ class SpaceController extends Controller
 
         $basePath = "images/uploads/spaces/{$space->id}";
         $destination = public_path($basePath);
-        if (!file_exists($destination)) {
+        if (! file_exists($destination)) {
             mkdir($destination, 0755, true);
         }
-    
+
         // cover image replacement
         if ($request->hasFile('cover_image')) {
             $cover = $request->file('cover_image');
-    
+
             // Delete old cover if exists
             if ($space->coverImage && file_exists(public_path($space->coverImage->media_url))) {
                 unlink(public_path($space->coverImage->media_url));
                 $space->coverImage->delete();
             }
-    
-            $coverName = 'cover_' . Str::uuid() . '.' . $cover->getClientOriginalExtension();
+
+            $coverName = 'cover_'.Str::uuid().'.'.$cover->getClientOriginalExtension();
             $cover->move($destination, $coverName);
-    
+
             \App\Models\Media::create([
                 'space_id' => $space->id,
                 'media_url' => "/{$basePath}/{$coverName}",
                 'is_cover' => true,
             ]);
         }
-    
+
         // Add new gallery images
         if ($request->hasFile('gallery_images')) {
             foreach ($request->file('gallery_images') as $image) {
-                $imageName = 'img_' . Str::uuid() . '.' . $image->getClientOriginalExtension();
+                $imageName = 'img_'.Str::uuid().'.'.$image->getClientOriginalExtension();
                 $image->move($destination, $imageName);
-    
+
                 \App\Models\Media::create([
                     'space_id' => $space->id,
                     'media_url' => "/{$basePath}/{$imageName}",
@@ -227,14 +230,14 @@ class SpaceController extends Controller
                 ]);
             }
         }
-    
+
         // Delete selected gallery images
         if ($request->filled('delete_images')) {
             $images = \App\Models\Media::whereIn('id', $request->delete_images)
                 ->where('space_id', $space->id)
                 ->where('is_cover', false)
                 ->get();
-    
+
             foreach ($images as $img) {
                 if (file_exists(public_path($img->media_url))) {
                     unlink(public_path($img->media_url));
@@ -242,8 +245,8 @@ class SpaceController extends Controller
                 $img->delete();
             }
         }
-    
-        // 8️⃣ Redirect back with success
+
+        // Redirect back with success
         return redirect()->route('spaces.show', $space)
             ->with('success', 'Space updated successfully!');
 
@@ -277,11 +280,11 @@ class SpaceController extends Controller
                 'title' => $space->title,
                 'duration' => $space->duration ?? 30,  // Default to 30 if not set
                 'opening_time' => $space->opening_time,
-                'closing_time' => $space->closing_time
+                'closing_time' => $space->closing_time,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Space not found'
+                'error' => 'Space not found',
             ], 404);
         }
     }

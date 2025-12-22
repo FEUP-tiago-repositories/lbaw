@@ -141,7 +141,7 @@
                     <div id="methodField"></div> 
 
                     <div>
-                        <label for="inputSpaceId" class="block text-sm font-medium text-gray-700 mb-1">Apply to Space</label>
+                        <label for="inputSpaceId" class="block text-sm font-medium text-gray-700 mb-1">Apply to Space <span class="text-red-500">*</span></label>
                         <div class="relative rounded-md shadow-sm">
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M17 21v-8H7v8"/></svg>
@@ -157,8 +157,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div class="col-span-1 sm:col-span-2"> <label class="block text-sm font-medium text-gray-700 mb-1">
-                                Discount Code 
-                                <span class="text-xs text-gray-400 font-normal ml-1">(Leave empty for auto-generation)</span>
+                                Discount Code <span class="text-red-500">*</span>
                             </label>
                             <div class="relative rounded-md shadow-sm">
                                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -174,7 +173,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Percentage</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Percentage <span class="text-red-500">*</span></label>
                             <div class="relative rounded-md shadow-sm">
                                 <input type="number" name="percentage" id="inputPercentage" min="1" max="100" required class="block w-full rounded-lg border-gray-300 pl-10 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5" placeholder="15">
                                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -188,13 +187,13 @@
 
                     <div class="grid grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Start Date <span class="text-red-500">*</span></label>
                             <div class="relative rounded-md shadow-sm">
                                 <input type="datetime-local" name="start_date" id="inputStart" required class="block w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5 text-gray-600">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">End Date <span class="text-red-500">*</span></label>
                             <div class="relative rounded-md shadow-sm">
                                 <input type="datetime-local" name="end_date" id="inputEnd" required class="block w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm py-2.5 text-gray-600">
                             </div>

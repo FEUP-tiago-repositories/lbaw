@@ -59,8 +59,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {{-- First Name --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">First Name</label>
-                        <input type="text" name="first_name"
+                        <label for="first_name" class="block font-medium text-gray-700 mb-1">First Name <span class="text-red-500">*</span></label>
+                        <input id="first_name" type="text" name="first_name"
                                value="{{ old('first_name') }}"
                                required minlength="2" maxlength="15"
                                pattern="[A-Za-z]+"
@@ -71,8 +71,8 @@
 
                     {{-- Surname --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Surname</label>
-                        <input type="text" name="surname"
+                        <label for="surname" class="block font-medium text-gray-700 mb-1">Surname <span class="text-red-500">*</span></label>
+                        <input id="surname" type="text" name="surname"
                                value="{{ old('surname') }}"
                                required minlength="2" maxlength="15"
                                pattern="[A-Za-z]+"
@@ -85,18 +85,18 @@
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Username</label>
                         <input type="text" name="user_name"
-                               value="{{ old('user_name') }}"
-                               required minlength="3" maxlength="20"
-                               pattern="[A-Za-z0-9_]+"
-                               title="Username can only contain letters, numbers, and underscores."
-                               class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="User123">
+                            value="{{ old('user_name') }}"
+                            required minlength="3" maxlength="20"
+                            pattern="[A-Za-z0-9_]+"
+                            title="Username can only contain letters, numbers, and underscores."
+                            class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="User123">
                     </div>
 
                     {{-- Email --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" name="email"
+                        <label for="email" class="block font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+                        <input id="email" type="email" name="email"
                                value="{{ old('email') }}"
                                required maxlength="255"
                                class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
@@ -105,8 +105,8 @@
 
                     {{-- Phone --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Phone Number</label>
-                        <input type="text" name="phone_no"
+                        <label for="phone" class="block font-medium text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
+                        <input id="phone" type="text" name="phone_no"
                                value="{{ old('phone_number') }}"
                                required pattern="[0-9]{9}" maxlength="9"
                                title="Phone number must be exactly 9 digits."
@@ -118,24 +118,24 @@
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Birth Date</label>
                         <input type="date" name="birth_date"
-                               value="{{ old('birth_date') }}"
-                               required
-                               max="{{ \Carbon\Carbon::now()->subYears(18)->format('Y-m-d') }}"
-                               title="You must be at least 18 years old."
-                               class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            value="{{ old('birth_date') }}"
+                            required
+                            max="{{ \Carbon\Carbon::now()->subYears(18)->format('Y-m-d') }}"
+                            title="You must be at least 18 years old."
+                            class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
 
                 {{-- Account Type --}}
                 <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-2">Account Type</label>
+                    <label class="block font-medium text-gray-700 mb-2">Account Type <span class="text-red-500">*</span></label>
                     <div class="flex items-center gap-6">
-                        <label class="inline-flex items-center gap-4 py-2">
-                            <input type="radio" name="role" value="customer" required {{ old('role') == 'customer' ? 'checked' : '' }}>
+                        <label for="rolec" class="inline-flex items-center gap-4 py-2">
+                            <input id="rolec" type="radio" name="role" value="customer" required {{ old('role') == 'customer' ? 'checked' : '' }}>
                             <span>Customer</span>
                         </label>
-                        <label class="inline-flex items-center gap-4 py-2">
-                            <input type="radio" name="role" value="business_owner" required {{ old('role') == 'business_owner' ? 'checked' : '' }}>
+                        <label for="rolebo" class="inline-flex items-center gap-4 py-2">
+                            <input id="rolebo" type="radio" name="role" value="business_owner" required {{ old('role') == 'business_owner' ? 'checked' : '' }}>
                             <span>Business Owner</span>
                         </label>
                     </div>
@@ -144,15 +144,16 @@
                     @enderror
                 </div>
 
+
                 <div class="mt-4">
                     <label class="block font-medium text-gray-700 mb-1">Profile Picture (optional)</label>
                     <input type="file" name="profile_pic_url"
-                           class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
+                        class="w-full border-gray-300 rounded-xl px-4 py-2 shadow-sm bg-yellow focus:ring-blue-500 focus:border-blue-500">
                 </div>
 
                 {{-- Password --}}
                 <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-1">Password</label>
+                    <label for="register-password" class="block font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <input type="password" name="password" id="register-password"
                                required minlength="6"
@@ -167,7 +168,7 @@
 
                 {{-- Confirm Password --}}
                 <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-1">Confirm Password</label>
+                    <label for="register-password-confirm" class="block font-medium text-gray-700 mb-1">Confirm Password <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <input type="password" name="password_confirmation" id="register-password-confirm"
                                required minlength="6"
@@ -197,3 +198,4 @@
     {{-- Include OAuth JavaScript --}}
     <script src="{{ asset('js/oauth.js') }}"></script>
 @endsection
+<script src="{{ asset('js/image-preview.js') }}"></script>

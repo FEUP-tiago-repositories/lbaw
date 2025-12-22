@@ -21,16 +21,6 @@ class SpaceManagementController extends Controller
     }
 
     /**
-     * Display the specified space.
-     */
-    public function show(string $id)
-    {
-        $space = Space::with(['owner.user', 'sportType'])->findOrFail($id);
-
-        return view('admin.spaces.show', compact('space'));
-    }
-
-    /**
      * Remove the specified space.
      */
     public function destroy(string $id)

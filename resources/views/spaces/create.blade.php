@@ -43,7 +43,7 @@
             @csrf
             {{-- Title --}}
             <div class="mb-2">
-                <label for="title" class="block text-lg font-medium mb-2">Title *</label>
+                <label for="title" class="block text-lg font-medium mb-2">Title <span class="text-red-500">*</span></label>
                 <input type="text" name="title" id="title" value="{{ old('title') }}"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
                     required maxlength="100" placeholder="e.g., Downtown Basketball Court">
@@ -52,7 +52,7 @@
 
             {{-- Sport Type --}}
             <div class="mb-2">
-                <label for="sport_type_id" class="block text-lg font-medium mb-2">Sport Type *</label>
+                <label for="sport_type_id" class="block text-lg font-medium mb-2">Sport Type <span class="text-red-500">*</span></label>
                 <select name="sport_type_id" id="sport_type_id"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
                     required>
@@ -68,7 +68,7 @@
 
             {{-- Address --}}
             <div class="mb-2">
-                <label for="address" class="block text-lg font-medium mb-2">Address *</label>
+                <label for="address" class="block text-lg font-medium mb-2">Address <span class="text-red-500">*</span></label>
                 <input type="text" name="address" id="address" value="{{ old('address') }}"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
                     required maxlength="150" placeholder="e.g., Rua das Flores 123, Porto">
@@ -77,7 +77,7 @@
 
             {{-- Description --}}
             <div class="mb-2">
-                <label for="description" class="block text-lg font-medium mb-2">Description *</label>
+                <label for="description" class="block text-lg font-medium mb-2">Description <span class="text-red-500">*</span></label>
                 <textarea name="description" id="description"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
                     rows="4" required maxlength="300"
@@ -87,7 +87,7 @@
 
             {{-- Phone Number --}}
             <div class="mb-2">
-                <label for="phone_no" class="block text-lg font-medium mb-2">Phone Number *</label>
+                <label for="phone_no" class="block text-lg font-medium mb-2">Phone Number <span class="text-red-500">*</span></label>
                 <input type="tel" name="phone_no" id="phone_no" value="{{ old('phone_no') }}"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-200 shadow-gray-200 shadow"
                     required maxlength="15" pattern="[0-9]{9,15}" placeholder="e.g., 912345678">
@@ -96,16 +96,24 @@
 
             {{-- Email --}}
             <div class="mb-2">
-                <label for="email" class="block text-lg font-medium mb-2">Email *</label>
+                <label for="email" class="block text-lg font-medium mb-2">Email <span class="text-red-500">*</span></label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green- bg-gray-200 shadow-gray-200 shadow"
                     required maxlength="150" placeholder="e.g., space@example.com">
             </div>
             
             {{-- Cover Picture --}}
+            <label class="block text-lg font-medium mb-2">Cover Picture</label>
             <div class="mt-4">
-                <label class="block text-lg font-medium mb-2">Cover Picture *</label>
+                <div
+                    id="CoverPreview"
+                    >
+                </div>
+            </div>
+            <div class="mt-4">
+                <label class="block text-lg font-medium mb-2">Cover Picture <span class="text-red-500">*</span></label>
                 <input type="file" name="cover_image"
+                    data-gallery-preview="CoverPreview"
                     class="w-full rounded-lg px-4 py-2 bg-gray-200"
                     accept="image/*" required>
             </div>
@@ -115,7 +123,15 @@
                 <label class="block text-lg font-medium mb-2">Other Pictures</label>
                 <input type="file" name="gallery_images[]"
                     class="w-full rounded-lg px-4 py-2 bg-gray-200"
+                    data-gallery-preview="GalleryPreview"
                     accept="image/*" multiple>
+            </div>
+            {{-- image preview --}}
+            <div class="mt-4">
+                <div
+                    id="GalleryPreview"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                </div>
             </div>
 
 
@@ -133,3 +149,4 @@
         </form>
     </div>
 @endsection
+<script src="{{ asset('js/gallery-images.js') }}"></script>

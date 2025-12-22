@@ -40,9 +40,9 @@ class UserController extends Controller
     {
         // Validate the form data
         $request->validate([
-            'first_name' => ['required', 'string', 'min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
-            'surname' => ['required', 'string', 'min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
-            'user_name' => ['required', 'string', 'min:2', 'max:255', 'unique:user,user_name', 'regex:/^[A-Za-z0-9_]+$/'],
+            'first_name' => ['required', 'string', 'min:2', 'max:15', 'regex:/^[A-Za-z]+$/'],
+            'surname' => ['required', 'string', 'min:2', 'max:15', 'regex:/^[A-Za-z]+$/'],
+            'user_name' => ['required', 'string', 'min:2', 'max:15', 'unique:user,user_name', 'regex:/^[A-Za-z0-9_]+$/'],
             'email' => ['required', 'email', 'unique:user,email'],
             'phone_no' => ['required', 'string', 'regex:/^[0-9]{9}$/'],
             'birth_date' => ['required', 'date'],
@@ -84,7 +84,7 @@ class UserController extends Controller
         Auth::login($user);
 
         return redirect()->route('users.show', $user->id)
-            ->with('success', 'Conta criada com sucesso!');
+            ->with('success', 'Account sucessfully created!');
     }
 
     /**
@@ -134,8 +134,8 @@ class UserController extends Controller
         $this->authorize('update', $user);
 
         $validated = $request->validate([
-            'first_name' => ['required', 'string', 'min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
-            'surname' => ['required', 'string', 'min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
+            'first_name' => ['required', 'string', 'min:2', 'max:15', 'regex:/^[A-Za-z]+$/'],
+            'surname' => ['required', 'string', 'min:2', 'max:15', 'regex:/^[A-Za-z]+$/'],
             'user_name' => [
                 'required',
                 'string',
@@ -144,7 +144,7 @@ class UserController extends Controller
                 'regex:/^[0-9]{9}$/',
                 Rule::unique('user', 'user_name')->ignore($user->id),
             ],
-            'email' => ['required', 'email', 'max:255', Rule::unique('user', 'email')->ignore($user->id)],
+            'email' => ['required', 'email', 'max:100', Rule::unique('user', 'email')->ignore($user->id)],
             'phone_no' => ['required', 'regex:/^[0-9]+$/'],
             'birth_date' => ['required', 'date', 'before_or_equal:'.Carbon::now()->subYears(18)->toDateString()],
             'profile_pic_url' => ['nullable', 'image', 'max:2048'],

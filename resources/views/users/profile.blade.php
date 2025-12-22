@@ -19,8 +19,19 @@
 
                     {{-- Header --}}
                     <div class="flex items-center gap-8">
-                        <img src="{{ $user->profile_pic_url ? asset($user->profile_pic_url) : 'https://via.placeholder.com/120' }}"
-                            class="w-20 h-20 rounded-full object-cover border-gray-200 shadow">
+                        @php
+                            $profilePicUrl = $user->profile_pic_url;
+                            if (str_starts_with($profilePicUrl, 'http://') || str_starts_with($profilePicUrl, 'https://')) {
+                                $displayUrl = $profilePicUrl;
+                            } else {
+                                $displayUrl = $profilePicUrl ? asset($profilePicUrl) : asset('images/profile.jpg');
+                            }
+                        @endphp
+                        <img src="{{ $displayUrl }}" 
+                             alt="Profile Picture"
+                             class="w-20 h-20 rounded-full object-cover border-2 border-gray-200 shadow"
+                             onerror="this.src='{{ asset('images/profile.jpg') }}'">
+                        
                         <div class="space-y-2">
                             <h1 class="text-4xl font-bold text-gray-900">
                                 {{ $user->first_name }} {{ $user->surname }}

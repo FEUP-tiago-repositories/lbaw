@@ -31,7 +31,7 @@ CREATE Table "user" (
     birth_date DATE NOT NULL CHECK (
         birth_date <= NOW() - INTERVAL '18 years'
     ), --Must be 18+ years old
-    profile_pic_url VARCHAR(255),
+    profile_pic_url TEXT,
     google_id VARCHAR(255) DEFAULT NULL UNIQUE,
     facebook_id VARCHAR(255) DEFAULT NULL UNIQUE
 );

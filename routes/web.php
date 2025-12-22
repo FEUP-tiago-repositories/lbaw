@@ -74,6 +74,17 @@ Route::controller(FacebookController::class)->group(function () {
     Route::get('auth/facebook/call-back', 'callbackFacebook')->name('facebook-call-back');
 });
 
+// OAuth Role Selection (compartilhado)
+Route::get('auth/select-role', function() {
+    if (!session('oauth_id')) {
+        return redirect()->route('login');
+    }
+    return view('auth.select-role');
+})->name('oauth.select-role');
+
+Route::post('auth/complete', [GoogleController::class, 'completeOAuthRegistration'])
+    ->name('oauth.complete');
+    
 // ============================================
 // M02: USER PROFILES (R205-R206)
 // ============================================

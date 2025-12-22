@@ -4,101 +4,81 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 use Exception;
 
 class FacebookController extends Controller
 {
-    /**
-     * Redirect to Facebook authentication page
-     */
     public function redirect()
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver('facebook')
+            ->scopes(['email', 'public_profile'])
+            ->redirect();
     }
 
-    /**
-     * Handle Facebook authentication callback
-     */
     public function callbackFacebook()
     {
         try {
             $facebook_user = Socialite::driver('facebook')->stateless()->user();
+            
+            // Obter avatar do Facebook
+            $avatar = $facebook_user->getAvatar();
 
-            // Verificar se já existe utilizador com este Facebook ID
+            // Verificar se já existe utilizador
             $user = User::where('facebook_id', $facebook_user->getId())->first();
 
-            if (!$user) {
-                // Verificar se existe utilizador com o mesmo email
-                $existing_user = User::where('email', $facebook_user->getEmail())->first();
-
-                if ($existing_user) {
-                    // Associar Facebook ID ao utilizador existente
-                    $existing_user->update([
-                        'facebook_id' => $facebook_user->getId(),
-                        'profilepicurl' => $facebook_user->getAvatar() ?? $existing_user->profilepicurl
-                    ]);
-                    Auth::login($existing_user);
-                } else {
-                    // Criar novo utilizador
-                    // Dividir nome completo em firstname e surname
-                    $nameParts = explode(' ', $facebook_user->getName(), 2);
-                    $firstname = $nameParts[0];
-                    $surname = isset($nameParts[1]) ? $nameParts[1] : '';
-
-                    $new_user = User::create([
-                        'firstname' => $firstname,
-                        'surname' => $surname,
-                        'username' => $this->generateUsername($facebook_user->getEmail()),
-                        'email' => $facebook_user->getEmail(),
-                        'phoneno' => $this->generateDummyPhone(),
-                        'facebook_id' => $facebook_user->getId(),
-                        'profilepicurl' => $facebook_user->getAvatar() ?? 'images/profile.jpg',
-                        'birthdate' => now()->subYears(18), // Placeholder - pode ajustar depois
-                        'password' => null
-                    ]);
-
-                    Auth::login($new_user);
+            if ($user) {
+                // Utilizador já existe - atualizar foto se disponível
+                if ($avatar) {
+                    $user->update(['profile_pic_url' => $avatar]);
                 }
-            } else {
+                
                 Auth::login($user);
+                return redirect()->route('profile.show', ['id' => $user->id]);
             }
 
-            return redirect()->intended('/');
+            // Verificar email existente
+            $existing_user = User::where('email', $facebook_user->getEmail())->first();
+
+            if ($existing_user) {
+                // Associar Facebook ID e atualizar foto
+                $updateData = ['facebook_id' => $facebook_user->getId()];
+                if ($avatar) {
+                    $updateData['profile_pic_url'] = $avatar;
+                }
+                
+                $existing_user->update($updateData);
+                Log::info('Linked Facebook to existing user', [
+                    'user_id' => $existing_user->id,
+                    'avatar_updated' => !empty($avatar)
+                ]);
+                
+                Auth::login($existing_user);
+                return redirect()->route('profile.show', ['id' => $existing_user->id]);
+            }
+
+            
+            session([
+                'oauth_provider' => 'facebook',
+                'oauth_id' => $facebook_user->getId(),
+                'oauth_name' => $facebook_user->getName(),
+                'oauth_email' => $facebook_user->getEmail(),
+                'oauth_avatar' => $avatar 
+            ]);
+
+            return redirect()->route('oauth.select-role');
 
         } catch (Exception $e) {
-            \Log::error('Facebook OAuth Error: ' . $e->getMessage());
+            Log::error('Facebook OAuth Error', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return redirect()->route('login')
-                ->with('error', 'Erro ao autenticar com Facebook. Tente novamente.');
+                ->with('error', 'Erro ao autenticar com Facebook: ' . $e->getMessage());
         }
-    }
-
-    /**
-     * Generate unique username from email
-     */
-    private function generateUsername($email)
-    {
-        $base = explode('@', $email)[0];
-        $username = $base;
-        $counter = 1;
-
-        while (User::where('username', $username)->exists()) {
-            $username = $base . $counter;
-            $counter++;
-        }
-
-        return $username;
-    }
-
-    /**
-     * Generate dummy phone number (temporary)
-     */
-    private function generateDummyPhone()
-    {
-        do {
-            $phone = '9' . rand(10000000, 99999999);
-        } while (User::where('phoneno', $phone)->exists());
-
-        return $phone;
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,7 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
-        $middleware->alias(['business.owner' => \App\Http\Middleware\CheckBusinessOwner::class]);
+        $middleware->alias(['business.owner' => \App\Http\Middleware\CheckBusinessOwner::class,
+            'auth' => Authenticate::class]);
 
         $middleware->redirectGuestsTo(function (Request $request) {
             if ($request->is('admin/*')) {

@@ -37,7 +37,7 @@
                     @csrf
 
                     <div class="mb-5">
-                        <label for="email" class="block font-medium text-gray-700 mb-1">Email</label>
+                        <label for="email" class="block font-medium text-gray-700 mb-1">Email <span class="text-red-600" aria-hidden="true">*</span></label>
                         <input id="email" type="email" name="email" value="{{ old('email') }}"
                             class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('email') border-red-500 @enderror"
                             placeholder="admin.example@gmail.com" required>
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="mb-6">
-                        <label for="password" class="block font-medium text-gray-700 mb-1">Password</label>
+                        <label for="password" class="block font-medium text-gray-700 mb-1">Password <span class="text-red-600" aria-hidden="true">*</span></label>
                         <input id="password" type="password" name="password"
                             class="w-full border-gray-300 rounded-xl p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('password') border-red-500 @enderror"
                             placeholder="password" required>

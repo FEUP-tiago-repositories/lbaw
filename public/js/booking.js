@@ -618,7 +618,7 @@ function closePaymentModal() {
     document.getElementById('paymentModal').classList.add('hidden');
 }
 
-window.applyPromoCode = function() {
+window.redeemPromoCode = function() {
     const codeInput = document.getElementById('promoCodeInput');
     const messageEl = document.getElementById('promoMessage');
 

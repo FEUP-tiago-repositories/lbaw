@@ -59,7 +59,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {{-- First Name --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">First Name</label>
+                        <label class="block font-medium text-gray-700 mb-1">First Name <span class="text-red-500">*</span></label>
                         <input type="text" name="first_name"
                                value="{{ old('first_name') }}"
                                required minlength="2" maxlength="15"
@@ -71,7 +71,7 @@
 
                     {{-- Surname --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Surname</label>
+                        <label class="block font-medium text-gray-700 mb-1">Surname <span class="text-red-500">*</span></label>
                         <input type="text" name="surname"
                                value="{{ old('surname') }}"
                                required minlength="2" maxlength="15"
@@ -83,7 +83,7 @@
 
                     {{-- Username --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Username</label>
+                        <label class="block font-medium text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
                         <input type="text" name="user_name"
                                value="{{ old('user_name') }}"
                                required minlength="3" maxlength="20"
@@ -95,7 +95,7 @@
 
                     {{-- Email --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Email</label>
+                        <label class="block font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
                         <input type="email" name="email"
                                value="{{ old('email') }}"
                                required maxlength="255"
@@ -105,7 +105,7 @@
 
                     {{-- Phone --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Phone Number</label>
+                        <label class="block font-medium text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
                         <input type="text" name="phone_no"
                                value="{{ old('phone_number') }}"
                                required pattern="[0-9]{9}" maxlength="9"
@@ -116,7 +116,7 @@
 
                     {{-- Birth Date --}}
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">Birth Date</label>
+                        <label class="block font-medium text-gray-700 mb-1">Birth Date <span class="text-red-500">*</span></label>
                         <input type="date" name="birth_date"
                                value="{{ old('birth_date') }}"
                                required
@@ -128,7 +128,7 @@
 
                 {{-- Account Type --}}
                 <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-2">Account Type</label>
+                    <label class="block font-medium text-gray-700 mb-2">Account Type <span class="text-red-500">*</span></label>
                     <div class="flex items-center gap-6">
                         <label class="inline-flex items-center gap-4 py-2">
                             <input type="radio" name="role" value="customer" required {{ old('role') == 'customer' ? 'checked' : '' }}>
@@ -152,7 +152,7 @@
 
                 {{-- Password --}}
                 <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-1">Password</label>
+                    <label class="block font-medium text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <input type="password" name="password" id="register-password"
                                required minlength="6"
@@ -167,7 +167,7 @@
 
                 {{-- Confirm Password --}}
                 <div class="mt-4">
-                    <label class="block font-medium text-gray-700 mb-1">Confirm Password</label>
+                    <label class="block font-medium text-gray-700 mb-1">Confirm Password <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <input type="password" name="password_confirmation" id="register-password-confirm"
                                required minlength="6"

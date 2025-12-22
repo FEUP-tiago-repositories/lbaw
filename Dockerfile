@@ -2,7 +2,7 @@
 # LBAW Laravel Application Dockerfile
 #
 # Builds a production-ready container with:
-# - PHP 8.3 FPM (Laravel runtime)
+# - PHP 8.5 FPM (Laravel runtime)
 # - Nginx (web server)
 # - PostgreSQL support (pdo_pgsql extension)
 # - Composer (dependency manager)
@@ -11,7 +11,7 @@
 # Entrypoint script starts php-fpm and nginx.
 # -----------------------------------------------------------------------------
     
-FROM php:8.3-fpm
+FROM php:8.5-fpm
 
 # Install system dependencies and required PHP extensions
 # - nginx: web server
@@ -36,12 +36,17 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Set the working directory for the application code
 WORKDIR /var/www
 
+RUN rm -rf bootstrap/cache/* storage/framework/cache/* storage/framework/views/*
+
 # Install PHP dependencies inside the container
-COPY composer.json composer.lock ./
+RUN composer clear-cache 
+COPY composer.json composer.lock ./ 
 RUN composer install --optimize-autoloader --prefer-dist --no-progress --no-interaction --no-scripts
 
 # Copy application source into the image (owned by www-data)
-COPY --chown=www-data:www-data . .
+COPY --chown=www-data:www-data . . 
+RUN chown -R www-data:www-data storage bootstrap/cache \ 
+	&& chmod -R 775 storage bootstrap/cache
 
 # Copy configuration files into container
 # - PHP overrides (php.ini)

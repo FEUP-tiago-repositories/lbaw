@@ -28,7 +28,6 @@
                     <th class="px-4 py-3 rounded">Address</th>
                     <th class="px-4 py-3 rounded">Phone nº</th>
                     <th class="px-4 py-3 rounded">Email</th>
-                    <th class="px-4 py-3 rounded">View Space</th>
                     <th class="px-4 py-3 rounded">Delete Space</th>
                 </tr>
             </thead>
@@ -75,14 +74,6 @@
                         </td>
 
                         {{-- Actions --}}
-                        <td class="px-4 py-2 rounded">
-                            <div class="flex justify-center gap-2">
-                                <a href="{{ route('admin.spaces.show', $space->id) }}"
-                                   class="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-semibold
-                                          hover:bg-emerald-200 transition">
-                                    Show
-                                </a>
-                        </td>
                         <td class="px-4 py-2 rounded">
                         <button onclick="openDeleteModal({{ $space->id }})"
                                     class="px-3 py-1 rounded-lg bg-red-100 text-red-700 font-semibold hover:bg-red-200 transition">

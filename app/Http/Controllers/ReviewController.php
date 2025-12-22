@@ -33,8 +33,12 @@ class ReviewController
      */
     public function store(Request $request)
     {
+        if (!auth()->check() || !auth()->user()->customer) {
+            abort(403, 'Only customers can submit reviews.');
+        }
+
         $validatedData = $request->validate([
-            'booking_id' => 'required|exists:booking,id',
+            'booking_id' => 'required|integer|exists:booking,id',
             'environment_rating' => 'required|integer|min:1|max:5',
             'equipment_rating' => 'required|integer|min:1|max:5',
             'service_rating' => 'required|integer|min:1|max:5',

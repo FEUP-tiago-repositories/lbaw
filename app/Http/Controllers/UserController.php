@@ -40,11 +40,11 @@ class UserController extends Controller
     {
         // Validate the form data
         $request->validate([
-            'first_name' => ['required', 'string','min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
-            'surname' => ['required', 'string','min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
-            'user_name' => ['required', 'string','min:2', 'max:255', 'unique:user,user_name', 'regex:/^[A-Za-z0-9_]+$/'],
+            'first_name' => ['required', 'string', 'min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
+            'surname' => ['required', 'string', 'min:2', 'max:250', 'regex:/^[A-Za-z]+$/'],
+            'user_name' => ['required', 'string', 'min:2', 'max:255', 'unique:user,user_name', 'regex:/^[A-Za-z0-9_]+$/'],
             'email' => ['required', 'email', 'unique:user,email'],
-            'phone_no' => ['required', 'string','regex:/^[0-9]+$/'],
+            'phone_no' => ['required', 'string', 'regex:/^[0-9]{9}$/'],
             'birth_date' => ['required', 'date'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'profile_pic_url' => ['nullable', 'image', 'max:2048'],
@@ -141,7 +141,7 @@ class UserController extends Controller
                 'string',
                 'min:3',
                 'max:20',
-                'regex:/^[A-Za-z0-9_]+$/',
+                'regex:/^[0-9]{9}$/',
                 Rule::unique('user', 'user_name')->ignore($user->id),
             ],
             'email' => ['required', 'email', 'max:255', Rule::unique('user', 'email')->ignore($user->id)],

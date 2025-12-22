@@ -104,34 +104,37 @@
                 </svg>
             </button>
         </div>
-        @if($recommendedSpaces->isNotEmpty())
-            <h2 class="mb-4 text-3xl font-semibold">Recommended based on your reservations</h2>
+        @if($recommendedSpaces->isNotEmpty() || $favoriteSpaces->isNotEmpty())
+            <h2 class="my-4 text-3xl font-semibold">Recommended For You</h2>
+            <div class="relative mb-8">
+                <div id="recommendations-gradient-left" class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-100 to-transparent z-10 pointer-events-none opacity-0 transition-opacity duration-300"></div>
 
-            <div class="relative">
-                <div id="rec-scroll-container"
-                    class="flex overflow-x-auto gap-2 pb-4 scroll-smooth scrollbar-hide">
+                <button id="recommendations-scroll-left" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition opacity-0 pointer-events-none">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
 
-                    @foreach($recommendedSpaces as $space)
+                <div id="recommendations-scroll-container" class="flex overflow-x-auto gap-2 pb-4 scroll-smooth scrollbar-hide"
+                     style="-ms-overflow-style: none; scrollbar-width: none;">
+                    @php
+                        // Combinar as duas coleções e remover duplicados
+                        $allRecommended = $recommendedSpaces->merge($favoriteSpaces)->unique('id');
+                    @endphp
+                    @foreach($allRecommended as $space)
                         <div class="shrink-0 w-[240px]">
                             @include('spaces.partials.space-card', ['space' => $space])
                         </div>
                     @endforeach
                 </div>
-            </div>
-        @endif
-        @if($favoriteSpaces->isNotEmpty())
-            <h2 class="mb-4 text-3xl font-semibold">Recommended based on your favorite spaces</h2>
 
-            <div class="relative">
-                <div id="rec-scroll-container"
-                    class="flex overflow-x-auto gap-2 pb-4 scroll-smooth scrollbar-hide">
+                <div id="recommendations-gradient-right" class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-100 to-transparent z-10 pointer-events-none transition-opacity duration-300"></div>
 
-                    @foreach($favoriteSpaces as $space)
-                        <div class="shrink-0 w-[240px]">
-                            @include('spaces.partials.space-card', ['space' => $space])
-                        </div>
-                    @endforeach
-                </div>
+                <button id="recommendations-scroll-right" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         @endif
     </div>
@@ -139,4 +142,5 @@
 
 @push('scripts')
     <script src="{{ asset('js/horizontal-scroll.js') }}"></script>
+    <script src="{{ asset('js/menu.js') }}"></script>
 @endpush

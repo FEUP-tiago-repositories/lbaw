@@ -68,7 +68,7 @@
 </nav>
 
 {{-- Mobile menu --}}
-<div id="navMenu" class="fixed top-20 right-0 w-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden z-50">
+<div id="navMenu" class="fixed top-20 right-0 w-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden z-[1001]">
     <div class="flex flex-col p-6 gap-4">
         {{-- Search mobile --}}
         <form action="{{ route('spaces.search') }}" method="GET" class="flex flex-col gap-2 md:hidden">

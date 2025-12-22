@@ -45,7 +45,13 @@
 
 ### 6. HTML & CSS Validation
 
-[Html Validation](HTML_Checker.pdf)
+#### HTML Validation Report
+
+Home Page: [Html Validation](HTML_Checker.pdf)
+
+#### CSS Validation Report
+
+Since we are using the Tailwind framework, and all CSS that comes from it is automatically valid, we found no need for the CSS validation.
 
 ### 7. Revisions to the Project
 

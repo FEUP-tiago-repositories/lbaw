@@ -41,6 +41,7 @@ For _SportsHub_ website, the actors are represented in Figure 1 and described in
 | Administrator     | Manages the overall systems and ensures a smooth experience                                                         |
 | Payment Provider  | Allows to make payments through external providers                                                                  |
 | OpenStreetMap API | External API responsible for the system's map service (OpenStreetMap)                                               |
+| OAuth API | External API responsible for Google and Facebook authentication                                               |
 
 <div align="center">
   <p>Table 1: SportsHub actors description.</p>
@@ -175,7 +176,7 @@ This section contains business rules, technical requirements and other restricti
 | Identifier  | Name                   | Description                                                                                                                                                                                               |
 | ----------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | TR10        | Availability           | The system must be available 99% of the time in each 7 days cycle.                                                                                                                                        |
-| <b>TR11</b> | <b> Compatibility </b> | <b> The application must be compatible in different types of systems, such as computers, tablets and smartphones </b>                                                                                     |
+| <b>TR11</b> | <b> Responsivity </b> | <b> The application must be compatible in different types of systems, such as computers, tablets and smartphones </b>                                                                                     |
 | TR12        | Development Tools      | The system must be developed using HTML5, CSS, PHP and JavaScript, as well as compatible frameworks                                                                                                       |
 | <b>TR13</b> | <b>Usability</b>       | <b>The system must be easy and intuitive to use, as it is designed to be used by every age group without technical experience</b>                                                                         |
 | <b>TR14</b> | <b>Security</b>        | <b>The system shall protect information from unauthorized access through the use of an authentication system. It should keep all sensitive information such as location and payment details encrypted</b> |
@@ -258,6 +259,7 @@ Changes made to the first submission:
 1. Change user story identifiers to 3 digits. Add new user stories (US102, US207, US209, US210, US211, US212, US301, US302 and US303) and minimal changes to others (US100, US206, US208, US300 and US600). (12/10/2025, by Tiago Oliveira)
 2. Add new business rules (BR18 to BR22). (23/10/2025, by Tiago Oliveira)´
 3. Fix BR16 (especify restriction with favorited spaces). (03/11/2025, by Tiago Oliveira)
+4. Changed the Actors section to now use OAuth API actor and fixed TR11 from Compatibility to Responsivity. (31/12/2025, by Gustavo Lourenço)
 
 ###GROUP25122, 08/10/2025
 

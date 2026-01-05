@@ -15,7 +15,7 @@ class SearchController
         
         if ($request->filled('sport_type')) {
             $query->whereHas('sportType', function($q) use ($request) {
-                $q->where('id', $request->input('sport_type'));
+                $q->whereIn('id', $request->input('sport_type'));
             });
         }
 

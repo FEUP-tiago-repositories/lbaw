@@ -56,9 +56,14 @@ class SearchController
 
                         $camposSpace->where('title', 'ILIKE', "%{$term}%")
                         ->orWhere('address', 'ILIKE', "%{$term}%")
-                        
+                        ->orWhere('description', 'ILIKE', "%{$term}%")
                         ->orWhereHas('sportType', function ($stype) use ($term) {
                             $stype->where('name', 'ILIKE', "%{$term}%");
+                        })
+
+                        ->orWhereHas('owner.user', function ($userQuery) use ($term) {
+                            $userQuery->where('first_name', 'ILIKE', "%{$term}%")
+                                      ->orWhere('surname', 'ILIKE', "%{$term}%");
                         });
                     });
                 }

@@ -349,6 +349,7 @@ making a booking --}}
         </section>
     </main>
     @include('bookings.modals.payment-modal')
+    @include('bookings.modals.login-modal')
     @include('partials.discounts')
 @endsection
 

@@ -6,6 +6,7 @@
 # - Nginx (web server)
 # - PostgreSQL support (pdo_pgsql extension)
 # - Composer (dependency manager)
+# - postgresql-client (psql, for running seed SQL)
 #
 # Copies Laravel source and configuration files into the container.
 # Entrypoint script starts php-fpm and nginx.
@@ -16,12 +17,14 @@ FROM php:8.5-fpm
 # Install system dependencies and required PHP extensions
 # - nginx: web server
 # - libpq-dev: PostgreSQL client libraries (needed for pdo_pgsql)
+# - postgresql-client: provides psql CLI for running seed SQL
 # - ca-certificates: enable HTTPS in PHP/cURL
 # Also remove default nginx site to avoid conflicts.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        nginx \
        libpq-dev \
+       postgresql-client \
        ca-certificates \
        zip \
        unzip \

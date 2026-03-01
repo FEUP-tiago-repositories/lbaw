@@ -60,7 +60,7 @@ LOG_LEVEL=error
 DB_CONNECTION=pgsql
 DB_HOST="${DB_HOST:-}"
 DB_PORT="${DB_PORT:-5432}"
-DB_SCHEMA="${DB_SCHEMA:-public}"
+DB_SCHEMA="${DB_SCHEMA:-lbaw25122}"
 DB_DATABASE="${DB_DATABASE:-}"
 DB_USERNAME="${DB_USERNAME:-}"
 DB_PASSWORD="${DB_PASSWORD:-}"
@@ -97,58 +97,57 @@ FACEBOOK_CALL_BACK_ROUTE="${FACEBOOK_CALL_BACK_ROUTE:-}"
 EOF
 echo "[ENV] .env written."
 
-# -----------------------------------------------------------------------
-# Ensure Laravel runtime directories exist with correct permissions
-# -----------------------------------------------------------------------
+# Ensure Laravel runtime directories
 mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache
 
 # -----------------------------------------------------------------------
 # Seed database on first deploy
-# Uses DATABASE_URL directly with psql to avoid SSL / parsing issues.
-# Checks if the target schema already exists before running.
+# Checks if the 'user' TABLE exists inside the target schema.
+# The 'public' schema always exists in PostgreSQL, so checking the schema
+# alone is not sufficient — we must check for an actual table.
 # -----------------------------------------------------------------------
-SCHEMA="${DB_SCHEMA:-public}"
+SCHEMA="${DB_SCHEMA:-lbaw25122}"
 echo "[SEED] Target schema: ${SCHEMA}"
 
 # Build psql connection string
-# Prefer DATABASE_URL directly (Railway handles SSL automatically in the URL)
 if [ -n "${DATABASE_URL:-}" ]; then
     PSQL_CONN="${DATABASE_URL}"
 else
-    PSQL_CONN="postgresql://${DB_USERNAME:-postgres}:${DB_PASSWORD:-}@${DB_HOST:-localhost}:${DB_PORT:-5432}/${DB_DATABASE:-postgres}"
+    PSQL_CONN="postgresql://${DB_USERNAME:-}:${DB_PASSWORD:-}@${DB_HOST:-}:${DB_PORT:-5432}/${DB_DATABASE:-}"
 fi
 
 echo "[SEED] Testing database connection..."
-if PGSSLMODE=prefer psql "${PSQL_CONN}" -c "\\conninfo" > /dev/null 2>&1; then
+if PGSSLMODE=prefer psql "${PSQL_CONN}" -c "SELECT 1;" > /dev/null 2>&1; then
     echo "[SEED] Connection OK."
 
-    # Check if schema already has the 'user' table (means seed was already run)
-    SCHEMA_EXISTS=$(PGSSLMODE=prefer psql "${PSQL_CONN}" -tAc \
-        "SELECT schema_name FROM information_schema.schemata WHERE schema_name = '${SCHEMA}';" 2>&1)
+    # Check if 'user' table exists in the target schema
+    # (not just if the schema exists — 'public' always exists!)
+    TABLE_EXISTS=$(PGSSLMODE=prefer psql "${PSQL_CONN}" -tAc \
+        "SELECT COUNT(*) FROM information_schema.tables \
+         WHERE table_schema = '${SCHEMA}' AND table_name = 'user';" 2>&1)
 
-    echo "[SEED] Schema check result: '${SCHEMA_EXISTS}'"
+    echo "[SEED] Table 'user' in schema '${SCHEMA}': count=${TABLE_EXISTS}"
 
-    if [ -z "${SCHEMA_EXISTS}" ]; then
-        echo "[SEED] Schema '${SCHEMA}' not found. Running seed SQL..."
+    if [ "${TABLE_EXISTS}" = "0" ] || [ -z "${TABLE_EXISTS}" ]; then
+        echo "[SEED] Table not found. Running sportshub-seed.sql..."
         PGSSLMODE=prefer psql "${PSQL_CONN}" -v ON_ERROR_STOP=1 \
             -f /var/www/database/sportshub-seed.sql
         echo "[SEED] Seed completed successfully!"
     else
-        echo "[SEED] Schema '${SCHEMA}' already exists. Skipping seed."
+        echo "[SEED] Table 'user' already exists (count=${TABLE_EXISTS}). Skipping seed."
     fi
 else
     echo "[SEED] ERROR: Cannot connect to the database!"
-    echo "[SEED] Check DB_HOST / DB_PORT / DB_USERNAME / DB_PASSWORD / DB_DATABASE."
-    echo "[SEED] DB Host  = ${DB_HOST:-UNSET}"
-    echo "[SEED] DB Port  = ${DB_PORT:-UNSET}"
-    echo "[SEED] DB Name  = ${DB_DATABASE:-UNSET}"
-    echo "[SEED] DB User  = ${DB_USERNAME:-UNSET}"
-    # Do not print the password for security
+    echo "[SEED] DB Host = ${DB_HOST:-UNSET}"
+    echo "[SEED] DB Port = ${DB_PORT:-UNSET}"
+    echo "[SEED] DB Name = ${DB_DATABASE:-UNSET}"
+    echo "[SEED] DB User = ${DB_USERNAME:-UNSET}"
+    echo "[SEED] DATABASE_URL set: $([ -n "${DATABASE_URL:-}" ] && echo YES || echo NO)"
 fi
 
 # -----------------------------------------------------------------------
-# Laravel cache commands
+# Laravel cache
 # -----------------------------------------------------------------------
 echo "[LARAVEL] Clearing caches..."
 php artisan config:clear  || true

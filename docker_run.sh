@@ -19,21 +19,19 @@ echo "========================================"
 if [ -n "${DATABASE_URL:-}" ]; then
     echo "[DB] DATABASE_URL detected, parsing..."
 
-    # Strip scheme (handles both postgres:// and postgresql://)
     _URL="${DATABASE_URL}"
     _URL="${_URL#postgres://}"
     _URL="${_URL#postgresql://}"
-    # _URL is now: user:password@host:port/database?params
 
     DB_USERNAME="${_URL%%:*}"
-    _REST="${_URL#*:}"                  # password@host:port/database?params
+    _REST="${_URL#*:}"
     DB_PASSWORD="${_REST%%@*}"
-    _REST="${_REST#*@}"                 # host:port/database?params
+    _REST="${_REST#*@}"
     DB_HOST="${_REST%%:*}"
-    _REST="${_REST#*:}"                 # port/database?params
+    _REST="${_REST#*:}"
     DB_PORT="${_REST%%/*}"
-    DB_DATABASE="${_REST#*/}"           # database?params
-    DB_DATABASE="${DB_DATABASE%%\?*}"  # strip ?sslmode=... etc.
+    DB_DATABASE="${_REST#*/}"
+    DB_DATABASE="${DB_DATABASE%%\?*}"
 
     export DB_USERNAME DB_PASSWORD DB_HOST DB_PORT DB_DATABASE
     echo "[DB] Host=${DB_HOST} Port=${DB_PORT} DB=${DB_DATABASE} User=${DB_USERNAME}"
@@ -41,6 +39,15 @@ else
     echo "[DB] No DATABASE_URL found. Using individual DB_* vars."
     echo "[DB] Host=${DB_HOST:-UNSET} Port=${DB_PORT:-5432} DB=${DB_DATABASE:-UNSET} User=${DB_USERNAME:-UNSET}"
 fi
+
+# -----------------------------------------------------------------------
+# Configure Nginx to listen on Railway's dynamic PORT
+# Railway injects PORT env var. If not set, default to 80.
+# -----------------------------------------------------------------------
+APP_PORT="${PORT:-80}"
+echo "[NGINX] Configuring Nginx to listen on port ${APP_PORT}..."
+sed -i "s/listen 80;/listen ${APP_PORT};/g" /etc/nginx/conf.d/default.conf
+echo "[NGINX] Port set to ${APP_PORT}."
 
 # -----------------------------------------------------------------------
 # Generate .env at runtime from environment variables
@@ -103,14 +110,10 @@ chown -R www-data:www-data storage bootstrap/cache
 
 # -----------------------------------------------------------------------
 # Seed database on first deploy
-# Checks if the 'user' TABLE exists inside the target schema.
-# The 'public' schema always exists in PostgreSQL, so checking the schema
-# alone is not sufficient — we must check for an actual table.
 # -----------------------------------------------------------------------
 SCHEMA="${DB_SCHEMA:-lbaw25122}"
 echo "[SEED] Target schema: ${SCHEMA}"
 
-# Build psql connection string
 if [ -n "${DATABASE_URL:-}" ]; then
     PSQL_CONN="${DATABASE_URL}"
 else
@@ -121,8 +124,6 @@ echo "[SEED] Testing database connection..."
 if PGSSLMODE=prefer psql "${PSQL_CONN}" -c "SELECT 1;" > /dev/null 2>&1; then
     echo "[SEED] Connection OK."
 
-    # Check if 'user' table exists in the target schema
-    # (not just if the schema exists — 'public' always exists!)
     TABLE_EXISTS=$(PGSSLMODE=prefer psql "${PSQL_CONN}" -tAc \
         "SELECT COUNT(*) FROM information_schema.tables \
          WHERE table_schema = '${SCHEMA}' AND table_name = 'user';" 2>&1)
@@ -135,14 +136,10 @@ if PGSSLMODE=prefer psql "${PSQL_CONN}" -c "SELECT 1;" > /dev/null 2>&1; then
             -f /var/www/database/sportshub-seed.sql
         echo "[SEED] Seed completed successfully!"
     else
-        echo "[SEED] Table 'user' already exists (count=${TABLE_EXISTS}). Skipping seed."
+        echo "[SEED] Table 'user' already exists. Skipping seed."
     fi
 else
     echo "[SEED] ERROR: Cannot connect to the database!"
-    echo "[SEED] DB Host = ${DB_HOST:-UNSET}"
-    echo "[SEED] DB Port = ${DB_PORT:-UNSET}"
-    echo "[SEED] DB Name = ${DB_DATABASE:-UNSET}"
-    echo "[SEED] DB User = ${DB_USERNAME:-UNSET}"
     echo "[SEED] DATABASE_URL set: $([ -n "${DATABASE_URL:-}" ] && echo YES || echo NO)"
 fi
 
@@ -163,5 +160,5 @@ php artisan view:cache    || echo "[LARAVEL] View cache failed (acceptable)"
 echo "[STARTUP] Starting PHP-FPM..."
 php-fpm -D
 
-echo "[STARTUP] Starting Nginx..."
+echo "[STARTUP] Starting Nginx on port ${APP_PORT}..."
 exec nginx -g "daemon off;"

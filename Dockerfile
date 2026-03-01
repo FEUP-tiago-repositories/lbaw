@@ -51,11 +51,10 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 # Copy configuration files into container
 # - PHP overrides (php.ini)
 # - Nginx site config
-# - Production .env for Laravel
 # - Entrypoint script to launch php-fpm + nginx
+# NOTE: .env is generated at runtime from environment variables (see docker_run.sh)
 COPY ./etc/php/php.ini /usr/local/etc/php/conf.d/php.ini
 COPY ./etc/nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY .env.production /var/www/.env
 COPY docker_run.sh /docker_run.sh
 
 # Ensure entrypoint script is executable

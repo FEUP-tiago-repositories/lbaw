@@ -433,8 +433,7 @@ async function createBooking() {
     }
 
     if (!state.customerId || !state.userId) {
-        alert('Please login to continue');
-        window.location.href = '/sign-in';
+        openLoginModal();
         return;
     }
 
@@ -922,5 +921,25 @@ async function confirmCancel() {
         alert('An error occurred while cancelling the booking. Please try again.');
         confirmBtn.textContent = originalText;
         confirmBtn.disabled = false;
+    }
+}
+
+
+function openLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    } else {
+        console.error('Login modal not found');
+        if(confirm('You need to login to continue. Go to login page?')) {
+            window.location.href = '/sign-in';
+        }
+    }
+}
+
+function closeLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (modal) {
+        modal.classList.add('hidden');
     }
 }

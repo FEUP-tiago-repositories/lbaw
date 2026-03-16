@@ -141,7 +141,7 @@ class UserController extends Controller
                 'string',
                 'min:3',
                 'max:20',
-                'regex:/^[0-9]{9}$/',
+                'regex:/^[A-Za-z0-9_]+$/',
                 Rule::unique('user', 'user_name')->ignore($user->id),
             ],
             'email' => ['required', 'email', 'max:100', Rule::unique('user', 'email')->ignore($user->id)],

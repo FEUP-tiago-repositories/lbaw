@@ -276,7 +276,7 @@ VALUES (
         '954529117',
         FALSE,
         FALSE,
-        'PDF81OMZ4CZ',
+        '$2y$12$G7RJNYEPJFmnjQl4mwVFv.s6UmtaPcV/8I83GAZz9SBnhU/WINHaO',
         '1960-01-23',
         'images/profile.jpg'
     ),
@@ -288,7 +288,7 @@ VALUES (
         '962922371',
         FALSE,
         FALSE,
-        'NXV25EBT2MC',
+        '$2y$12$KxtcFtTfVaTHzV4hjZmFquE37E1N60GPjvU4Ulc66c2r6nOj9Hp0q',
         '1989-04-05',
         'images/profile.jpg'
     ),
@@ -814,7 +814,7 @@ INSERT INTO
     admin (email, password)
 VALUES (
         'admin1@example.com',
-        'hashedpassword1'
+        '$2y$12$zxb.6PXYTLwp2gVdQ8/6Q.Px4ARONI/q7QIroHn8zrGd9VZSEjdSG'
     ),
     (
         'admin2@example.com',

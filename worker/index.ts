@@ -20,7 +20,7 @@ interface Env {
 export class LbawContainer extends Container<Env> {
   defaultPort = 80;
   sleepAfter = "2m";
-
+  enableInternet=true;
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
     const vars: Record<string, string | undefined> = {
@@ -34,7 +34,7 @@ export class LbawContainer extends Container<Env> {
       SESSION_DRIVER: "cookie",
       CACHE_STORE: "array",
       QUEUE_CONNECTION: "sync",
-      LOG_CHANNEL: "stderr",
+      LOG_CHANNEL: "single",
       BROADCAST_CONNECTION: "pusher",
       PUSHER_APP_ID: env.PUSHER_APP_ID,
       PUSHER_APP_KEY: env.PUSHER_APP_KEY,
